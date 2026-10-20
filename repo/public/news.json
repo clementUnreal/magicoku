@@ -1,5 +1,26 @@
 [
  {
+  "id": 23,
+  "date": "2026-10-20",
+  "icon": "🗺️",
+  "fr": {
+   "t": "Nouvel écran de choix des niveaux",
+   "d": "Choisis ton chapitre dans la colonne de gauche, puis ton enquête parmi des cartes qui montrent un aperçu du plan, sa taille et sa difficulté. Ta progression s'affiche pour chaque chapitre."
+  },
+  "en": {
+   "t": "New level selection screen",
+   "d": "Pick your chapter in the left column, then your case from cards showing a preview of the map, its size and its difficulty. Your progress is shown for each chapter."
+  },
+  "ko": {
+   "t": "새로운 레벨 선택 화면",
+   "d": "왼쪽에서 장을 고른 다음, 지도 미리보기와 크기, 난이도가 표시된 카드에서 사건을 고르세요. 장마다 진행 상황도 보여요."
+  },
+  "ja": {
+   "t": "新しいレベル選択画面",
+   "d": "左の列で章を選び、見取り図のプレビュー・サイズ・難易度が表示されたカードから事件を選ぼう。章ごとの進行状況も表示されます。"
+  }
+ },
+ {
   "id": 22,
   "date": "2026-10-20",
   "icon": "🔄",

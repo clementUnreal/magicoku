@@ -726,6 +726,64 @@ body.night #marks .mk.room{background:none!important}
 .fx-fortress .fog{width:260px;height:120px;border-radius:50%;background:radial-gradient(ellipse,rgba(210,215,230,.18),rgba(210,215,230,0) 70%);--anim:fxfog;left:-30%!important}
 @keyframes fxfog{0%{transform:translate(0,0)}100%{transform:translate(160%,-20px)}}
 .thfx .p{animation-name:var(--anim)}
+#lvView[hidden]{display:none}
+.home-in.lvmode{visibility:hidden}
+.lvv{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% 0%,#3a2a5a,transparent 60%),linear-gradient(#1d1533,#120d22);color:var(--ink);padding:max(10px,env(safe-area-inset-top,0px)) 14px max(10px,env(safe-area-inset-bottom,0px));gap:10px;overflow:hidden}
+.lvtop{text-align:center}
+.lvtop h1{margin:0;font:900 clamp(22px,3.4vw,34px) var(--f-display);color:#ffe08a;letter-spacing:.06em;text-transform:uppercase;text-shadow:0 2px 0 #5a3a10}
+.lvtop h1::before,.lvtop h1::after{content:"✦";font-size:.5em;color:#d6ab4f;margin:0 14px;vertical-align:middle}
+.lvbody{flex:1;min-height:0;display:flex;gap:12px;max-width:1500px;width:100%;margin:0 auto}
+.lvside{width:250px;flex:0 0 auto;background:linear-gradient(#2a1d40,#1a1230);border:2px solid #8a6a2a;border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:6px;overflow:auto;box-shadow:inset 0 0 0 2px rgba(255,224,138,.08)}
+.lvside h2{margin:2px 0 6px;text-align:center;font:800 18px var(--f-title);color:#ffe08a;letter-spacing:.08em;text-transform:uppercase}
+.lvch{display:flex;align-items:center;gap:10px;padding:7px 9px;border-radius:10px;border:1.5px solid rgba(214,171,79,.25);background:rgba(255,255,255,.04);color:#f6ecd2;text-align:left;cursor:pointer;font:600 14px/1.25 var(--f-title)}
+.lvch .ci{width:42px;height:42px;flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+.lvch .ci img{max-width:100%;max-height:100%;filter:drop-shadow(0 2px 2px #0008)}
+.lvch .ct{flex:1}.lvch .ct b{color:#ffe08a}
+.lvch .cs{font-weight:800;color:#ffe08a;font-size:18px}
+.lvch.on{background:linear-gradient(#3f6b35,#2f5428);border-color:#ffe08a;box-shadow:0 0 0 2px rgba(255,224,138,.35)}
+.lvv-disc .lvch.on{background:linear-gradient(#6b4b9c,#4a3270)}
+.lvch.locked{opacity:.5}.lvch.locked .ci img{filter:grayscale(1)}
+.lvmain{flex:1;min-width:0;background:radial-gradient(ellipse at 30% 0%,#fbf4e4,transparent 70%),linear-gradient(var(--parch),var(--parch2));border:2px solid #8a6a2a;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:12px;overflow:auto;box-shadow:0 10px 30px #0008}
+.lvhead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.lvhead small{font:800 12px var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:#8a5a3a}
+.lvhead h2{margin:2px 0;font:900 clamp(24px,3.4vw,42px)/1.05 var(--f-display);color:#2b1a33}
+.lvhead p{margin:0;font:italic 16px var(--f-body);color:#5a4a5a}
+.lvprog{min-width:220px;text-align:right}.lvprog span{font:15px var(--f-body)}.lvprog b{font:800 20px var(--f-title)}
+.lvprog i{display:block;height:12px;border-radius:999px;background:#e2d2b0;border:1.5px solid #b9a07a;margin-top:6px;overflow:hidden}.lvprog em{display:block;height:100%;background:linear-gradient(90deg,#3f6b35,#6aa857);border-radius:999px}
+.lvgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.lvc{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 8px 10px;border-radius:12px;border:2px solid #d8c29a;background:linear-gradient(#fffaf0,#f3e6c8);cursor:pointer;color:var(--ink);transition:transform .12s,box-shadow .12s}
+.lvc:hover{transform:translateY(-2px)}
+.lvc .lvh{display:flex;justify-content:space-between;align-items:center;width:100%;font:800 13px var(--f-title);letter-spacing:.06em;text-transform:uppercase}
+.lvc .ok{font-style:normal;width:24px;height:24px;border-radius:50%;background:#3b2a10;color:#ffe08a;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 0 0 2px #d6ab4f}
+.lvc .lk{font-style:normal;font-size:16px}
+.lvc .lvt{width:100%;aspect-ratio:1;border-radius:6px;overflow:hidden;box-shadow:0 0 0 3px #8a5a3a,0 3px 8px #0004;background:#e9dcc0}
+.lvc .lvt svg{width:100%;height:100%;display:block}
+.lvc .lvn{font:600 12.5px/1.2 var(--f-body);text-align:center;min-height:2.4em;display:flex;align-items:center;color:#5a4a5a}
+.lvc .lvs{font:700 14px var(--f-title)}
+.lvc .lvd{font:800 11px var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:3px 12px;border-radius:999px;color:#fff}
+.lvd.d0,.lvleg i.d0{background:#5f9a6e}.lvd.d1,.lvleg i.d1{background:#d99a2b}.lvd.d2,.lvleg i.d2{background:#6b2a5a}
+.lvc.locked .lvt{filter:grayscale(.6) brightness(.85)}.lvc.locked{opacity:.85}
+.lvc.sel{border-color:#d6ab4f;box-shadow:0 0 0 3px #ffe08a,0 0 22px rgba(255,214,90,.55);transform:translateY(-2px)}
+.lvc .lvp{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(#ffe08a,#d6ab4f);color:#3b2a10;font:800 12px var(--f-title);letter-spacing:.08em;text-transform:uppercase;padding:4px 14px;border-radius:999px;border:2px solid #8a6a2a;white-space:nowrap}
+.lvc.sel{margin-bottom:8px}
+.lvfoot{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1500px;width:100%;margin:0 auto}
+.lvleg{display:flex;gap:18px;color:#e9dcff;font:14px var(--f-body);flex-wrap:wrap;justify-content:center}.lvleg i{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:6px;vertical-align:-2px}
+.lvgo{background:linear-gradient(#b8283e,#8a1a2c)!important;color:#ffe6a6!important;border-color:#ffe08a!important;min-width:230px}
+.lvgo[disabled]{opacity:.5}
+@media (max-width:980px){
+  .lvbody{flex-direction:column}
+  .lvside{width:auto;flex-direction:row;overflow-x:auto;padding:6px;gap:6px}
+  .lvside h2{display:none}
+  .lvch{flex:0 0 auto;min-width:150px}
+  .lvgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lvprog{min-width:0;width:100%;text-align:left}
+  .lvleg{display:none}
+  .lvgo{min-width:0;flex:1}
+}
+@media (min-width:981px) and (max-width:1250px){.lvgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.lvc.sel{padding-bottom:24px}
+.lvc .lvp{bottom:-13px}
+@media (max-width:980px){.lvtop h1{font-size:20px}.lvtop h1::before,.lvtop h1::after{margin:0 6px}}
 #verdict{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;background:rgba(12,6,24,0);transition:background .3s;pointer-events:auto}
 #verdict[hidden]{display:none}
 #verdict.on{background:rgba(12,6,24,.72)}
@@ -2541,6 +2599,70 @@ try{AMB.on=localStorage.getItem("magicoku:ambience")!=="off"}catch(e){}
     if(t.id==="bSound"||t.id==="oSound")setTimeout(()=>{stop();amb()},50)});
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);const b=$("#oAmb");if(b){b.setAttribute("aria-pressed",AMB.on);$("#oAmbL").textContent=L("Ambiance des chapitres","Chapter ambience","장 분위기 사운드","章の環境音")}};
   try{renderHome()}catch(e){}
+})();
+
+/* ================= Level selection screen (chapters sidebar + level cards with map thumbnails) ================= */
+var LVV={ch:null,sel:null};
+var CH_TAG={
+ disc:[["Tes dix premières enquêtes à l'Académie.","Your first ten cases at the Academy.","아카데미에서의 첫 열 개의 사건.","アカデミーでの最初の十の事件。"],
+  ["L'enquête se complique : plus de suspects, plus de pièces.","Things get trickier: more suspects, more rooms.","용의자도 방도 늘어나며 사건이 복잡해져요.","容疑者も部屋も増えて、事件はさらに複雑に。"],
+  ["Les dix enquêtes les plus redoutables. Sans indice !","The ten toughest cases. No hints!","가장 어려운 열 개의 사건. 힌트 없이!","最も手ごわい十の事件。ヒントなし！"]],
+ story:[["Dix enquêtes au cœur des bois enchantés.","Ten cases deep in the enchanted woods.","마법의 숲 한가운데서 펼쳐지는 열 개의 사건.","魔法の森の奥で起きる十の事件。"],
+  ["Dix enquêtes entre les quais et la vapeur.","Ten cases between the platforms and the steam.","승강장과 증기 사이에서 펼쳐지는 열 개의 사건.","ホームと蒸気のあいだで起きる十の事件。"],
+  ["Dix enquêtes sous des tonnes d'or.","Ten cases beneath tons of gold.","산더미 같은 금 아래에서 펼쳐지는 열 개의 사건.","山のような金貨の下で起きる十の事件。"],
+  ["Dix enquêtes entre les échoppes enchantées.","Ten cases among the enchanted shops.","마법 가게들 사이에서 펼쳐지는 열 개의 사건.","魔法の店が並ぶ小路で起きる十の事件。"],
+  ["Dix enquêtes sous la neige et les étoiles.","Ten cases under the snow and the stars.","눈과 별 아래에서 펼쳐지는 열 개의 사건.","雪と星の下で起きる十の事件。"],
+  ["Dix enquêtes au bord des eaux profondes.","Ten cases on the edge of deep waters.","깊은 물가에서 펼쳐지는 열 개의 사건.","深い湖のほとりで起きる十の事件。"],
+  ["Dix enquêtes dans la clameur des tribunes.","Ten cases amid the roar of the stands.","관중의 함성 속에서 펼쳐지는 열 개의 사건.","観客の歓声の中で起きる十の事件。"],
+  ["Dix enquêtes entre potions et remèdes.","Ten cases among potions and remedies.","물약과 치료약 사이에서 펼쳐지는 열 개의 사건.","魔法薬と治療薬のあいだで起きる十の事件。"],
+  ["Dix enquêtes dans les couloirs du pouvoir.","Ten cases in the corridors of power.","권력의 복도에서 펼쳐지는 열 개의 사건.","権力の廊下で起きる十の事件。"],
+  ["Dix enquêtes au bout de la brume.","Ten cases at the end of the mist.","안개 끝에서 펼쳐지는 열 개의 사건.","霧の果てで起きる十の事件。"]]};
+var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","stall","snowman","anchor","broomrack","medcab","fountain","gargoyle"]};
+(function(){
+  const DIFF=[["Facile","Easy","쉬움","やさしい"],["Moyen","Medium","보통","ふつう"],["Difficile","Hard","어려움","むずかしい"]];
+  const tiers=()=>LVMODE==="story"?[...Array(10).keys()].map(k=>k+3):[0,1,2];
+  const idxOf=t=>DATA.map((c,i)=>i).filter(i=>tierOf(i)===t);
+  const diffOf=(t,k)=>t<3?t:(k<3?0:k<6?1:2);
+  function chName(t){const full=TX(CHAPTERS[t]);const p=full.split(/ · |・/);return {num:p[0],name:p.slice(1).join(" · ")||full}}
+  function thumb(i){const c=DATA[i],m=META[c.id],n=c.rooms.length,S=100/n;let o=`<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">`;
+    const fl=k=>((m.floors||FLOORS)[k]||["#ccc","#ddd"]);
+    for(let r=0;r<n;r++)for(let q=0;q<n;q++){const k=c.rooms[r][q];if(k===".")continue;const f=fl(k);o+=`<rect x="${q*S}" y="${r*S}" width="${S+.2}" height="${S+.2}" fill="${(r+q)%2?f[1]:f[0]}"/>`}
+    (c.objs||[]).forEach(([t,r,q])=>{if(SPR[t])o+=`<image href="${SPR[t]}" x="${q*S+S*.08}" y="${r*S+S*.06}" width="${S*.84}" height="${S*.84}"/>`});
+    let w="";for(let r=0;r<n;r++)for(let q=0;q<n;q++){const k=c.rooms[r][q];
+      if(r+1<n&&c.rooms[r+1][q]!==k)w+=`M${q*S} ${(r+1)*S}h${S}`;if(q+1<n&&c.rooms[r][q+1]!==k)w+=`M${(q+1)*S} ${r*S}v${S}`}
+    o+=`<path d="${w}" stroke="#2a1824" stroke-width="${Math.max(1.4,6/n)}" fill="none" stroke-linecap="square"/><rect x="0" y="0" width="100" height="100" fill="none" stroke="#2a1824" stroke-width="${Math.max(2.4,9/n)}"/></svg>`;return o}
+  function ensure(){let v=$("#lvView");if(v)return v;v=document.createElement("div");v.id="lvView";v.hidden=true;$("#home").appendChild(v);
+    v.addEventListener("click",e=>{const t=e.target.closest("[data-ch],[data-lv],[data-act]");if(!t)return;
+      if(t.dataset.ch!=null){const ch=+t.dataset.ch;if(!chOpen(ch)){try{play("forbid")}catch(_){}toast(L("Termine le chapitre précédent pour ouvrir celui-ci.","Finish the previous chapter to open this one.","이전 장을 끝내면 이 장이 열려요.","前の章をクリアすると、この章が解放されます。"));return}LVV.ch=ch;LVV.sel=null;try{play("page")}catch(_){}render();return}
+      if(t.dataset.lv!=null){const i=+t.dataset.lv;if(!unlocked(i)){try{play("forbid")}catch(_){}toast(L("Résous d'abord le niveau précédent.","Solve the previous level first.","먼저 이전 레벨을 해결하세요.","先に前のレベルを解いてください。"));return}
+        if(LVV.sel===i){go(i);return}LVV.sel=i;try{play("select")}catch(_){}render();return}
+      if(t.dataset.act==="back"){show("hMain");try{play("page")}catch(_){}}
+      if(t.dataset.act==="play"&&LVV.sel!=null)go(LVV.sel)});return v}
+  function chOpen(t){const ix=idxOf(t);return ix.length&&unlocked(ix[0])}
+  function go(i){$("#home").hidden=true;openCase(i);let seen=null;try{seen=localStorage.getItem("magicoku:tuto")}catch(_){}if(!seen)setTimeout(()=>tuto(0),400)}
+  function pickDefaults(enter){const ts=tiers();if(LVV.ch==null||!ts.includes(LVV.ch)||(enter&&idxOf(LVV.ch).every(lvlSolved))){LVV.ch=ts.find(t=>chOpen(t)&&idxOf(t).some(i=>!lvlSolved(i)))??ts.filter(chOpen).pop()??ts[0];LVV.sel=null}
+    const ix=idxOf(LVV.ch);if(LVV.sel==null||!ix.includes(LVV.sel)||(enter&&lvlSolved(LVV.sel)&&ix.some(i=>unlocked(i)&&!lvlSolved(i))))LVV.sel=ix.find(i=>unlocked(i)&&!lvlSolved(i))??null}
+  function render(enter){const v=ensure();pickDefaults(enter);const ts=tiers(),mode=LVMODE==="story"?"story":"disc",t=LVV.ch,ix=idxOf(t),pos=ts.indexOf(t);
+    const done=ix.filter(lvlSolved).length,cn=chName(t);
+    const side=ts.map((tt,k)=>{const c=chName(tt),open=chOpen(tt),all=idxOf(tt).every(lvlSolved);return `<button class="lvch${tt===t?" on":""}${open?"":" locked"}" data-ch="${tt}"><span class="ci"><img src="${SPR[CH_ICON[mode][k]]}" alt=""></span><span class="ct"><b>${c.num.replace(/^(Chapitre|Chapter) /,"")}</b> · ${c.name}</span>${open?(all?`<span class="cs">✓</span>`:`<span class="cs">›</span>`):`<span class="cs">🔒</span>`}</button>`}).join("");
+    const cards=ix.map((i,k)=>{const ok=lvlSolved(i),u=unlocked(i),d=diffOf(t,k),sz=DATA[i].rooms.length;
+      return `<button class="lvc${ok?" done":""}${u?"":" locked"}${LVV.sel===i?" sel":""}" data-lv="${i}"><span class="lvh"><b>${L("Niveau","Level","레벨","レベル")} ${k+1}</b>${ok?`<i class="ok">✓</i>`:u?"":`<i class="lk">🔒</i>`}</span><span class="lvt">${thumb(i)}</span><span class="lvn">${TX(META[DATA[i].id].title)}</span><span class="lvs">${sz} × ${sz}</span><span class="lvd d${d}">${TX(DIFF[d])}</span>${LVV.sel===i?`<span class="lvp">${L("À jouer","Up next","플레이","プレイ")}</span>`:""}</button>`}).join("");
+    const legend=mode==="story"?`<div class="lvleg"><span><i class="d0"></i>${L("Faciles 1–3","Easy 1–3","쉬움 1~3","やさしい 1〜3")}</span><span><i class="d1"></i>${L("Moyens 4–6","Medium 4–6","보통 4~6","ふつう 4〜6")}</span><span><i class="d2"></i>${L("Difficiles 7–10","Hard 7–10","어려움 7~10","むずかしい 7〜10")}</span></div>`:`<div class="lvleg"></div>`;
+    const title=mode==="story"?"📖 "+L("Mode histoire","Story mode","스토리 모드","ストーリーモード"):"🧭 "+L("Mode découverte","Discovery mode","디스커버리 모드","ディスカバリーモード");
+    const k=LVV.sel!=null?ix.indexOf(LVV.sel)+1:0;
+    v.className="lvv lvv-"+mode+(mode==="story"?" env-"+(META[DATA[ix[0]].id].env||""):"");
+    v.innerHTML=`<header class="lvtop"><h1>${title}</h1></header>
+      <div class="lvbody"><aside class="lvside"><h2>${L("Chapitres","Chapters","장","章")}</h2>${side}</aside>
+      <section class="lvmain"><div class="lvhead"><div><small>${mode==="story"?L("Histoire","Story","스토리","ストーリー"):L("Découverte","Discovery","디스커버리","ディスカバリー")} / ${cn.num}</small><h2>${cn.name}</h2><p>${TX(CH_TAG[mode][pos]||["","","",""])}</p></div>
+        <div class="lvprog"><span><b>${done} / ${ix.length}</b> ${L("enquêtes résolues","cases solved","사건 해결","件解決")}</span><i><em style="width:${100*done/ix.length}%"></em></i></div></div>
+        <div class="lvgrid">${cards}</div></section></div>
+      <footer class="lvfoot"><button class="hb small" data-act="back">← ${L("Retour","Back","뒤로","戻る")}</button>${legend}<button class="hb big lvgo" data-act="play"${LVV.sel==null?" disabled":""}>${LVV.sel==null?(done===ix.length?L("Chapitre terminé ✓","Chapter complete ✓","장 완료 ✓","章クリア ✓"):"—"):L(`Jouer le niveau ${k}`,`Play level ${k}`,`${k}레벨 플레이`,`レベル${k}をプレイ`)} ›</button></footer>`}
+  window.renderLevelView=render;
+  const _show=show;show=function(panel){const v=ensure();if(panel==="pLevels"){_show("__none__");["hMain","pLevels","pOptions","pAccount","pRank","pRush","pNight","pLiar"].forEach(id=>{const e=$("#"+id);if(e)e.hidden=true});
+      v.hidden=false;document.querySelector(".home-in").classList.add("lvmode");render(true);$("#home").scrollTop=0;return}
+    v.hidden=true;document.querySelector(".home-in").classList.remove("lvmode");_show(panel)};
+  const _oc=openCase;openCase=function(i){const r=_oc.apply(this,arguments);if(typeof i==="number"&&i>=0&&i<DATA.length){LVV.ch=tierOf(i);LVV.sel=i}return r};
+  const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);const v=$("#lvView");if(v&&!v.hidden)render()};
 })();
 
 render();
