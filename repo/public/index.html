@@ -489,6 +489,8 @@ h1::before{content:"☾ ";color:var(--gold);font-size:.7em;vertical-align:.12em}
 .lr-me{margin:4px 0 0;text-align:center;font:700 14px var(--f-title);color:var(--ink)}
 .lrsel{display:flex;flex-direction:column;gap:8px;margin-top:6px}
 #lrSel{border:1.5px solid var(--parch-edge);border-radius:10px;padding:8px 10px;font:15px var(--f-body);background:#fffc;color:var(--ink)}
+
+.tmr .h{font:600 13px var(--f-body);color:var(--mist)}.tmr .h.used{color:#ffd77a}
 .suspects .help{display:none}
 .chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:8px 6px;margin-bottom:12px}
 .chip2{display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:none;padding:0;cursor:pointer;color:var(--moon);font:inherit;position:relative}
@@ -1225,7 +1227,7 @@ function renderRank(){const p=ACC.profile,me=p&&p.pid,esc=s=>String(s).replace(/
   if(!RANK.rows){el.innerHTML=`<p class="rank-msg">${L("Chargement…","Loading…")}</p>`;return}
   if(!RANK.rows.length){el.innerHTML=`<p class="rank-msg">${L("Aucun détective inscrit pour l'instant.","No detectives registered yet.")}</p>`;return}
   el.innerHTML=RANK.rows.map((r,i)=>`<li class="rank-row${r.id===me?" me":""}"><span class="pos">${["🥇","🥈","🥉"][i]||i+1}</span><img src="${POR[r.avatar]||POR[AVS[0]]}" alt=""><b>${esc(r.pseudo)}</b>
-    <span class="sc"><strong>${r.solved} / ${DATA.length}</strong>${r.solved?`${fmt(r.time)} · ${r.hints} 💡`:""}</span></li>`).join("")}
+    <span class="sc"><strong>${r.solved} / ${DATA.length}</strong>${r.solved?`${fmt(r.time)} · 💡 ${r.hints} ${L(r.hints>1?"indices":"indice",r.hints>1?"hints":"hint")}`:""}</span></li>`).join("")}
 document.addEventListener("input",e=>{if(e.target.id==="accName")nameDraft=e.target.value});
 function show(panel){["hMain","pLevels","pOptions","pAccount","pRank"].forEach(id=>$("#"+id).hidden=id!==panel);renderHome()}
 function renderHome(){
@@ -1265,7 +1267,7 @@ function renderHome(){
   $("#lgBtn").textContent=L("Récupérer ma progression","Recover my progress");
   const solved=p&&p.progress?Object.values(p.progress).filter(x=>x.solved).length:0;
   $("#accStats").innerHTML=p&&p.pseudo?`<div class="row"><span>${L("Enquêtes résolues","Cases solved")}</span><b>${solved} / ${DATA.length}</b></div>`+
-    DATA.map(c=>{const x=p.progress&&p.progress[c.id];return `<div class="row"><span>${META[c.id].title[LI()]}</span><b>${x?`${fmt(x.time)} · ${x.hints} 💡`:"—"}</b></div>`}).join(""):"";
+    DATA.map(c=>{const x=p.progress&&p.progress[c.id];return `<div class="row"><span>${META[c.id].title[LI()]}</span><b>${x?`${fmt(x.time)} · 💡 ${x.hints} ${L(x.hints>1?"indices":"indice",x.hints>1?"hints":"hint")}`:"—"}</b></div>`}).join(""):"";
 }
 document.addEventListener("click",async e=>{const t=e.target.closest("button");if(!t)return;
   if(t.id==="hPlay")show("pLevels");else if(t.id==="hOptions")show("pOptions");else if(t.id==="hAccount")show("pAccount");else if(t.id==="hRank"){show("pRank");loadRank()}
@@ -1360,7 +1362,10 @@ function renderTimer(){const el=$("#tmr");if(!el||!S)return;const on=timerActive
   el.className="tmr"+(S.solved?" done":on?"":" paused");
   $("#tmrT").textContent=fmtT(S.time||0);
   $("#tmrA").textContent=`${S.attempts||0} ${L((S.attempts||0)>1?"tentatives":"tentative",(S.attempts||0)>1?"attempts":"attempt")}`;
+  let hEl=$("#tmrH");if(!hEl){hEl=document.createElement("span");hEl.className="h";hEl.id="tmrH";$("#tmrA").after(hEl)}
+  const nh=S.hints||0;hEl.textContent=`💡 ${nh} ${L(nh>1?"indices":"indice",nh>1?"hints":"hint")}`;hEl.classList.toggle("used",nh>0);
   $("#tmrP").hidden=on||S.solved;}
+var hintTxt=n=>`${n} ${L(n>1?"indices":"indice",n>1?"hints":"hint")}`;
 let _tick=0;
 setInterval(()=>{if(!S)return;if(timerActive()){S.time=(S.time||0)+1;if(++_tick%5===0)save()}renderTimer()},1000);
 document.addEventListener("visibilitychange",()=>{if(S)save();renderTimer()});
@@ -1384,12 +1389,12 @@ function rankHTML(rows,meId){if(!rows)return `<p class="lr-msg">${L("Classement 
   if(!rows.length)return `<p class="lr-msg">${L("Tu es le premier détective à résoudre cette enquête !","You're the first detective to solve this case!")}</p>`;
   const esc=s=>String(s).replace(/[<>&"]/g,"");const meIdx=rows.findIndex(r=>r.id===meId);
   const show=rows.slice(0,5);if(meIdx>=5)show.push(rows[meIdx]);
-  return `<ol class="lr">${show.map(r=>{const i=rows.indexOf(r);return `<li class="${r.id===meId?"me":""}"><span class="p">${["🥇","🥈","🥉"][i]||i+1}</span><img src="${POR[r.avatar]||POR[AVS[0]]}" alt=""><b>${esc(r.pseudo)}</b><span class="s">⏱ ${fmtT(r.time)} · 🎯 ${r.attempts} · 💡 ${r.hints}</span></li>`}).join("")}</ol>`+
+  return `<ol class="lr">${show.map(r=>{const i=rows.indexOf(r);return `<li class="${r.id===meId?"me":""}"><span class="p">${["🥇","🥈","🥉"][i]||i+1}</span><img src="${POR[r.avatar]||POR[AVS[0]]}" alt=""><b>${esc(r.pseudo)}</b><span class="s">⏱ ${fmtT(r.time)} · 🎯 ${r.attempts} · 💡 ${hintTxt(r.hints)}</span></li>`}).join("")}</ol>`+
     (meIdx>=0?`<p class="lr-me">${L(`Tu es ${meIdx+1}${meIdx===0?"er":"e"} sur ${rows.length} détective${rows.length>1?"s":""}`,`You're #${meIdx+1} of ${rows.length} detective${rows.length>1?"s":""}`)}</p>`:"")}
 (function(){const _sr=showReveal;showReveal=function(){const t=S.time||0,a=Math.max(1,S.attempts||1);_sr();
   const box=$("#reveal .box p");if(!box)return;
   const block=document.createElement("div");block.className="lvstats";
-  block.innerHTML=`<div class="mystat"><span>⏱ <b>${fmtT(t)}</b></span><span>🎯 <b>${a}</b> ${L(a>1?"tentatives":"tentative",a>1?"attempts":"attempt")}</span><span>💡 <b>${S.hints||0}</b></span></div>`+
+  block.innerHTML=`<div class="mystat"><span>⏱ <b>${fmtT(t)}</b></span><span>🎯 <b>${a}</b> ${L(a>1?"tentatives":"tentative",a>1?"attempts":"attempt")}</span><span>💡 <b>${S.hints||0}</b> ${L((S.hints||0)>1?"indices":"indice",(S.hints||0)>1?"hints":"hint")}</span></div>`+
     (ACC.profile&&ACC.profile.pseudo?`<h4>${L("Classement de cette enquête","This case's ranking")}</h4><div id="lrBox"><p class="lr-msg">${L("Chargement…","Loading…")}</p></div>`:`<p class="lr-msg">${L("Crée ton compte pour te comparer aux autres détectives !","Create an account to compare with other detectives!")}</p>`);
   box.after(block);
   if(ACC.profile&&ACC.profile.pseudo){const id=C.id,me=ACC.profile.pid;setTimeout(async()=>{const rows=await levelRank(id);const el=$("#lrBox");if(el)el.innerHTML=rankHTML(rows,me)},900)}
