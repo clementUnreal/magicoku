@@ -1,0 +1,11 @@
+.recit .kw{font-weight:700;cursor:pointer;border-radius:4px;padding:0 2px;margin:0 -1px;border-bottom:2px dotted currentColor;transition:background .15s}
+.recit .kw-obj{color:#9a5a00}
+.recit .kw-room{color:#6b3fa0}
+.recit .kw-row,.recit .kw-col{color:#1f6a8a}
+.recit .sn{cursor:pointer;border-radius:4px;padding:0 1px}
+.recit .kw:hover,.recit .sn:hover{background:rgba(214,171,79,.25)}
+.recit .kw.on,.recit .sn.on{background:rgba(255,207,77,.55);box-shadow:0 0 0 2px rgba(255,207,77,.55)}
+#marks .mk.kwhl{z-index:4;animation:kwglow 1.1s ease-in-out infinite alternate}
+#marks .mk.kwhl::before{content:"";position:absolute;inset:0;pointer-events:none;background:rgba(255,215,90,.32);box-shadow:inset 0 0 0 3px #ffcf4d}
+#marks .mk.kwhl.kw-room::before,#marks .mk.kwhl.kw-row::before,#marks .mk.kwhl.kw-col::before{background:rgba(255,215,90,.22);box-shadow:inset 0 0 0 2px rgba(255,207,77,.8)}
+@keyframes kwglow{from{filter:brightness(1)}to{filter:brightness(1.25) drop-shadow(0 0 6px #ffcf4d)}}

@@ -1,0 +1,8 @@
+.xm{inset:22%!important}
+.xm svg{filter:drop-shadow(0 1.5px 0 rgba(42,24,48,.25))!important}
+.xm .x1{stroke:#b8283e}
+.xm.auto .x1{stroke:#5d4a66}
+.xm.auto{opacity:.5!important;inset:28%!important}
+.xm.preview{opacity:.45!important}
+@keyframes xin{from{transform:scale(.3) rotate(-25deg);opacity:0}to{transform:none;opacity:1}}
+.xm:not(.auto):not(.preview){animation:xin .18s ease-out}

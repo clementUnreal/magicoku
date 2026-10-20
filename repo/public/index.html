@@ -524,6 +524,22 @@ h1::before{content:"☾ ";color:var(--gold);font-size:.7em;vertical-align:.12em}
 #marks .mk.kwhl::before{content:"";position:absolute;inset:0;pointer-events:none;background:rgba(255,215,90,.32);box-shadow:inset 0 0 0 3px #ffcf4d}
 #marks .mk.kwhl.kw-room::before,#marks .mk.kwhl.kw-row::before,#marks .mk.kwhl.kw-col::before{background:rgba(255,215,90,.22);box-shadow:inset 0 0 0 2px rgba(255,207,77,.8)}
 @keyframes kwglow{from{filter:brightness(1)}to{filter:brightness(1.25) drop-shadow(0 0 6px #ffcf4d)}}
+#hNews{position:relative}
+.nbadge{position:absolute;top:-8px;right:-8px;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:#d9334c;color:#fff;font:800 13px/22px var(--f-body);box-shadow:0 2px 0 #7a1020,0 0 0 2px #fff4;animation:nbump 1.6s ease-in-out infinite}
+.nbtn{position:relative}
+.ndot{position:absolute;top:2px;right:2px;width:10px;height:10px;border-radius:50%;background:#ff4f6a;box-shadow:0 0 0 2px #1a1330,0 0 8px #ff4f6a;animation:nbump 1.6s ease-in-out infinite}
+#newsBody{display:flex;flex-direction:column;gap:10px;max-height:min(62vh,520px);overflow:auto;padding-right:4px}
+.news{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.35);border:1.5px solid var(--parch-edge,#d8bf8f);border-radius:12px;padding:10px 12px;text-align:left}
+.news.fresh{border-color:#d6ab4f;background:linear-gradient(rgba(255,231,160,.55),rgba(255,248,225,.5));box-shadow:0 0 0 2px rgba(214,171,79,.25)}
+.news .nic{font-size:26px;line-height:1;flex:0 0 auto;margin-top:2px}
+.news h3{margin:0 0 3px;font:700 16px var(--f-title);color:var(--ink);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.news p{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink)}
+.news small{display:block;margin-top:4px;font-size:12px;color:var(--soft);font-style:italic}
+.ntag{font:800 10px var(--f-body);letter-spacing:.08em;text-transform:uppercase;background:#d9334c;color:#fff;border-radius:999px;padding:2px 7px}
+.npeek{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:80;transform:translate(-50%,140%);transition:transform .45s cubic-bezier(.2,1.3,.4,1);
+  border:2px solid var(--gold,#d6ab4f);background:linear-gradient(#2c1d4a,#1a1330);color:#ffe6a6;font:700 15px var(--f-title);padding:10px 18px;border-radius:999px;box-shadow:0 8px 24px #000a,0 0 18px rgba(214,171,79,.35);cursor:pointer;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+.npeek.on{transform:translate(-50%,0)}
+@keyframes nbump{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
 #verdict{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;background:rgba(12,6,24,0);transition:background .3s;pointer-events:auto}
 #verdict[hidden]{display:none}
 #verdict.on{background:rgba(12,6,24,.72)}
@@ -1691,6 +1707,38 @@ function kwApply(){document.querySelectorAll("#marks .mk.kwhl").forEach(e=>e.cla
 })();
 try{TUTO.fr[1][2]+=" Touche un <b>mot souligné</b> (pièce, objet, rangée) pour le voir s'illuminer sur le plan.";TUTO.en[1][2]+=" Tap an <b>underlined word</b> (room, object, row) to light it up on the map.";
 TUTO.ko[1][2]+=" <b>밑줄 친 단어</b>(방, 물건, 행)를 탭하면 지도에서 빛나요.";TUTO.ja[1][2]+="<b>下線の言葉</b>（部屋・家具・行）をタップすると、見取り図で光ります。"}catch(e){}
+/* ================= What's new ================= */
+var NEWS=[],NEWS_KEY="magicoku:newsSeen";
+function newsSeen(){try{const v=localStorage.getItem(NEWS_KEY);return v==null?null:+v}catch(e){return 0}}
+function newsMax(){return NEWS.reduce((m,n)=>Math.max(m,n.id),0)}
+function newsUnseen(){const s=newsSeen()||0;return NEWS.filter(n=>n.id>s).length}
+function newsTxt(n){return n[LANG]||n.en||n.fr}
+function renderNewsBadges(){const u=newsUnseen();
+  const hb=$("#hNews");if(hb){hb.innerHTML=`✨ ${L("Nouveautés","What's new","새로운 소식","お知らせ")}${u?`<span class="nbadge">${u}</span>`:""}`;hb.hidden=!NEWS.length}
+  const gb=$("#bNews");if(gb){gb.innerHTML=`✨${u?`<span class="ndot"></span>`:""}`;gb.title=L("Nouveautés","What's new","새로운 소식","お知らせ");gb.hidden=!NEWS.length}}
+function openNews(){const s=newsSeen()||0;const loc=LANG==="fr"?"fr-FR":LANG==="ko"?"ko-KR":LANG==="ja"?"ja-JP":"en-GB";
+  $("#mNewsT").textContent="✨ "+L("Nouveautés","What's new","새로운 소식","お知らせ");
+  $("#newsBody").innerHTML=NEWS.slice().sort((a,b)=>b.id-a.id).map(n=>{const t=newsTxt(n);let d="";try{d=new Date(n.date+"T12:00:00").toLocaleDateString(loc,{day:"numeric",month:"long"})}catch(e){}
+    return `<article class="news${n.id>s?" fresh":""}"><div class="nic">${n.icon||"✨"}</div><div><h3>${t.t}${n.id>s?`<span class="ntag">${L("Nouveau","New","NEW","NEW")}</span>`:""}</h3><p>${t.d}</p><small>${d}</small></div></article>`}).join("");
+  openModal("#mNews");try{localStorage.setItem(NEWS_KEY,String(newsMax()))}catch(e){}renderNewsBadges()}
+function newsPeek(){const u=newsUnseen();if(!u)return;const el=document.createElement("button");el.className="npeek";
+  el.innerHTML=`✨ <b>${u}</b> ${L(u>1?"nouveautés dans le jeu !":"nouveauté dans le jeu !",u>1?"new things in the game!":"new thing in the game!","가지 새로운 소식!","件のお知らせ！")}`;
+  if(LANG==="ko")el.innerHTML=`✨ 새로운 소식 <b>${u}</b>개!`;
+  el.onclick=()=>{el.remove();openNews()};document.body.appendChild(el);requestAnimationFrame(()=>el.classList.add("on"));
+  setTimeout(()=>{el.classList.remove("on");setTimeout(()=>el.remove(),500)},7000)}
+(function(){
+  const nav=$("#hMain");if(nav&&!$("#hNews")){const b=document.createElement("button");b.className="hb";b.id="hNews";b.hidden=true;nav.appendChild(b);b.onclick=e=>{e.stopPropagation();openNews()}}
+  const tb=$("#bTuto");if(tb&&!$("#bNews")){const b=document.createElement("button");b.className="hbtn nbtn";b.id="bNews";b.hidden=true;tb.after(b);b.onclick=()=>openNews()}
+  if(!$("#mNews")){const m=document.createElement("div");m.className="modal";m.id="mNews";m.hidden=true;m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");
+    m.innerHTML=`<div class="mbox"><button class="mclose" aria-label="✕">✕</button><h2 id="mNewsT"></h2><div id="newsBody"></div></div>`;document.body.appendChild(m);
+    m.addEventListener("click",e=>{if(e.target===m||e.target.closest(".mclose"))m.hidden=true})}
+  const _rs=renderStatic;renderStatic=function(){_rs.apply(this,arguments);renderNewsBadges()};
+  if(typeof renderHome==="function"){const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);renderNewsBadges()}}
+  fetch("news.json?v="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():[]).then(list=>{NEWS=Array.isArray(list)?list:[];
+    if(newsSeen()==null){let returning=false;try{for(let i=0;i<localStorage.length;i++){if(/^crimes-mignons-wiz:/.test(localStorage.key(i))){returning=true;break}}}catch(e){}
+      try{localStorage.setItem(NEWS_KEY,String(returning?Math.max(0,newsMax()-4):newsMax()))}catch(e){}}
+    renderNewsBadges();setTimeout(newsPeek,1600)}).catch(()=>{});
+})();
 
 render();
 </script>

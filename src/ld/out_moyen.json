@@ -1,0 +1,1 @@
+{"moyen": {"solution": [[5, 4], [3, 6], [4, 1], [6, 3], [0, 5], [1, 2], [2, 0]], "clues": {"2": [["adj", "desk"]], "1": [["room", "B"]], "4": [["adj", "plant"]], "5": [["adj", "candle"]], "3": [["row", 6]], "0": [["east", 3]], "6": [["notroom", "O"]]}, "killer": 3, "firstSingles": 1}}
