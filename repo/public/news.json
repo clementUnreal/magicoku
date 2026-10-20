@@ -1,5 +1,26 @@
 [
  {
+  "id": 18,
+  "date": "2026-10-20",
+  "icon": "🐛",
+  "fr": {
+   "t": "Correction : Défi chrono",
+   "d": "Demander un indice dans la dernière seconde ne bloque plus le chrono : si le temps tombe à zéro, la partie est perdue."
+  },
+  "en": {
+   "t": "Fix: Time trial",
+   "d": "Asking for a hint in the last second no longer freezes the timer: if time runs out, the game is lost."
+  },
+  "ko": {
+   "t": "수정: 타임 챌린지",
+   "d": "마지막 순간에 힌트를 요청해도 더 이상 타이머가 멈추지 않아요. 시간이 0이 되면 실패예요."
+  },
+  "ja": {
+   "t": "修正：タイムチャレンジ",
+   "d": "最後の一秒でヒントを使ってもタイマーが止まらなくなりました。時間がゼロになったら失敗です。"
+  }
+ },
+ {
   "id": 17,
   "date": "2026-10-20",
   "icon": "🚫",

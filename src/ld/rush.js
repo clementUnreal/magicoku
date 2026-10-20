@@ -59,7 +59,7 @@ function rushStars(left){return left>=30?3:left>=15?2:1}
   /* win hook (outermost wrapper) */
   const _sr=showReveal;showReveal=function(){if(RUSH.on){rushWin();return}return _sr.apply(this,arguments)};
   /* hint costs time */
-  const _h=hint;hint=function(){if(RUSH.on){if(RUSH.done||!RUSH.started)return;RUSH.left=Math.max(1,RUSH.left-10);paint();
+  const _h=hint;hint=function(){if(RUSH.on){if(RUSH.done||!RUSH.started)return;RUSH.left=Math.max(0,RUSH.left-10);paint();if(RUSH.left<=0){const f=document.createElement("div");f.className="rpen";f.textContent="−10 s";const b=$("#rushBar");if(b){b.appendChild(f);setTimeout(()=>f.remove(),1200)}rushLose();return}
       const f=document.createElement("div");f.className="rpen";f.textContent="−10 s";const b=$("#rushBar");if(b){b.appendChild(f);setTimeout(()=>f.remove(),1200)}}
     return _h.apply(this,arguments)};
   /* leaving the game ends the run */
