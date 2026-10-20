@@ -14,3 +14,10 @@
   window.recoverProgress=pull;
   setTimeout(()=>{pull().then(n=>{if(n)_sr()})},300);
 })();
+/* keep the account: ask the browser not to wipe our storage, and explain how to come back */
+(function(){
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
+  const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);
+    const p=ACC.profile,n=$("#accNote");if(!n||(p&&p.pseudo))return;
+    if(!n.querySelector(".back-hint"))n.insertAdjacentHTML("beforeend",`<br><b class="back-hint">${L("Tu as déjà joué ? Entre exactement le même nom de détective : ta progression sera récupérée automatiquement.","Played before? Enter exactly the same detective name: your progress will be recovered automatically.","전에 플레이한 적이 있나요? 같은 탐정 이름을 그대로 입력하면 진행 상황이 자동으로 복구돼요.","前に遊んだことがある？同じ探偵ネームを入力すれば、進行状況が自動で引き継がれます。")}</b>`)};
+})();
