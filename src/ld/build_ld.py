@@ -172,8 +172,8 @@ exec(open('patch_lv2.py').read())
 exec(open('patch_timer.py').read())
 exec(open('patch_story.py').read())
 exec(open('patch_i18n.py').read())
-_i=s.rindex('</script>');s=s[:_i]+open('verdict.js').read()+open('kw.js').read()+open('news.js').read()+'\nrender();\n'+s[_i:]
-s=s.replace('</style>',open('kw.css').read()+open('news.css').read()+'</style>',1)
+_i=s.rindex('</script>');s=s[:_i]+open('verdict.js').read()+open('kw.js').read()+open('news.js').read()+open('hint2.js').read()+'\nrender();\n'+s[_i:]
+s=s.replace('</style>',open('kw.css').read()+open('news.css').read()+open('hint2.css').read()+'</style>',1)
 s=s.replace('</style>',open('verdict.css').read()+'</style>',1)
 open('../crimes-mignons.html','w').write(s)
 print(len(s)//1024,"KB")
