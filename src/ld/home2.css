@@ -82,3 +82,5 @@
 @media (max-height:720px){.home-in.h2in{gap:8px}.home-in.h2in .home-logo .moon{display:none}.home-in.h2in .home-t{font-size:clamp(32px,9vw,44px)}
   .home-in.h2in .home-sub{font-size:14px}.home-who img{width:46px;height:46px}.h2-art{aspect-ratio:696/250}.h2-go{min-height:52px}.h2-card{min-height:92px}}
 .home-nav.h2,.h2-bar{word-break:keep-all;overflow-wrap:anywhere}
+.h2-card.c-disc .h2-ct b{white-space:nowrap}
+.h2-bar button span{white-space:nowrap;font-size:clamp(11px,3.3vw,13px);overflow-wrap:normal;word-break:normal}
