@@ -1,0 +1,38 @@
+.board{position:relative}
+.board .plan{z-index:1}
+.thfx{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:inherit}
+.thfx.under{z-index:0}.thfx.over{z-index:6}
+.thfx .p{position:absolute;display:block;animation:var(--anim) var(--d) linear infinite;transform:scale(var(--s))}
+/* forest: fireflies */
+.fx-forest .fly{width:6px;height:6px;border-radius:50%;background:#e8ff9a;box-shadow:0 0 8px 3px rgba(220,255,120,.6);--anim:fxfly;animation-timing-function:ease-in-out;opacity:.75}
+@keyframes fxfly{0%{transform:translate(0,0) scale(var(--s));opacity:0}20%{opacity:.8}50%{transform:translate(18px,-22px) scale(var(--s))}80%{opacity:.7}100%{transform:translate(-10px,-46px) scale(var(--s));opacity:0}}
+/* station: steam puffs drifting */
+.fx-station .steam{width:70px;height:40px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.35),rgba(255,255,255,0) 70%);--anim:fxsteam;top:-10px!important}
+@keyframes fxsteam{0%{transform:translate(-60px,10px) scale(.6);opacity:0}30%{opacity:1}100%{transform:translate(160px,-20px) scale(1.6);opacity:0}}
+/* bank: glints */
+.fx-bank .glint{width:10px;height:10px;background:radial-gradient(circle,#fff6c8 0 25%,rgba(242,196,67,.8) 30%,transparent 65%);clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);--anim:fxglint}
+@keyframes fxglint{0%,70%,100%{opacity:0;transform:scale(.2) rotate(0)}80%{opacity:1;transform:scale(1.4) rotate(45deg)}}
+/* alley: lantern glows */
+.fx-alley .lamp{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,90,.35),rgba(255,214,90,0) 70%);--anim:fxlamp;animation-timing-function:ease-in-out}
+@keyframes fxlamp{0%,100%{opacity:.4}45%{opacity:1}55%{opacity:.7}}
+/* village: snow */
+.fx-village .snow{width:5px;height:5px;border-radius:50%;background:#fff;opacity:.85;--anim:fxsnow;top:-6%!important}
+@keyframes fxsnow{0%{transform:translate(0,0) scale(var(--s))}50%{transform:translate(14px,55vh) scale(var(--s))}100%{transform:translate(-6px,110vh) scale(var(--s))}}
+.fx-village{overflow:hidden}
+/* lake: ripples */
+.fx-lake .ripple{width:40px;height:12px;border-radius:50%;border:2px solid rgba(255,255,255,.45);--anim:fxripple;animation-timing-function:ease-out}
+@keyframes fxripple{0%{transform:scale(.2);opacity:0}20%{opacity:1}100%{transform:scale(2.2);opacity:0}}
+/* stadium: confetti */
+.fx-stadium .confetti{width:7px;height:11px;border-radius:2px;--anim:fxconf;top:-5%!important;opacity:.8}
+.fx-stadium .confetti:nth-child(3n){background:#d6404f}.fx-stadium .confetti:nth-child(3n+1){background:#f2c443}.fx-stadium .confetti:nth-child(3n+2){background:#3f7fa8}
+@keyframes fxconf{0%{transform:translate(0,0) rotate(0)}100%{transform:translate(30px,105vh) rotate(720deg)}}
+/* hospital: bubbles */
+.fx-hospital .bubble{width:12px;height:12px;border-radius:50%;border:2px solid rgba(95,156,128,.5);background:rgba(255,255,255,.4);--anim:fxbub;top:100%!important}
+@keyframes fxbub{0%{transform:translate(0,0) scale(var(--s));opacity:0}15%{opacity:1}100%{transform:translate(12px,-110vh) scale(var(--s));opacity:0}}
+/* ministry: flying memos */
+.fx-ministry .memo{width:22px;height:12px;background:#f6ecd2;clip-path:polygon(0 0,100% 50%,0 100%,25% 50%);opacity:.85;--anim:fxmemo;left:-8%!important}
+@keyframes fxmemo{0%{transform:translate(0,0) rotate(-8deg)}50%{transform:translate(55vw,-30px) rotate(6deg)}100%{transform:translate(110vw,10px) rotate(-6deg)}}
+/* fortress: drifting fog */
+.fx-fortress .fog{width:260px;height:120px;border-radius:50%;background:radial-gradient(ellipse,rgba(210,215,230,.18),rgba(210,215,230,0) 70%);--anim:fxfog;left:-30%!important}
+@keyframes fxfog{0%{transform:translate(0,0)}100%{transform:translate(160%,-20px)}}
+.thfx .p{animation-name:var(--anim)}
