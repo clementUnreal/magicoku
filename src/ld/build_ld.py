@@ -38,7 +38,23 @@ for _i in range(1,11):
       f"<b>{_vk}</b>{_ga} 방금 천천히 퍼지는 독을 마셨다! 1분 안에 범인을 밝혀내 해독제를 손에 넣어라.",
       f"<b>{_vj}</b>が遅効性の毒を飲んでしまった！一分以内に犯人を暴いて、解毒剤を手に入れろ。"]
     _rmeta[_lid]=_m
-head="const DATA="+json.dumps(out,ensure_ascii=False,separators=(',',':'))+";\n"+open('meta.js').read()+"\nObject.assign(META,"+json.dumps(_extra,ensure_ascii=False)+");\nconst RUSH_DATA="+json.dumps(_rush,ensure_ascii=False,separators=(',',':'))+";\nObject.assign(META,"+json.dumps(_rmeta,ensure_ascii=False)+");\n"+helpers+"\n"
+_night=[];_nmeta={}
+for _i in range(1,11):
+    _p=f"lv/n{_i}.json"
+    if not os.path.exists(_p):continue
+    _d=json.load(open(_p));_lid=f"n{_i}"
+    _night.append(dict(id=_lid,rooms=_d['rooms'],objs=_d['objs'],windows=[],solution=_d['solution'],clues=_d['clues'],killer=_d['killer']))
+    _m=_mb(("m","d","f")[_i%3]+str(2+((_i+4)%9)),_d,(_i*4+1)%9)
+    _v=_m["people"][0];_f=_v[1]=="f";_vk,_vj=_RN[_v[0]]
+    _ga="이" if (0xAC00<=ord(_vk[-1])<=0xD7A3 and (ord(_vk[-1])-0xAC00)%28) else "가"
+    _m["level"]=["Mode nuit","Night mode","나이트 모드","ナイトモード"]
+    _m["title"]=[f"Nuit {_i}",f"Night {_i}",f"밤 {_i}",f"夜 {_i}"]
+    _m["story"]=[f"Une bourrasque a soufflé toutes les bougies de l'Académie. Dans le noir, <b>{_v[0]}</b> a été {'retrouvée' if _f else 'retrouvé'} sans vie. Ta lanterne est ta seule lumière : promène-la sur le plan pour l'explorer.",
+      f"A gust of wind blew out every candle in the Academy. In the dark, <b>{_v[0]}</b> was found lifeless. Your lantern is your only light: move it over the map to explore.",
+      f"돌풍이 불어 아카데미의 촛불이 모두 꺼졌다. 어둠 속에서 <b>{_vk}</b>{_ga} 숨진 채 발견되었다. 등불만이 유일한 빛이다. 지도 위로 등불을 움직여 살펴보자.",
+      f"突風でアカデミーのロウソクがすべて消えてしまった。暗闇の中で、<b>{_vj}</b>が息絶えているのが見つかった。頼りになるのはランタンの灯りだけ。見取り図の上を照らして調べよう。"]
+    _nmeta[_lid]=_m
+head="const DATA="+json.dumps(out,ensure_ascii=False,separators=(',',':'))+";\n"+open('meta.js').read()+"\nObject.assign(META,"+json.dumps(_extra,ensure_ascii=False)+");\nconst RUSH_DATA="+json.dumps(_rush,ensure_ascii=False,separators=(',',':'))+";\nObject.assign(META,"+json.dumps(_rmeta,ensure_ascii=False)+");\nconst NIGHT_DATA="+json.dumps(_night,ensure_ascii=False,separators=(',',':'))+";\nObject.assign(META,"+json.dumps(_nmeta,ensure_ascii=False)+");\n"+helpers+"\n"
 head+="const POR="+open('portraits.json').read()+";\n"
 head+=r'''const KNIFE=`<svg class="knife" viewBox="0 0 40 40"><g transform="rotate(-30 20 20)"><rect x="17" y="2" width="6" height="20" rx="2.5" fill="#dfe3ee" stroke="#2c1a33" stroke-width="1.2"/><rect x="14.5" y="21" width="11" height="3.2" rx="1.5" fill="#2c1a33"/><rect x="17.6" y="24" width="4.8" height="11" rx="2" fill="#8a5a33"/><circle cx="20" cy="8" r="2" fill="#b8283e"/></g></svg>`;
 function ava(p,o={}){const k=M.people[p][5];if(k)return `<img class="pimg" src="${POR[k]}" alt="" draggable="false" style="background:${look(p)[4]}">`+(o.angry?KNIFE:"");return face(look(p),o)+(o.angry&&false?KNIFE:"")}
@@ -190,8 +206,8 @@ exec(open('patch_lv2.py').read())
 exec(open('patch_timer.py').read())
 exec(open('patch_story.py').read())
 exec(open('patch_i18n.py').read())
-_i=s.rindex('</script>');s=s[:_i]+open('verdict.js').read()+open('kw.js').read()+open('news.js').read()+open('hint2.js').read()+open('nav.js').read()+open('rules2.js').read()+open('rush.js').read()+'\nrender();\n'+s[_i:]
-s=s.replace('</style>',open('kw.css').read()+open('news.css').read()+open('hint2.css').read()+open('nav.css').read()+open('rush.css').read()+'</style>',1)
+_i=s.rindex('</script>');s=s[:_i]+open('verdict.js').read()+open('kw.js').read()+open('news.js').read()+open('hint2.js').read()+open('nav.js').read()+open('rules2.js').read()+open('rush.js').read()+open('night.js').read()+'\nrender();\n'+s[_i:]
+s=s.replace('</style>',open('kw.css').read()+open('news.css').read()+open('hint2.css').read()+open('nav.css').read()+open('rush.css').read()+open('night.css').read()+'</style>',1)
 s=s.replace('</style>',open('verdict.css').read()+'</style>',1)
 open('../crimes-mignons.html','w').write(s)
 print(len(s)//1024,"KB")

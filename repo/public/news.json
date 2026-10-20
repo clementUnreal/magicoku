@@ -1,5 +1,26 @@
 [
  {
+  "id": 15,
+  "date": "2026-10-20",
+  "icon": "🏮",
+  "fr": {
+   "t": "Nouveau mode : Mode nuit",
+   "d": "Dix enquêtes plongées dans le noir. Ta souris, ou ton doigt sur téléphone, devient une lanterne qui éclaire le plan autour d'elle : à toi de découvrir les pièces et les objets."
+  },
+  "en": {
+   "t": "New mode: Night mode",
+   "d": "Ten cases plunged into darkness. Your mouse, or your finger on a phone, becomes a lantern that lights up the map around it: it's up to you to discover the rooms and objects."
+  },
+  "ko": {
+   "t": "새 모드: 나이트 모드",
+   "d": "어둠에 잠긴 사건 10개. 마우스(휴대폰에서는 손가락)가 주변을 비추는 등불이 돼요. 직접 방과 물건을 찾아내 보세요."
+  },
+  "ja": {
+   "t": "新モード：ナイトモード",
+   "d": "暗闇に包まれた事件が10個。マウス（スマホでは指）が周りを照らすランタンになります。部屋や家具を自分で見つけ出そう。"
+  }
+ },
+ {
   "id": 14,
   "date": "2026-10-20",
   "icon": "🏅",
