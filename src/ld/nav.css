@@ -1,0 +1,1 @@
+.home-panel > .hb.back.top{order:-1;align-self:flex-start;margin:0 0 4px;position:sticky;top:max(8px,env(safe-area-inset-top,0px));z-index:5;box-shadow:0 3px 0 #3b2a10,0 6px 14px rgba(0,0,0,.35),inset 0 0 0 2px #fff6}

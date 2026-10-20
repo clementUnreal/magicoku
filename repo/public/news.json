@@ -1,5 +1,26 @@
 [
  {
+  "id": 11,
+  "date": "2026-10-20",
+  "icon": "↩️",
+  "fr": {
+   "t": "Retour plus facile",
+   "d": "Le bouton « Retour » est maintenant en haut des menus et reste visible quand tu fais défiler. Le geste ou le bouton « retour » du téléphone te ramène dans le jeu au lieu de le quitter."
+  },
+  "en": {
+   "t": "Easier going back",
+   "d": "The “Back” button is now at the top of the menus and stays visible as you scroll. Your phone's back gesture or button takes you back within the game instead of leaving it."
+  },
+  "ko": {
+   "t": "더 쉬워진 뒤로 가기",
+   "d": "‘뒤로’ 버튼이 메뉴 위쪽으로 옮겨졌고, 스크롤해도 계속 보여요. 휴대폰의 뒤로 가기 동작이나 버튼을 눌러도 게임이 닫히지 않고 이전 화면으로 돌아가요."
+  },
+  "ja": {
+   "t": "戻るのがかんたんに",
+   "d": "「戻る」ボタンがメニューの上に移り、スクロールしても見えたままです。スマホの戻る操作やボタンでも、ゲームを閉じずに前の画面へ戻ります。"
+  }
+ },
+ {
   "id": 10,
   "date": "2026-10-20",
   "icon": "🌌",

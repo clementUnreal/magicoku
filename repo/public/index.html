@@ -563,6 +563,7 @@ h1::before{content:"☾ ";color:var(--gold);font-size:.7em;vertical-align:.12em}
 @media (max-width:980px){#hintBox{font-size:14.5px}}
 
 .recit p.hhl{background:rgba(255,207,77,.32);box-shadow:inset 3px 0 0 #e0a92e}
+.home-panel > .hb.back.top{order:-1;align-self:flex-start;margin:0 0 4px;position:sticky;top:max(8px,env(safe-area-inset-top,0px));z-index:5;box-shadow:0 3px 0 #3b2a10,0 6px 14px rgba(0,0,0,.35),inset 0 0 0 2px #fff6}
 #verdict{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;background:rgba(12,6,24,0);transition:background .3s;pointer-events:auto}
 #verdict[hidden]{display:none}
 #verdict.on{background:rgba(12,6,24,.72)}
@@ -1868,6 +1869,29 @@ hint=function(){
     TUTO.en[8][2]="<b>Hint</b> guides you step by step: first who to look at, then the reasoning, and finally the right square. You can reread your hints at any time.";
     TUTO.ko[8][2]="<b>힌트</b>는 단계별로 안내해요. 먼저 살펴볼 사람, 다음은 추론, 마지막으로 정답 칸. 사용한 힌트는 언제든 다시 볼 수 있어요.";
     TUTO.ja[8][2]="<b>ヒント</b>は一歩ずつ導きます。まず注目する人物、次に推理、最後に正しいマス。使ったヒントはいつでも読み返せます。"}catch(_){}
+})();
+/* ================= navigation: back buttons on top + system back gesture ================= */
+(function(){
+  document.querySelectorAll(".home-panel").forEach(p=>{const b=p.querySelector(":scope > [data-back]");if(b){b.classList.add("top");p.prepend(b)}});
+  const vis=s=>{const e=$(s);return e&&!e.hidden};
+  function atRoot(){if(vis("#verdict"))return false;if(document.querySelector(".modal:not([hidden])")||vis("#reveal")||vis("#tuto"))return false;
+    if(!vis("#home"))return false;return vis("#hMain")}
+  function doBack(){
+    if(vis("#verdict"))return;
+    const m=document.querySelector(".modal:not([hidden])");if(m){m.hidden=true;return}
+    if(vis("#reveal")){$("#reveal").hidden=true;return}
+    if(vis("#tuto")){endTuto();return}
+    if(!vis("#home")){$("#home").hidden=false;show("pLevels");try{play("page")}catch(e){}return}
+    if(!vis("#hMain")){show("hMain");try{play("page")}catch(e){}}
+  }
+  let trapped=false,ignore=false,pend=false;
+  function sync(){pend=false;const root=atRoot();
+    if(!root&&!trapped){try{history.pushState({mk:1},"");trapped=true}catch(e){}}
+    else if(root&&trapped){trapped=false;ignore=true;try{history.back()}catch(e){ignore=false}}}
+  const later=()=>{if(!pend){pend=true;setTimeout(sync,60)}};
+  window.addEventListener("popstate",()=>{if(ignore){ignore=false;return}trapped=false;doBack();later()});
+  new MutationObserver(later).observe(document.body,{attributes:true,attributeFilter:["hidden"],subtree:true,childList:true});
+  later();
 })();
 
 render();
