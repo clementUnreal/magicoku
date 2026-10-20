@@ -468,6 +468,27 @@ h1::before{content:"☾ ";color:var(--gold);font-size:.7em;vertical-align:.12em}
 .lgrow b{font:700 15px var(--f-title)}
 .lgrow small{color:var(--soft)}
 #tabs{display:none!important}
+.tmr{display:inline-flex;align-items:center;gap:10px;border:1.5px solid var(--gold);background:rgba(0,0,0,.25);color:var(--gold-soft);border-radius:999px;padding:5px 14px;font:700 14px var(--f-title);font-variant-numeric:tabular-nums}
+.tmr .t{font-size:16px;letter-spacing:.04em;min-width:52px;text-align:center}
+.tmr .a{font:600 13px var(--f-body);color:var(--mist)}
+.tmr.paused .t{opacity:.55}
+.tmr.done{border-color:#5fbf7a;color:#bff0c9}
+.tmr.done .t::after{content:" ✓"}
+.tmr .pz{font:600 11px var(--f-body);color:var(--mist);text-transform:uppercase;letter-spacing:.08em}
+.lvstats{display:flex;flex-direction:column;gap:8px;margin:0 0 14px;text-align:left}
+.mystat{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;font-size:16px;background:#fff8;border:1.5px solid var(--parch-edge);border-radius:10px;padding:8px}
+.lvstats h4{margin:4px 0 0;font:700 15px var(--f-title);color:var(--cherry);text-align:center}
+.lr{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+.lr li{display:grid;grid-template-columns:26px 30px minmax(0,1fr) auto;gap:8px;align-items:center;border:1px solid var(--parch-edge);background:#fff7;border-radius:8px;padding:4px 8px;font-size:14px}
+.lr li.me{border-color:var(--cherry);box-shadow:0 0 0 2px var(--gold-soft);background:#fffc}
+.lr .p{font:900 15px var(--f-display);color:var(--gold-deep);text-align:center}
+.lr img{width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:50% 12%;background:#e9d6ad}
+.lr b{font:700 14px var(--f-title);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lr .s{font-size:12.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lr-msg{margin:0;text-align:center;font-style:italic;color:var(--soft);font-size:14px}
+.lr-me{margin:4px 0 0;text-align:center;font:700 14px var(--f-title);color:var(--ink)}
+.lrsel{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+#lrSel{border:1.5px solid var(--parch-edge);border-radius:10px;padding:8px 10px;font:15px var(--f-body);background:#fffc;color:var(--ink)}
 </style>
 
 <div class="wrap">
@@ -483,7 +504,7 @@ h1::before{content:"☾ ";color:var(--gold);font-size:.7em;vertical-align:.12em}
       <div class="cards" id="cards"></div>
     </section>
     <section class="center">
-      <div class="views"><div class="seg2" role="group"><button id="vPlan" aria-pressed="true">🗺️ <span data-t="vplan"></span></button><button id="vSketch" aria-pressed="false">✏️ <span data-t="vsketch"></span></button></div>
+      <div class="views"><div class="tmr" id="tmr" aria-live="off"><span class="t" id="tmrT">00:00</span><span class="a" id="tmrA"></span><span class="pz" id="tmrP" hidden>⏸</span></div><div class="seg2" role="group"><button id="vPlan" aria-pressed="true">🗺️ <span data-t="vplan"></span></button><button id="vSketch" aria-pressed="false">✏️ <span data-t="vsketch"></span></button></div>
 <div class="skbar" id="skBar" hidden><button class="pen" data-c="#2b1a33" style="--c:#2b1a33" aria-label="noir"></button><button class="pen" data-c="#c0263d" style="--c:#c0263d" aria-label="rouge"></button><button class="pen" data-c="#2f6fc9" style="--c:#2f6fc9" aria-label="bleu"></button><button class="pen" data-c="#2f8a4e" style="--c:#2f8a4e" aria-label="vert"></button><button id="skErase" class="skb" data-t="skerase"></button><button id="skClear" class="skb" data-t="skclear"></button></div></div>
 <div class="board" id="board"></div>
       <p class="status" id="status"></p><div class="theory" id="theoryBox" hidden><label for="theory" data-t="theory"></label><textarea id="theory"></textarea></div>
@@ -1311,6 +1332,55 @@ function setMusic(on){MUS.on=on;try{localStorage.setItem("magicoku:music",on?"on
 document.addEventListener("click",e=>{const t=e.target.closest("button");if(t&&t.id==="oMusic")setMusic(!MUS.on)});
 (function(){const _r=renderHome;renderHome=function(){_r();const b=$("#oMusic");if(b){b.setAttribute("aria-pressed",MUS.on);$("#oMusicL").textContent=L("Musique du menu","Menu music")}}})();
 renderHome();
+
+/* ================= TIMER + ATTEMPTS + LEVEL COMPARISON ================= */
+const fmtT=s=>{s=Math.max(0,Math.round(s||0));return s>=3600?Math.floor(s/3600)+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"):String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
+function timerActive(){return S&&!S.solved&&$("#home").hidden&&$("#reveal").hidden&&$("#tuto").hidden&&!document.hidden&&document.querySelectorAll(".modal:not([hidden])").length===0}
+function renderTimer(){const el=$("#tmr");if(!el||!S)return;const on=timerActive();
+  el.className="tmr"+(S.solved?" done":on?"":" paused");
+  $("#tmrT").textContent=fmtT(S.time||0);
+  $("#tmrA").textContent=`${S.attempts||0} ${L((S.attempts||0)>1?"tentatives":"tentative",(S.attempts||0)>1?"attempts":"attempt")}`;
+  $("#tmrP").hidden=on||S.solved;}
+let _tick=0;
+setInterval(()=>{if(!S)return;if(timerActive()){S.time=(S.time||0)+1;if(++_tick%5===0)save()}renderTimer()},1000);
+document.addEventListener("visibilitychange",()=>{if(S)save();renderTimer()});
+/* attempts: count each real check */
+(function(){const el=$("#tValid"),orig=el.onclick;el.onclick=function(e){const P=M.people.length;if(Object.keys(S.place).length>=P){S.attempts=(S.attempts||0)+1;save()}const r=orig&&orig.call(this,e);renderTimer();return r}})();
+/* reset clears timer too (fresh() has no time) ; opening a solved case to replay starts over */
+(function(){const _o=openCase;openCase=function(i){_o(i);if(S.solved&&!S.replay){} renderTimer()}})();
+/* record: active time + attempts */
+recordWin=function(){
+  const id=C.id;if(!ACC.profile)return;
+  ACC.profile.progress=ACC.profile.progress||{};const prev=ACC.profile.progress[id];
+  const cur={solved:true,hints:S.hints||0,time:Math.round(S.time||0),attempts:Math.max(1,S.attempts||1),at:Date.now()};
+  const better=!prev||!prev.solved||cur.hints<prev.hints||(cur.hints===prev.hints&&(cur.time<prev.time||(cur.time===prev.time&&cur.attempts<(prev.attempts||99))));
+  if(better)ACC.profile.progress[id]=cur;
+  ACC.profile.games=(ACC.profile.games||0)+1;saveProfile();
+  return {cur,best:ACC.profile.progress[id],improved:better};
+};
+/* reveal: show my stats + level ranking */
+async function levelRank(id){try{const r=await fetch("/api/level?id="+encodeURIComponent(id),{cache:"no-store"});if(!r.ok)throw 0;return await r.json()}catch(e){return null}}
+function rankHTML(rows,meId){if(!rows)return `<p class="lr-msg">${L("Classement indisponible hors ligne.","Ranking unavailable offline.")}</p>`;
+  if(!rows.length)return `<p class="lr-msg">${L("Tu es le premier détective à résoudre cette enquête !","You're the first detective to solve this case!")}</p>`;
+  const esc=s=>String(s).replace(/[<>&"]/g,"");const meIdx=rows.findIndex(r=>r.id===meId);
+  const show=rows.slice(0,5);if(meIdx>=5)show.push(rows[meIdx]);
+  return `<ol class="lr">${show.map(r=>{const i=rows.indexOf(r);return `<li class="${r.id===meId?"me":""}"><span class="p">${["🥇","🥈","🥉"][i]||i+1}</span><img src="${POR[r.avatar]||POR[AVS[0]]}" alt=""><b>${esc(r.pseudo)}</b><span class="s">⏱ ${fmtT(r.time)} · 🎯 ${r.attempts} · 💡 ${r.hints}</span></li>`}).join("")}</ol>`+
+    (meIdx>=0?`<p class="lr-me">${L(`Tu es ${meIdx+1}${meIdx===0?"er":"e"} sur ${rows.length} détective${rows.length>1?"s":""}`,`You're #${meIdx+1} of ${rows.length} detective${rows.length>1?"s":""}`)}</p>`:"")}
+(function(){const _sr=showReveal;showReveal=function(){const t=S.time||0,a=Math.max(1,S.attempts||1);_sr();
+  const box=$("#reveal .box p");if(!box)return;
+  const block=document.createElement("div");block.className="lvstats";
+  block.innerHTML=`<div class="mystat"><span>⏱ <b>${fmtT(t)}</b></span><span>🎯 <b>${a}</b> ${L(a>1?"tentatives":"tentative",a>1?"attempts":"attempt")}</span><span>💡 <b>${S.hints||0}</b></span></div>`+
+    (ACC.profile&&ACC.profile.pseudo?`<h4>${L("Classement de cette enquête","This case's ranking")}</h4><div id="lrBox"><p class="lr-msg">${L("Chargement…","Loading…")}</p></div>`:`<p class="lr-msg">${L("Crée ton compte pour te comparer aux autres détectives !","Create an account to compare with other detectives!")}</p>`);
+  box.after(block);
+  if(ACC.profile&&ACC.profile.pseudo){const id=C.id,me=ACC.profile.pid;setTimeout(async()=>{const rows=await levelRank(id);const el=$("#lrBox");if(el)el.innerHTML=rankHTML(rows,me)},900)}
+}})();
+/* leaderboard panel: per-level tab */
+(function(){const _rr=renderRank;renderRank=function(){_rr();const panel=$("#pRank");if(!panel)return;
+  let sel=$("#lrSel");if(!sel){const w=document.createElement("div");w.className="lrsel";w.innerHTML=`<select id="lrSel"></select><div id="lrLvl"></div>`;$("#rankList").after(w);sel=$("#lrSel");
+    sel.onchange=async()=>{const v=sel.value;$("#lrLvl").innerHTML=v?`<p class="lr-msg">${L("Chargement…","Loading…")}</p>`:"";if(v)$("#lrLvl").innerHTML=rankHTML(await levelRank(v),ACC.profile&&ACC.profile.pid)}}
+  const cur=sel.value;sel.innerHTML=`<option value="">${L("— Voir le classement d'une enquête —","— See a case's ranking —")}</option>`+DATA.map((c,i)=>`<option value="${c.id}">${META[c.id].level[LI()]} ${DATA.filter((d,j)=>j<i&&tierOf(j)===tierOf(i)).length+1} · ${META[c.id].title[LI()]}</option>`).join("");sel.value=cur;
+}})();
+renderTimer();
 
 </script>
 

@@ -10,6 +10,15 @@ async function sha(s) {
   const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(s)));
   return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join("");
 }
+function sanitizeProgress(progress) {
+  const out = {};
+  for (const [k, v] of Object.entries(progress || {}).slice(0, 60)) {
+    if (!/^[a-z0-9]{1,12}$/.test(k) || !v || !v.solved) continue;
+    out[k] = { t: Math.max(0, Math.min(86400, Math.round(Number(v.time) || 0))), h: Math.max(0, Math.min(999, Number(v.hints) || 0)),
+      a: Math.max(1, Math.min(999, Number(v.attempts) || 1)) };
+  }
+  return out;
+}
 function summarize(progress) {
   let solved = 0, hints = 0, time = 0;
   for (const v of Object.values(progress || {})) {
@@ -49,13 +58,23 @@ export class Leaderboard extends DurableObject {
     rows.sort((a, b) => b.solved - a.solved || a.hints - b.hints || a.time - b.time);
     return rows.slice(0, 100);
   }
+  async level(lid) {
+    const all = await this.ctx.storage.list({ prefix: "p:" });
+    const rows = [];
+    for (const v of all.values()) {
+      const x = v && v.prog && v.prog[lid];
+      if (x && v.row) rows.push({ id: v.row.id, pseudo: v.row.pseudo, avatar: v.row.avatar, time: x.t, hints: x.h, attempts: x.a });
+    }
+    rows.sort((a, b) => a.hints - b.hints || a.time - b.time || a.attempts - b.attempts);
+    return rows.slice(0, 100);
+  }
   async submit(body) {
     const id = clean(body.id, 64), token = String(body.token || "");
     if (!/^[\w-]{8,64}$/.test(id) || token.length < 8) return { status: 400, body: { error: "bad id" } };
     const key = "p:" + id, prev = await this.ctx.storage.get(key), tok = await sha(token);
     if (prev && prev.tok && prev.tok !== tok) return { status: 403, body: { error: "forbidden" } };
     const row = { id, pseudo: clean(body.pseudo, 20) || "Détective", avatar: clean(body.avatar, 20), ...summarize(body.progress) };
-    await this.ctx.storage.put(key, { tok, row, at: Date.now() });
+    await this.ctx.storage.put(key, { tok, row, prog: sanitizeProgress(body.progress), at: Date.now() });
     return { status: 200, body: { ok: true } };
   }
 }
@@ -73,6 +92,11 @@ export default {
         return json(r.body, r.status);
       }
       return json({ error: "method" }, 405);
+    }
+    if (url.pathname === "/api/level") {
+      const lid = url.searchParams.get("id") || "";
+      if (!/^[a-z0-9]{1,12}$/.test(lid)) return json({ error: "bad level" }, 400);
+      return json(await env.LB.get(env.LB.idFromName("main")).level(lid));
     }
     if (url.pathname === "/api/legacy") {
       try {
