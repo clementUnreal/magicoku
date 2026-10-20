@@ -243,8 +243,8 @@ exec(open('patch_lv2.py').read())
 exec(open('patch_timer.py').read())
 exec(open('patch_story.py').read())
 exec(open('patch_i18n.py').read())
-_i=s.rindex('</script>');s=s[:_i]+open('verdict.js').read()+open('kw.js').read()+open('news.js').read()+open('hint2.js').read()+open('nav.js').read()+open('rules2.js').read()+open('rush.js').read()+open('night.js').read()+open('liar.js').read()+open('modes.js').read()+open('storymode.js').read()+open('recover.js').read()+open('envtheme.js').read()+open('ambience.js').read()+open('levelview.js').read()+open('tuto2.js').read()+open('home2.js').read()+open('rank2.js').read()+'\nrender();\n'+s[_i:]
-s=s.replace('</style>',open('kw.css').read()+open('news.css').read()+open('hint2.css').read()+open('nav.css').read()+open('rush.css').read()+open('night.css').read()+open('liar.css').read()+open('modes.css').read()+open('storymode.css').read()+open('envtheme.css').read()+open('ambience.css').read()+open('levelview.css').read()+open('tuto2.css').read()+open('home2.css').read()+open('rank2.css').read()+'</style>',1)
+_i=s.rindex('</script>');s=s[:_i]+open('verdict.js').read()+open('kw.js').read()+open('news.js').read()+open('hint2.js').read()+open('nav.js').read()+open('rules2.js').read()+open('rush.js').read()+open('night.js').read()+open('liar.js').read()+open('modes.js').read()+open('storymode.js').read()+open('recover.js').read()+open('envtheme.js').read()+open('ambience.js').read()+open('levelview.js').read()+open('tuto2.js').read()+open('home2.js').read()+open('rank2.js').read()+open('reveal2.js').read()+'\nrender();\n'+s[_i:]
+s=s.replace('</style>',open('kw.css').read()+open('news.css').read()+open('hint2.css').read()+open('nav.css').read()+open('rush.css').read()+open('night.css').read()+open('liar.css').read()+open('modes.css').read()+open('storymode.css').read()+open('envtheme.css').read()+open('ambience.css').read()+open('levelview.css').read()+open('tuto2.css').read()+open('home2.css').read()+open('rank2.css').read()+open('reveal2.css').read()+'</style>',1)
 s=s.replace('</style>',open('verdict.css').read()+'</style>',1)
 open('../crimes-mignons.html','w').write(s)
 print(len(s)//1024,"KB")

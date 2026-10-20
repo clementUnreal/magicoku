@@ -984,6 +984,63 @@ body.night #marks .mk.room{background:none!important}
 .rk-ct{margin:4px 0 0;text-align:center;font:800 18px "Cinzel",Georgia,serif;color:#3a1f3d}
 .rk-note{margin:0;text-align:center;font:italic 13px var(--f-body);color:#7a6250}
 @media (max-width:360px){.rk-lvs{grid-template-columns:repeat(5,1fr)}}
+/* ================= "Case closed" popup v2 ================= */
+#reveal .box.rv2{position:relative;width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow-y:auto;overflow-x:hidden;padding:0 18px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;
+  background:radial-gradient(120% 60% at 50% 0%,#fff8e6,transparent 60%),linear-gradient(#f8eed8,#ead6ad);border:3px solid #d6ab4f;border-radius:20px;box-shadow:0 0 0 2px #5a3b12,0 0 0 7px rgba(214,171,79,.25),0 24px 60px #000c;scrollbar-width:none}
+#reveal .box.rv2::-webkit-scrollbar{display:none}
+.rv2>*{position:relative}
+.rv2 .rv-rays{position:absolute!important;left:50%;top:70px;width:420px;height:420px;margin-left:-210px;border-radius:50%;pointer-events:none;opacity:.55;
+  background:repeating-conic-gradient(from 0deg,#f6d36a55 0 6deg,transparent 6deg 18deg);-webkit-mask-image:radial-gradient(circle,#000 20%,transparent 62%);mask-image:radial-gradient(circle,#000 20%,transparent 62%);animation:rvspin 24s linear infinite}
+@keyframes rvspin{to{transform:rotate(360deg)}}
+.rv-rib{margin-top:16px;padding:8px 34px;background:linear-gradient(#c43a54,#8d1d33);color:#fbefc8;font:900 clamp(15px,4.4vw,18px) "Cinzel",Georgia,serif;letter-spacing:.08em;text-transform:uppercase;
+  clip-path:polygon(0 0,100% 0,94% 50%,100% 100%,0 100%,6% 50%);box-shadow:0 3px 0 #4a0d1a;animation:rvdrop .5s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes rvdrop{from{transform:translateY(-14px) scale(.9);opacity:0}}
+.rv-por{width:132px;height:132px;margin-top:4px;animation:rvpop .55s cubic-bezier(.2,1.5,.4,1) .1s both}
+@keyframes rvpop{from{transform:scale(.5);opacity:0}}
+.rv-av{width:100%;height:100%;border-radius:22px;overflow:hidden;background:#d8eccf;box-shadow:0 0 0 4px #3a1f3d,0 0 0 7px #d6ab4f,0 10px 22px #0005}
+.rv-av>*{width:100%;height:100%}
+.rv-av svg,.rv-av img{width:100%;height:100%;object-fit:cover;display:block}
+.rv-stamp{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%) rotate(-9deg);padding:3px 12px;border:3px solid #b8283e;border-radius:6px;color:#b8283e;background:#fff5ee;
+  font:900 16px "Cinzel",Georgia,serif;letter-spacing:.12em;text-transform:uppercase;box-shadow:0 3px 8px #0003;animation:rvstamp .45s cubic-bezier(.3,1.6,.5,1) .55s both}
+@keyframes rvstamp{from{transform:translateX(-50%) rotate(-9deg) scale(2.4);opacity:0}}
+.rv2 h2{margin:6px 0 0;font:900 clamp(28px,8vw,36px)/1.05 "Cinzel Decorative","Cinzel",Georgia,serif;color:#a3263b;text-shadow:0 2px 0 #fff8}
+.rv-stars{display:flex;gap:6px;font-size:30px;line-height:1}
+.rv-stars span{color:#d9cba8;text-shadow:0 2px 0 #fff8}
+.rv-stars span.on{color:#f2b632;text-shadow:0 2px 0 #9a6a10,0 0 12px #f6d36a;animation:rvstar .5s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes rvstar{from{transform:scale(0) rotate(-90deg)}}
+.rv-file{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;background:#fffaf0;border:1.5px dashed #c9a35a;border-radius:12px;padding:10px 12px;box-sizing:border-box}
+.rv-fi{font-size:22px;line-height:1.2}
+.rv-file p{margin:0;font:500 15px/1.4 var(--f-body);color:#3a2a30}
+.rv-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.rv-stats div{background:#fffaf0;border:1.5px solid #e2cfa4;border-radius:12px;padding:8px 4px;display:flex;flex-direction:column;gap:2px}
+.rv-stats b{font:900 22px "Cinzel",Georgia,serif;color:#3a1f3d}
+.rv-stats small{font:600 12.5px var(--f-body);color:#7a6250}
+.rv-bdgs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.rv-bdg{padding:5px 12px;border-radius:999px;background:linear-gradient(#3c8a4a,#2a6a36);color:#fff;font:800 13px var(--f-body);box-shadow:0 2px 0 #1a4a24}
+.rv-prog{width:100%;display:flex;flex-direction:column;gap:5px}
+.rv-pt{display:flex;justify-content:space-between;font:700 13.5px var(--f-body);color:#4a3426}
+.rv-pt b{color:#8d1d33}
+.rv-bar{height:9px;border-radius:9px;background:#e3cfa3;overflow:hidden;box-shadow:inset 0 1px 2px #0002}
+.rv-bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#d6ab4f,#b8283e);animation:rvbar 1s ease-out .4s both}
+@keyframes rvbar{from{width:0!important}}
+.rv-rank{width:100%;display:flex;flex-direction:column;gap:6px}
+.rv-rank h4{margin:4px 0 0;font:800 15px "Cinzel",Georgia,serif;color:#8d1d33;letter-spacing:.03em}
+.rv-rk-me{font:600 14px var(--f-body);color:#3a1f3d}.rv-rk-me b{color:#b8283e}
+.rv-rk{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+.rv-rk li{display:grid;grid-template-columns:26px 32px minmax(0,1fr) auto;gap:8px;align-items:center;padding:5px 10px;border-radius:10px;background:#fffaf0;border:1.5px solid #e2cfa4;text-align:left}
+.rv-rk li.me{border-color:#b8283e;background:#fff3f0}
+.rv-rk .p{font:900 15px "Cinzel",Georgia,serif;color:#9a7426;text-align:center}
+.rv-rk img{width:32px;height:32px;border-radius:50%;object-fit:cover;object-position:50% 12%;background:#e9d6ad}
+.rv-rk b{font:800 15px var(--f-body);color:#3a1f3d;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rv-rk .s{font:700 13px var(--f-body);color:#4a3426;white-space:nowrap;display:flex;gap:8px}
+.rv-rk .s i{font-style:normal;color:#7a6250}
+.rv-msg{margin:0;font:italic 14px var(--f-body);color:#7a6250}
+.rv2 .acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-top:4px;position:sticky;bottom:-18px;padding:10px 0 2px;background:linear-gradient(transparent,#ead6ad 30%)}
+.rv2 .acts .pill{width:100%;min-height:48px;font-size:15px}
+.rv2 .acts .pill:only-child{grid-column:1/-1}
+@media (prefers-reduced-motion:reduce){.rv2 *{animation:none!important}}
+.rv2{word-break:keep-all;overflow-wrap:anywhere}
+@media (max-height:720px){.rv-por{width:104px;height:104px}.rv2 h2{font-size:26px}.rv-stars{font-size:24px}.rv-file p{font-size:14px}.rv-stats b{font-size:19px}}
 #verdict{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;background:rgba(12,6,24,0);transition:background .3s;pointer-events:auto}
 #verdict[hidden]{display:none}
 #verdict.on{background:rgba(12,6,24,.72)}
@@ -3094,6 +3151,47 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
     if(t.id==="rkAcc"){show("pAccount")}});
   renderRank=function(){const h=$("#pRankT");if(h)h.innerHTML=`<span class="rk-tro">🏆</span>${L("Classement","Leaderboard","순위","ランキング")}`;draw()};
   try{renderRank()}catch(e){}
+})();
+
+/* ================= "Case closed" popup v2 ================= */
+(function(){
+  const special=()=>(typeof RUSH!=="undefined"&&RUSH.on)||(typeof NIGHT!=="undefined"&&NIGHT.on)||(typeof LIAR!=="undefined"&&LIAR.on);
+  const esc=s=>String(s==null?"":s).replace(/[<>&"]/g,"");
+  const hintsW=n=>L(n>1?"indices":"indice",n>1?"hints":"hint","힌트","ヒント");
+  const triesW=n=>L(n>1?"tentatives":"tentative",n>1?"tries":"try","시도","回挑戦");
+  const place=n=>L(n===1?"1re":n+"ᵉ",n===1?"1st":n===2?"2nd":n===3?"3rd":n+"th",n+"위",n+"位");
+  function isMe(r){const p=ACC.profile;if(!p||!p.pseudo)return false;return r.id===p.pid||String(r.pseudo||"").trim().toLowerCase()===String(p.pseudo).trim().toLowerCase()}
+  function rankBlock(rows){
+    if(!rows)return `<p class="rv-msg">${L("Classement indisponible hors ligne.","Ranking unavailable offline.","오프라인에서는 순위를 볼 수 없어요.","オフラインではランキングを表示できません。")}</p>`;
+    if(!rows.length)return `<p class="rv-msg">🥇 ${L("Tu es le premier détective à résoudre cette enquête !","You're the first detective to solve this case!","이 사건을 처음으로 해결한 탐정이에요!","この事件を最初に解いた探偵です！")}</p>`;
+    const mi=rows.findIndex(isMe),show=rows.slice(0,3);if(mi>=3)show.push(rows[mi]);
+    const head=mi>=0?`<div class="rv-rk-me">${mi===0?"👑 ":""}${L(`Tu es <b>${place(mi+1)}</b> sur ${rows.length} détective${rows.length>1?"s":""}`,`You're <b>${place(mi+1)}</b> of ${rows.length} detective${rows.length>1?"s":""}`,`탐정 ${rows.length}명 중 <b>${place(mi+1)}</b>`,`探偵${rows.length}人中<b>${place(mi+1)}</b>`)}</div>`:"";
+    return head+`<ol class="rv-rk">${show.map(r=>{const i=rows.indexOf(r);return `<li class="${isMe(r)?"me":""}"><span class="p">${["🥇","🥈","🥉"][i]||i+1}</span><img src="${POR[r.avatar]||POR[AVS[0]]}" alt=""><b>${esc(r.pseudo)}</b><span class="s">⏱ ${fmtT(r.time)}<i>💡 ${r.hints}</i></span></li>`}).join("")}</ol>`}
+  const _sr=showReveal;showReveal=function(){
+    const t=S.time||0,a=Math.max(1,S.attempts||1),h=S.hints||0;_sr.apply(this,arguments);
+    if(special())return;const ov=$("#reveal"),old=ov&&ov.querySelector(".box");if(!old)return;
+    const K=C.killer,story=old.querySelector("p");if(story)story.querySelectorAll("small,br").forEach(e=>e.remove());
+    const stars=[true,h===0,a===1],ns=stars.filter(Boolean).length;
+    const tr=tierOf(ci),idx=DATA.map((c,i)=>i).filter(i=>tierOf(i)===tr),k=idx.indexOf(ci)+1,done=idx.filter(lvlSolved).length;
+    const badges=[h===0?`<span class="rv-bdg">✨ ${L("Sans indice","No hints","힌트 없이","ヒントなし")}</span>`:"",a===1?`<span class="rv-bdg">🎯 ${L("Du premier coup","First try","한 번에","一発で")}</span>`:""].join("");
+    const hasNext=ci<DATA.length-1;
+    old.className="box rv2";
+    old.innerHTML=`<div class="rv-rays"></div><div class="rv-rib"><span>${L("Affaire résolue !","Case closed!","사건 해결!","事件解決！")}</span></div>
+      <div class="rv-por"><div class="rv-av">${ava(K,{angry:true})}</div><div class="rv-stamp">${L("Coupable","Guilty","범인","犯人")}</div></div>
+      <h2 id="rv">${L(`C'est ${pname(K)} !`,`It's ${pname(K)}!`,`범인은 ${pname(K)}!`,`犯人は${pname(K)}だ！`)}</h2>
+      <div class="rv-stars" aria-label="${ns}/3">${stars.map((s,i)=>`<span class="${s?"on":""}" style="animation-delay:${.25+i*.18}s">★</span>`).join("")}</div>
+      <div class="rv-file"><span class="rv-fi">📜</span><p>${story?story.innerHTML:""}</p></div>
+      <div class="rv-stats"><div><b>${fmtT(t)}</b><small>⏱ ${L("temps","time","시간","時間")}</small></div><div><b>${a}</b><small>🎯 ${triesW(a)}</small></div><div><b>${h}</b><small>💡 ${hintsW(h)}</small></div></div>
+      ${badges?`<div class="rv-bdgs">${badges}</div>`:""}
+      <div class="rv-prog"><div class="rv-pt"><span>${esc(TX(CH_SHORT[tr]))} · ${L("Niveau","Level","레벨","レベル")} ${k}/10</span><b>${done}/${idx.length} ${L("résolues","solved","해결","解決")}</b></div><div class="rv-bar"><i style="width:${Math.round(100*done/idx.length)}%"></i></div></div>
+      <div class="rv-rank"><h4>🏆 ${L("Classement de cette enquête","This case's ranking","이 사건의 순위","この事件のランキング")}</h4><div id="rvRk">${ACC.profile&&ACC.profile.pseudo?`<p class="rv-msg">${L("Chargement…","Loading…","불러오는 중…","読み込み中…")}</p>`:`<p class="rv-msg">${L("Crée ton compte pour te comparer aux autres détectives !","Create an account to compare with other detectives!","계정을 만들면 다른 탐정과 비교할 수 있어요!","アカウントを作ってほかの探偵と比べよう！")}</p>`}</div></div>
+      <div class="acts"><button class="pill" id="rvClose">${L("Admirer ma grille","Admire my grid","내 격자 감상하기","自分のグリッドを眺める")}</button>${hasNext?`<button class="pill red" id="rvNext">${L("Enquête suivante","Next case","다음 사건","次の事件")} ›</button>`:""}</div>`;
+    $("#rvClose").onclick=()=>ov.hidden=true;
+    const nx=$("#rvNext");if(nx)nx.onclick=()=>{ov.hidden=true;openCase(ci+1)};
+    try{$("#rvClose").focus({preventScroll:true})}catch(_){}
+    old.scrollTop=0;
+    if(ACC.profile&&ACC.profile.pseudo){const id=C.id;setTimeout(async()=>{const rows=await levelRank(id);const el=$("#rvRk");if(el&&C.id===id)el.innerHTML=rankBlock(rows)},900)}
+  };
 })();
 
 render();

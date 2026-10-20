@@ -1,5 +1,26 @@
 [
  {
+  "id": 30,
+  "date": "2026-10-21",
+  "icon": "⭐",
+  "fr": {
+   "t": "Affaire résolue : jusqu'à 3 étoiles",
+   "d": "La fenêtre de fin d'enquête a été refaite : tampon « Coupable » sur le portrait, résumé du crime, et jusqu'à 3 étoiles à gagner (enquête résolue, sans indice, du premier coup). Elle montre aussi ta progression dans le chapitre et ta place au classement de l'enquête."
+  },
+  "en": {
+   "t": "Case closed: up to 3 stars",
+   "d": "The end-of-case window has been redesigned: a “Guilty” stamp on the portrait, a summary of the crime, and up to 3 stars to earn (case solved, no hints, first try). It also shows your progress in the chapter and your place in the case's ranking."
+  },
+  "ko": {
+   "t": "사건 해결: 별 최대 3개",
+   "d": "사건 해결 창이 새로워졌어요. 초상화에 ‘범인’ 도장이 찍히고, 사건 요약과 함께 별을 최대 3개(사건 해결, 힌트 없이, 한 번에) 받을 수 있어요. 장 진행도와 이 사건의 내 순위도 보여 줘요."
+  },
+  "ja": {
+   "t": "事件解決：星を最大3つ",
+   "d": "事件解決の画面をリニューアルしました。肖像に「犯人」のスタンプ、事件のまとめ、そして星を最大3つ（事件解決、ヒントなし、一発クリア）獲得できます。章の進み具合と、この事件でのあなたの順位も表示されます。"
+  }
+ },
+ {
   "id": 29,
   "date": "2026-10-21",
   "icon": "🏆",
