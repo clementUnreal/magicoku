@@ -1,5 +1,26 @@
 [
  {
+  "id": 19,
+  "date": "2026-10-20",
+  "icon": "🤥",
+  "fr": {
+   "t": "Nouveau mode : Le Menteur",
+   "d": "Dix enquêtes où les suspects témoignent… et où l'un d'eux ment. Une seule déclaration est fausse : trouve la seule disposition où tout le reste colle. Pas d'indice. Se débloque après le niveau 30 du mode histoire."
+  },
+  "en": {
+   "t": "New mode: The Liar",
+   "d": "Ten cases where the suspects testify… and one of them lies. Exactly one statement is false: find the only arrangement where everything else fits. No hints. Unlocks after level 30 of story mode."
+  },
+  "ko": {
+   "t": "새 모드: 거짓말쟁이",
+   "d": "용의자들이 진술하지만 그중 한 명은 거짓말을 하는 사건 10개. 거짓 진술은 단 하나! 나머지가 모두 들어맞는 유일한 배치를 찾으세요. 힌트는 없어요. 스토리 모드 30레벨을 클리어하면 열려요."
+  },
+  "ja": {
+   "t": "新モード：嘘つき",
+   "d": "容疑者たちが証言するが、そのうち一人は嘘をついている事件が10個。偽りの証言はひとつだけ。ほかがすべて合う、ただひとつの配置を見つけよう。ヒントはなし。ストーリーモードのレベル30をクリアすると解放。"
+  }
+ },
+ {
   "id": 18,
   "date": "2026-10-20",
   "icon": "🐛",
