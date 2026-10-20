@@ -22,7 +22,28 @@ function summarize(progress) {
 }
 
 export class Leaderboard extends DurableObject {
+  // Copies players from the old Netlify leaderboard (at most every 5 minutes).
+  // Imported rows have no token yet: the player claims them via "Récupérer ma progression".
+  async importLegacy() {
+    const last = (await this.ctx.storage.get("__legacy_at")) || 0;
+    if (Date.now() - last < 300000) return;
+    await this.ctx.storage.put("__legacy_at", Date.now());
+    try {
+      const r = await fetch(OLD, { headers: { accept: "application/json" } });
+      if (!r.ok) return;
+      const rows = await r.json();
+      for (const x of Array.isArray(rows) ? rows : []) {
+        const id = clean(x && x.id, 64);
+        if (!/^[\w-]{8,64}$/.test(id) || !x.pseudo) continue;
+        const row = { id, pseudo: clean(x.pseudo, 20), avatar: clean(x.avatar, 20),
+          solved: Math.max(0, Math.min(999, Number(x.solved) || 0)), hints: Number(x.hints) || 0, time: Number(x.time) || 0 };
+        const prev = await this.ctx.storage.get("p:" + id);
+        if (!prev || (!prev.tok && prev.row.solved < row.solved)) await this.ctx.storage.put("p:" + id, { tok: null, row, at: Date.now(), imported: true });
+      }
+    } catch {}
+  }
   async list() {
+    await this.importLegacy();
     const all = await this.ctx.storage.list({ prefix: "p:" });
     const rows = [...all.values()].map((v) => v.row).filter(Boolean);
     rows.sort((a, b) => b.solved - a.solved || a.hints - b.hints || a.time - b.time);

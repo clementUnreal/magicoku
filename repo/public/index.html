@@ -1246,6 +1246,7 @@ document.addEventListener("click",async e=>{const t=e.target.closest("button");i
     const n=Math.min(x.solved,DATA.length),prog=Object.assign({},(ACC.profile&&ACC.profile.progress)||{});
     for(let i=0;i<n;i++){const id=DATA[i].id;if(!prog[id])prog[id]={solved:true,hints:i===0?x.hints:0,time:i===0?x.time:0,at:Date.now()};try{const k="crimes-mignons-wiz:"+id;const st=JSON.parse(localStorage.getItem(k)||"{}");st.solved=true;localStorage.setItem(k,JSON.stringify(st))}catch(_){}}
     ACC.profile=Object.assign(ACC.profile||{games:0,created:Date.now()},{pseudo:(ACC.profile&&ACC.profile.pseudo)||x.pseudo,avatar:(ACC.profile&&ACC.profile.avatar)||x.avatar||AVS[0],progress:prog,legacy:true});
+    if(x.id&&/^[\w-]{8,64}$/.test(x.id)){ACC.profile.pid=x.id;ACC.profile.ptok=rid()}
     avSel=ACC.profile.avatar;nameDraft=null;await saveProfile();play("win");toast(L(`Progression récupérée : ${n} enquêtes débloquées !`,`Progress recovered: ${n} cases unlocked!`));renderHome()}
   else if(t.id==="accSave"){const n=$("#accName").value.trim();if(!n){toast(L("Choisis un nom de détective.","Pick a detective name."));$("#accName").focus();return}
     const isNew=!(ACC.profile&&ACC.profile.pseudo);ACC.profile=Object.assign(ACC.profile||{progress:{},games:0,created:Date.now()},{pseudo:n,avatar:avSel});
