@@ -500,13 +500,15 @@ h1::before{content:"☾ ";color:var(--gold);font-size:.7em;vertical-align:.12em}
 .chip2[aria-pressed="true"] .cph{box-shadow:0 0 0 3px var(--gold-soft),0 0 16px var(--gold)}
 .chip2[aria-pressed="true"] .cnm{color:var(--gold-soft)}
 .chip2.placed .cph{opacity:.4}
-.story{background:linear-gradient(var(--parch),var(--parch2));color:var(--ink);border:1.5px solid var(--parch-edge);border-radius:8px;padding:14px 16px;box-shadow:0 6px 18px #0006;font:17px/1.55 var(--f-body);display:flex;flex-direction:column;gap:9px}
-.story p{margin:0;border-radius:6px;padding:2px 4px;transition:background .2s}
-.story p.hl{background:rgba(214,171,79,.28)}
-.story .sn{font-weight:700;-webkit-text-stroke:0}
-.story .st-open{font-style:italic}
-.story .st-end{font-size:14.5px;font-style:italic;color:var(--soft);border-top:1px dashed var(--line);padding-top:8px}
+.recit{background:linear-gradient(var(--parch),var(--parch2));color:var(--ink);border:1.5px solid var(--parch-edge);border-radius:8px;padding:14px 16px;box-shadow:0 6px 18px #0006;font:17px/1.55 var(--f-body);display:flex;flex-direction:column;gap:9px}
+.recit p{margin:0;border-radius:6px;padding:2px 4px;transition:background .2s}
+.recit p.hl{background:rgba(214,171,79,.28)}
+.recit .sn{font-weight:700;-webkit-text-stroke:0}
+.recit .st-open{font-style:italic}
+.recit .st-end{font-size:14.5px;font-style:italic;color:var(--soft);border-top:1px dashed var(--line);padding-top:8px}
 @media (max-width:980px){.chips{grid-template-columns:repeat(auto-fill,minmax(58px,1fr))}}
+.cards:has(.recit){display:block!important}.recit,.recit p{color:var(--ink)!important}
+.recit .sn{white-space:nowrap}
 </style>
 
 <div class="wrap">
@@ -1474,10 +1476,10 @@ function storyHTML(){
 function renderCards(){
   const order=[...M.people.keys()].sort((a,b)=>(a===0)-(b===0)||pname(a).localeCompare(pname(b)));
   $("#cards").innerHTML=`<div class="chips">${order.map(p=>`<button class="card chip2${p===0?" victim":""}${S.place[p]?" placed":""}" aria-pressed="${S.sel===p}" data-p="${p}" aria-label="${pname(p)}, ${prole(p)}"><span class="cph">${ava(p,{victim:p===0})}</span><span class="cnm">${pname(p).replace(/^(Pr|Sir|Maître|Dame|Dr) /,"")}</span>${p===0?`<span class="cvt">${L("victime","victim")}</span>`:""}</button>`).join("")}</div>
-    <article class="story">${storyHTML()}</article>`;
+    <article class="recit">${storyHTML()}</article>`;
   $("#cards").querySelectorAll(".chip2").forEach(el=>el.onclick=()=>{const p=+el.dataset.p;S.sel=S.sel===p?null:p;if(S.sel!=null)tool=null;save();render();
     if(S.sel!=null&&matchMedia("(max-width:980px)").matches)$("#board").scrollIntoView({behavior:"smooth",block:"start"})});
-  document.querySelectorAll(".story p[data-p]").forEach(el=>el.classList.toggle("hl",S.sel!=null&&+el.dataset.p===S.sel));
+  document.querySelectorAll(".recit p[data-p]").forEach(el=>el.classList.toggle("hl",S.sel!=null&&+el.dataset.p===S.sel));
 }
 /* no more "choose a suspect or a tool" line */
 (function(){const _rt=renderTools;renderTools=function(){_rt();const st=$("#status");if(st){st.innerHTML="";st.hidden=true}}})();
