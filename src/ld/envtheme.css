@@ -36,3 +36,4 @@
 .plan .notes{z-index:6}
 .plan .notes span{font-size:clamp(10px,calc(93.6cqw * 30 / var(--wn)),22px)!important;-webkit-text-stroke:3px #fff!important;paint-order:stroke fill}
 .plan .who .ini{font-size:clamp(12px,calc(93.6cqw * 34 / var(--wn)),26px)!important;z-index:7}
+.lgq{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1.5px solid var(--gold-deep,#9a7426);font:600 16px var(--f-body);margin-bottom:6px;background:#fffdf6!important;color:#3a1f3d!important;-webkit-text-fill-color:#3a1f3d}
