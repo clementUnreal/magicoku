@@ -3,9 +3,9 @@ function hashStr(s){let h=2166136261;for(const ch of s){h^=ch.charCodeAt(0);h=Ma
 function rng(seed){let x=seed||1;return()=>{x^=x<<13;x>>>=0;x^=x>>17;x^=x<<5;x>>>=0;return x/4294967296}}
 var vowelStart=s=>/^[AEIOUYÉÈÊÂÎÔHaeiouyéèêâîôh]/.test(s.replace(/^(Pr|Sir|Maître|Dame|Dr) /,"X"));
 function crimeTime(){const r=rng(hashStr(C.id+"t"));const h=21+Math.floor(r()*3),m=[0,5,10,15,20,25,30,35,40,45,50,55][Math.floor(r()*12)];return {fr:m?`${h} h ${String(m).padStart(2,"0")}`:`${h} h`,en:`${h>12?h-12:h}:${String(m).padStart(2,"0")} pm`}}
-var DE={chair:["d'un fauteuil","an armchair"],bath:["de la baignoire","the bathtub"],trunk:["d'une malle","a trunk"],book:["d'un grimoire","a grimoire"],potion:["d'une potion","a potion"],
+var DE=Object.assign({chair:["d'un fauteuil","an armchair"],bath:["de la baignoire","the bathtub"],trunk:["d'une malle","a trunk"],book:["d'un grimoire","a grimoire"],potion:["d'une potion","a potion"],
  shelf:["d'une bibliothèque","a bookcase"],cauldron:["d'un chaudron","a cauldron"],plant:["d'une mandragore","a mandrake"],desk:["d'un bureau","a desk"],gramo:["du gramophone","the gramophone"],
- candle:["d'un chandelier","a candelabra"],mirror:["d'un miroir","a mirror"]};
+ candle:["d'un chandelier","a candelabra"],mirror:["d'un miroir","a mirror"]},typeof DE_X!=="undefined"?DE_X:{});
 function nameHTML(p){return `<b class="sn" data-sp="${p}" role="button" tabindex="0" style="color:${inkCol(p)}">${pname(p)}</b>`}
 /* predicate without subject */
 function KW(k,v,t){return `<span class="kw kw-${k}" data-k="${k}" data-v="${v}" role="button" tabindex="0">${t}</span>`}
@@ -17,14 +17,14 @@ function pred(p,[k,v]){
   if(LANG==="en")switch(k){
     case "room":return `was in ${KWr(v)}`;case "notroom":return `was definitely not in ${KWr(v)}`;
     case "row":return `was standing somewhere in ${KW("row",v,"row "+ROWS[v])}`;case "col":return `was standing somewhere in ${KW("col",v,"column "+(v+1))}`;
-    case "on":return {chair:`was sitting in ${O("chair",1)}`,trunk:`was sitting on ${O("trunk",1)}`,bath:`was in ${O("bath",1)}`,book:`was reading ${O("book",1)}`,potion:`was drinking ${O("potion",1)}`}[v]||`was on ${O(v,1)}`;
+    case "on":return {chair:`was sitting in ${O("chair",1)}`,trunk:`was sitting on ${O("trunk",1)}`,bath:`was in ${O("bath",1)}`,book:`was reading ${O("book",1)}`,potion:`was drinking ${O("potion",1)}`}[v]||(typeof ONX!=="undefined"&&ONX[v]?"was "+ONX[v][1].replace(OBJN[v][1],O(v,1)):`was on ${O(v,1)}`);
     case "adj":return `was standing right next to ${KW("obj",v,DE[v]?DE[v][1]:OBJN[v][1])}`;case "same":return `was in the same room as ${Q}`;
     case "south":return `was further south than ${Q}`;case "north":return `was further north than ${Q}`;case "east":return `was further east than ${Q}`;case "west":return `was further west than ${Q}`;
     case "alone":return `was alone in ${f?"her":"his"} room`;}
   switch(k){
     case "room":return `se trouvait dans ${KWr(v)}`;case "notroom":return `n'était pas dans ${KWr(v)}, c'est certain`;
     case "row":return `se tenait quelque part sur ${KW("row",v,"la rangée "+ROWS[v])}`;case "col":return `se tenait quelque part dans ${KW("col",v,"la colonne "+(v+1))}`;
-    case "on":return {chair:`était ${f?"assise":"assis"} dans ${O("chair",0)}`,trunk:`était ${f?"assise":"assis"} sur ${O("trunk",0)}`,bath:`se prélassait dans ${O("bath",0)}`,book:`lisait ${O("book",0)}`,potion:`buvait ${O("potion",0)}`}[v]||`était sur ${O(v,0)}`;
+    case "on":return {chair:`était ${f?"assise":"assis"} dans ${O("chair",0)}`,trunk:`était ${f?"assise":"assis"} sur ${O("trunk",0)}`,bath:`se prélassait dans ${O("bath",0)}`,book:`lisait ${O("book",0)}`,potion:`buvait ${O("potion",0)}`}[v]||(typeof ONX!=="undefined"&&ONX[v]?"était "+ONX[v][0][f?1:0].replace(OBJN[v][0],O(v,0)):`était sur ${O(v,0)}`);
     case "adj":return `se tenait juste à côté ${DE[v]?KW("obj",v,DE[v][0]):"de "+O(v,0)}`;case "same":return `était dans la même pièce ${que}${Q}`;
     case "south":return `se trouvait plus au sud ${que}${Q}`;case "north":return `se trouvait plus au nord ${que}${Q}`;
     case "east":return `se trouvait plus à l'est ${que}${Q}`;case "west":return `se trouvait plus à l'ouest ${que}${Q}`;

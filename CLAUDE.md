@@ -7,6 +7,8 @@ Live site: https://magicoku.scorclem.workers.dev (Cloudflare Worker, deploys aut
 - `repo/worker.js` — API: leaderboard (Durable Object), per-level ranking, legacy import.
 - `src/` — build sources. `sh src/build.sh` regenerates `repo/public/index.html`.
   Patches are applied in order by `src/ld/build_ld.py`; translations (KO/JA) live in `src/i18n/`.
+  Story mode (10 chapters): environments/texts in `src/story/` (envrt.py, envtext.py, sprites/*.webp), levels `src/ld/lv/s{chapter}n{level}.json` (generator: `src/story/genchap.py`).
+  Extra modes: rush (u*), night (n*), liar (l*) levels also in `src/ld/lv/`.
 
 ## Release checklist (every update)
 1. Edit sources in `src/`, run `sh src/build.sh`.

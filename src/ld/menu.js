@@ -33,7 +33,7 @@ function recordWin(){
   const _o=openCase;openCase=function(i){_o(i);window._t0=Date.now()}})();
 const fmt=s=>s>=3600?Math.floor(s/3600)+"h"+String(Math.floor(s%3600/60)).padStart(2,"0"):Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
 /* ================= LEVELS / UNLOCK ================= */
-function tierOf(i){const id=DATA[i].id;return id==="facile"||id[0]==="f"?0:id==="moyen"||id[0]==="m"?1:2}
+function tierOf(i){const id=DATA[i].id;if(id[0]==="s"&&/^s\d+n\d+$/.test(id))return 2+parseInt(id.slice(1));return id==="facile"||id[0]==="f"?0:id==="moyen"||id[0]==="m"?1:2}
 function lvlSolved(i){const id=DATA[i].id,p=ACC.profile;if(p&&p.progress&&p.progress[id]&&p.progress[id].solved)return true;try{return !!(JSON.parse(localStorage.getItem("crimes-mignons-wiz:"+id)||"{}").solved)}catch(e){return false}}
 function unlocked(i){return i===0||lvlSolved(i-1)||lvlSolved(i)}
 let lastSel=null;
@@ -60,7 +60,7 @@ function renderHome(){
   const p=ACC.profile;
   $("#hSub").textContent=L("Les enquêtes de l'Académie de Brumelune","The Brumelune Academy mysteries");
   $("#hWho").innerHTML=p&&p.pseudo?`<img src="${POR[p.avatar]||POR[AVS[0]]}" alt="">${L("Bonjour","Hello")}, ${p.pseudo.replace(/[<>&]/g,"")} !`:"";
-  $("#hPlay").textContent=L("Mode histoire","Story mode");$("#hRules").textContent=L("Règles","Rules");$("#hOptions").textContent=L("Options","Options");
+  $("#hPlay").textContent=L("Mode découverte","Discovery mode");$("#hRules").textContent=L("Règles","Rules");$("#hOptions").textContent=L("Options","Options");
   $("#hAccount").textContent=p&&p.pseudo?L("Mon compte","My account"):L("Créer mon compte","Create my account");
   $("#hRank").textContent=L("Classement","Leaderboard");renderRank();
   document.querySelectorAll("[data-back]").forEach(b=>b.textContent=L("← Retour","← Back"));

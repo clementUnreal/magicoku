@@ -12,7 +12,7 @@ async function sha(s) {
 }
 function sanitizeProgress(progress) {
   const out = {};
-  for (const [k, v] of Object.entries(progress || {}).slice(0, 60)) {
+  for (const [k, v] of Object.entries(progress || {}).slice(0, 200)) {
     if (!/^[a-z0-9]{1,12}$/.test(k) || !v || !v.solved) continue;
     out[k] = { t: Math.max(0, Math.min(86400, Math.round(Number(v.time) || 0))), h: Math.max(0, Math.min(999, Number(v.hints) || 0)),
       a: Math.max(1, Math.min(999, Number(v.attempts) || 1)) };

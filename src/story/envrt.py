@@ -1,0 +1,25 @@
+# room types (blocked objects, walkable objects) per environment, for the level generator
+ENV_RT={
+ "forest":{"clairiere":(["tree","shroom"],["stump"]),"sousbois":(["tree","tree","shroom"],["stump"]),"mare":(["rock","plant"],["stump"]),"grotte":(["rock","rock"],["stump"]),
+           "campement":(["rock","tree"],["stump","trunk"]),"ronces":(["shroom","tree"],["stump"]),"cercle":(["rock","shroom"],["stump"]),"nid":(["tree","rock"],["stump"])},
+ "station":{"quai":(["lamp","luggage"],["bench"]),"attente":(["clock","plant"],["bench","chair"]),"guichet":(["clock","desk"],["chair"]),"consigne":(["luggage","luggage"],["trunk"]),
+           "buffet":(["lamp","plant"],["chair","bench"]),"voies":(["lamp","luggage"],["bench"]),"hallg":(["clock","lamp"],["bench"]),"souterrain":(["lamp","luggage"],["trunk"])},
+ "bank":{"comptoir":(["scales","gold"],["chair"]),"coffres":(["vault","gold"],["minecart"]),"rails":(["gold","vault"],["minecart"]),"chambreforte":(["vault","vault","gold"],["minecart"]),
+         "directeur":(["desk","scales"],["chair"]),"galerie":(["gold","candle"],["minecart"]),"change":(["scales","candle"],["chair"]),"crypte":(["gold","vault"],["minecart"])},
+ "alley":{"baguettes":(["wandbox","wandbox"],["chair"]),"librairie":(["shelf","stall"],["book","barrel"]),"apothic":(["cauldron","stall"],["potion","barrel"]),"menagerie":(["cage","cage"],["barrel"]),
+          "tailleur":(["mirror","stall"],["chair"]),"glacier":(["stall","plant"],["barrel","chair"]),"farces":(["stall","cage"],["barrel"]),"ruelle":(["stall","cage"],["barrel"])},
+ "village":{"taverne":(["hearth","candyjar"],["stool","chair"]),"confiserie":(["candyjar","candyjar"],["stool"]),"poste":(["cage","desk"],["stool"]),"place":(["snowman","snowman"],["stool"]),
+            "cabane":(["hearth","shelf"],["stool","trunk"]),"salonthe":(["candyjar","plant"],["chair"]),"forge":(["hearth","cauldron"],["stool"]),"pont":(["snowman","lamp"],["stool"])},
+ "lake":{"rive":(["reeds","rock"],["boat"]),"ponton":(["anchor","reeds"],["boat"]),"hangar":(["anchor","luggage"],["boat","barrel"]),"ile":(["reeds","tree"],["stump"]),
+         "phare":(["anchor","lamp"],["stool"]),"cabanep":(["reeds","hearth"],["stool"]),"roseliere":(["reeds","reeds"],["boat"]),"crique":(["rock","anchor"],["boat"])},
+ "stadium":{"terrain":(["hoop","hoop"],["bleacher"]),"tribune":(["broomrack","plant"],["bleacher"]),"vestiaire":(["broomrack","ballchest"],["bench"]),"tourcom":(["ballchest","lamp"],["chair"]),
+            "infirmerie":(["medcab","screen"],["bed"]),"reserve":(["broomrack","broomrack"],["barrel"]),"loge":(["plant","lamp"],["chair","bleacher"]),"tunnel":(["ballchest","lamp"],["bench"])},
+ "hospital":{"accueil":(["desk","plant"],["chair"]),"salle":(["screen","medcab"],["bed"]),"pharmacie":(["medcab","cauldron"],["potion"]),"serreh":(["plant","plant"],["stool"]),
+             "chambre":(["screen","candle"],["bed","chair"]),"bloc":(["medcab","screen"],["bed"]),"laboh":(["cauldron","shelf"],["potion","stool"]),"jardin":(["plant","statue"],["bench"])},
+ "ministry":{"atrium":(["fountain","statue"],["bench"]),"archives":(["cabinet","cabinet","shelf"],["chair"]),"audience":(["statue","desk"],["chair"]),"ascenseurs":(["statue","lamp"],["bench"]),
+             "ministre":(["desk","cabinet"],["chair"]),"secrets":(["cabinet","mirror"],["chair"]),"courrier":(["cabinet","cage"],["chair"]),"cantine":(["fountain","plant"],["chair","bench"])},
+ "fortress":{"cour":(["gargoyle","brazier"],["straw"]),"cachots":(["bars","bars"],["straw"]),"tourf":(["brazier","gargoyle"],["straw"]),"garde":(["brazier","desk"],["chair","stool"]),
+             "chemin":(["gargoyle","bars"],["straw"]),"armurerie":(["brazier","shelf"],["stool"]),"chapelle":(["statue","candle"],["bench"]),"donjon":(["bars","brazier"],["straw"])},
+}
+NEW_WALK={"stump","bench","minecart","barrel","stool","boat","bleacher","bed","straw"}
+ENVS=["forest","station","bank","alley","village","lake","stadium","hospital","ministry","fortress"]

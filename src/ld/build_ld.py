@@ -15,6 +15,17 @@ for tier,first in (("f","facile"),("m","moyen"),("d","difficile")):
         if not os.path.exists(p):continue
         d=json.load(open(p));out.append(dict(id=lid,rooms=d['rooms'],objs=d['objs'],windows=[],solution=d['solution'],clues=d['clues'],killer=d['killer']))
         _extra[lid]=_mb(lid,d,i-2)
+# ---- story mode (chapters 1-10) ----
+import sys as _sx;_sx.path.insert(0,'../story')
+import storymeta as _SM
+from sprites import uris as _spr
+for _c in range(10):
+    for _k in range(10):
+        _lid=f"s{_c+1}n{_k+1}";_p=f"lv/{_lid}.json"
+        if not os.path.exists(_p):continue
+        _d=json.load(open(_p));out.append(dict(id=_lid,rooms=_d['rooms'],objs=_d['objs'],windows=[],solution=_d['solution'],clues=_d['clues'],killer=_d['killer']))
+        _extra[_lid]=_SM.build(_lid,_d,_c,_k)
+assets["sprites"].update(_spr())
 old=open('../mk/chunk_data_draw.js').read().split('\n')
 helpers='\n'.join(old[65:107])  # LANG .. look
 helpers=helpers.replace("if(WIN[r+\",\"+c])s.add(\"window\");","")
@@ -71,6 +82,14 @@ for _i in range(1,11):
       f"<b>{_vj}</b>が息絶えているのが見つかった。容疑者全員を取り調べたが……<b>そのうち一人が嘘をついている</b>。物語の証言のうち、ひとつだけが偽りだ。どれなのか見抜け。"]
     _lmeta[_lid]=_m
 head="const DATA="+json.dumps(out,ensure_ascii=False,separators=(',',':'))+";\n"+open('meta.js').read()+"\nObject.assign(META,"+json.dumps(_extra,ensure_ascii=False)+");\nconst RUSH_DATA="+json.dumps(_rush,ensure_ascii=False,separators=(',',':'))+";\nObject.assign(META,"+json.dumps(_rmeta,ensure_ascii=False)+");\nconst NIGHT_DATA="+json.dumps(_night,ensure_ascii=False,separators=(',',':'))+";\nObject.assign(META,"+json.dumps(_nmeta,ensure_ascii=False)+");\nconst LIAR_DATA="+json.dumps(_liar,ensure_ascii=False,separators=(',',':'))+";\nObject.assign(META,"+json.dumps(_lmeta,ensure_ascii=False)+");\n"+helpers+"\n"
+from envtext import CH as _CH,SHORT as _SH,OBJ as _OB,ON as _ON
+from envrt import NEW_WALK as _NW
+head+="var STORY_CH="+json.dumps([list(x) for x in _CH],ensure_ascii=False)+";var STORY_SHORT="+json.dumps([list(x) for x in _SH],ensure_ascii=False)+";\n"
+head+="Object.assign(OBJN,"+json.dumps({k:[v[0],v[1],v[2],v[3]] for k,v in _OB.items()},ensure_ascii=False)+");\n"
+head+="var DE_X="+json.dumps({k:[v[4],v[1]] for k,v in _OB.items()},ensure_ascii=False)+";\n"
+head+="var ONX="+json.dumps({k:[list(v[0]),v[1],v[2],v[3]] for k,v in _ON.items()},ensure_ascii=False)+";\n"
+head+="Object.assign(ONTXT,"+json.dumps({k:[list(v[0]),v[1]] for k,v in _ON.items()},ensure_ascii=False)+");\n"
+head+="["+",".join(json.dumps(x) for x in sorted(_NW))+"].forEach(x=>WALK.add(x));\n"
 head+="const POR="+open('portraits.json').read()+";\n"
 head+=r'''const KNIFE=`<svg class="knife" viewBox="0 0 40 40"><g transform="rotate(-30 20 20)"><rect x="17" y="2" width="6" height="20" rx="2.5" fill="#dfe3ee" stroke="#2c1a33" stroke-width="1.2"/><rect x="14.5" y="21" width="11" height="3.2" rx="1.5" fill="#2c1a33"/><rect x="17.6" y="24" width="4.8" height="11" rx="2" fill="#8a5a33"/><circle cx="20" cy="8" r="2" fill="#b8283e"/></g></svg>`;
 function ava(p,o={}){const k=M.people[p][5];if(k)return `<img class="pimg" src="${POR[k]}" alt="" draggable="false" style="background:${look(p)[4]}">`+(o.angry?KNIFE:"");return face(look(p),o)+(o.angry&&false?KNIFE:"")}
@@ -222,8 +241,8 @@ exec(open('patch_lv2.py').read())
 exec(open('patch_timer.py').read())
 exec(open('patch_story.py').read())
 exec(open('patch_i18n.py').read())
-_i=s.rindex('</script>');s=s[:_i]+open('verdict.js').read()+open('kw.js').read()+open('news.js').read()+open('hint2.js').read()+open('nav.js').read()+open('rules2.js').read()+open('rush.js').read()+open('night.js').read()+open('liar.js').read()+open('modes.js').read()+'\nrender();\n'+s[_i:]
-s=s.replace('</style>',open('kw.css').read()+open('news.css').read()+open('hint2.css').read()+open('nav.css').read()+open('rush.css').read()+open('night.css').read()+open('liar.css').read()+open('modes.css').read()+'</style>',1)
+_i=s.rindex('</script>');s=s[:_i]+open('verdict.js').read()+open('kw.js').read()+open('news.js').read()+open('hint2.js').read()+open('nav.js').read()+open('rules2.js').read()+open('rush.js').read()+open('night.js').read()+open('liar.js').read()+open('modes.js').read()+open('storymode.js').read()+'\nrender();\n'+s[_i:]
+s=s.replace('</style>',open('kw.css').read()+open('news.css').read()+open('hint2.css').read()+open('nav.css').read()+open('rush.css').read()+open('night.css').read()+open('liar.css').read()+open('modes.css').read()+open('storymode.css').read()+'</style>',1)
 s=s.replace('</style>',open('verdict.css').read()+'</style>',1)
 open('../crimes-mignons.html','w').write(s)
 print(len(s)//1024,"KB")

@@ -14,7 +14,7 @@ function predCJK(p,[k,v],second){
     case "room":return `${rname(v)}에 있었다`;
     case "notroom":return second?`${rname(v)}에도 없었다`:`${rname(v)}에는 분명히 없었다`;
     case "row":return `${R(v)} 어딘가에 있었다`;case "col":return `${Co(v)} 어딘가에 있었다`;
-    case "on":return {chair:`${obj("chair")}에 앉아 있었다`,trunk:`${obj("trunk")} 위에 앉아 있었다`,bath:`${obj("bath")}에서 느긋하게 쉬고 있었다`,book:`${obj("book")}를 읽고 있었다`,potion:`${obj("potion")}을 마시고 있었다`}[v]||`${obj(v)} 위에 있었다`;
+    case "on":return {chair:`${obj("chair")}에 앉아 있었다`,trunk:`${obj("trunk")} 위에 앉아 있었다`,bath:`${obj("bath")}에서 느긋하게 쉬고 있었다`,book:`${obj("book")}를 읽고 있었다`,potion:`${obj("potion")}을 마시고 있었다`}[v]||(typeof ONX!=="undefined"&&ONX[v]?ONX[v][2].replace(TX(OBJN[v]),obj(v)):`${obj(v)} 위에 있었다`);
     case "adj":return second?`${obj(v)}${particle(TX(OBJN[v]),"과","와")}도 가까이 있었다`:`${obj(v)} 바로 옆에 있었다`;
     case "same":return `${Q}${particle(qn,"과","와")} 같은 방에 있었다`;
     case "south":return `${Q}보다 더 남쪽에 있었다`;case "north":return `${Q}보다 더 북쪽에 있었다`;
@@ -24,7 +24,7 @@ function predCJK(p,[k,v],second){
     case "room":return `${rname(v)}にいた`;
     case "notroom":return second?`${rname(v)}にもいなかった`:`${rname(v)}には絶対にいなかった`;
     case "row":return `${R(v)}のどこかにいた`;case "col":return `${Co(v)}のどこかにいた`;
-    case "on":return {chair:`${obj("chair")}に座っていた`,trunk:`${obj("trunk")}の上に座っていた`,bath:`${obj("bath")}でくつろいでいた`,book:`${obj("book")}を読んでいた`,potion:`${obj("potion")}を飲んでいた`}[v]||`${obj(v)}の上にいた`;
+    case "on":return {chair:`${obj("chair")}に座っていた`,trunk:`${obj("trunk")}の上に座っていた`,bath:`${obj("bath")}でくつろいでいた`,book:`${obj("book")}を読んでいた`,potion:`${obj("potion")}を飲んでいた`}[v]||(typeof ONX!=="undefined"&&ONX[v]?ONX[v][3].replace(TX(OBJN[v]),obj(v)):`${obj(v)}の上にいた`);
     case "adj":return second?`${obj(v)}にも近かった`:`${obj(v)}のすぐそばにいた`;
     case "same":return `${Q}と同じ部屋にいた`;
     case "south":return `${Q}より南にいた`;case "north":return `${Q}より北にいた`;
