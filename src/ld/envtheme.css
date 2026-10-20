@@ -37,3 +37,12 @@
 .plan .notes span{font-size:clamp(10px,calc(93.6cqw * 30 / var(--wn)),22px)!important;-webkit-text-stroke:3px #fff!important;paint-order:stroke fill}
 .plan .who .ini{font-size:clamp(12px,calc(93.6cqw * 34 / var(--wn)),26px)!important;z-index:7}
 .lgq{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1.5px solid var(--gold-deep,#9a7426);font:600 16px var(--f-body);margin-bottom:6px;background:#fffdf6!important;color:#3a1f3d!important;-webkit-text-fill-color:#3a1f3d}
+.lgl{display:flex;flex-direction:column;gap:4px;font:700 14px var(--f-body);color:#3a1f3d;text-align:left}
+.lgq.code{font:800 22px ui-monospace,Menlo,monospace!important;letter-spacing:.3em;text-transform:uppercase;text-align:center}
+.lgmsg{display:block;margin-top:6px;color:#8d1d33;font-weight:700}
+.legacy.adm{border-color:#b8283e}
+.admlist{display:flex;flex-direction:column;gap:6px;max-height:340px;overflow:auto}
+.admrow{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;background:#fff9;border-radius:10px;padding:6px 10px}
+.admrow img{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:50% 12%;background:#e9d6ad}
+.admrow span{display:flex;flex-direction:column;min-width:0}.admrow b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.admrow code{font:800 18px ui-monospace,Menlo,monospace;letter-spacing:.15em;color:#8d1d33;user-select:all;-webkit-user-select:all}

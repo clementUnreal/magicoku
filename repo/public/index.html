@@ -697,6 +697,15 @@ body.night #marks .mk.room{background:none!important}
 .plan .notes span{font-size:clamp(10px,calc(93.6cqw * 30 / var(--wn)),22px)!important;-webkit-text-stroke:3px #fff!important;paint-order:stroke fill}
 .plan .who .ini{font-size:clamp(12px,calc(93.6cqw * 34 / var(--wn)),26px)!important;z-index:7}
 .lgq{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1.5px solid var(--gold-deep,#9a7426);font:600 16px var(--f-body);margin-bottom:6px;background:#fffdf6!important;color:#3a1f3d!important;-webkit-text-fill-color:#3a1f3d}
+.lgl{display:flex;flex-direction:column;gap:4px;font:700 14px var(--f-body);color:#3a1f3d;text-align:left}
+.lgq.code{font:800 22px ui-monospace,Menlo,monospace!important;letter-spacing:.3em;text-transform:uppercase;text-align:center}
+.lgmsg{display:block;margin-top:6px;color:#8d1d33;font-weight:700}
+.legacy.adm{border-color:#b8283e}
+.admlist{display:flex;flex-direction:column;gap:6px;max-height:340px;overflow:auto}
+.admrow{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;background:#fff9;border-radius:10px;padding:6px 10px}
+.admrow img{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:50% 12%;background:#e9d6ad}
+.admrow span{display:flex;flex-direction:column;min-width:0}.admrow b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.admrow code{font:800 18px ui-monospace,Menlo,monospace;letter-spacing:.15em;color:#8d1d33;user-select:all;-webkit-user-select:all}
 .board{position:relative}
 .board .plan{z-index:1}
 .thfx{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:inherit}
@@ -2491,7 +2500,7 @@ var UNLOCK={hRush:{lvl:10,name:["le Défi chrono","the Time trial","타임 챌�
   if(typeof STORY_CH!=="undefined"){CHAPTERS=CHAPTERS.concat(STORY_CH);CH_SHORT=CH_SHORT.concat(STORY_SHORT)}
   DATA.forEach((c,i)=>{if(META[c.id])META[c.id].level=CH_SHORT[tierOf(i)]});
   const _rs=renderStatic;renderStatic=function(){_rs.apply(this,arguments);
-    if(!(typeof RUSH!=="undefined"&&RUSH.on)&&!(typeof NIGHT!=="undefined"&&NIGHT.on)){const t=tierOf(ci),k=DATA.filter((c,i)=>i<ci&&tierOf(i)===t).length+1,el=$("#caseTitle");if(el)el.textContent=`${TX(M.level)} · ${k}/10 · ${TX(M.title)}`}};
+    if(!(typeof RUSH!=="undefined"&&RUSH.on)&&!(typeof NIGHT!=="undefined"&&NIGHT.on)){const t=tierOf(ci),k=DATA.filter((c,i)=>i<ci&&tierOf(i)===t).length+1,el=$("#caseTitle");if(el){let g="";if(t<3){const gi=DATA.filter((c,i)=>i<ci&&tierOf(i)<3).length+1,gn=DATA.filter((c,i)=>tierOf(i)<3).length;g=` (${L("enquête","case","사건","事件")} ${gi}/${gn})`}el.textContent=`${TX(M.level)} · ${L("Niveau","Level","레벨","レベル")} ${k}/10${g} · ${TX(M.title)}`}}};
   const isOpen=id=>(typeof isTester==="function"&&isTester())||lvlSolved(UNLOCK[id].lvl-1);
   function paintLocks(){for(const id in UNLOCK){const b=$("#"+id);if(!b)continue;const open=isOpen(id);b.classList.toggle("lockm",!open);
       if(!open){const base=b.textContent.replace(/^🔒\s*/,"").split("\n")[0];b.innerHTML=`🔒 ${base.replace(/^[^\s]+\s/,"")}<small>${L(`Termine le niveau ${UNLOCK[id].lvl} du mode découverte`,`Finish level ${UNLOCK[id].lvl} of discovery mode`,`디스커버리 모드 ${UNLOCK[id].lvl}레벨을 클리어하세요`,`ディスカバリーモードのレベル${UNLOCK[id].lvl}をクリアしよう`)}</small>`}}}
@@ -2542,63 +2551,57 @@ function storyLocked(){return false} /* story mode is open to everyone (levels u
   const _oc=openCase;openCase=function(i){if(typeof i==="number"&&i>=0&&i<DATA.length&&!(typeof RUSH!=="undefined"&&RUSH.on)&&!(typeof NIGHT!=="undefined"&&NIGHT.on)&&!(typeof LIAR!=="undefined"&&LIAR.on))LVMODE=isStory(i)?"story":"disc";return _oc.apply(this,arguments)};
   try{renderHome()}catch(e){}
 })();
-/* ================= recover progress saved under the same detective name (other browser / app) ================= */
+/* ================= account recovery with a personal code (codes are only visible to the admin) ================= */
+var ADMIN_NAME="clemonchichi";
+function isAdminUser(){const p=ACC&&ACC.profile;return !!(p&&p.pseudo&&String(p.pseudo).trim().toLowerCase()===ADMIN_NAME)}
+/* keep the account: ask the browser not to wipe our storage */
+(function(){try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}})();
 (function(){
-  let busy=false,doneFor="";
-  async function pull(){const p=ACC.profile;if(!p||!p.pseudo||busy)return 0;const key=p.pseudo.trim().toLowerCase();if(doneFor===key)return 0;busy=true;
-    try{const r=await fetch("/api/progress?pseudo="+encodeURIComponent(p.pseudo),{cache:"no-store"});if(!r.ok)return 0;const remote=await r.json();doneFor=key;
-      p.progress=p.progress||{};let n=0;const ids=new Set(DATA.map(c=>c.id));
-      for(const [lid,x] of Object.entries(remote||{})){if(!ids.has(lid))continue;const cur=p.progress[lid];
-        if(!cur||!cur.solved){p.progress[lid]={solved:true,hints:x.h||0,time:x.t||0,attempts:x.a||1,at:Date.now()};n++}}
-      /* older rows only know a count: those were the first cases of discovery mode, in order */
-      const cnt=Math.min(+(remote&&remote._n)||0,DATA.length);
-      if(cnt>Object.values(p.progress).filter(x=>x&&x.solved).length){let k=0;
-        for(let i=0;i<DATA.length&&k<cnt;i++){const id=DATA[i].id;if(/^s\d+n\d+$/.test(id))continue;k++;const cur=p.progress[id];
-          if(!cur||!cur.solved){p.progress[id]={solved:true,hints:0,time:0,attempts:1,at:Date.now()};n++}}}
-      if(n){try{localStorage.setItem(LKEY,JSON.stringify(p))}catch(e){}if(ACC.mode==="cloud"&&ACC.db){try{await ACC.db.doc("data/users/"+ACC.uid+"/profile").set(JSON.parse(JSON.stringify(p)))}catch(e){}}
-        toast(L(`Progression retrouvée : ${n} ${n>1?"enquêtes récupérées":"enquête récupérée"} !`,`Progress found: ${n} ${n>1?"cases":"case"} recovered!`,`진행 상황을 찾았어요: 사건 ${n}개를 되찾았어요!`,`進行状況が見つかりました：${n}件の事件を取り戻しました！`));
-        try{renderHome()}catch(e){}}
-      return n}catch(e){return 0}finally{busy=false}}
-  const _sr=syncRank;syncRank=function(){const args=arguments;pull().finally(()=>_sr.apply(this,args))};
-  window.recoverProgress=pull;
-  setTimeout(()=>{pull().then(n=>{if(n)_sr()})},300);
-})();
-/* keep the account: ask the browser not to wipe our storage, and explain how to come back */
-(function(){
-  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}
-  const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);
-    const p=ACC.profile,n=$("#accNote");if(!n||(p&&p.pseudo))return;
-    if(!n.querySelector(".back-hint"))n.insertAdjacentHTML("beforeend",`<br><b class="back-hint">${L("Tu as déjà joué ? Entre exactement le même nom de détective : ta progression sera récupérée automatiquement.","Played before? Enter exactly the same detective name: your progress will be recovered automatically.","전에 플레이한 적이 있나요? 같은 탐정 이름을 그대로 입력하면 진행 상황이 자동으로 복구돼요.","前に遊んだことがある？同じ探偵ネームを入力すれば、進行状況が自動で引き継がれます。")}</b>`)};
-})();
-/* "Recover my progress": list every detective of the current leaderboard and restore their levels one by one */
-(function(){
-  let rows=[];
   const esc=s=>String(s||"").replace(/[<>&"]/g,"");
-  function list(q){const el=$("#lgList");if(!el)return;const f=String(q||"").trim().toLowerCase();
-    const sh=rows.map((x,i)=>[x,i]).filter(([x])=>!f||String(x.pseudo).toLowerCase().includes(f));
-    el.innerHTML=`<input id="lgQ" class="lgq" placeholder="${L("Cherche ton nom…","Search your name…","이름 검색…","名前を検索…")}" value="${esc(q)}">`+
-      (sh.length?sh.map(([x,i])=>`<button class="lgrow" data-lg2="${i}"><img src="${POR[x.avatar]||POR[AVS[0]]}" alt=""><span><b>${esc(x.pseudo)}</b><br><small>${x.solved} ${L(x.solved>1?"enquêtes résolues":"enquête résolue",x.solved>1?"cases solved":"case solved","개 사건 해결","件解決")}</small></span><span>→</span></button>`).join("")
-        :`<small>${L("Aucun détective trouvé.","No detective found.","탐정을 찾지 못했어요.","探偵が見つかりません。")}</small>`)}
-  document.addEventListener("input",e=>{if(e.target.id==="lgQ"){const v=e.target.value;list(v);const n=$("#lgQ");if(n){n.focus();n.setSelectionRange(v.length,v.length)}}});
-  document.addEventListener("click",async e=>{const t=e.target.closest&&e.target.closest("#lgBtn,[data-lg2]");if(!t)return;e.stopPropagation();e.preventDefault();
-    if(t.id==="lgBtn"){$("#lgList").innerHTML=`<small>${L("Chargement…","Loading…","불러오는 중…","読み込み中…")}</small>`;
-      try{const r=await fetch("/api/leaderboard",{cache:"no-store"});rows=(await r.json()).filter(x=>x&&x.pseudo&&x.solved>0)}catch(_){rows=[]}
-      if(!rows.length){$("#lgList").innerHTML=`<small>${L("Impossible de charger la liste pour l'instant.","Couldn't load the list right now.","지금은 목록을 불러올 수 없어요.","いまはリストを読み込めません。")}</small>`;return}
-      list("");return}
-    const x=rows[+t.dataset.lg2];if(!x)return;
-    if(!t.dataset.armed){document.querySelectorAll("[data-lg2]").forEach(b=>{delete b.dataset.armed;b.querySelector("span:last-child").textContent="→"});t.dataset.armed=1;t.querySelector("span:last-child").textContent=L("C'est moi ✓","That's me ✓","저예요 ✓","わたしです ✓");return}
-    let remote={};try{const r=await fetch("/api/progress?pseudo="+encodeURIComponent(x.pseudo),{cache:"no-store"});if(r.ok)remote=await r.json()}catch(_){}
+  let open=false,codes=null,codesErr="";
+  function form(){const el=$("#lgList");if(!el)return;
+    el.innerHTML=`<label class="lgl">${L("Ton nom de détective","Your detective name","탐정 이름","探偵ネーム")}<input id="lgName" class="lgq" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(ACC.profile&&ACC.profile.pseudo||"")}"></label>
+      <label class="lgl">${L("Ton code de récupération","Your recovery code","복구 코드","復元コード")}<input id="lgCode" class="lgq code" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABC123"></label>
+      <button class="hb small" id="lgGo">${L("Récupérer","Recover","되찾기","取り戻す")}</button><small id="lgMsg" class="lgmsg"></small>`}
+  async function restore(){const name=$("#lgName").value.trim(),code=$("#lgCode").value.trim(),msg=$("#lgMsg");
+    if(!name||code.replace(/\W/g,"").length!==6){msg.textContent=L("Entre ton nom et le code à 6 caractères.","Enter your name and the 6-character code.","이름과 6자리 코드를 입력하세요.","名前と6文字のコードを入力してね。");return}
+    msg.textContent=L("Vérification…","Checking…","확인 중…","確認中…");
+    const pid=rid(),ptok=rid();let r,d;
+    try{r=await fetch("/api/restore",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pseudo:name,code,newId:pid})});d=await r.json()}catch(_){msg.textContent=L("Pas de connexion. Réessaie dans un instant.","No connection. Try again in a moment.","연결이 없어요. 잠시 후 다시 시도하세요.","接続できません。少ししてからもう一度。");return}
+    if(!r.ok){try{play("forbid")}catch(_){}msg.textContent=r.status===404?L("Aucun détective à ce nom.","No detective with that name.","그 이름의 탐정이 없어요.","その名前の探偵はいません。"):L("Code incorrect. Demande ton code à l'administrateur du jeu.","Wrong code. Ask the game's admin for your code.","코드가 틀렸어요. 게임 관리자에게 코드를 물어보세요.","コードが違います。ゲームの管理者にコードを聞いてね。");return}
     const prog=Object.assign({},(ACC.profile&&ACC.profile.progress)||{}),ids=new Set(DATA.map(c=>c.id));let n=0;
-    for(const [lid,v] of Object.entries(remote||{})){if(!ids.has(lid))continue;if(!prog[lid]||!prog[lid].solved){prog[lid]={solved:true,hints:v.h||0,time:v.t||0,attempts:v.a||1,at:Date.now()};n++}}
-    const want=Math.min(Math.max(+x.solved||0,+(remote&&remote._n)||0),DATA.length);
+    for(const [lid,v] of Object.entries(d.progress||{})){if(!ids.has(lid))continue;if(!prog[lid]||!prog[lid].solved){prog[lid]={solved:true,hints:v.h||0,time:v.t||0,attempts:v.a||1,at:Date.now()};n++}}
+    const want=Math.min(+(d.progress&&d.progress._n)||0,DATA.length);
     for(let i=0;i<DATA.length&&Object.values(prog).filter(v=>v&&v.solved).length<want;i++){const id=DATA[i].id;if(/^s\d+n\d+$/.test(id))continue;if(!prog[id]||!prog[id].solved){prog[id]={solved:true,hints:0,time:0,attempts:1,at:Date.now()};n++}}
-    ACC.profile=Object.assign(ACC.profile||{games:0,created:Date.now()},{pseudo:x.pseudo,avatar:x.avatar||(ACC.profile&&ACC.profile.avatar)||AVS[0],progress:prog,legacy:true,pid:rid(),ptok:rid()});
+    ACC.profile=Object.assign(ACC.profile||{games:0,created:Date.now()},{pseudo:d.pseudo,avatar:d.avatar||(ACC.profile&&ACC.profile.avatar)||AVS[0],progress:prog,legacy:true,pid,ptok});
     try{avSel=ACC.profile.avatar;nameDraft=null}catch(_){}
-    await saveProfile();try{play("win")}catch(_){}
-    toast(L(`Progression de ${x.pseudo} récupérée : ${n} ${n>1?"enquêtes débloquées":"enquête débloquée"} !`,`${x.pseudo}'s progress recovered: ${n} ${n>1?"cases":"case"} unlocked!`,`${x.pseudo}의 진행 상황을 되찾았어요: 사건 ${n}개!`,`${x.pseudo}の進行状況を取り戻しました：${n}件！`));
-    $("#lgList").innerHTML="";renderHome()},true);
+    await saveProfile();try{play("win")}catch(_){}open=false;codes=null;
+    toast(L(`Progression de ${d.pseudo} récupérée : ${n} ${n>1?"enquêtes débloquées":"enquête débloquée"} !`,`${d.pseudo}'s progress recovered: ${n} ${n>1?"cases":"case"} unlocked!`,`${d.pseudo}의 진행 상황을 되찾았어요: 사건 ${n}개!`,`${d.pseudo}の進行状況を取り戻しました：${n}件！`));
+    renderHome()}
+  async function loadCodes(){const p=ACC.profile;codes=null;codesErr=L("Chargement…","Loading…","불러오는 중…","読み込み中…");renderHome();
+    try{const r=await fetch("/api/admin/codes",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:p.pid,token:p.ptok})});
+      if(r.ok){codes=await r.json();codesErr=""}else codesErr=L("Cet appareil n'est pas reconnu comme administrateur.","This device isn't recognised as admin.","이 기기는 관리자로 인식되지 않아요.","この端末は管理者として認識されていません。")}
+    catch(_){codesErr=L("Pas de connexion.","No connection.","연결이 없어요.","接続できません。")}renderHome()}
+  function adminBox(){let b=$("#admCodes");const lg=$("#legacy");if(!lg)return;
+    if(!isAdminUser()){if(b)b.remove();return}
+    if(!b){b=document.createElement("div");b.id="admCodes";b.className="legacy adm";lg.after(b)}
+    const f=(b.querySelector("#admQ")||{}).value||"";
+    const rows=(codes||[]).filter(x=>!f||String(x.pseudo).toLowerCase().includes(f.toLowerCase()));
+    b.innerHTML=`<p><b>🔑 ${L("Codes de récupération (visible par toi seul)","Recovery codes (only you can see this)","복구 코드 (나만 볼 수 있어요)","復元コード（あなただけに表示）")}</b><br>${L("Donne son code à un joueur qui a perdu sa progression : il l'entre avec son nom dans « Récupérer ma progression ».","Give a player who lost their progress their code: they enter it with their name in “Recover my progress”.","진행 상황을 잃은 플레이어에게 코드를 알려 주세요. ‘진행 상황 되찾기’에서 이름과 함께 입력하면 돼요.","進行状況をなくしたプレイヤーにコードを教えてあげて。「進行状況を取り戻す」で名前と一緒に入力します。")}</p>
+      ${codes?`<input id="admQ" class="lgq" placeholder="${L("Chercher un joueur…","Search a player…","플레이어 검색…","プレイヤーを検索…")}" value="${esc(f)}"><div class="admlist">${rows.map(x=>`<div class="admrow"><img src="${POR[x.avatar]||POR[AVS[0]]}" alt=""><span><b>${esc(x.pseudo)}</b><small>${x.solved} ${L(x.solved>1?"enquêtes":"enquête","cases","개 사건","件")}</small></span><code>${x.code}</code></div>`).join("")}</div>`
+        :`<button class="hb small" id="admShow">${L("Afficher les codes","Show the codes","코드 보기","コードを表示")}</button>${codesErr?`<small class="lgmsg">${codesErr}</small>`:""}`}`;
+    if(f){const q=b.querySelector("#admQ");q.focus();q.setSelectionRange(f.length,f.length)}}
+  document.addEventListener("input",e=>{if(e.target.id==="admQ")adminBox()});
+  document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#lgBtn,#lgGo,#admShow");if(!t)return;e.stopPropagation();e.preventDefault();
+    if(t.id==="lgBtn"){open=!open;renderHome();if(open)setTimeout(()=>{const c=$("#lgName");if(c&&!c.value)c.focus();else if($("#lgCode"))$("#lgCode").focus()},50)}
+    else if(t.id==="lgGo")restore();else if(t.id==="admShow")loadCodes()},true);
+  document.addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.target.id==="lgCode"||e.target.id==="lgName"))restore()});
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);const lg=$("#legacy");if(!lg)return;lg.hidden=location.protocol==="file:";
-    $("#lgT").textContent=L("Ta progression a disparu (autre téléphone, données effacées) ? Retrouve ton nom de détective dans la liste pour la récupérer.","Lost your progress (other phone, data wiped)? Find your detective name in the list to get it back.","진행 상황이 사라졌나요(다른 휴대폰, 데이터 삭제)? 목록에서 탐정 이름을 찾아 되찾으세요.","進行状況が消えた（別のスマホ、データ削除）？リストから探偵名を探して取り戻そう。")};
+    $("#lgT").textContent=L("Ta progression a disparu (autre téléphone, données effacées) ? Demande ton code de récupération à l'administrateur du jeu, puis entre-le ici avec ton nom de détective.","Lost your progress (other phone, data wiped)? Ask the game's admin for your recovery code, then enter it here with your detective name.","진행 상황이 사라졌나요(다른 휴대폰, 데이터 삭제)? 게임 관리자에게 복구 코드를 받은 뒤, 탐정 이름과 함께 여기에 입력하세요.","進行状況が消えた（別のスマホ、データ削除）？ゲームの管理者に復元コードをもらって、探偵ネームと一緒にここに入力してね。");
+    const keep=open&&$("#lgName")?[$("#lgName").value,$("#lgCode").value,$("#lgMsg").textContent]:null;
+    if(open&&!$("#lgName"))form();else if(!open)$("#lgList").innerHTML="";
+    if(keep){$("#lgName").value=keep[0];$("#lgCode").value=keep[1];$("#lgMsg").textContent=keep[2]}
+    adminBox()};
   try{renderHome()}catch(e){}
 })();
 

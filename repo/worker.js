@@ -2,6 +2,7 @@
 // The leaderboard lives in a Durable Object (SQLite storage, free plan) — no dashboard setup needed.
 import { DurableObject } from "cloudflare:workers";
 
+const ADMIN = "clemonchichi";
 const OLD = "https://brilliant-souffle-0e22cf.netlify.app/api/leaderboard";
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json", "cache-control": "no-store" } });
@@ -102,6 +103,58 @@ export class Leaderboard extends DurableObject {
     if (n) out._n = Math.min(n, 999);
     return out;
   }
+  // ---- recovery codes: one per detective name, only the admin can list them ----
+  async secret() {
+    let s = await this.ctx.storage.get("__secret");
+    if (!s) { s = crypto.randomUUID() + crypto.randomUUID(); await this.ctx.storage.put("__secret", s); }
+    return s;
+  }
+  async codeFor(pseudo) {
+    const A = "ABCDEFGHJKMNPQRSTUVWXYZ23456789", h = await sha((await this.secret()) + "|" + String(pseudo || "").trim().toLowerCase());
+    let c = "";
+    for (let i = 0; i < 6; i++) c += A[parseInt(h.slice(i * 2, i * 2 + 2), 16) % A.length];
+    return c;
+  }
+  async admins() {
+    let a = await this.ctx.storage.get("__admins");
+    if (!a) { // first use: the existing "clemonchichi" lines become the admin devices
+      const all = await this.ctx.storage.list({ prefix: "p:" });
+      a = [...all.values()].filter((v) => v && v.tok && v.row && String(v.row.pseudo).trim().toLowerCase() === ADMIN).map((v) => v.row.id);
+      await this.ctx.storage.put("__admins", a);
+    }
+    return a;
+  }
+  async isAdmin(id, token) {
+    const v = await this.ctx.storage.get("p:" + clean(id, 64));
+    if (!v || !v.tok || v.tok !== (await sha(token)) || String(v.row && v.row.pseudo).trim().toLowerCase() !== ADMIN) return false;
+    return (await this.admins()).includes(v.row.id);
+  }
+  async codes(id, token) {
+    if (!(await this.isAdmin(id, token))) return { status: 403, body: { error: "forbidden" } };
+    const all = await this.ctx.storage.list({ prefix: "p:" }), by = new Map();
+    for (const v of all.values()) {
+      if (!v || !v.row || !v.row.pseudo) continue;
+      const k = String(v.row.pseudo).trim().toLowerCase(), cur = by.get(k);
+      if (!cur || v.row.solved > cur.solved) by.set(k, { pseudo: v.row.pseudo, avatar: v.row.avatar, solved: v.row.solved });
+    }
+    const out = [];
+    for (const [k, r] of by) out.push({ ...r, code: await this.codeFor(k) });
+    out.sort((a, b) => b.solved - a.solved || a.pseudo.localeCompare(b.pseudo));
+    return { status: 200, body: out };
+  }
+  async restore(body) {
+    const pseudo = clean(body.pseudo, 20), code = String(body.code || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+    await new Promise((r) => setTimeout(r, 400)); // slow down guessing
+    if (!pseudo || code.length !== 6 || code !== (await this.codeFor(pseudo))) return { status: 403, body: { error: "bad code" } };
+    const progress = await this.progress(pseudo), all = await this.ctx.storage.list({ prefix: "p:" });
+    let best = null;
+    for (const v of all.values()) if (v && v.row && String(v.row.pseudo).trim().toLowerCase() === pseudo.toLowerCase() && (!best || v.row.solved > best.solved)) best = v.row;
+    if (!best) return { status: 404, body: { error: "unknown" } };
+    // the admin recovering on a new device keeps admin rights there
+    const nid = clean(body.newId, 64);
+    if (pseudo.toLowerCase() === ADMIN && /^[\w-]{8,64}$/.test(nid)) { const a = await this.admins(); if (!a.includes(nid)) { a.push(nid); await this.ctx.storage.put("__admins", a); } }
+    return { status: 200, body: { pseudo: best.pseudo, avatar: best.avatar, progress } };
+  }
   async submit(body) {
     const id = clean(body.id, 64), token = String(body.token || "");
     if (!/^[\w-]{8,64}$/.test(id) || token.length < 8) return { status: 400, body: { error: "bad id" } };
@@ -132,9 +185,15 @@ export default {
       if (!/^[a-z0-9]{1,12}$/.test(lid)) return json({ error: "bad level" }, 400);
       return json(await env.LB.get(env.LB.idFromName("main")).level(lid));
     }
-    if (url.pathname === "/api/progress") {
-      const ps = clean(url.searchParams.get("pseudo"), 20);
-      return json(await env.LB.get(env.LB.idFromName("main")).progress(ps));
+    // progress is no longer given out by name alone: a recovery code is needed
+    if (url.pathname === "/api/progress") return json({});
+    if (url.pathname === "/api/restore" || url.pathname === "/api/admin/codes") {
+      if (request.method !== "POST") return json({ error: "method" }, 405);
+      let body;
+      try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
+      const lb = env.LB.get(env.LB.idFromName("main"));
+      const r = url.pathname === "/api/restore" ? await lb.restore(body) : await lb.codes(body.id, String(body.token || ""));
+      return json(r.body, r.status);
     }
     if (url.pathname === "/api/legacy") {
       try {
