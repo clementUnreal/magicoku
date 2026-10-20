@@ -1,5 +1,26 @@
 [
  {
+  "id": 22,
+  "date": "2026-10-20",
+  "icon": "🔄",
+  "fr": {
+   "t": "Ta progression te suit",
+   "d": "Si tu joues sur un autre appareil, ou dans l'app après avoir joué dans le navigateur, utilise le même nom de détective : tes enquêtes résolues sont récupérées automatiquement."
+  },
+  "en": {
+   "t": "Your progress follows you",
+   "d": "If you play on another device, or in the app after playing in the browser, use the same detective name: your solved cases are recovered automatically."
+  },
+  "ko": {
+   "t": "진행 상황이 함께 따라와요",
+   "d": "다른 기기에서 하거나, 브라우저에서 하다가 앱으로 옮겨도 같은 탐정 이름을 쓰면 해결한 사건이 자동으로 복구돼요."
+  },
+  "ja": {
+   "t": "進行状況が引き継がれます",
+   "d": "別の端末で遊ぶときや、ブラウザで遊んだあとにアプリで遊ぶときは、同じ探偵ネームを使ってください。解決した事件が自動で引き継がれます。"
+  }
+ },
+ {
   "id": 21,
   "date": "2026-10-20",
   "icon": "🔒",

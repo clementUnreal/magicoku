@@ -81,6 +81,21 @@ export class Leaderboard extends DurableObject {
     out.sort(cmp);
     return out.slice(0, 100);
   }
+  // Best known result per level for a detective name (case-insensitive), across all their rows.
+  async progress(pseudo) {
+    const want = String(pseudo || "").trim().toLowerCase();
+    if (!want) return {};
+    const all = await this.ctx.storage.list({ prefix: "p:" });
+    const out = {};
+    for (const v of all.values()) {
+      if (!v || !v.row || String(v.row.pseudo || "").trim().toLowerCase() !== want || !v.prog) continue;
+      for (const [k, x] of Object.entries(v.prog)) {
+        const cur = out[k];
+        if (!cur || x.h < cur.h || (x.h === cur.h && x.t < cur.t)) out[k] = x;
+      }
+    }
+    return out;
+  }
   async submit(body) {
     const id = clean(body.id, 64), token = String(body.token || "");
     if (!/^[\w-]{8,64}$/.test(id) || token.length < 8) return { status: 400, body: { error: "bad id" } };
@@ -110,6 +125,10 @@ export default {
       const lid = url.searchParams.get("id") || "";
       if (!/^[a-z0-9]{1,12}$/.test(lid)) return json({ error: "bad level" }, 400);
       return json(await env.LB.get(env.LB.idFromName("main")).level(lid));
+    }
+    if (url.pathname === "/api/progress") {
+      const ps = clean(url.searchParams.get("pseudo"), 20);
+      return json(await env.LB.get(env.LB.idFromName("main")).progress(ps));
     }
     if (url.pathname === "/api/legacy") {
       try {
