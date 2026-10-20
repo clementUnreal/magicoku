@@ -3,11 +3,12 @@
 var LVMODE="disc";
 /* story mode temporarily closed while it is being reworked — open only for the testers below */
 var STORY_TESTERS=["clemonchichi"];
+function isTester(){try{const p=ACC&&ACC.profile&&ACC.profile.pseudo;return !!(p&&STORY_TESTERS.includes(String(p).trim().toLowerCase()))}catch(e){return false}}
 function storyLocked(){try{const p=ACC&&ACC.profile&&ACC.profile.pseudo;return !(p&&STORY_TESTERS.includes(String(p).trim().toLowerCase()))}catch(e){return true}}
 (function(){
   const FIRST_STORY=DATA.findIndex(c=>/^s\d+n\d+$/.test(c.id));
   const isStory=i=>FIRST_STORY>=0&&i>=FIRST_STORY;
-  const _un=unlocked;unlocked=function(i){if(i===FIRST_STORY)return true;return _un(i)};
+  const _un=unlocked;unlocked=function(i){if(isTester())return true;if(i===FIRST_STORY)return true;return _un(i)};
   /* home buttons */
   const hp=$("#hPlay");
   if(hp&&!$("#hStory")){const b=document.createElement("button");b.className="hb big storyb";b.id="hStory";hp.after(b)}

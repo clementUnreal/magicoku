@@ -9,7 +9,7 @@ var UNLOCK={hRush:{lvl:10,name:["le Défi chrono","the Time trial","타임 챌�
   DATA.forEach((c,i)=>{if(META[c.id])META[c.id].level=CH_SHORT[tierOf(i)]});
   const _rs=renderStatic;renderStatic=function(){_rs.apply(this,arguments);
     if(!(typeof RUSH!=="undefined"&&RUSH.on)&&!(typeof NIGHT!=="undefined"&&NIGHT.on)){const t=tierOf(ci),k=DATA.filter((c,i)=>i<ci&&tierOf(i)===t).length+1,el=$("#caseTitle");if(el)el.textContent=`${TX(M.level)} · ${k}/10 · ${TX(M.title)}`}};
-  const isOpen=id=>lvlSolved(UNLOCK[id].lvl-1);
+  const isOpen=id=>(typeof isTester==="function"&&isTester())||lvlSolved(UNLOCK[id].lvl-1);
   function paintLocks(){for(const id in UNLOCK){const b=$("#"+id);if(!b)continue;const open=isOpen(id);b.classList.toggle("lockm",!open);
       if(!open){const base=b.textContent.replace(/^🔒\s*/,"").split("\n")[0];b.innerHTML=`🔒 ${base.replace(/^[^\s]+\s/,"")}<small>${L(`Termine le niveau ${UNLOCK[id].lvl} du mode découverte`,`Finish level ${UNLOCK[id].lvl} of discovery mode`,`디스커버리 모드 ${UNLOCK[id].lvl}레벨을 클리어하세요`,`ディスカバリーモードのレベル${UNLOCK[id].lvl}をクリアしよう`)}</small>`}}}
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);paintLocks()};
