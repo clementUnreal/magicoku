@@ -1,5 +1,26 @@
 [
  {
+  "id": 10,
+  "date": "2026-10-20",
+  "icon": "🌌",
+  "fr": {
+   "t": "Un ciel plus calme",
+   "d": "Les étoiles du menu ne s'agitent plus quand tu ouvres ton compte ou que tu fais défiler la page."
+  },
+  "en": {
+   "t": "A calmer sky",
+   "d": "The menu's stars no longer go wild when you open your account or scroll the page."
+  },
+  "ko": {
+   "t": "더 차분한 하늘",
+   "d": "이제 계정을 열거나 화면을 스크롤해도 메뉴의 별들이 요란하게 움직이지 않아요."
+  },
+  "ja": {
+   "t": "落ち着いた夜空",
+   "d": "アカウントを開いたりスクロールしたりしても、メニューの星が騒がしく動かなくなりました。"
+  }
+ },
+ {
   "id": 9,
   "date": "2026-10-20",
   "icon": "💡",
