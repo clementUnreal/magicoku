@@ -46,3 +46,7 @@ body.rush #tmr{display:none}
 @keyframes rin{from{transform:scale(.7);opacity:0}}
 @keyframes rpop{0%{transform:scale(1.4);opacity:0}30%{transform:scale(1);opacity:1}100%{opacity:.85}}
 @media (max-width:520px){.rtiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+#rushCard .rmode{display:inline-block;font:800 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:999px;margin-bottom:6px}
+#rushCard .rmode.off{background:#ffcf4d;color:#5a3a00}#rushCard .rmode.prac{background:#cfd8ff;color:#24306a}
+#rushCard .roff{font-size:14px;color:#24306a;background:#e6ebff;border-radius:10px;padding:6px 10px;margin:8px 0 0}
+.rtile.lost{background:linear-gradient(#f3dcdc,#e2c0c0)}.rtile.lost small{color:#a01f36;font-weight:700}

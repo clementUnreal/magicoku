@@ -1,5 +1,26 @@
 [
  {
+  "id": 14,
+  "date": "2026-10-20",
+  "icon": "🏅",
+  "fr": {
+   "t": "Défi chrono : une seule chance",
+   "d": "Seule ta première tentative compte : ton score est alors définitif, et quitter en cours de route vaut un échec. Ensuite, tu peux rejouer chaque défi pour t'entraîner, sans changer ton score."
+  },
+  "en": {
+   "t": "Time trial: one chance only",
+   "d": "Only your first attempt counts: your score is then final, and leaving midway counts as a failure. After that, you can replay each challenge for practice without changing your score."
+  },
+  "ko": {
+   "t": "타임 챌린지: 기회는 한 번",
+   "d": "첫 번째 도전만 기록돼요. 그 점수가 최종 점수가 되고, 도중에 나가면 실패로 처리돼요. 그 뒤로는 점수에 영향 없이 연습으로 다시 할 수 있어요."
+  },
+  "ja": {
+   "t": "タイムチャレンジ：チャンスは一度",
+   "d": "記録されるのは最初の挑戦だけ。そのスコアが最終スコアになり、途中でやめると失敗になります。そのあとは、スコアを変えずに練習として何度でも遊べます。"
+  }
+ },
+ {
   "id": 13,
   "date": "2026-10-20",
   "icon": "⏳",
