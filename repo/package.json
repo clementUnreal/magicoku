@@ -1,1 +1,9 @@
-{ "name": "magicoku", "private": true, "type": "module", "dependencies": { "@netlify/blobs": "^8.1.0" } }
+{
+ "name": "magicoku",
+ "private": true,
+ "type": "module",
+ "dependencies": {
+  "@netlify/blobs": "^8.1.0",
+  "@neondatabase/serverless": "^0.10.4"
+ }
+}

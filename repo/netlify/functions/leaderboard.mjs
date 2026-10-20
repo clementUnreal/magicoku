@@ -1,5 +1,6 @@
 import { getStore, listStores } from "@netlify/blobs";
 import { createHash } from "node:crypto";
+import { neon } from "@neondatabase/serverless";
 
 const store = () => getStore({ name: "magicoku-leaderboard", consistency: "strong" });
 const sha = (s) => createHash("sha256").update(String(s)).digest("hex");
@@ -44,10 +45,41 @@ async function migrate(s) {
   await s.set("__migrated", String(Date.now()));
 }
 
+// One-time import from the Netlify Database (Postgres) used by the previous leaderboard.
+async function migrateDb(s) {
+  if (await s.get("__migrated_db")) return;
+  const url = process.env.NETLIFY_DATABASE_URL || process.env.NETLIFY_DATABASE_URL_UNPOOLED || process.env.DATABASE_URL;
+  if (url) {
+    try {
+      const sql = neon(url);
+      const cols = await sql("select table_schema, table_name, column_name from information_schema.columns where table_schema not in ('pg_catalog','information_schema')");
+      const tables = {};
+      for (const c of cols) (tables[c.table_schema + "." + c.table_name] ||= new Set()).add(c.column_name);
+      for (const [t, set] of Object.entries(tables)) {
+        if (!set.has("pseudo")) continue;
+        const [sch, name] = t.split(".");
+        const rows = await sql(`select * from "${sch.replace(/"/g, "")}"."${name.replace(/"/g, "")}" limit 1000`);
+        for (const r of rows) {
+          let prog = r.progress;
+          if (typeof prog === "string") { try { prog = JSON.parse(prog); } catch { prog = null; } }
+          const id = clean(r.id ?? r.player_id ?? r.pid, 64);
+          if (!/^[\w-]{8,64}$/.test(id) || !r.pseudo) continue;
+          const cur = await s.get(id, { type: "json" });
+          const sum = prog ? summarize(prog) : { solved: Number(r.solved) || 0, hints: Number(r.hints) || 0, time: Number(r.time ?? r.total_time) || 0 };
+          if (cur && cur.solved >= sum.solved) continue;
+          await s.setJSON(id, { id, pseudo: clean(r.pseudo, 20), avatar: clean(r.avatar, 20), ...sum, tok: cur ? cur.tok : null, at: Date.now(), imported: t });
+        }
+      }
+    } catch (e) { console.log("migrateDb", e && e.message); return; }
+  }
+  await s.set("__migrated_db", String(Date.now()));
+}
+
 export default async (req) => {
   const s = store();
   if (req.method === "GET") {
     await migrate(s);
+    await migrateDb(s);
     const { blobs } = (await s.list());
     const rows = (await Promise.all(blobs.filter((b) => !b.key.startsWith("__")).map((b) => s.get(b.key, { type: "json" })))).filter(Boolean)
       .map(({ id, pseudo, avatar, solved, hints, time }) => ({ id, pseudo, avatar, solved, hints, time }))
