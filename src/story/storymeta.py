@@ -29,4 +29,4 @@ def build(lid,d,c,k):
       MG.STORY_KO[si].format(v=vk,ga="이" if MG._bat(vk) else "가",t=pko,k=MG.KNUM[n-1]),
       MG.STORY_JA[si].format(v=vj,t=pja,k=MG.JNUM[n-1])]
     w=MG.WEAP[(c*7+k*3)%len(MG.WEAP)];wk,wj=_D[w[1]]
-    return {"level":list(SHORT[c]),"title":list(TITLES[env][k]),"story":story,"weapon":[w[0],w[1],wk,wj],"rooms":rooms,"floors":floors,"rugs":rugs,"people":people}
+    return {"env":env,"rtypes":dict(d["types"]),"level":list(SHORT[c]),"title":list(TITLES[env][k]),"story":story,"weapon":[w[0],w[1],wk,wj],"rooms":rooms,"floors":floors,"rugs":rugs,"people":people}

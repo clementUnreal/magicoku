@@ -3,6 +3,7 @@ const PP=f=>(3.2+f*93.6).toFixed(3)+"%";
 const isVoid=(r,c)=>r<0||c<0||r>=N||c>=N||C.rooms[r][c]===".";
 function shade(hex,f){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;r=Math.round(r*f);g=Math.round(g*f);b=Math.round(b*f);return `rgb(${Math.min(255,r)},${Math.min(255,g)},${Math.min(255,b)})`}
 function floorCSS(k,r,c,pi){
+  if(typeof themeFloor==="function"){const tf=themeFloor(k,r,c);if(tf)return tf}
   const [f1,f2]=(M.floors||FLOORS)[k]||["#ccc","#ddd"],d=shade(f1,.82),l=shade(f1,1.1);
   switch(pi%4){
     case 0:return `${STAR} center/34% no-repeat,${(r+c)%2?f2:f1}`;
@@ -65,7 +66,8 @@ function renderBoard(){
     addPt(s.x1,s.y1);addPt(s.x2,s.y2);
     if(s.door){const h=s.y1===s.y2,mx=(s.x1+s.x2)/2,my=(s.y1+s.y2)/2;
       const g=34,R=2*g,hx=h?mx-g:s.x1,hy=h?s.y1:my-g;
-      door+=`<rect x="${h?mx-g:s.x1-5}" y="${h?s.y1-5:my-g}" width="${h?2*g:10}" height="${h?10:2*g}" fill="#c9a46a" opacity=".9"/>`+
+      const tdm=typeof themeDoor==="function"?themeDoor(h,mx,my,g,s):null;
+      if(tdm)door+=tdm;else door+=`<rect x="${h?mx-g:s.x1-5}" y="${h?s.y1-5:my-g}" width="${h?2*g:10}" height="${h?10:2*g}" fill="#c9a46a" opacity=".9"/>`+
         (h?`<path d="M${hx} ${hy+R} A${R} ${R} 0 0 0 ${hx+R} ${hy}" fill="none" stroke="rgba(42,24,36,.45)" stroke-width="2.5" stroke-dasharray="5 5"/><path d="M${hx} ${hy}L${hx} ${hy+R}" stroke="#3b2418" stroke-width="9" stroke-linecap="round"/><path d="M${hx} ${hy}L${hx} ${hy+R}" stroke="#a87634" stroke-width="5" stroke-linecap="round"/>`
            :`<path d="M${hx+R} ${hy} A${R} ${R} 0 0 1 ${hx} ${hy+R}" fill="none" stroke="rgba(42,24,36,.45)" stroke-width="2.5" stroke-dasharray="5 5"/><path d="M${hx} ${hy}L${hx+R} ${hy}" stroke="#3b2418" stroke-width="9" stroke-linecap="round"/><path d="M${hx} ${hy}L${hx+R} ${hy}" stroke="#a87634" stroke-width="5" stroke-linecap="round"/>`);
       const h2=h;// wall stubs either side of the door
@@ -76,10 +78,11 @@ function renderBoard(){
   // posts at corners/junctions
   let posts="";
   const isCorner=(x,y)=>{const H=segs.some(s=>s.y1===s.y2&&s.y1===y&&(s.x1===x||s.x2===x)),V=segs.some(s=>s.x1===s.x2&&s.x1===x&&(s.y1===y||s.y2===y));return H&&V};
-  Object.keys(pts).forEach(p=>{const [x,y]=p.split(",").map(Number);if(x%100||y%100)return;if(isCorner(x,y)){const q=N/9;posts+=`<rect x="${x-19*q}" y="${y-19*q}" width="${38*q}" height="${38*q}" rx="${5*q}" class="post"/><rect x="${x-12*q}" y="${y-15*q}" width="${24*q}" height="${11*q}" rx="${3*q}" fill="#6d4c5f"/>`}});
+  Object.keys(pts).forEach(p=>{const [x,y]=p.split(",").map(Number);if(x%100||y%100)return;if(isCorner(x,y)){const q=N/9;const tp=typeof themePost==="function"?themePost(x,y,q):null;if(tp){posts+=tp;return}posts+=`<rect x="${x-19*q}" y="${y-19*q}" width="${38*q}" height="${38*q}" rx="${5*q}" class="post"/><rect x="${x-12*q}" y="${y-15*q}" width="${24*q}" height="${11*q}" rx="${3*q}" fill="#6d4c5f"/>`}});
   const K=N/9;
   wall=wall.replace(/class="w o"/g,`class="w o" stroke-width="${30*K}"`).replace(/class="w"/g,`class="w" stroke-width="${20*K}"`);
   posts=posts.replace(/(-?\d+(\.\d+)?)/g,m=>m);
+  if(typeof themeWall==="function")wall=themeWall(wall,K);
   const svg=`<svg class="walls" viewBox="-20 -20 ${N*100+40} ${N*100+40}" aria-hidden="true">${wall}${posts}${door}</svg>`;
   let labels="";
   rooms.forEach(k=>{const L=labelRun[k];let best=[],cur=[];L.cs.forEach(c=>{if(doorTop.has(L.r+","+c)){cur=[]}else{cur.push(c);if(cur.length>best.length)best=cur.slice()}});if(!best.length)best=L.cs;
@@ -89,6 +92,7 @@ function renderBoard(){
   for(let c=0;c<N;c++)edge+=`<span class="edge top" style="left:${PP((c+.5)/N)}">${c+1}</span>`;
   for(let r=0;r<N;r++)edge+=`<span class="edge side" style="top:${PP((r+.5)/N)}">${ROWS[r]}</span>`;
   const g=`grid-template-columns:repeat(${N},1fr);grid-template-rows:repeat(${N},1fr)`;
+  {const bd=$("#board");bd.className="board"+(typeof themeClass==="function"?" "+themeClass():"")}
   $("#board").innerHTML=`<div class="plan" id="plan" style="--wn:${N*100}"><div class="layer" id="grid" style="${g}">${cells}</div><svg class="rugs" viewBox="0 0 ${N*100} ${N*100}" preserveAspectRatio="none" aria-hidden="true">${rugs}</svg><div class="layer objs" style="${g}">${objs}</div>${svg}<div class="layer marks" id="marks" style="${g}">${mk}</div>${labels}${edge}<span class="tip" id="tip" hidden></span></div>`;
   bindPlan();renderMarks();setupSketch();
 }

@@ -1,0 +1,30 @@
+/* chapter frames (story mode) */
+.board.th{transition:background .3s}
+.board.th-forest{background:radial-gradient(circle at 10% 15%,#3f6b35 0 6%,transparent 6.5%),radial-gradient(circle at 88% 8%,#4d7d40 0 7%,transparent 7.5%),radial-gradient(circle at 95% 85%,#3f6b35 0 6%,transparent 6.5%),radial-gradient(circle at 4% 92%,#4d7d40 0 7%,transparent 7.5%),linear-gradient(#24401f,#1a3016)!important}
+.board.th-station{background:repeating-linear-gradient(0deg,#5a2a22 0 13px,#3b1c17 13px 15px),#5a2a22!important}
+.board.th-bank{background:radial-gradient(ellipse at 50% 0%,rgba(217,168,64,.25),transparent 60%),linear-gradient(#26232f,#17151d)!important;box-shadow:0 0 0 3px #d9a840,0 0 0 7px rgba(217,168,64,.2),0 18px 40px #000a!important}
+.board.th-alley{background:radial-gradient(circle at 25% 25%,#8a7356 0 30%,#5a4632 31% 36%,transparent 37%) 0 0/28px 28px,#6e5a44!important}
+.board.th-village{background:radial-gradient(circle at 20% 30%,#fff 0 1.5px,transparent 2px) 0 0/34px 34px,radial-gradient(circle at 70% 70%,#fff 0 1px,transparent 1.5px) 0 0/22px 22px,linear-gradient(#c9dcea,#a9c3d8)!important}
+.board.th-lake{background:radial-gradient(ellipse 30px 5px at 50% 50%,rgba(255,255,255,.25) 0 60%,transparent 62%) 0 0/70px 36px,linear-gradient(#3f7fa8,#2a5f85)!important}
+.board.th-stadium{background:repeating-linear-gradient(90deg,#5f9a4e 0 40px,#6aa857 40px 80px)!important}
+.board.th-hospital{background:conic-gradient(#dff1ec 25%,#c8e6dc 0 50%,#dff1ec 0 75%,#c8e6dc 0) 0 0/36px 36px!important}
+.board.th-ministry{background:linear-gradient(125deg,transparent 40%,rgba(255,255,255,.06) 42%,transparent 46%),linear-gradient(#1f4a3a,#12302a)!important;box-shadow:0 0 0 3px #d9a840,0 0 0 7px rgba(217,168,64,.2),0 18px 40px #000a!important}
+.board.th-fortress{background:linear-gradient(90deg,#2a2d38 0 2px,transparent 2px) 0 0/48px 24px,linear-gradient(#2a2d38 0 2px,transparent 2px) 0 0/48px 24px,#3f4352!important}
+.board.th-forest .edge,.board.th-station .edge,.board.th-bank .edge,.board.th-alley .edge,.board.th-lake .edge,.board.th-stadium .edge,.board.th-ministry .edge,.board.th-fortress .edge{color:#f6ecd2;text-shadow:0 1px 2px #000a}
+.board.th .rlabel{border-width:2px}
+.board.th-forest .rlabel{background:#e9f3d8!important;border-color:#2f5428!important;color:#2f5428!important}
+.board.th-station .rlabel{background:#fdf3dc!important;border-color:#3b3550!important;color:#3b3550!important;font-family:var(--f-title)!important}
+.board.th-bank .rlabel{background:#2e2b38!important;border-color:#d9a840!important;color:#f2c443!important}
+.board.th-alley .rlabel{background:#fdf3dc!important;border-color:#4a3220!important;color:#4a3220!important}
+.board.th-village .rlabel{background:#ffffff!important;border-color:#5a3e26!important;color:#5a3e26!important}
+.board.th-lake .rlabel{background:#f6ecd2!important;border-color:#5a4028!important;color:#5a4028!important}
+.board.th-stadium .rlabel{background:#f5f5f5!important;border-color:#d6404f!important;color:#a01f36!important}
+.board.th-hospital .rlabel{background:#ffffff!important;border-color:#5f7d8a!important;color:#3f5d6a!important}
+.board.th-ministry .rlabel{background:#163a2e!important;border-color:#d9a840!important;color:#f2c443!important}
+.board.th-fortress .rlabel{background:#2a2d38!important;border-color:#7a7f93!important;color:#e0e3ec!important}
+.board.th .walls{filter:drop-shadow(0 3px 0 rgba(0,0,0,.35))}
+/* better-integrated nature objects */
+.board.th .oc .obj.o-tree .spr{width:122%;height:122%;margin:-11% -11% 0}
+.board.th .oc .obj.o-reeds .spr,.board.th .oc .obj.o-shroom .spr{width:100%;height:100%}
+.board.th .oc .obj.o-tree .spr::before,.board.th .oc .obj.o-reeds .spr::before{left:4%;right:4%;height:22%;background:radial-gradient(ellipse at center,rgba(10,30,10,.45),rgba(10,30,10,0) 70%)}
+.board.th-forest .rugs,.board.th-lake .rugs,.board.th-stadium .rugs,.board.th-fortress .rugs{display:none}
