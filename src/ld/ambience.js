@@ -21,7 +21,7 @@ try{AMB.on=localStorage.getItem("magicoku:ambience")!=="off"}catch(e){}
   function ctx(){if(!SND.on||!AMB.on)return null;return ac()}
   function noise(c){if(noiseBuf)return noiseBuf;const b=c.createBuffer(1,c.sampleRate*2,c.sampleRate),d=b.getChannelData(0);let last=0;for(let i=0;i<d.length;i++){const w=Math.random()*2-1;last=(last+.02*w)/1.02;d[i]=last*3.5}noiseBuf=b;return b}
   function out(c){if(!AMB.out){AMB.out=c.createGain();AMB.out.gain.value=0;AMB.out.connect(c.destination)}return AMB.out}
-  function s.buffer=noise(c);s.loop=true;const f=c.createBiquadFilter();f.type=type;f.frequency.value=freq;f.Q.value=q;const g=c.createGain();g.gain.value=vol;
+  function bed(c,type,freq,q,vol,lfoHz,lfoAmt){const s=c.createBufferSource();s.buffer=noise(c);s.loop=true;const f=c.createBiquadFilter();f.type=type;f.frequency.value=freq;f.Q.value=q;const g=c.createGain();g.gain.value=vol;
     s.connect(f).connect(g).connect(out(c));s.start();AMB.nodes.push(s);
     if(lfoHz){const o=c.createOscillator(),og=c.createGain();o.frequency.value=lfoHz;og.gain.value=lfoAmt;o.connect(og).connect(f.frequency);o.start();AMB.nodes.push(o)}
     return g}
