@@ -1,0 +1,8 @@
+{
+  "name": "magicoku",
+  "main": "repo/worker.js",
+  "compatibility_date": "2025-09-01",
+  "assets": { "directory": "./repo/public", "binding": "ASSETS" },
+  "durable_objects": { "bindings": [{ "name": "LB", "class_name": "Leaderboard" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Leaderboard"] }]
+}
