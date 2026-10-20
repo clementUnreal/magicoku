@@ -1,5 +1,26 @@
 [
  {
+  "id": 13,
+  "date": "2026-10-20",
+  "icon": "⏳",
+  "fr": {
+   "t": "Nouveau mode : Défi chrono",
+   "d": "Une victime a bu un poison lent : tu as une minute pour démasquer le coupable et obtenir l'antidote. Dix petites enquêtes, une bougie qui fond, et jusqu'à trois étoiles selon le temps restant. Chaque indice coûte 10 secondes."
+  },
+  "en": {
+   "t": "New mode: Time trial",
+   "d": "A victim has drunk a slow poison: you have one minute to unmask the culprit and get the antidote. Ten short cases, a melting candle, and up to three stars depending on the time left. Each hint costs 10 seconds."
+  },
+  "ko": {
+   "t": "새 모드: 타임 챌린지",
+   "d": "피해자가 천천히 퍼지는 독을 마셨어요. 1분 안에 범인을 밝혀 해독제를 구하세요. 짧은 사건 10개, 녹아내리는 촛불, 남은 시간에 따라 별을 최대 3개까지 받을 수 있어요. 힌트 하나에 10초가 줄어요."
+  },
+  "ja": {
+   "t": "新モード：タイムチャレンジ",
+   "d": "被害者が遅効性の毒を飲んでしまった。一分以内に犯人を暴いて解毒剤を手に入れよう。短い事件が10個、溶けていくロウソク、残り時間で最大3つの星。ヒントは一回につき10秒減ります。"
+  }
+ },
+ {
   "id": 12,
   "date": "2026-10-20",
   "icon": "📜",

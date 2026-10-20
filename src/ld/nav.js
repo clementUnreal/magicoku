@@ -5,11 +5,12 @@
   function atRoot(){if(vis("#verdict"))return false;if(document.querySelector(".modal:not([hidden])")||vis("#reveal")||vis("#tuto"))return false;
     if(!vis("#home"))return false;return vis("#hMain")}
   function doBack(){
+    if(vis("#rushCard"))return;
     if(vis("#verdict"))return;
     const m=document.querySelector(".modal:not([hidden])");if(m){m.hidden=true;return}
     if(vis("#reveal")){$("#reveal").hidden=true;return}
     if(vis("#tuto")){endTuto();return}
-    if(!vis("#home")){$("#home").hidden=false;show("pLevels");try{play("page")}catch(e){}return}
+    if(!vis("#home")){$("#home").hidden=false;show(typeof RUSH!=="undefined"&&RUSH.on?"pRush":"pLevels");try{play("page")}catch(e){}return}
     if(!vis("#hMain")){show("hMain");try{play("page")}catch(e){}}
   }
   let trapped=false,ignore=false,pend=false;

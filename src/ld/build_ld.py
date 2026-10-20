@@ -20,7 +20,25 @@ helpers='\n'.join(old[65:107])  # LANG .. look
 helpers=helpers.replace("if(WIN[r+\",\"+c])s.add(\"window\");","")
 helpers=helpers.replace("OBJ[rr][cc]&&OBJ[rr][cc]!==OBJ[r][c])s.add","OBJ[rr][cc]&&OBJ[rr][cc]!==OBJ[r][c]&&room(rr,cc)===room(r,c))s.add")
 assert "room(rr,cc)===room(r,c)" in helpers and "function face" in helpers and "const look" in helpers
-head="const DATA="+json.dumps(out,ensure_ascii=False,separators=(',',':'))+";\n"+open('meta.js').read()+"\nObject.assign(META,"+json.dumps(_extra,ensure_ascii=False)+");\n"+helpers+"\n"
+_rush=[];_rmeta={}
+import sys as _s2;_s2.path.insert(0,'../i18n')
+from data import NAMES as _RN
+for _i in range(1,11):
+    _p=f"lv/u{_i}.json"
+    if not os.path.exists(_p):continue
+    _d=json.load(open(_p));_lid=f"u{_i}"
+    _rush.append(dict(id=_lid,rooms=_d['rooms'],objs=_d['objs'],windows=[],solution=_d['solution'],clues=_d['clues'],killer=_d['killer']))
+    _m=_mb(("f","m","d")[_i%3]+str(2+(_i%9)),_d,(_i*2)%9)
+    _v=_m["people"][0];_f=_v[1]=="f";_vk,_vj=_RN[_v[0]]
+    _ga="이" if (0xAC00<=ord(_vk[-1])<=0xD7A3 and (ord(_vk[-1])-0xAC00)%28) else "가"
+    _m["level"]=["Défi chrono","Time trial","타임 챌린지","タイムチャレンジ"]
+    _m["title"]=[f"Défi {_i}",f"Challenge {_i}",f"챌린지 {_i}",f"チャレンジ {_i}"]
+    _m["story"]=[f"<b>{_v[0]}</b> vient de boire un poison lent ! Démasque le coupable en moins d'une minute pour obtenir l'antidote.",
+      f"<b>{_v[0]}</b> has just drunk a slow poison! Unmask the culprit in under a minute to get the antidote.",
+      f"<b>{_vk}</b>{_ga} 방금 천천히 퍼지는 독을 마셨다! 1분 안에 범인을 밝혀내 해독제를 손에 넣어라.",
+      f"<b>{_vj}</b>が遅効性の毒を飲んでしまった！一分以内に犯人を暴いて、解毒剤を手に入れろ。"]
+    _rmeta[_lid]=_m
+head="const DATA="+json.dumps(out,ensure_ascii=False,separators=(',',':'))+";\n"+open('meta.js').read()+"\nObject.assign(META,"+json.dumps(_extra,ensure_ascii=False)+");\nconst RUSH_DATA="+json.dumps(_rush,ensure_ascii=False,separators=(',',':'))+";\nObject.assign(META,"+json.dumps(_rmeta,ensure_ascii=False)+");\n"+helpers+"\n"
 head+="const POR="+open('portraits.json').read()+";\n"
 head+=r'''const KNIFE=`<svg class="knife" viewBox="0 0 40 40"><g transform="rotate(-30 20 20)"><rect x="17" y="2" width="6" height="20" rx="2.5" fill="#dfe3ee" stroke="#2c1a33" stroke-width="1.2"/><rect x="14.5" y="21" width="11" height="3.2" rx="1.5" fill="#2c1a33"/><rect x="17.6" y="24" width="4.8" height="11" rx="2" fill="#8a5a33"/><circle cx="20" cy="8" r="2" fill="#b8283e"/></g></svg>`;
 function ava(p,o={}){const k=M.people[p][5];if(k)return `<img class="pimg" src="${POR[k]}" alt="" draggable="false" style="background:${look(p)[4]}">`+(o.angry?KNIFE:"");return face(look(p),o)+(o.angry&&false?KNIFE:"")}
@@ -172,8 +190,8 @@ exec(open('patch_lv2.py').read())
 exec(open('patch_timer.py').read())
 exec(open('patch_story.py').read())
 exec(open('patch_i18n.py').read())
-_i=s.rindex('</script>');s=s[:_i]+open('verdict.js').read()+open('kw.js').read()+open('news.js').read()+open('hint2.js').read()+open('nav.js').read()+open('rules2.js').read()+'\nrender();\n'+s[_i:]
-s=s.replace('</style>',open('kw.css').read()+open('news.css').read()+open('hint2.css').read()+open('nav.css').read()+'</style>',1)
+_i=s.rindex('</script>');s=s[:_i]+open('verdict.js').read()+open('kw.js').read()+open('news.js').read()+open('hint2.js').read()+open('nav.js').read()+open('rules2.js').read()+open('rush.js').read()+'\nrender();\n'+s[_i:]
+s=s.replace('</style>',open('kw.css').read()+open('news.css').read()+open('hint2.css').read()+open('nav.css').read()+open('rush.css').read()+'</style>',1)
 s=s.replace('</style>',open('verdict.css').read()+'</style>',1)
 open('../crimes-mignons.html','w').write(s)
 print(len(s)//1024,"KB")
