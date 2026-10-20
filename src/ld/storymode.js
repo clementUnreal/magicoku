@@ -1,6 +1,7 @@
 
 /* ================= Discovery mode (chapters I-III) vs Story mode (chapters 1-10) ================= */
 var LVMODE="disc";
+var STORY_LOCKED=true; /* story mode temporarily closed while it is being reworked */
 (function(){
   const FIRST_STORY=DATA.findIndex(c=>/^s\d+n\d+$/.test(c.id));
   const isStory=i=>FIRST_STORY>=0&&i>=FIRST_STORY;
@@ -8,13 +9,16 @@ var LVMODE="disc";
   /* home buttons */
   const hp=$("#hPlay");
   if(hp&&!$("#hStory")){const b=document.createElement("button");b.className="hb big storyb";b.id="hStory";hp.after(b)}
-  function labels(){const b=$("#hStory");if(b)b.textContent="📖 "+L("Mode histoire","Story mode","스토리 모드","ストーリーモード");
+  function labels(){const b=$("#hStory");if(b){b.classList.toggle("lockm",STORY_LOCKED);
+      if(STORY_LOCKED)b.innerHTML=`🔒 ${L("Mode histoire","Story mode","스토리 모드","ストーリーモード")}<small>${L("Bientôt disponible","Coming soon","곧 공개돼요","近日公開")}</small>`;
+      else b.textContent="📖 "+L("Mode histoire","Story mode","스토리 모드","ストーリーモード")}
     const p=$("#hPlay");if(p)p.textContent="🧭 "+L("Mode découverte","Discovery mode","디스커버리 모드","ディスカバリーモード")}
   /* levels panel: only show the chapters of the current mode */
   function filterTiers(){const secs=document.querySelectorAll("#lvls > section.tier");secs.forEach((s,t)=>{s.hidden=LVMODE==="story"?t<3:t>=3});
     const h=$("#pLevelsT");if(h)h.textContent=LVMODE==="story"?"📖 "+L("Mode histoire","Story mode","스토리 모드","ストーリーモード"):"🧭 "+L("Mode découverte","Discovery mode","디스커버리 모드","ディスカバリーモード")}
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);labels();filterTiers()};
   window.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#hPlay,#hStory");if(!t)return;
+    if(t.id==="hStory"&&STORY_LOCKED){e.stopPropagation();try{play("forbid")}catch(_){}toast(L("Le mode histoire arrive bientôt : nous le peaufinons encore.","Story mode is coming soon: we're still polishing it.","스토리 모드는 곧 공개돼요. 아직 다듬는 중이에요.","ストーリーモードは近日公開。いま仕上げているところです。"));return}
     LVMODE=t.id==="hStory"?"story":"disc";if(t.id==="hStory"){e.stopPropagation();show("pLevels");try{play("page")}catch(_){}}},true);
   /* opening a level sets the mode, so "back" returns to the right list */
   const _oc=openCase;openCase=function(i){if(typeof i==="number"&&i>=0&&i<DATA.length&&!(typeof RUSH!=="undefined"&&RUSH.on)&&!(typeof NIGHT!=="undefined"&&NIGHT.on)&&!(typeof LIAR!=="undefined"&&LIAR.on))LVMODE=isStory(i)?"story":"disc";return _oc.apply(this,arguments)};
