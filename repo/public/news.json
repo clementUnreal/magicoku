@@ -1,5 +1,26 @@
 [
  {
+  "id": 12,
+  "date": "2026-10-20",
+  "icon": "📜",
+  "fr": {
+   "t": "Des règles plus claires",
+   "d": "Les règles précisent maintenant qu'une pièce peut accueillir plusieurs personnes, et que seule la pièce de la victime n'en contient qu'une autre : le meurtrier."
+  },
+  "en": {
+   "t": "Clearer rules",
+   "d": "The rules now explain that a room can hold several people, and that only the victim's room has exactly one other person in it: the murderer."
+  },
+  "ko": {
+   "t": "더 명확해진 규칙",
+   "d": "이제 규칙에 한 방에 여러 사람이 있을 수 있다는 점, 그리고 피해자의 방에만 다른 사람이 딱 한 명, 즉 범인만 있다는 점이 설명되어 있어요."
+  },
+  "ja": {
+   "t": "わかりやすくなったルール",
+   "d": "ひとつの部屋に何人いてもよいこと、そして被害者の部屋だけはほかに一人（犯人）しかいないことを、ルールで説明するようにしました。"
+  }
+ },
+ {
   "id": 11,
   "date": "2026-10-20",
   "icon": "↩️",
