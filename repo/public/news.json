@@ -1,5 +1,26 @@
 [
  {
+  "id": 16,
+  "date": "2026-10-20",
+  "icon": "📖",
+  "fr": {
+   "t": "Le mode histoire en trois chapitres",
+   "d": "« Jouer » devient « Mode histoire », découpé en trois chapitres : Les premiers soupçons, L'étau se resserre et Au cœur des ténèbres. Termine le niveau 10 pour débloquer le Défi chrono, et le niveau 20 pour le Mode nuit."
+  },
+  "en": {
+   "t": "Story mode in three chapters",
+   "d": "“Play” becomes “Story mode”, split into three chapters: First Suspicions, The Net Tightens and Into the Darkness. Finish level 10 to unlock the Time trial, and level 20 for Night mode."
+  },
+  "ko": {
+   "t": "3장으로 된 스토리 모드",
+   "d": "‘플레이’가 ‘스토리 모드’로 바뀌었고, 첫 의심, 좁혀 오는 포위망, 어둠의 한가운데의 3장으로 나뉘어요. 10레벨을 클리어하면 타임 챌린지가, 20레벨을 클리어하면 나이트 모드가 열려요."
+  },
+  "ja": {
+   "t": "三章構成のストーリーモード",
+   "d": "「プレイ」が「ストーリーモード」になり、最初の疑い・迫る包囲網・闇の奥への三章に分かれました。レベル10をクリアするとタイムチャレンジが、レベル20をクリアするとナイトモードが解放されます。"
+  }
+ },
+ {
   "id": 15,
   "date": "2026-10-20",
   "icon": "🏮",

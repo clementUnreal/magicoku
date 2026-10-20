@@ -636,6 +636,8 @@ body.night .rlabel{z-index:2!important}
 #nightCard .nbig{font:900 26px/1.2 var(--f-display);margin:4px 0}
 #nightCard .nacts{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}
 body.night #marks .mk.room{background:none!important}
+.hb.lockm{opacity:.62;filter:grayscale(.5);display:flex;flex-direction:column;align-items:center;gap:2px}
+.hb.lockm small{font:italic 600 12px var(--f-body);letter-spacing:0;text-transform:none;opacity:.9}
 #verdict{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;background:rgba(12,6,24,0);transition:background .3s;pointer-events:auto}
 #verdict[hidden]{display:none}
 #verdict.on{background:rgba(12,6,24,.72)}
@@ -1414,15 +1416,15 @@ function renderHome(){
   const p=ACC.profile;
   $("#hSub").textContent=L("Les enquêtes de l'Académie de Brumelune","The Brumelune Academy mysteries","브륌륀 아카데미의 미스터리","ブリュムリュヌ学院の謎");
   $("#hWho").innerHTML=p&&p.pseudo?`<img src="${POR[p.avatar]||POR[AVS[0]]}" alt="">${(n=>L(`Bonjour, ${n} !`,`Hello, ${n}!`,`안녕하세요, ${n}님!`,`こんにちは、${n}さん！`))(p.pseudo.replace(/[<>&]/g,""))}`:"";
-  $("#hPlay").textContent=L("Jouer","Play","플레이","プレイ");$("#hRules").textContent=L("Règles","Rules","규칙","ルール");$("#hOptions").textContent=L("Options","Options","설정","設定");
+  $("#hPlay").textContent=L("Mode histoire","Story mode","스토리 모드","ストーリーモード");$("#hRules").textContent=L("Règles","Rules","규칙","ルール");$("#hOptions").textContent=L("Options","Options","설정","設定");
   $("#hAccount").textContent=p&&p.pseudo?L("Mon compte","My account","내 계정","マイアカウント"):L("Créer mon compte","Create my account","계정 만들기","アカウントを作る");
   $("#hRank").textContent=L("Classement","Leaderboard","순위표","ランキング");renderRank();
   document.querySelectorAll("[data-back]").forEach(b=>b.textContent=L("← Retour","← Back","← 뒤로","← 戻る"));
   // levels
   $("#pLevelsT").textContent=L("Choisis ton enquête","Choose your case","사건을 고르세요","事件を選んでください");
-  const TIERS=[["Facile","Easy"],["Moyen","Medium"],["Difficile","Hard"]];
+  const TIERS=(typeof CHAPTERS!=="undefined"&&CHAPTERS)||[["Facile","Easy"],["Moyen","Medium"],["Difficile","Hard"]];
   $("#lvls").innerHTML=TIERS.map((tn,t)=>{const idx=DATA.map((c,i)=>i).filter(i=>tierOf(i)===t);const nd=idx.filter(lvlSolved).length;const open=unlocked(idx[0]);
-    return `<section class="tier${open?"":" locked"}"><header><h3>${TX(tn)}</h3><span>${open?`${nd} / ${idx.length}`:"🔒 "+L(`Termine le niveau ${TIERS[t-1][0].toLowerCase()} pour débloquer`,`Finish ${TIERS[t-1][1].toLowerCase()} to unlock`,`‘${TX(TIERS[t-1])}’ 단계를 끝내면 열려요`,`「${TX(TIERS[t-1])}」をクリアすると解放`)}</span></header>
+    return `<section class="tier${open?"":" locked"}"><header><h3>${TX(tn)}</h3><span>${open?`${nd} / ${idx.length}`:"🔒 "+L(`Termine « ${TX(TIERS[t-1])} » pour débloquer`,`Finish “${TX(TIERS[t-1])}” to unlock`,`‘${TX(TIERS[t-1])}’ 단계를 끝내면 열려요`,`「${TX(TIERS[t-1])}」をクリアすると解放`)}</span></header>
     <div class="tiles">${idx.map((i,k)=>{const ok=lvlSolved(i),u=unlocked(i),pr=p&&p.progress&&p.progress[DATA[i].id];
       return `<button class="tile${ok?" done":""}${u?"":" lockd"}${u&&!ok?" next":""}" data-l="${i}" aria-label="${TX(META[DATA[i].id].title)}"><b>${u?k+1:"🔒"}</b><i>${ok?(pr?fmt(pr.time):"✓"):u?"":""}</i></button>`}).join("")}</div></section>`}).join("")+
     (lastSel!=null?`<div class="lvinfo" id="lvinfo"></div>`:"");
@@ -2135,6 +2137,25 @@ function nightDone(){try{return JSON.parse(localStorage.getItem("magicoku:night"
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);renderNight()};
   window.addEventListener("resize",light);
   renderNight();
+})();
+/* ================= story chapters + mode unlocks ================= */
+var CHAPTERS=[["Chapitre I · Les premiers soupçons","Chapter I · First Suspicions","1장 · 첫 의심","第一章・最初の疑い"],
+  ["Chapitre II · L'étau se resserre","Chapter II · The Net Tightens","2장 · 좁혀 오는 포위망","第二章・迫る包囲網"],
+  ["Chapitre III · Au cœur des ténèbres","Chapter III · Into the Darkness","3장 · 어둠의 한가운데","第三章・闇の奥へ"]];
+var CH_SHORT=[["Chapitre I","Chapter I","1장","第一章"],["Chapitre II","Chapter II","2장","第二章"],["Chapitre III","Chapter III","3장","第三章"]];
+var UNLOCK={hRush:{lvl:10,name:["le Défi chrono","the Time trial","타임 챌린지","タイムチャレンジ"]},hNight:{lvl:20,name:["le Mode nuit","Night mode","나이트 모드","ナイトモード"]}};
+(function(){
+  DATA.forEach((c,i)=>{if(META[c.id])META[c.id].level=CH_SHORT[tierOf(i)]});
+  const _rs=renderStatic;renderStatic=function(){_rs.apply(this,arguments);
+    if(!(typeof RUSH!=="undefined"&&RUSH.on)&&!(typeof NIGHT!=="undefined"&&NIGHT.on)){const t=tierOf(ci),k=DATA.filter((c,i)=>i<ci&&tierOf(i)===t).length+1,el=$("#caseTitle");if(el)el.textContent=`${TX(M.level)} · ${k}/10 · ${TX(M.title)}`}};
+  const isOpen=id=>lvlSolved(UNLOCK[id].lvl-1);
+  function paintLocks(){for(const id in UNLOCK){const b=$("#"+id);if(!b)continue;const open=isOpen(id);b.classList.toggle("lockm",!open);
+      if(!open){const base=b.textContent.replace(/^🔒\s*/,"").split("\n")[0];b.innerHTML=`🔒 ${base.replace(/^[^\s]+\s/,"")}<small>${L(`Termine le niveau ${UNLOCK[id].lvl} du mode histoire`,`Finish level ${UNLOCK[id].lvl} of story mode`,`스토리 모드 ${UNLOCK[id].lvl}레벨을 클리어하세요`,`ストーリーモードのレベル${UNLOCK[id].lvl}をクリアしよう`)}</small>`}}}
+  const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);paintLocks()};
+  window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#hRush,#hNight");if(!b)return;
+    if(!isOpen(b.id)){e.stopPropagation();e.preventDefault();try{play("forbid")}catch(_){}const u=UNLOCK[b.id];
+      toast(L(`Termine le niveau ${u.lvl} du mode histoire pour débloquer ${u.name[0]}.`,`Finish level ${u.lvl} of story mode to unlock ${u.name[1]}.`,`스토리 모드 ${u.lvl}레벨을 클리어하면 ${u.name[2]}가 열려요.`,`ストーリーモードのレベル${u.lvl}をクリアすると、${u.name[3]}が解放されます。`))}},true);
+  try{renderHome();renderStatic()}catch(e){}
 })();
 
 render();

@@ -60,15 +60,15 @@ function renderHome(){
   const p=ACC.profile;
   $("#hSub").textContent=L("Les enquêtes de l'Académie de Brumelune","The Brumelune Academy mysteries");
   $("#hWho").innerHTML=p&&p.pseudo?`<img src="${POR[p.avatar]||POR[AVS[0]]}" alt="">${L("Bonjour","Hello")}, ${p.pseudo.replace(/[<>&]/g,"")} !`:"";
-  $("#hPlay").textContent=L("Jouer","Play");$("#hRules").textContent=L("Règles","Rules");$("#hOptions").textContent=L("Options","Options");
+  $("#hPlay").textContent=L("Mode histoire","Story mode");$("#hRules").textContent=L("Règles","Rules");$("#hOptions").textContent=L("Options","Options");
   $("#hAccount").textContent=p&&p.pseudo?L("Mon compte","My account"):L("Créer mon compte","Create my account");
   $("#hRank").textContent=L("Classement","Leaderboard");renderRank();
   document.querySelectorAll("[data-back]").forEach(b=>b.textContent=L("← Retour","← Back"));
   // levels
   $("#pLevelsT").textContent=L("Choisis ton enquête","Choose your case");
-  const TIERS=[["Facile","Easy"],["Moyen","Medium"],["Difficile","Hard"]];
+  const TIERS=(typeof CHAPTERS!=="undefined"&&CHAPTERS)||[["Facile","Easy"],["Moyen","Medium"],["Difficile","Hard"]];
   $("#lvls").innerHTML=TIERS.map((tn,t)=>{const idx=DATA.map((c,i)=>i).filter(i=>tierOf(i)===t);const nd=idx.filter(lvlSolved).length;const open=unlocked(idx[0]);
-    return `<section class="tier${open?"":" locked"}"><header><h3>${tn[LI()]}</h3><span>${open?`${nd} / ${idx.length}`:"🔒 "+L(`Termine le niveau ${TIERS[t-1][0].toLowerCase()} pour débloquer`,`Finish ${TIERS[t-1][1].toLowerCase()} to unlock`)}</span></header>
+    return `<section class="tier${open?"":" locked"}"><header><h3>${tn[LI()]}</h3><span>${open?`${nd} / ${idx.length}`:"🔒 "+L(`Termine « ${TX(TIERS[t-1])} » pour débloquer`,`Finish “${TX(TIERS[t-1])}” to unlock`)}</span></header>
     <div class="tiles">${idx.map((i,k)=>{const ok=lvlSolved(i),u=unlocked(i),pr=p&&p.progress&&p.progress[DATA[i].id];
       return `<button class="tile${ok?" done":""}${u?"":" lockd"}${u&&!ok?" next":""}" data-l="${i}" aria-label="${META[DATA[i].id].title[LI()]}"><b>${u?k+1:"🔒"}</b><i>${ok?(pr?fmt(pr.time):"✓"):u?"":""}</i></button>`}).join("")}</div></section>`}).join("")+
     (lastSel!=null?`<div class="lvinfo" id="lvinfo"></div>`:"");
