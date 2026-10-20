@@ -17,3 +17,15 @@ var UNLOCK={hRush:{lvl:10,name:["le Défi chrono","the Time trial","타임 챌�
       toast(L(`Termine le niveau ${u.lvl} du mode histoire pour débloquer ${u.name[0]}.`,`Finish level ${u.lvl} of story mode to unlock ${u.name[1]}.`,`스토리 모드 ${u.lvl}레벨을 클리어하면 ${u.name[2]}가 열려요.`,`ストーリーモードのレベル${u.lvl}をクリアすると、${u.name[3]}が解放されます。`))}},true);
   try{renderHome();renderStatic()}catch(e){}
 })();
+
+/* chapter III: no hints */
+(function(){
+  const noHint=()=>!(typeof RUSH!=="undefined"&&RUSH.on)&&!(typeof NIGHT!=="undefined"&&NIGHT.on)&&tierOf(ci)===2;
+  function paintHint(){const b=$("#tHint");if(!b)return;const off=noHint();b.classList.toggle("nohint",off);b.disabled=off;
+    if(off)b.innerHTML=`<span>🚫 ${L("Pas d'indice","No hints","힌트 없음","ヒントなし")}</span><small>${L("Chapitre III : à toi de jouer !","Chapter III: you're on your own!","3장: 혼자 힘으로!","第三章：自分の力で！")}</small>`;
+    else if(b.querySelector("small"))b.innerHTML=`<span data-t="hint">${TX(TXT.hint)}</span>`}
+  const _r=render;render=function(){_r.apply(this,arguments);paintHint()};
+  const _h=hint;hint=function(){if(noHint()){toast(L("Pas d'indice dans le chapitre III : c'est à toi de jouer !","No hints in chapter III: it's all up to you!","3장에서는 힌트를 쓸 수 없어요. 혼자 힘으로 풀어 보세요!","第三章ではヒントは使えません。自分の力で解こう！"));return}return _h.apply(this,arguments)};
+  const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);const hs=document.querySelectorAll("#lvls .tier header h3");if(hs[2]&&!hs[2].querySelector(".nh"))hs[2].insertAdjacentHTML("beforeend",`<span class="nh">🚫💡 ${L("sans indice","no hints","힌트 없음","ヒントなし")}</span>`)};
+  try{render()}catch(e){}
+})();

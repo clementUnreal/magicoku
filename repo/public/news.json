@@ -1,5 +1,26 @@
 [
  {
+  "id": 17,
+  "date": "2026-10-20",
+  "icon": "🚫",
+  "fr": {
+   "t": "Chapitre III : sans indice",
+   "d": "Dans le chapitre III, « Au cœur des ténèbres », le bouton Indice est désactivé : tu dois résoudre chaque enquête par toi-même."
+  },
+  "en": {
+   "t": "Chapter III: no hints",
+   "d": "In chapter III, “Into the Darkness”, the Hint button is disabled: you must solve every case on your own."
+  },
+  "ko": {
+   "t": "3장: 힌트 없음",
+   "d": "3장 ‘어둠의 한가운데’에서는 힌트 버튼을 쓸 수 없어요. 모든 사건을 혼자 힘으로 풀어야 해요."
+  },
+  "ja": {
+   "t": "第三章：ヒントなし",
+   "d": "第三章「闇の奥へ」ではヒントボタンが使えません。すべての事件を自分の力で解こう。"
+  }
+ },
+ {
   "id": 16,
   "date": "2026-10-20",
   "icon": "📖",
