@@ -1,5 +1,26 @@
 [
  {
+  "id": 28,
+  "date": "2026-10-21",
+  "icon": "🖼️",
+  "fr": {
+   "t": "Des miniatures plus détaillées",
+   "d": "Dans le choix des niveaux, chaque miniature reprend maintenant les décors de son chapitre : sols texturés (herbe, pavés, eau, parquet…), murs et piliers propres à chaque lieu, et objets avec leur ombre."
+  },
+  "en": {
+   "t": "More detailed thumbnails",
+   "d": "In the level select, each thumbnail now uses its chapter's scenery: textured floors (grass, cobblestones, water, parquet…), walls and pillars unique to each place, and objects with their shadows."
+  },
+  "ko": {
+   "t": "더 자세해진 미리보기",
+   "d": "레벨 선택 화면의 미리보기가 이제 각 장의 배경을 그대로 보여 줘요. 질감 있는 바닥(풀, 자갈길, 물, 마루 등), 장소마다 다른 벽과 기둥, 그림자가 있는 물건까지요."
+  },
+  "ja": {
+   "t": "サムネイルがより詳しく",
+   "d": "レベル選択のサムネイルが、それぞれの章の背景を再現するようになりました。質感のある床（草、石畳、水、フローリングなど）、場所ごとの壁と柱、影のついた家具が見られます。"
+  }
+ },
+ {
   "id": 27,
   "date": "2026-10-21",
   "icon": "🔑",

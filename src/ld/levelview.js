@@ -22,13 +22,28 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
   const idxOf=t=>DATA.map((c,i)=>i).filter(i=>tierOf(i)===t);
   const diffOf=(t,k)=>t<3?t:(k<3?0:k<8?1:2);
   function chName(t){const full=TX(CHAPTERS[t]);const p=full.split(/ · |・/);return {num:p[0],name:p.slice(1).join(" · ")||full}}
-  function thumb(i){const c=DATA[i],m=META[c.id],n=c.rooms.length,S=100/n;let o=`<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">`;
-    const fl=k=>((m.floors||FLOORS)[k]||["#ccc","#ddd"]);
-    for(let r=0;r<n;r++)for(let q=0;q<n;q++){const k=c.rooms[r][q];if(k===".")continue;const f=fl(k);o+=`<rect x="${q*S}" y="${r*S}" width="${S+.2}" height="${S+.2}" fill="${(r+q)%2?f[1]:f[0]}"/>`}
-    (c.objs||[]).forEach(([t,r,q])=>{if(SPR[t])o+=`<image href="${SPR[t]}" x="${q*S+S*.08}" y="${r*S+S*.06}" width="${S*.84}" height="${S*.84}"/>`});
-    let w="";for(let r=0;r<n;r++)for(let q=0;q<n;q++){const k=c.rooms[r][q];
-      if(r+1<n&&c.rooms[r+1][q]!==k)w+=`M${q*S} ${(r+1)*S}h${S}`;if(q+1<n&&c.rooms[r][q+1]!==k)w+=`M${(q+1)*S} ${r*S}v${S}`}
-    o+=`<path d="${w}" stroke="#2a1824" stroke-width="${Math.max(1.4,6/n)}" fill="none" stroke-linecap="square"/><rect x="0" y="0" width="100" height="100" fill="none" stroke="#2a1824" stroke-width="${Math.max(2.4,9/n)}"/></svg>`;return o}
+  function thumb(i){const c=DATA[i],m=META[c.id],n=c.rooms.length,P=100/n,env=m&&m.env,TW=(env&&typeof TH_WALL!=="undefined"&&TH_WALL[env])||null;
+    /* floors: same textures as the real board (story chapters), soft checker + light texture otherwise */
+    const save=M;let cells="";try{M=m;
+      for(let r=0;r<n;r++)for(let q=0;q<n;q++){const k=c.rooms[r][q];if(k==="."){cells+=`<i style="background:#1d1424"></i>`;continue}
+        let bg=null;try{bg=typeof themeFloor==="function"?themeFloor(k,r,q):null}catch(_){}
+        if(!bg){const f=((m.floors||FLOORS)[k]||["#ccc","#ddd"]),odd=(r+q)%2,b0=odd?f[1]:f[0];bg=`radial-gradient(circle at 30% 30%,${shade(b0,1.08)} 0 2px,transparent 2.5px),radial-gradient(circle at 72% 68%,${shade(b0,.9)} 0 1.5px,transparent 2px),${b0}`}
+        cells+=`<i style="background:${bg}"></i>`}}finally{M=save}
+    /* objects with a soft shadow */
+    let objs="";(c.objs||[]).forEach(([t,r,q,h,w])=>{if(!SPR[t])return;h=h||1;w=w||1;
+      objs+=`<img src="${SPR[t]}" alt="" style="left:${q*P+P*w*.04}%;top:${r*P+P*h*.0}%;width:${P*w*.92}%;height:${P*h*.94}%">`});
+    /* walls: dark base + chapter-coloured top line, posts where walls meet */
+    let w="";const pts=new Map();const pt=(x,y)=>{const key=x+","+y;pts.set(key,(pts.get(key)||0)+1)};
+    for(let r=0;r<n;r++)for(let q=0;q<n;q++){const k=c.rooms[r][q];
+      if(r+1<n&&c.rooms[r+1][q]!==k){w+=`M${q*P} ${(r+1)*P}h${P}`;pt(q,r+1);pt(q+1,r+1)}
+      if(q+1<n&&c.rooms[r][q+1]!==k){w+=`M${(q+1)*P} ${r*P}v${P}`;pt(q+1,r);pt(q+1,r+1)}}
+    const base=TW?TW.base:"#3a2430",over=TW?TW.over:"#8a6a52",sw=Math.max(2.2,9/n);
+    let posts="";const sv=M;try{M=m;for(const [key,v] of pts){const [x,y]=key.split(",").map(Number);if(!(v>=2||x===0||y===0||x===n||y===n))continue;
+      let tp=null;try{tp=typeof themePost==="function"?themePost(x*P,y*P,sw*.95/19):null}catch(_){}
+      posts+=tp||`<rect x="${x*P-sw*.75}" y="${y*P-sw*.75}" width="${sw*1.5}" height="${sw*1.5}" rx="${sw*.35}" fill="${base}"/><rect x="${x*P-sw*.45}" y="${y*P-sw*.6}" width="${sw*.9}" height="${sw*.55}" rx="${sw*.2}" fill="${over}" opacity=".9"/>`}}finally{M=sv}
+    const dash=TW&&TW.dash?TW.dash.split(" ").map(x=>(+x*P/55).toFixed(2)).join(" "):"",cap=TW?TW.cap:"round",ow=TW?Math.max(.3,TW.ow):.38;
+    const svg=`<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="${w}" stroke="#0007" stroke-width="${sw*1.25}" fill="none" transform="translate(0 ${sw*.35})"/><path d="${w}" stroke="${base}" stroke-width="${sw}" fill="none" stroke-linecap="square"/><path d="${w}" stroke="${over}" stroke-width="${sw*ow}" fill="none" stroke-linecap="${cap}"${dash?` stroke-dasharray="${dash}"`:""} opacity=".95"/>${posts}</svg>`;
+    return `<span class="tb2${env?" e-"+env:""}" style="--n:${n};--wb:${base};--wo:${over}"><span class="tbg">${cells}</span>${svg}<span class="tbo">${objs}</span><span class="tbl"></span></span>`}
   function ensure(){let v=$("#lvView");if(v)return v;v=document.createElement("div");v.id="lvView";v.hidden=true;$("#home").appendChild(v);
     v.addEventListener("click",e=>{const t=e.target.closest("[data-ch],[data-lv],[data-act]");if(!t)return;
       if(t.dataset.ch!=null){const ch=+t.dataset.ch;if(!chOpen(ch)){try{play("forbid")}catch(_){}toast(L("Termine le chapitre précédent pour ouvrir celui-ci.","Finish the previous chapter to open this one.","이전 장을 끝내면 이 장이 열려요.","前の章をクリアすると、この章が解放されます。"));return}LVV.ch=ch;LVV.sel=null;try{play("page")}catch(_){}render();return}

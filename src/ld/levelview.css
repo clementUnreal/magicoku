@@ -56,3 +56,13 @@
 .lvc.sel{padding-bottom:24px}
 .lvc .lvp{bottom:-13px}
 @media (max-width:980px){.lvtop h1{font-size:20px}.lvtop h1::before,.lvtop h1::after{margin:0 6px}}
+/* richer thumbnails */
+.lvc .lvt{box-shadow:0 0 0 2px #2a1824,0 0 0 5px #8a5a3a,0 0 0 6px #d6ab4f,0 6px 12px #0006;background:#2a1824}
+.tb2{position:relative;display:block;width:100%;height:100%;background:var(--wb)}
+.tb2 .tbg{position:absolute;inset:0;display:grid;grid-template-columns:repeat(var(--n),1fr);grid-template-rows:repeat(var(--n),1fr)}
+.tb2 .tbg i{display:block;box-shadow:inset 0 1px 0 #ffffff26,inset 0 -1px 0 #0000001a}
+.tb2 svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.tb2 .tbo{position:absolute;inset:0;pointer-events:none}
+.tb2 .tbo img{position:absolute;object-fit:contain;object-position:50% 85%;filter:drop-shadow(0 1.5px 0 #2a182499) drop-shadow(0 2px 2px #0005)}
+.tb2 .tbl{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 30% 15%,#fff3,transparent 55%),radial-gradient(140% 120% at 50% 50%,transparent 60%,#0006);box-shadow:inset 0 0 0 3px var(--wb),inset 0 0 0 4px var(--wo)}
+.lvc:not(.locked):hover .tb2 .tbo img{transform:translateY(-1px)}
