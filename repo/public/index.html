@@ -459,6 +459,14 @@ h1::before{content:"☾ ";color:var(--gold);font-size:.7em;vertical-align:.12em}
 .rank-row .sc{text-align:right;font-size:14px;line-height:1.25;white-space:nowrap}
 .rank-row .sc strong{font:700 15px var(--f-title);color:var(--cherry);display:block}
 .rank-msg{margin:0;text-align:center;font-style:italic;color:var(--soft)}
+
+.legacy{border:1.5px dashed var(--gold-deep);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;background:#fff5}
+.legacy p{margin:0;font-size:15px}
+.lglist{display:flex;flex-direction:column;gap:6px;max-height:40vh;overflow:auto}
+.lgrow{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:10px;align-items:center;border:1.5px solid var(--parch-edge);background:#fff9;border-radius:10px;padding:6px 10px;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.lgrow img{width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:50% 12%;background:#e9d6ad}
+.lgrow b{font:700 15px var(--f-title)}
+.lgrow small{color:var(--soft)}
 #tabs{display:none!important}
 </style>
 
@@ -520,6 +528,7 @@ h1::before{content:"☾ ";color:var(--gold);font-size:.7em;vertical-align:.12em}
     <div class="acc-av-l" id="accAvL"></div><div class="avs" id="avs"></div>
     <button class="hb big" id="accSave"></button>
    </div>
+   <div class="legacy" id="legacy"><p id="lgT"></p><button class="hb small" id="lgBtn"></button><div class="lglist" id="lgList"></div></div>
    <div id="accStats"></div>
    <button class="hb small back" data-back></button></div>
   <div class="home-panel" id="pRank" hidden><h2 id="pRankT"></h2>
@@ -1210,6 +1219,9 @@ function renderHome(){
   $("#accAvL").textContent=L("Ton portrait","Your portrait");
   $("#avs").innerHTML=AVS.map(k=>`<button class="av" data-av="${k}" aria-pressed="${k===avSel}"><img src="${POR[k]}" alt=""></button>`).join("");
   $("#accSave").textContent=p&&p.pseudo?L("Enregistrer","Save"):L("Créer mon compte","Create my account");
+  const lg=$("#legacy");lg.hidden=!!(p&&p.legacy)||/netlify\.app$/.test(location.hostname)||location.protocol==="file:";
+  $("#lgT").textContent=L("Tu jouais déjà sur l'ancienne adresse du jeu ? Retrouve ton nom pour récupérer tes niveaux.","Already played on the game's old address? Find your name to get your levels back.");
+  $("#lgBtn").textContent=L("Récupérer ma progression","Recover my progress");
   const solved=p&&p.progress?Object.values(p.progress).filter(x=>x.solved).length:0;
   $("#accStats").innerHTML=p&&p.pseudo?`<div class="row"><span>${L("Enquêtes résolues","Cases solved")}</span><b>${solved} / ${DATA.length}</b></div>`+
     DATA.map(c=>{const x=p.progress&&p.progress[c.id];return `<div class="row"><span>${META[c.id].title[LI()]}</span><b>${x?`${fmt(x.time)} · ${x.hints} 💡`:"—"}</b></div>`}).join(""):"";
@@ -1227,6 +1239,14 @@ document.addEventListener("click",async e=>{const t=e.target.closest("button");i
       if(ACC.profile){ACC.profile.progress={};ACC.profile.games=0;saveProfile()}openCase(ci);toast(L("Progression réinitialisée.","Progress reset."));renderHome()}
     else{t.dataset.armed=1;t.textContent=L("Sûr ? Touche encore","Sure? Tap again");setTimeout(()=>{delete t.dataset.armed;renderHome()},2500)}}
   else if(t.classList.contains("av")){avSel=t.dataset.av;play("select");renderHome()}
+  else if(t.id==="lgBtn"){$("#lgList").innerHTML=`<small>${L("Chargement…","Loading…")}</small>`;try{const r=await fetch("/api/legacy",{cache:"no-store"});const rows=await r.json();
+      $("#lgList").innerHTML=rows.length?rows.map((x,i)=>`<button class="lgrow" data-lg="${i}"><img src="${POR[x.avatar]||POR[AVS[0]]}" alt=""><span><b>${x.pseudo}</b><br><small>${x.solved} ${L("enquêtes résolues","cases solved")}</small></span><span>→</span></button>`).join(""):`<small>${L("Aucun joueur trouvé sur l'ancienne adresse.","No players found on the old address.")}</small>`;window._LG=rows}catch(e){$("#lgList").innerHTML=`<small>${L("Impossible de joindre l'ancienne adresse.","Couldn't reach the old address.")}</small>`}}
+  else if(t.classList.contains("lgrow")){const x=window._LG[+t.dataset.lg];if(!x)return;
+    if(!t.dataset.armed){document.querySelectorAll(".lgrow").forEach(b=>delete b.dataset.armed);t.dataset.armed=1;t.querySelector("span:last-child").textContent=L("C'est moi ✓","That's me ✓");return}
+    const n=Math.min(x.solved,DATA.length),prog=Object.assign({},(ACC.profile&&ACC.profile.progress)||{});
+    for(let i=0;i<n;i++){const id=DATA[i].id;if(!prog[id])prog[id]={solved:true,hints:i===0?x.hints:0,time:i===0?x.time:0,at:Date.now()};try{const k="crimes-mignons-wiz:"+id;const st=JSON.parse(localStorage.getItem(k)||"{}");st.solved=true;localStorage.setItem(k,JSON.stringify(st))}catch(_){}}
+    ACC.profile=Object.assign(ACC.profile||{games:0,created:Date.now()},{pseudo:(ACC.profile&&ACC.profile.pseudo)||x.pseudo,avatar:(ACC.profile&&ACC.profile.avatar)||x.avatar||AVS[0],progress:prog,legacy:true});
+    avSel=ACC.profile.avatar;nameDraft=null;await saveProfile();play("win");toast(L(`Progression récupérée : ${n} enquêtes débloquées !`,`Progress recovered: ${n} cases unlocked!`));renderHome()}
   else if(t.id==="accSave"){const n=$("#accName").value.trim();if(!n){toast(L("Choisis un nom de détective.","Pick a detective name."));$("#accName").focus();return}
     const isNew=!(ACC.profile&&ACC.profile.pseudo);ACC.profile=Object.assign(ACC.profile||{progress:{},games:0,created:Date.now()},{pseudo:n,avatar:avSel});
     nameDraft=null;await saveProfile();play("win");toast(isNew?L(`Bienvenue, ${n} !`,`Welcome, ${n}!`):L("Compte enregistré.","Account saved."));renderHome()}
