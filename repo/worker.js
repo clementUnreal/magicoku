@@ -19,6 +19,16 @@ function sanitizeProgress(progress) {
   }
   return out;
 }
+// Same detective name on several devices / imported twice: keep only their best line.
+function dedupe(rows, better) {
+  const best = new Map();
+  for (const r of rows) {
+    const k = String(r.pseudo || "").toLowerCase();
+    const cur = best.get(k);
+    if (!cur || better(r, cur) < 0) best.set(k, r);
+  }
+  return [...best.values()];
+}
 function summarize(progress) {
   let solved = 0, hints = 0, time = 0;
   for (const v of Object.values(progress || {})) {
@@ -54,8 +64,9 @@ export class Leaderboard extends DurableObject {
   async list() {
     await this.importLegacy();
     const all = await this.ctx.storage.list({ prefix: "p:" });
-    const rows = [...all.values()].map((v) => v.row).filter(Boolean);
-    rows.sort((a, b) => b.solved - a.solved || a.hints - b.hints || a.time - b.time);
+    const cmp = (a, b) => b.solved - a.solved || a.hints - b.hints || a.time - b.time;
+    const rows = dedupe([...all.values()].map((v) => v.row).filter(Boolean), cmp);
+    rows.sort(cmp);
     return rows.slice(0, 100);
   }
   async level(lid) {
@@ -65,8 +76,10 @@ export class Leaderboard extends DurableObject {
       const x = v && v.prog && v.prog[lid];
       if (x && v.row) rows.push({ id: v.row.id, pseudo: v.row.pseudo, avatar: v.row.avatar, time: x.t, hints: x.h, attempts: x.a });
     }
-    rows.sort((a, b) => a.hints - b.hints || a.time - b.time || a.attempts - b.attempts);
-    return rows.slice(0, 100);
+    const cmp = (a, b) => a.hints - b.hints || a.time - b.time || a.attempts - b.attempts;
+    const out = dedupe(rows, cmp);
+    out.sort(cmp);
+    return out.slice(0, 100);
   }
   async submit(body) {
     const id = clean(body.id, 64), token = String(body.token || "");
