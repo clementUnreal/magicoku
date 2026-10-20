@@ -4,7 +4,7 @@ import layouts;from envrt import ENV_RT,NEW_WALK,ENVS
 layouts.WALK|=NEW_WALK
 import gen;gen.WALK|=NEW_WALK
 import genlv
-DIFF=[(5,3,3,6,0,False),(6,4,3,6,0,False),(6,5,2,4,0,False),(6,5,1,2,1,True),(7,6,1,2,1,True),(7,7,1,2,1,True),(7,7,0,1,1,True),(8,7,0,1,1,True),(8,8,0,1,1,True),(9,8,0,1,1,True)]
+DIFF=[(5,3,3,6,0,False),(6,4,3,6,0,False),(6,5,2,4,0,False),(6,5,1,2,1,True),(7,6,1,2,1,True),(7,7,1,2,1,True),(7,7,1,2,1,True),(8,7,1,2,1,True),(8,8,0,1,1,True),(9,8,0,1,1,True)]
 w,W=int(sys.argv[1]),int(sys.argv[2])
 jobs=[(c,k) for k in range(10) for c in range(10)]
 for j,(c,k) in enumerate(jobs):

@@ -1,0 +1,16 @@
+.tuto.pass{pointer-events:none}.tuto.pass .tuto-box{pointer-events:auto}
+.tuto.pass .tuto-hole{box-shadow:0 0 0 9999px rgba(10,6,24,.45),0 0 0 3px var(--gold),0 0 24px 4px var(--gold)}
+.hdemo{position:relative;display:block;width:74px;height:64px;margin:2px auto 8px}
+.hdemo .hcell{position:absolute;left:8px;top:4px;width:50px;height:50px;border-radius:8px;background:#e9dcc0;box-shadow:inset 0 0 0 2px #b9a07a;overflow:hidden}
+.hdemo .hring{position:absolute;inset:0;border-radius:8px;background:conic-gradient(#3b7be0 var(--hp,0deg),transparent 0);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:5px;animation:hring 2.4s linear infinite}
+@property --hp{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes hring{0%,15%{--hp:0deg}55%{--hp:360deg}100%{--hp:360deg}}
+.hdemo .hppl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:28px;opacity:0;animation:hppl 2.4s ease-out infinite}
+@keyframes hppl{0%,55%{opacity:0;transform:scale(.4)}62%{opacity:1;transform:scale(1.15)}70%,92%{opacity:1;transform:none}100%{opacity:0}}
+.hdemo .hfinger{position:absolute;left:30px;top:24px;font-size:30px;animation:hfinger 2.4s ease-in-out infinite;filter:drop-shadow(0 2px 2px #0006)}
+@keyframes hfinger{0%{transform:translate(14px,14px);opacity:0}10%{opacity:1;transform:translate(0,0)}15%,55%{transform:translate(0,2px) scale(.94)}65%{transform:translate(12px,14px);opacity:1}80%,100%{opacity:0}}
+.hbravo{display:block;margin-top:8px;font-weight:800;color:#2f7a3a}
+#holdHint{max-width:700px;margin:0 auto 8px;display:flex;align-items:center;gap:10px;background:rgba(59,123,224,.15);border:1.5px solid rgba(59,123,224,.6);border-radius:12px;padding:4px 12px;color:#e9f0ff;font:15px var(--f-body)}
+#holdHint .hdemo{margin:0;flex:0 0 auto;transform:scale(.8)}
+#holdHint b{color:#fff}
+@media (max-width:980px){.tuto.pass .tuto-box{padding:10px 14px 10px}.tuto.pass .tuto-box p{font-size:14px;margin:4px 0}.tuto.pass .hdemo{width:60px;height:52px;margin:0 auto 2px;transform:scale(.85)}}

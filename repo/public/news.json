@@ -1,5 +1,47 @@
 [
  {
+  "id": 25,
+  "date": "2026-10-20",
+  "icon": "📖",
+  "fr": {
+   "t": "Le Mode histoire est ouvert !",
+   "d": "Dix chapitres et cent enquêtes dans dix lieux du monde magique, chacun avec ses décors animés, ses objets et ses sons. Dans chaque chapitre, les niveaux 1 à 3 sont faciles, 4 à 8 moyens et 9 à 10 difficiles. Les niveaux se débloquent un par un."
+  },
+  "en": {
+   "t": "Story mode is open!",
+   "d": "Ten chapters and a hundred cases in ten places of the magical world, each with its own animated scenery, objects and sounds. In every chapter, levels 1–3 are easy, 4–8 medium and 9–10 hard. Levels unlock one by one."
+  },
+  "ko": {
+   "t": "스토리 모드가 열렸어요!",
+   "d": "마법 세계의 열 곳을 무대로 한 10개의 장과 100개의 사건. 장소마다 움직이는 배경과 고유한 물건, 소리가 있어요. 각 장의 1~3레벨은 쉬움, 4~8레벨은 보통, 9~10레벨은 어려움이에요. 레벨은 하나씩 열려요."
+  },
+  "ja": {
+   "t": "ストーリーモード公開！",
+   "d": "魔法の世界の10の場所を舞台にした全10章・100事件。場所ごとに動く背景、専用の家具、環境音があります。各章のレベル1〜3はやさしい、4〜8はふつう、9〜10はむずかしい。レベルは一つずつ解放されます。"
+  }
+ },
+ {
+  "id": 24,
+  "date": "2026-10-20",
+  "icon": "👆",
+  "fr": {
+   "t": "Placer un personnage : mieux expliqué",
+   "d": "Le tutoriel montre maintenant en animation qu'il faut garder le doigt appuyé sur une case pour placer un personnage, et te laisse essayer. Un rappel s'affiche aussi au-dessus du plan tant que tu n'as placé personne. Les noms des pièces s'adaptent à la taille de l'écran, et tes notes passent toujours par-dessus."
+  },
+  "en": {
+   "t": "Placing a character: better explained",
+   "d": "The tutorial now shows with an animation that you must press and hold a square to place a character, and lets you try. A reminder also appears above the map until you've placed someone. Room names adapt to the screen size, and your notes always stay on top."
+  },
+  "ko": {
+   "t": "인물 배치 방법을 더 쉽게",
+   "d": "이제 튜토리얼이 칸을 길게 눌러야 인물이 배치된다는 것을 애니메이션으로 보여 주고, 직접 해 볼 수 있게 해요. 아직 아무도 배치하지 않았다면 지도 위에 안내도 표시돼요. 방 이름은 화면 크기에 맞게 조절되고, 메모는 항상 맨 위에 보여요."
+  },
+  "ja": {
+   "t": "人物の配置をもっとわかりやすく",
+   "d": "チュートリアルで、マスを長押しすると人物を配置できることをアニメーションで見せ、実際に試せるようにしました。まだ誰も配置していないときは、見取り図の上にも案内が出ます。部屋の名前は画面サイズに合わせて調整され、メモはいつもいちばん上に表示されます。"
+  }
+ },
+ {
   "id": 23,
   "date": "2026-10-20",
   "icon": "🗺️",
@@ -39,27 +81,6 @@
   "ja": {
    "t": "進行状況が引き継がれます",
    "d": "別の端末で遊ぶときや、ブラウザで遊んだあとにアプリで遊ぶときは、同じ探偵ネームを使ってください。解決した事件が自動で引き継がれます。"
-  }
- },
- {
-  "id": 21,
-  "date": "2026-10-20",
-  "icon": "🔒",
-  "fr": {
-   "t": "Le Mode histoire arrive bientôt",
-   "d": "Le Mode histoire est temporairement fermé : nous le peaufinons avant sa sortie. En attendant, le Mode découverte et les autres modes restent ouverts."
-  },
-  "en": {
-   "t": "Story mode is coming soon",
-   "d": "Story mode is temporarily closed while we polish it before release. Meanwhile, Discovery mode and the other modes remain open."
-  },
-  "ko": {
-   "t": "스토리 모드는 곧 공개돼요",
-   "d": "스토리 모드는 출시 전에 다듬는 중이라 잠시 닫혀 있어요. 그동안 디스커버리 모드와 다른 모드는 계속 즐길 수 있어요."
-  },
-  "ja": {
-   "t": "ストーリーモードは近日公開",
-   "d": "ストーリーモードは公開前の仕上げのため、一時的に閉じています。そのあいだも、ディスカバリーモードやほかのモードは遊べます。"
   }
  },
  {

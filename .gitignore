@@ -1,3 +1,4 @@
 src/crimes-mignons.html
 src/ld/__pycache__/
 src/i18n/__pycache__/
+src/story/*.log

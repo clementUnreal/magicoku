@@ -20,7 +20,7 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
   const DIFF=[["Facile","Easy","쉬움","やさしい"],["Moyen","Medium","보통","ふつう"],["Difficile","Hard","어려움","むずかしい"]];
   const tiers=()=>LVMODE==="story"?[...Array(10).keys()].map(k=>k+3):[0,1,2];
   const idxOf=t=>DATA.map((c,i)=>i).filter(i=>tierOf(i)===t);
-  const diffOf=(t,k)=>t<3?t:(k<3?0:k<6?1:2);
+  const diffOf=(t,k)=>t<3?t:(k<3?0:k<8?1:2);
   function chName(t){const full=TX(CHAPTERS[t]);const p=full.split(/ · |・/);return {num:p[0],name:p.slice(1).join(" · ")||full}}
   function thumb(i){const c=DATA[i],m=META[c.id],n=c.rooms.length,S=100/n;let o=`<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">`;
     const fl=k=>((m.floors||FLOORS)[k]||["#ccc","#ddd"]);
@@ -45,7 +45,7 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
     const side=ts.map((tt,k)=>{const c=chName(tt),open=chOpen(tt),all=idxOf(tt).every(lvlSolved);return `<button class="lvch${tt===t?" on":""}${open?"":" locked"}" data-ch="${tt}"><span class="ci"><img src="${SPR[CH_ICON[mode][k]]}" alt=""></span><span class="ct"><b>${c.num.replace(/^(Chapitre|Chapter) /,"")}</b> · ${c.name}</span>${open?(all?`<span class="cs">✓</span>`:`<span class="cs">›</span>`):`<span class="cs">🔒</span>`}</button>`}).join("");
     const cards=ix.map((i,k)=>{const ok=lvlSolved(i),u=unlocked(i),d=diffOf(t,k),sz=DATA[i].rooms.length;
       return `<button class="lvc${ok?" done":""}${u?"":" locked"}${LVV.sel===i?" sel":""}" data-lv="${i}"><span class="lvh"><b>${L("Niveau","Level","레벨","レベル")} ${k+1}</b>${ok?`<i class="ok">✓</i>`:u?"":`<i class="lk">🔒</i>`}</span><span class="lvt">${thumb(i)}</span><span class="lvn">${TX(META[DATA[i].id].title)}</span><span class="lvs">${sz} × ${sz}</span><span class="lvd d${d}">${TX(DIFF[d])}</span>${LVV.sel===i?`<span class="lvp">${L("À jouer","Up next","플레이","プレイ")}</span>`:""}</button>`}).join("");
-    const legend=mode==="story"?`<div class="lvleg"><span><i class="d0"></i>${L("Faciles 1–3","Easy 1–3","쉬움 1~3","やさしい 1〜3")}</span><span><i class="d1"></i>${L("Moyens 4–6","Medium 4–6","보통 4~6","ふつう 4〜6")}</span><span><i class="d2"></i>${L("Difficiles 7–10","Hard 7–10","어려움 7~10","むずかしい 7〜10")}</span></div>`:`<div class="lvleg"></div>`;
+    const legend=mode==="story"?`<div class="lvleg"><span><i class="d0"></i>${L("Faciles 1–3","Easy 1–3","쉬움 1~3","やさしい 1〜3")}</span><span><i class="d1"></i>${L("Moyens 4–8","Medium 4–8","보통 4~8","ふつう 4〜8")}</span><span><i class="d2"></i>${L("Difficiles 9–10","Hard 9–10","어려움 9~10","むずかしい 9〜10")}</span></div>`:`<div class="lvleg"></div>`;
     const title=mode==="story"?"📖 "+L("Mode histoire","Story mode","스토리 모드","ストーリーモード"):"🧭 "+L("Mode découverte","Discovery mode","디스커버리 모드","ディスカバリーモード");
     const k=LVV.sel!=null?ix.indexOf(LVV.sel)+1:0;
     v.className="lvv lvv-"+mode+(mode==="story"?" env-"+(META[DATA[ix[0]].id].env||""):"");

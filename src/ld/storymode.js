@@ -4,7 +4,7 @@ var LVMODE="disc";
 /* story mode temporarily closed while it is being reworked — open only for the testers below */
 var STORY_TESTERS=["clemonchichi"];
 function isTester(){try{const p=ACC&&ACC.profile&&ACC.profile.pseudo;return !!(p&&STORY_TESTERS.includes(String(p).trim().toLowerCase()))}catch(e){return false}}
-function storyLocked(){try{const p=ACC&&ACC.profile&&ACC.profile.pseudo;return !(p&&STORY_TESTERS.includes(String(p).trim().toLowerCase()))}catch(e){return true}}
+function storyLocked(){return false} /* story mode is open to everyone (levels unlock one by one) */
 (function(){
   const FIRST_STORY=DATA.findIndex(c=>/^s\d+n\d+$/.test(c.id));
   const isStory=i=>FIRST_STORY>=0&&i>=FIRST_STORY;

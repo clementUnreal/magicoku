@@ -28,3 +28,11 @@
 .board.th .oc .obj.o-reeds .spr,.board.th .oc .obj.o-shroom .spr{width:100%;height:100%}
 .board.th .oc .obj.o-tree .spr::before,.board.th .oc .obj.o-reeds .spr::before{left:4%;right:4%;height:22%;background:radial-gradient(ellipse at center,rgba(10,30,10,.45),rgba(10,30,10,0) 70%)}
 .board.th-forest .rugs,.board.th-lake .rugs,.board.th-stadium .rugs,.board.th-fortress .rugs{display:none}
+/* text sized from the board itself (not the screen), notes always on top */
+.plan{container-type:inline-size}
+.plan .rlabel{font-size:clamp(9px,2.35cqw,14px)!important;padding:.15em .55em .2em!important;z-index:3!important;max-width:calc(93.6cqw * 300 / var(--wn));overflow:hidden;text-overflow:ellipsis}
+.plan .edge{font-size:clamp(9px,2.2cqw,14px)!important}
+.plan .marks{z-index:5!important}
+.plan .notes{z-index:6}
+.plan .notes span{font-size:clamp(10px,calc(93.6cqw * 30 / var(--wn)),22px)!important;-webkit-text-stroke:3px #fff!important;paint-order:stroke fill}
+.plan .who .ini{font-size:clamp(12px,calc(93.6cqw * 34 / var(--wn)),26px)!important;z-index:7}
