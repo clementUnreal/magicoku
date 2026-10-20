@@ -1,5 +1,26 @@
 [
  {
+  "id": 26,
+  "date": "2026-10-20",
+  "icon": "🏰",
+  "fr": {
+   "t": "Un nouvel écran d'accueil",
+   "d": "Le bouton « Continuer » te ramène directement à ta prochaine enquête du Mode histoire. Les autres modes sont réunis en un coup d'œil, et une barre en bas de l'écran donne accès au classement, aux règles et à ton profil."
+  },
+  "en": {
+   "t": "A brand-new home screen",
+   "d": "The “Continue” button takes you straight to your next Story mode case. The other modes are gathered at a glance, and a bar at the bottom of the screen gives access to the leaderboard, the rules and your profile."
+  },
+  "ko": {
+   "t": "새로워진 홈 화면",
+   "d": "‘계속하기’ 버튼을 누르면 스토리 모드의 다음 사건으로 바로 이동해요. 다른 모드도 한눈에 볼 수 있고, 화면 아래 메뉴에서 랭킹, 규칙, 프로필을 열 수 있어요."
+  },
+  "ja": {
+   "t": "ホーム画面をリニューアル",
+   "d": "「つづける」ボタンで、ストーリーモードの次の事件へすぐに進めます。ほかのモードもひと目でわかり、画面下のバーからランキング、ルール、プロフィールを開けます。"
+  }
+ },
+ {
   "id": 25,
   "date": "2026-10-20",
   "icon": "📖",

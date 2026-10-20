@@ -1,0 +1,84 @@
+
+/* ================= new home screen ================= */
+.home-in.h2in{justify-content:flex-start;gap:12px;padding-bottom:calc(86px + env(safe-area-inset-bottom,0px))}
+.home.h2lv .home-in.h2in{padding-bottom:0}
+.home-in.h2in .home-logo .moon{font-size:34px;line-height:1}
+.home-in.h2in .home-t{font-size:clamp(36px,10.5vw,58px)}
+.home-in.h2in .home-sub{font-size:16px;margin-top:2px}
+.home-who{gap:12px;text-align:left}
+.home-who img{width:58px;height:58px;box-shadow:0 0 0 3px var(--gold),0 4px 12px #0008}
+.home-who span{display:flex;flex-direction:column;line-height:1.2}
+.home-who b{font:700 clamp(17px,5vw,21px) var(--f-body);color:var(--gold-soft)}
+.home-who small{font:italic 15px var(--f-body);color:var(--mist,#cfc6e6)}
+.home-nav.h2{max-width:420px;gap:12px}
+/* gear */
+.h2-gear{position:absolute;z-index:3;top:max(14px,env(safe-area-inset-top,0px));right:max(14px,env(safe-area-inset-right,0px));width:46px;height:46px;border-radius:12px;display:grid;place-items:center;cursor:pointer;
+  background:linear-gradient(#4a2a2f,#2a161c);border:2px solid var(--gold);box-shadow:0 4px 12px #0009,inset 0 0 0 2px #0006;color:var(--gold)}
+.h2-gear svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2}
+.home.h2lv .h2-gear,.home.h2lv .h2-bar{display:none}
+/* story hero */
+.h2-hero{position:relative;border-radius:18px;overflow:hidden;background:linear-gradient(#f8eed8,#ead6ad);border:3px solid var(--gold);
+  box-shadow:0 0 0 2px #5a3b12,0 0 0 6px rgba(214,171,79,.25),0 18px 36px #000a;color:#3a1f3d;text-align:center}
+.h2-hero::after{content:"";position:absolute;inset:5px;border:1.5px solid rgba(154,116,38,.55);border-radius:13px;pointer-events:none}
+.h2-art{aspect-ratio:696/304;overflow:hidden;background:#24361d}
+.h2-art img{display:block;width:100%;height:100%;object-fit:cover;-webkit-mask-image:linear-gradient(#000 82%,transparent);mask-image:linear-gradient(#000 82%,transparent)}
+.h2-body{padding:4px 16px 14px;display:flex;flex-direction:column;align-items:center;gap:4px;position:relative}
+.h2-t{display:flex;align-items:center;gap:10px;margin:0;font:900 clamp(24px,7.4vw,32px)/1.1 "Cinzel Decorative","Cinzel",Georgia,serif;color:#3a1f3d}
+.h2-bk svg{width:1.15em;height:1.15em;display:block;color:#4a2350}
+.h2-ch{font:700 clamp(16px,4.8vw,20px) "Cinzel",Georgia,serif;color:#2f5a2a}
+.h2-lv span{white-space:nowrap}
+.h2-lv{display:flex;align-items:center;gap:10px;font:600 15px var(--f-body);color:#3a1f3d;width:100%;justify-content:center}
+.h2-lv i,.h2-sec i{flex:0 1 54px;height:1.5px;background:linear-gradient(90deg,transparent,var(--gold-deep))}
+.h2-lv i:last-child,.h2-sec i:last-child{background:linear-gradient(90deg,var(--gold-deep),transparent)}
+.h2-go{margin-top:8px;width:100%;min-height:58px;display:flex;align-items:center;gap:12px;padding:0 20px;border-radius:999px;cursor:pointer;color:#fbefc8;
+  background:linear-gradient(#c43a54,#8d1d33 60%,#741427);border:2px solid #f0cf7a;box-shadow:0 0 0 2px #6b4410,0 5px 0 #4a0d1a,0 9px 18px #0007,inset 0 2px 0 #ff9fb04d;
+  font:900 clamp(19px,5.6vw,24px) "Cinzel",Georgia,serif;letter-spacing:.06em;text-transform:uppercase;transition:transform .12s}
+.h2-go:active{transform:translateY(3px);box-shadow:0 0 0 2px #6b4410,0 2px 0 #4a0d1a,0 4px 10px #0007}
+.h2-go #h2GoT{flex:1}
+.h2-gi svg{width:30px;height:30px;display:block;color:#f6e3a8}
+.h2-chev{font:700 1.3em/1 var(--f-body);opacity:.9}
+.h2-link{background:none;border:0;cursor:pointer;margin-top:4px;padding:6px 8px;font:700 16px "Cinzel",Georgia,serif;color:#3a1f3d;text-decoration:underline;text-decoration-color:var(--gold-deep);text-underline-offset:4px}
+.h2-hero.lockm .h2-go{filter:grayscale(.6) brightness(.9)}
+/* section title */
+.h2-sec{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:6px;font:700 clamp(14px,4.2vw,17px) "Cinzel",Georgia,serif;color:var(--gold-soft);letter-spacing:.04em}
+.h2-sec i{flex-basis:40px}
+/* mode cards */
+.h2-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.h2-card{position:relative;min-height:104px;border-radius:14px;overflow:hidden;cursor:pointer;text-align:right;color:#fbefc8;padding:10px 20px 10px 38%;display:flex;align-items:center;justify-content:flex-end;
+  border:2px solid var(--gold);box-shadow:0 0 0 1px #3b2408,0 8px 18px #0008,inset 0 0 0 1px #fff2;transition:transform .12s}
+.h2-card:active{transform:scale(.97)}
+.h2-card.c-disc{background:linear-gradient(135deg,#7d1e35,#4a0f22)}
+.h2-card.c-rush{background:linear-gradient(135deg,#55307f,#2d1650)}
+.h2-card.c-night{background:linear-gradient(135deg,#272a66,#141436)}
+.h2-card.c-liar{background:linear-gradient(135deg,#34512a,#1b2c15)}
+.h2-card img{position:absolute;left:0;top:0;height:100%;width:52%;object-fit:cover;object-position:30% 50%;-webkit-mask-image:linear-gradient(90deg,#000 62%,transparent);mask-image:linear-gradient(90deg,#000 62%,transparent)}
+.h2-ct{position:relative;display:flex;flex-direction:column;gap:3px;line-height:1.15}
+.h2-ct b{font:700 clamp(14px,4.2vw,19px) "Cinzel",Georgia,serif;text-shadow:0 2px 3px #0009}
+.h2-ct small{font:italic clamp(12px,3.5vw,14px)/1.2 var(--f-body);color:#eadfc8;text-shadow:0 1px 2px #0009}
+.h2-card>.h2-chev{position:absolute;right:9px;bottom:8px;color:var(--gold)}
+.h2-card.lockm img{filter:grayscale(.85) brightness(.65)}
+.h2-card.lockm .h2-ct b{color:#d8cdb6}
+/* news bar */
+.h2-news{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:0 16px;border-radius:14px;cursor:pointer;color:#3a1f3d;text-align:left;
+  background:linear-gradient(#f8eed8,#e9d4a8);border:2px solid var(--gold);box-shadow:0 0 0 1px #5a3b12,0 6px 14px #0008;font:700 17px "Cinzel",Georgia,serif}
+.h2-bell{font-size:22px}.h2-nt{flex:1}
+.h2-news .nbadge{position:static;margin:0;min-width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#b8283e;color:#fff;font:800 14px var(--f-body);box-shadow:0 0 0 2px #f0cf7a}
+.h2-news .h2-chev{font-size:22px}
+/* bottom bar */
+.h2-bar{position:fixed;z-index:3;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);padding:6px max(8px,env(safe-area-inset-right,0px)) max(6px,env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));
+  background:linear-gradient(#2a1d45,#170f2a);border-top:2px solid rgba(214,171,79,.6);box-shadow:0 -8px 24px #0009;border-radius:20px 20px 0 0}
+.h2-bar button{position:relative;background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px 8px;color:#b9b0cc;font:700 13px var(--f-body)}
+.h2-bar svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round;stroke-linecap:round}
+.h2-bar button.on{color:var(--gold)}
+.h2-bar button.on::after{content:"";position:absolute;left:18%;right:18%;bottom:2px;height:3px;border-radius:3px;background:var(--gold)}
+@media (min-width:700px){.h2-bar{left:50%;right:auto;width:460px;transform:translateX(-50%)}}
+.home:not([hidden]) .h2-hero,.home:not([hidden]) .h2-sec,.home:not([hidden]) .h2-card,.home:not([hidden]) .h2-news{animation:fadeUp .55s cubic-bezier(.2,.9,.3,1.2) both}
+.home:not([hidden]) .h2-hero{animation-delay:.15s}.home:not([hidden]) .h2-sec{animation-delay:.3s}
+.home:not([hidden]) .h2-card:nth-child(1){animation-delay:.35s}.home:not([hidden]) .h2-card:nth-child(2){animation-delay:.42s}
+.home:not([hidden]) .h2-card:nth-child(3){animation-delay:.49s}.home:not([hidden]) .h2-card:nth-child(4){animation-delay:.56s}
+.home:not([hidden]) .h2-news{animation-delay:.63s}
+.h2-ct small.lk{font-size:clamp(11px,3.1vw,13px);font-style:normal}
+.npeek{bottom:calc(92px + env(safe-area-inset-bottom,0px))!important}
+@media (max-height:720px){.home-in.h2in{gap:8px}.home-in.h2in .home-logo .moon{display:none}.home-in.h2in .home-t{font-size:clamp(32px,9vw,44px)}
+  .home-in.h2in .home-sub{font-size:14px}.home-who img{width:46px;height:46px}.h2-art{aspect-ratio:696/250}.h2-go{min-height:52px}.h2-card{min-height:92px}}
+.home-nav.h2,.h2-bar{word-break:keep-all;overflow-wrap:anywhere}
