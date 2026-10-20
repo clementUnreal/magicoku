@@ -1,5 +1,26 @@
 [
  {
+  "id": 29,
+  "date": "2026-10-21",
+  "icon": "🏆",
+  "fr": {
+   "t": "Un nouveau classement",
+   "d": "Les trois meilleurs détectives montent sur le podium, et une carte t'indique ta place et combien d'enquêtes il te manque pour dépasser le joueur devant toi. L'onglet « Par enquête » permet de choisir un chapitre et un niveau pour voir qui l'a résolu le plus vite."
+  },
+  "en": {
+   "t": "A brand-new leaderboard",
+   "d": "The top three detectives stand on the podium, and a card shows your place and how many cases you need to overtake the player just ahead. The “By case” tab lets you pick a chapter and a level to see who solved it fastest."
+  },
+  "ko": {
+   "t": "새로워진 순위표",
+   "d": "상위 세 명의 탐정이 시상대에 올라가고, 내 순위와 바로 앞 플레이어를 앞지르려면 사건을 몇 개 더 풀어야 하는지 카드로 알려 줘요. ‘사건별’ 탭에서는 장과 레벨을 골라 누가 가장 빨리 풀었는지 볼 수 있어요."
+  },
+  "ja": {
+   "t": "ランキングをリニューアル",
+   "d": "上位3人の探偵が表彰台に立ち、あなたの順位と、すぐ上のプレイヤーを抜くにはあと何件解けばいいかをカードで表示します。「事件別」タブでは章とレベルを選んで、誰がいちばん早く解いたかを見られます。"
+  }
+ },
+ {
   "id": 28,
   "date": "2026-10-21",
   "icon": "🖼️",

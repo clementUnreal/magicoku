@@ -914,6 +914,76 @@ body.night #marks .mk.room{background:none!important}
 .home-nav.h2,.h2-bar{word-break:keep-all;overflow-wrap:anywhere}
 .h2-card.c-disc .h2-ct b{white-space:nowrap}
 .h2-bar button span{white-space:nowrap;font-size:clamp(11px,3.3vw,13px);overflow-wrap:normal;word-break:normal}
+/* ================= leaderboard v2 ================= */
+.rk2p #rankNote,.rk2p #rankList,.rk2p .lrsel{display:none!important}
+.rk2p h2{display:flex;align-items:center;justify-content:center;gap:10px;font:900 clamp(24px,7vw,30px) "Cinzel Decorative","Cinzel",Georgia,serif!important;color:#3a1f3d!important}
+.rk-tro{font-size:1.1em;filter:drop-shadow(0 2px 2px #0003)}
+#rk2{display:flex;flex-direction:column;gap:12px}
+.rk-tabs{display:grid;grid-template-columns:1fr 1fr;background:#e3cfa3;border-radius:999px;padding:4px;box-shadow:inset 0 2px 4px #0002}
+.rk-tabs button{border:0;background:none;border-radius:999px;padding:10px 6px;font:800 15px var(--f-body);color:#6b5040;cursor:pointer}
+.rk-tabs button.on{background:linear-gradient(#c43a54,#8d1d33);color:#fbefc8;box-shadow:0 2px 0 #4a0d1a,0 4px 10px #0003}
+.rk-body{display:flex;flex-direction:column;gap:12px}
+.rk-msg{margin:8px 0;text-align:center;font-style:italic;color:#7a6250}
+/* podium */
+.rk-pod{display:grid;grid-template-columns:1fr 1.15fr 1fr;align-items:end;gap:6px;margin-top:6px}
+.rk-pc{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
+.rk-pa{position:relative;margin-bottom:4px}
+.rk-pa img{width:62px;height:62px;border-radius:50%;object-fit:cover;object-position:50% 12%;background:#e9d6ad;box-shadow:0 0 0 3px #c0c4cc,0 4px 10px #0004}
+.rk-pc.p1 .rk-pa img{width:80px;height:80px;box-shadow:0 0 0 4px #e8b93e,0 0 18px #f6d36a99,0 4px 10px #0004}
+.rk-pc.p3 .rk-pa img{box-shadow:0 0 0 3px #c47a3e,0 4px 10px #0004}
+.rk-crown{position:absolute;left:50%;top:-24px;transform:translateX(-50%) rotate(-8deg);font-size:26px;animation:rkfloat 3s ease-in-out infinite}
+@keyframes rkfloat{50%{transform:translateX(-50%) rotate(-8deg) translateY(-3px)}}
+.rk-md{position:absolute;right:-6px;bottom:-4px;font-size:22px}
+.rk-pn{font:800 15px var(--f-body);color:#3a1f3d;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rk-pc small{font:600 13px var(--f-body);color:#8d1d33;margin-bottom:6px}
+.rk-ped{width:100%;border-radius:10px 10px 4px 4px;display:grid;place-items:center;font:900 26px "Cinzel",Georgia,serif;color:#fff8;box-shadow:inset 0 3px 0 #fff5,0 4px 8px #0003}
+.rk-pc.p1 .rk-ped{height:78px;background:linear-gradient(#f2cf6a,#c9952e)}
+.rk-pc.p2 .rk-ped{height:56px;background:linear-gradient(#d9dde4,#9ea4b0)}
+.rk-pc.p3 .rk-ped{height:42px;background:linear-gradient(#e0a06a,#a8642e)}
+.rk-pc.me .rk-pn{color:#b8283e}
+.rk-pc.me .rk-pn::after{content:" ★"}
+/* your place */
+.rk-me{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#7d1e35,#4a0f22);color:#fbefc8;border:2px solid #e8b93e;box-shadow:0 6px 14px #0004}
+.rk-mep{display:flex;flex-direction:column;align-items:center;min-width:64px;padding-right:12px;border-right:1px solid #fbefc855}
+.rk-mep small{font:700 11px var(--f-body);text-transform:uppercase;letter-spacing:.08em;opacity:.85}
+.rk-mep b{font:900 28px "Cinzel",Georgia,serif;color:#f6d36a;line-height:1.1}
+.rk-mei{display:flex;flex-direction:column;gap:3px;min-width:0}
+.rk-mei>b{font:800 15px var(--f-body)}
+.rk-mei small{font:500 14px/1.3 var(--f-body);opacity:.95}
+.rk-mei small b{color:#f6d36a}
+.rk-me.none{background:linear-gradient(135deg,#3b2a55,#241838)}
+.rk-me.none>span{font-size:30px}.rk-me.none>div{flex:1;display:flex;flex-direction:column;gap:2px}.rk-me.none small{opacity:.85}
+.rk-cta{border:0;border-radius:999px;padding:9px 14px;background:#f6d36a;color:#3a1f3d;font:800 14px var(--f-body);cursor:pointer}
+/* list */
+.rk-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.rk-r{display:grid;grid-template-columns:30px 44px minmax(0,1fr);gap:10px;align-items:center;padding:9px 12px;border-radius:12px;background:#fffaf0;border:1.5px solid #e2cfa4}
+.rk-r.me{border-color:#b8283e;background:#fff3f0;box-shadow:0 0 0 3px #b8283e22}
+.rk-n{font:900 17px "Cinzel",Georgia,serif;color:#9a7426;text-align:center}
+.rk-r img{width:44px;height:44px;border-radius:50%;object-fit:cover;object-position:50% 12%;background:#e9d6ad;box-shadow:0 0 0 2px #d6ab4f}
+.rk-b{display:flex;flex-direction:column;gap:4px;min-width:0}
+.rk-t{display:flex;align-items:baseline;gap:8px;justify-content:space-between}
+.rk-t b{font:800 16px var(--f-body);color:#3a1f3d;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rk-t strong{font:800 14px var(--f-body);color:#8d1d33;white-space:nowrap}
+.rk-bar{height:7px;border-radius:9px;background:#ead9b4;overflow:hidden}
+.rk-bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#d6ab4f,#b8283e)}
+.rk-b small{font:500 13px var(--f-body);color:#7a6250}
+.rk-how{background:#f3e5c4;border-radius:12px;padding:10px 14px;color:#4a3426;font:500 14px var(--f-body)}
+.rk-how summary{cursor:pointer;font-weight:800;color:#3a1f3d}
+.rk-how ol{margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+/* per case */
+.rk-chg{display:flex;flex-direction:column;gap:6px}
+.rk-chg>small{font:800 12px var(--f-body);text-transform:uppercase;letter-spacing:.08em;color:#9a7426}
+.rk-chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.rk-chips::-webkit-scrollbar{display:none}
+.rk-chip{flex:none;border:1.5px solid #d6ab4f;background:#fffaf0;border-radius:999px;padding:7px 12px;font:700 14px var(--f-body);color:#4a3426;cursor:pointer}
+.rk-chip.on{background:#3a1f3d;color:#f6d36a;border-color:#3a1f3d}
+.rk-lvs{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.rk-lv{aspect-ratio:1;border:1.5px solid #d6ab4f;border-radius:8px;background:#fffaf0;font:800 14px var(--f-body);color:#4a3426;cursor:pointer;padding:0;position:relative}
+.rk-lv.ok::after{content:"✓";position:absolute;right:1px;top:-2px;font-size:10px;color:#3c8a4a}
+.rk-lv.on{background:linear-gradient(#c43a54,#8d1d33);color:#fbefc8;border-color:#741427}
+.rk-ct{margin:4px 0 0;text-align:center;font:800 18px "Cinzel",Georgia,serif;color:#3a1f3d}
+.rk-note{margin:0;text-align:center;font:italic 13px var(--f-body);color:#7a6250}
+@media (max-width:360px){.rk-lvs{grid-template-columns:repeat(5,1fr)}}
 #verdict{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;background:rgba(12,6,24,0);transition:background .3s;pointer-events:auto}
 #verdict[hidden]{display:none}
 #verdict.on{background:rgba(12,6,24,.72)}
@@ -2955,6 +3025,75 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
     if(typeof storyLocked==="function"&&storyLocked()){$("#hStory")&&$("#hStory").click();return}
     const c=current();if(c)go(c.i)});
   try{renderHome();renderNewsBadges()}catch(e){}
+})();
+
+/* ================= leaderboard v2: podium, "your place", progress bars, per-case tab ================= */
+(function(){
+  const panel=$("#pRank");if(!panel)return;
+  const box=document.createElement("div");box.id="rk2";$("#rankList").before(box);panel.classList.add("rk2p");
+  const RK={tab:"all",ch:null,lv:null,rows:null,loading:false};
+  const esc=s=>String(s==null?"":s).replace(/[<>&"]/g,"");
+  const av=a=>POR[a]||POR[AVS[0]];
+  const isMe=r=>{const p=ACC.profile;if(!p||!p.pseudo)return false;return r.id===p.pid||String(r.pseudo||"").trim().toLowerCase()===String(p.pseudo).trim().toLowerCase()};
+  const place=n=>L(n===1?"1re":n+"ᵉ",n===1?"1st":n===2?"2nd":n===3?"3rd":n+"th",n+"위",n+"位");
+  const cases=n=>L(`${n} ${n>1?"enquêtes":"enquête"}`,`${n} ${n>1?"cases":"case"}`,`사건 ${n}개`,`${n}件`);
+  const hints=n=>L(`${n} ${n>1?"indices":"indice"}`,`${n} ${n>1?"hints":"hint"}`,`힌트 ${n}개`,`ヒント${n}回`);
+  const tot=()=>DATA.length;
+  function podium(rows){const top=rows.slice(0,3);if(!top.length)return "";const order=[top[1],top[0],top[2]];
+    return `<div class="rk-pod">${order.map((r,j)=>{if(!r)return `<div class="rk-pc empty"></div>`;const n=rows.indexOf(r)+1;
+      return `<div class="rk-pc p${n}${isMe(r)?" me":""}"><div class="rk-pa">${n===1?`<span class="rk-crown">👑</span>`:""}<img src="${av(r.avatar)}" alt=""><span class="rk-md">${["🥇","🥈","🥉"][n-1]}</span></div>
+        <b class="rk-pn">${esc(r.pseudo)}</b><small>${cases(r.solved)}</small><div class="rk-ped"><span>${n}</span></div></div>`}).join("")}</div>`}
+  function mine(rows){const p=ACC.profile;
+    if(!p||!p.pseudo)return `<div class="rk-me none"><span>🕵️</span><div><b>${L("Tu n'es pas encore classé","You're not ranked yet","아직 순위에 없어요","まだランキングに載っていません")}</b><small>${L("Crée ton compte pour entrer dans le classement !","Create your account to join the leaderboard!","계정을 만들면 순위에 들어가요!","アカウントを作ってランキングに参加しよう！")}</small></div><button class="rk-cta" id="rkAcc">${L("Créer","Create","만들기","作成")}</button></div>`;
+    const i=rows.findIndex(isMe);
+    if(i<0)return `<div class="rk-me none"><span>🔎</span><div><b>${L("Résous une enquête pour apparaître ici !","Solve a case to show up here!","사건을 하나 해결하면 여기에 나와요!","事件を一つ解決するとここに表示されます！")}</b></div></div>`;
+    const me=rows[i];let next="";
+    if(i===0)next=L("Tu es en tête du classement ! 👑","You're top of the leaderboard! 👑","1위예요! 👑","ランキング1位です！👑");
+    else{const a=rows[i-1],d=a.solved-me.solved;
+      next=d>0?L(`Encore <b>${cases(d)}</b> pour dépasser <b>${esc(a.pseudo)}</b>`,`<b>${cases(d)}</b> more to overtake <b>${esc(a.pseudo)}</b>`,`<b>${esc(a.pseudo)}</b>님을 앞지르려면 <b>${cases(d)}</b> 더`,`<b>${esc(a.pseudo)}</b>さんを抜くまであと<b>${cases(d)}</b>`)
+        :L(`À égalité avec <b>${esc(a.pseudo)}</b> : utilise moins d'indices pour passer devant`,`Tied with <b>${esc(a.pseudo)}</b>: use fewer hints to get ahead`,`<b>${esc(a.pseudo)}</b>님과 동점: 힌트를 덜 쓰면 앞설 수 있어요`,`<b>${esc(a.pseudo)}</b>さんと同点：ヒントを減らせば上に行けます`)}
+    return `<div class="rk-me"><div class="rk-mep"><small>${L("Ta place","Your place","내 순위","あなたの順位")}</small><b>${place(i+1)}</b></div><div class="rk-mei"><b>${L(`sur ${rows.length} détectives`,`out of ${rows.length} detectives`,`탐정 ${rows.length}명 중`,`探偵${rows.length}人中`)}</b><small>${next}</small></div></div>`}
+  function row(r,n){const pc=Math.max(2,Math.round(100*r.solved/tot()));
+    return `<li class="rk-r${isMe(r)?" me":""}"><span class="rk-n">${n}</span><img src="${av(r.avatar)}" alt=""><div class="rk-b"><div class="rk-t"><b>${esc(r.pseudo)}</b><strong>${cases(r.solved)}</strong></div>
+      <div class="rk-bar"><i style="width:${pc}%"></i></div><small>⏱ ${fmt(r.time)} · 💡 ${hints(r.hints)}</small></div></li>`}
+  function general(){const rows=RANK.rows;
+    if(RANK.err&&!rows)return `<p class="rk-msg">${L("Classement indisponible pour l'instant.","Leaderboard unavailable right now.","지금은 순위를 볼 수 없어요.","いまはランキングを表示できません。")}</p>`;
+    if(!rows)return `<p class="rk-msg">${L("Chargement…","Loading…","불러오는 중…","読み込み中…")}</p>`;
+    if(!rows.length)return `<p class="rk-msg">${L("Aucun détective inscrit pour l'instant.","No detectives registered yet.","아직 등록된 탐정이 없어요.","まだ探偵がいません。")}</p>`+mine(rows);
+    return podium(rows)+mine(rows)+(rows.length>3?`<ol class="rk-list">${rows.slice(3).map((r,k)=>row(r,k+4)).join("")}</ol>`:"")+
+      `<details class="rk-how"><summary>${L("Comment le classement est-il calculé ?","How is the ranking worked out?","순위는 어떻게 정해지나요?","順位の決まり方は？")}</summary><ol>
+       <li>${L("Le plus d'enquêtes résolues passe devant.","Most cases solved comes first.","해결한 사건이 많을수록 위예요.","解決した事件が多いほど上位。")}</li>
+       <li>${L("À égalité : le moins d'indices utilisés.","If tied: fewest hints used.","동점이면 힌트를 적게 쓴 사람이 위예요.","同点ならヒントが少ない方が上位。")}</li>
+       <li>${L("Puis : le temps total le plus court.","Then: shortest total time.","그다음은 총 시간이 짧은 사람이에요.","その次は合計時間が短い方。")}</li></ol></details>`}
+  /* ---------- per-case tab ---------- */
+  const tiersAll=()=>{const s=new Set();DATA.forEach((c,i)=>s.add(tierOf(i)));return [...s].sort((a,b)=>a-b)};
+  const idxOf=t=>DATA.map((c,i)=>i).filter(i=>tierOf(i)===t);
+  async function loadLv(){const i=RK.lv;RK.rows=null;RK.loading=true;draw();const rows=await levelRank(DATA[i].id);if(RK.lv!==i)return;RK.rows=rows;RK.loading=false;draw()}
+  function perCase(){if(RK.ch==null){const t=typeof ci==="number"?tierOf(ci):0;RK.ch=t;RK.lv=ci}
+    const ts=tiersAll(),chip=t=>`<button class="rk-chip${t===RK.ch?" on":""}" data-rkch="${t}">${esc(TX(CH_SHORT[t]))}</button>`;
+    const grp=`<div class="rk-chg"><small>${L("Découverte","Discovery","디스커버리","ディスカバリー")}</small><div class="rk-chips">${ts.filter(t=>t<3).map(chip).join("")}</div>
+      <small>${L("Histoire","Story","스토리","ストーリー")}</small><div class="rk-chips">${ts.filter(t=>t>=3).map(chip).join("")}</div></div>`;
+    const lv=idxOf(RK.ch).map((i,k)=>`<button class="rk-lv${i===RK.lv?" on":""}${lvlSolved(i)?" ok":""}" data-rklv="${i}">${k+1}</button>`).join("");
+    let res="";
+    if(RK.lv==null||tierOf(RK.lv)!==RK.ch)res=`<p class="rk-msg">${L("Choisis une enquête ci-dessus.","Pick a case above.","위에서 사건을 고르세요.","上で事件を選んでね。")}</p>`;
+    else{const m=META[DATA[RK.lv].id];res=`<h3 class="rk-ct">${esc(TX(m.title))}</h3>`;
+      if(RK.loading)res+=`<p class="rk-msg">${L("Chargement…","Loading…","불러오는 중…","読み込み中…")}</p>`;
+      else if(!RK.rows)res+=`<p class="rk-msg">${L("Classement indisponible hors ligne.","Ranking unavailable offline.","오프라인에서는 순위를 볼 수 없어요.","オフラインではランキングを表示できません。")}</p>`;
+      else if(!RK.rows.length)res+=`<p class="rk-msg">${L("Personne n'a encore résolu cette enquête. Sois le premier !","Nobody has solved this case yet. Be the first!","아직 아무도 이 사건을 풀지 못했어요. 첫 번째가 되어 보세요!","まだ誰も解いていません。一番乗りを目指そう！")}</p>`;
+      else res+=`<ol class="rk-list lv">${RK.rows.map((r,k)=>`<li class="rk-r${isMe(r)?" me":""}"><span class="rk-n">${["🥇","🥈","🥉"][k]||k+1}</span><img src="${av(r.avatar)}" alt=""><div class="rk-b"><div class="rk-t"><b>${esc(r.pseudo)}</b><strong>⏱ ${fmtT(r.time)}</strong></div><small>💡 ${hints(r.hints)} · 🎯 ${L(`${r.attempts} ${r.attempts>1?"tentatives":"tentative"}`,`${r.attempts} ${r.attempts>1?"attempts":"attempt"}`,`${r.attempts}번 시도`,`${r.attempts}回挑戦`)}</small></div></li>`).join("")}</ol>
+        <p class="rk-note">${L("Classé par indices utilisés, puis par temps.","Ranked by hints used, then time.","힌트 사용 수, 그다음 시간 순이에요.","ヒントの数、次に時間で順位が決まります。")}</p>`}
+    return grp+`<div class="rk-lvs">${lv}</div>`+res}
+  function draw(){
+    box.innerHTML=`<div class="rk-tabs"><button data-rktab="all" class="${RK.tab==="all"?"on":""}">🏆 ${L("Général","Overall","전체","総合")}</button><button data-rktab="lv" class="${RK.tab==="lv"?"on":""}">🔍 ${L("Par enquête","By case","사건별","事件別")}</button></div>
+      <div class="rk-body">${RK.tab==="all"?general():perCase()}</div>`;
+    if(RK.tab==="lv"&&RK.lv!=null&&RK.rows==null&&!RK.loading&&tierOf(RK.lv)===RK.ch)loadLv()}
+  box.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
+    if(t.dataset.rktab){RK.tab=t.dataset.rktab;try{play("select")}catch(_){}draw();return}
+    if(t.dataset.rkch!=null){RK.ch=+t.dataset.rkch;const f=idxOf(RK.ch);RK.lv=f[0];RK.rows=null;RK.loading=false;draw();return}
+    if(t.dataset.rklv!=null){RK.lv=+t.dataset.rklv;RK.rows=null;RK.loading=false;draw();return}
+    if(t.id==="rkAcc"){show("pAccount")}});
+  renderRank=function(){const h=$("#pRankT");if(h)h.innerHTML=`<span class="rk-tro">🏆</span>${L("Classement","Leaderboard","순위","ランキング")}`;draw()};
+  try{renderRank()}catch(e){}
 })();
 
 render();
