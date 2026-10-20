@@ -6,6 +6,11 @@
       p.progress=p.progress||{};let n=0;const ids=new Set(DATA.map(c=>c.id));
       for(const [lid,x] of Object.entries(remote||{})){if(!ids.has(lid))continue;const cur=p.progress[lid];
         if(!cur||!cur.solved){p.progress[lid]={solved:true,hints:x.h||0,time:x.t||0,attempts:x.a||1,at:Date.now()};n++}}
+      /* older rows only know a count: those were the first cases of discovery mode, in order */
+      const cnt=Math.min(+(remote&&remote._n)||0,DATA.length);
+      if(cnt>Object.values(p.progress).filter(x=>x&&x.solved).length){let k=0;
+        for(let i=0;i<DATA.length&&k<cnt;i++){const id=DATA[i].id;if(/^s\d+n\d+$/.test(id))continue;k++;const cur=p.progress[id];
+          if(!cur||!cur.solved){p.progress[id]={solved:true,hints:0,time:0,attempts:1,at:Date.now()};n++}}}
       if(n){try{localStorage.setItem(LKEY,JSON.stringify(p))}catch(e){}if(ACC.mode==="cloud"&&ACC.db){try{await ACC.db.doc("data/users/"+ACC.uid+"/profile").set(JSON.parse(JSON.stringify(p)))}catch(e){}}
         toast(L(`Progression retrouvée : ${n} ${n>1?"enquêtes récupérées":"enquête récupérée"} !`,`Progress found: ${n} ${n>1?"cases":"case"} recovered!`,`진행 상황을 찾았어요: 사건 ${n}개를 되찾았어요!`,`進行状況が見つかりました：${n}件の事件を取り戻しました！`));
         try{renderHome()}catch(e){}}

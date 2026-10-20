@@ -87,13 +87,19 @@ export class Leaderboard extends DurableObject {
     if (!want) return {};
     const all = await this.ctx.storage.list({ prefix: "p:" });
     const out = {};
+    let n = 0;
     for (const v of all.values()) {
-      if (!v || !v.row || String(v.row.pseudo || "").trim().toLowerCase() !== want || !v.prog) continue;
+      if (!v || !v.row || String(v.row.pseudo || "").trim().toLowerCase() !== want) continue;
+      // old / imported rows only know how many cases were solved, not which ones
+      const known = v.prog ? Object.keys(v.prog).length : 0;
+      if ((Number(v.row.solved) || 0) > known) n = Math.max(n, Number(v.row.solved) || 0);
+      if (!v.prog) continue;
       for (const [k, x] of Object.entries(v.prog)) {
         const cur = out[k];
         if (!cur || x.h < cur.h || (x.h === cur.h && x.t < cur.t)) out[k] = x;
       }
     }
+    if (n) out._n = Math.min(n, 999);
     return out;
   }
   async submit(body) {

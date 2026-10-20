@@ -1,5 +1,26 @@
 [
  {
+  "id": 27,
+  "date": "2026-10-21",
+  "icon": "💾",
+  "fr": {
+   "t": "Progression mieux sauvegardée",
+   "d": "Si ta progression n'était plus enregistrée ou si tu étais revenu au début, entre ton nom de détective habituel : le jeu récupère maintenant aussi les enquêtes résolues sur l'ancienne version, puis sauvegarde à nouveau normalement."
+  },
+  "en": {
+   "t": "Progress saved more reliably",
+   "d": "If your progress stopped being saved or you were back at the start, enter your usual detective name: the game now also recovers the cases solved on the old version, then saves normally again."
+  },
+  "ko": {
+   "t": "진행 상황 저장 개선",
+   "d": "진행 상황이 저장되지 않았거나 처음으로 돌아갔다면, 평소 쓰던 탐정 이름을 입력하세요. 이제 예전 버전에서 해결한 사건도 되찾고, 다시 정상적으로 저장돼요."
+  },
+  "ja": {
+   "t": "進行状況の保存を改善",
+   "d": "進行状況が保存されなくなったり、最初に戻ってしまったりした場合は、いつもの探偵名を入力してください。旧バージョンで解決した事件も取り戻せるようになり、その後は通常どおり保存されます。"
+  }
+ },
+ {
   "id": 26,
   "date": "2026-10-20",
   "icon": "🏰",

@@ -15,7 +15,9 @@ async function initAccount(){
 const rid=()=>(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2));
 function syncRank(){const p=ACC.profile;if(!p||!p.pseudo)return;
   if(!p.pid||!p.ptok){p.pid=rid();p.ptok=rid();try{localStorage.setItem(LKEY,JSON.stringify(p))}catch(e){}}
-  fetch("/api/leaderboard",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:p.pid,token:p.ptok,pseudo:p.pseudo,avatar:p.avatar||"",progress:p.progress||{}})}).catch(()=>{})}
+  const send=()=>fetch("/api/leaderboard",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:p.pid,token:p.ptok,pseudo:p.pseudo,avatar:p.avatar||"",progress:p.progress||{}})});
+  /* 403 = this id belongs to another key (account recovered twice, storage wiped…): start a fresh line instead of never saving again */
+  send().then(r=>{if(r&&r.status===403){p.pid=rid();p.ptok=rid();try{localStorage.setItem(LKEY,JSON.stringify(p))}catch(e){}return send()}}).catch(()=>{})}
 async function saveProfile(){
   syncRank();
   try{localStorage.setItem(LKEY,JSON.stringify(ACC.profile))}catch(e){}
