@@ -1216,6 +1216,14 @@ body.xs-spark #marks .xm::after{content:"✨"}
 .home-in.shopmode .home-logo,.home-in.shopmode .home-who,.home.shopmode .h2-gear{display:none!important}
 .sh-tab{padding:8px 10px 7px;font-size:clamp(12.5px,3.6vw,15px);gap:5px}
 .sh-ti,.sh-ti svg{width:18px;height:18px;font-size:15px}
+@media (min-width:700px){
+  .home-in.shopmode{max-width:min(980px,calc(100vw - 48px))}
+  .shop2 .sh-tabs{flex-wrap:wrap;overflow:visible;row-gap:6px;border-bottom:3px solid #d6ab4f}
+  .shop2 .sh-tab{border-radius:12px 12px 0 0}
+  .shop2 .sh-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+  .home.shopmode .h2-bar{width:min(980px,calc(100vw - 48px))}
+}
+.sh-tabs{cursor:grab}
 #verdict{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;background:rgba(12,6,24,0);transition:background .3s;pointer-events:auto}
 #verdict[hidden]{display:none}
 #verdict.on{background:rgba(12,6,24,.72)}
@@ -3627,7 +3635,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= */
-var APP_BUILD="9da063e4fa25";
+var APP_BUILD="45471bf0e6a2";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -3803,6 +3811,8 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     m.innerHTML=`<div class="mbox pf-box"><button class="mclose" aria-label="✕">✕</button><p class="rk-msg">${L("Chargement…","Loading…","불러오는 중…","読み込み中…")}</p></div>`;m.hidden=false;
     const r=await api("/api/profile?pseudo="+encodeURIComponent(pseudo)).catch(()=>null);
     m.querySelector(".mbox").innerHTML=`<button class="mclose" aria-label="✕">✕</button>`+(r&&r.ok?card(r.d,false):`<p class="rk-msg">${L("Profil introuvable.","Profile not found.","프로필을 찾을 수 없어요.","プロフィールが見つかりません。")}</p>`)}
+  /* mouse wheel scrolls the tab row sideways when it overflows */
+  document.addEventListener("wheel",e=>{const t=e.target.closest&&e.target.closest(".sh-tabs");if(!t||t.scrollWidth<=t.clientWidth||Math.abs(e.deltaY)<Math.abs(e.deltaX))return;t.scrollLeft+=e.deltaY;e.preventDefault()},{passive:false});
   /* ---------- events ---------- */
   document.addEventListener("click",async e=>{const t=e.target.closest&&e.target.closest("button,[data-prof]");if(!t)return;
     if(t.id==="h2Daily"){e.stopPropagation();show("pDaily");try{play("page")}catch(_){}return}

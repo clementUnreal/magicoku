@@ -128,3 +128,11 @@ body.xs-spark #marks .xm::after{content:"✨"}
 .home-in.shopmode .home-logo,.home-in.shopmode .home-who,.home.shopmode .h2-gear{display:none!important}
 .sh-tab{padding:8px 10px 7px;font-size:clamp(12.5px,3.6vw,15px);gap:5px}
 .sh-ti,.sh-ti svg{width:18px;height:18px;font-size:15px}
+@media (min-width:700px){
+  .home-in.shopmode{max-width:min(980px,calc(100vw - 48px))}
+  .shop2 .sh-tabs{flex-wrap:wrap;overflow:visible;row-gap:6px;border-bottom:3px solid #d6ab4f}
+  .shop2 .sh-tab{border-radius:12px 12px 0 0}
+  .shop2 .sh-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+  .home.shopmode .h2-bar{width:min(980px,calc(100vw - 48px))}
+}
+.sh-tabs{cursor:grab}

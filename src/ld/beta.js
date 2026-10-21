@@ -159,6 +159,8 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     m.innerHTML=`<div class="mbox pf-box"><button class="mclose" aria-label="✕">✕</button><p class="rk-msg">${L("Chargement…","Loading…","불러오는 중…","読み込み中…")}</p></div>`;m.hidden=false;
     const r=await api("/api/profile?pseudo="+encodeURIComponent(pseudo)).catch(()=>null);
     m.querySelector(".mbox").innerHTML=`<button class="mclose" aria-label="✕">✕</button>`+(r&&r.ok?card(r.d,false):`<p class="rk-msg">${L("Profil introuvable.","Profile not found.","프로필을 찾을 수 없어요.","プロフィールが見つかりません。")}</p>`)}
+  /* mouse wheel scrolls the tab row sideways when it overflows */
+  document.addEventListener("wheel",e=>{const t=e.target.closest&&e.target.closest(".sh-tabs");if(!t||t.scrollWidth<=t.clientWidth||Math.abs(e.deltaY)<Math.abs(e.deltaX))return;t.scrollLeft+=e.deltaY;e.preventDefault()},{passive:false});
   /* ---------- events ---------- */
   document.addEventListener("click",async e=>{const t=e.target.closest&&e.target.closest("button,[data-prof]");if(!t)return;
     if(t.id==="h2Daily"){e.stopPropagation();show("pDaily");try{play("page")}catch(_){}return}
