@@ -9,6 +9,7 @@ Live site: https://magicoku.scorclem.workers.dev (Cloudflare Worker, deploys aut
   Patches are applied in order by `src/ld/build_ld.py`; translations (KO/JA) live in `src/i18n/`.
   Story mode (10 chapters): environments/texts in `src/story/` (envrt.py, envtext.py, sprites/*.webp), levels `src/ld/lv/s{chapter}n{level}.json` (generator: `src/story/genchap.py`).
   Chapter mechanics (one per story chapter): generator `src/story/genstory.py` (clue types dist/cnt/mirc/mird/mira/mid (knight no longer used), poison flasks, liar levels, `dark` and `nox` (no crosses, ch.7) flags); game side `src/ld/mech.js` (texts, liar/dark), `mech2.js` (train countdown ch.2, frost ch.5), `mech3.js` (chapter rule popup). Chapters 2, 5, 9 keep their levels (mechanic is runtime only).
+  BETA (only testers in STORY_TESTERS see it, `src/ld/beta.js` + `beta.css`): daily puzzle (pool `lv/dy*.json`, generator `src/story/gendaily.py`, same puzzle for everyone per Paris date), moon shards wallet, shop (cross styles, music styles, characters, ornaments, titles, renaming), profile. Server side in `repo/worker.js` (`/api/daily`, `/api/shop`, `/api/profile`, prices in `SHOP`).
   Extra modes: rush (u*), night (n*), liar (l*) levels also in `src/ld/lv/`.
 
 ## Release checklist (every update)

@@ -5,7 +5,7 @@
   const box=document.createElement("div");box.id="rk2";$("#rankList").before(box);panel.classList.add("rk2p");
   const RK={tab:"all",ch:null,lv:null,rows:null,loading:false};
   const esc=s=>String(s==null?"":s).replace(/[<>&"]/g,"");
-  const av=a=>POR[a]||POR[AVS[0]];
+  const av=a=>POR[a]||POR[AVS[0]];const cav=(r,c)=>typeof cosAv==="function"?cosAv(r.avatar,r.cos,c):`<img src="${av(r.avatar)}" alt="">`;const ttl=r=>typeof cosTitle==="function"?cosTitle(r.cos):"";const dp=r=>typeof betaOn==="function"&&betaOn()?` data-prof="${esc(r.pseudo)}"`:"";
   const isMe=r=>{const p=ACC.profile;if(!p||!p.pseudo)return false;return r.id===p.pid||String(r.pseudo||"").trim().toLowerCase()===String(p.pseudo).trim().toLowerCase()};
   const place=n=>L(n===1?"1re":n+"ᵉ",n===1?"1st":n===2?"2nd":n===3?"3rd":n+"th",n+"위",n+"位");
   const cases=n=>L(`${n} ${n>1?"enquêtes":"enquête"}`,`${n} ${n>1?"cases":"case"}`,`사건 ${n}개`,`${n}件`);
@@ -13,8 +13,8 @@
   const tot=()=>DATA.length;
   function podium(rows){const top=rows.slice(0,3);if(!top.length)return "";const order=[top[1],top[0],top[2]];
     return `<div class="rk-pod">${order.map((r,j)=>{if(!r)return `<div class="rk-pc empty"></div>`;const n=rows.indexOf(r)+1;
-      return `<div class="rk-pc p${n}${isMe(r)?" me":""}"><div class="rk-pa">${n===1?`<span class="rk-crown">👑</span>`:""}<img src="${av(r.avatar)}" alt=""><span class="rk-md">${["🥇","🥈","🥉"][n-1]}</span></div>
-        <b class="rk-pn">${esc(r.pseudo)}</b><small>${cases(r.solved)}</small><span class="rk-ps">⏱ ${fmt(r.time)}<br>💡 ${hints(r.hints)}</span><div class="rk-ped"><span>${n}</span></div></div>`}).join("")}</div>`}
+      return `<div class="rk-pc p${n}${isMe(r)?" me":""}"${dp(r)}><div class="rk-pa">${n===1?`<span class="rk-crown">👑</span>`:""}${cav(r,"rk-pcav")}<span class="rk-md">${["🥇","🥈","🥉"][n-1]}</span></div>
+        <b class="rk-pn">${esc(r.pseudo)}</b>${ttl(r)}<small>${cases(r.solved)}</small><span class="rk-ps">⏱ ${fmt(r.time)}<br>💡 ${hints(r.hints)}</span><div class="rk-ped"><span>${n}</span></div></div>`}).join("")}</div>`}
   function mine(rows){const p=ACC.profile;
     if(!p||!p.pseudo)return `<div class="rk-me none"><span>🕵️</span><div><b>${L("Tu n'es pas encore classé","You're not ranked yet","아직 순위에 없어요","まだランキングに載っていません")}</b><small>${L("Crée ton compte pour entrer dans le classement !","Create your account to join the leaderboard!","계정을 만들면 순위에 들어가요!","アカウントを作ってランキングに参加しよう！")}</small></div><button class="rk-cta" id="rkAcc">${L("Créer","Create","만들기","作成")}</button></div>`;
     const i=rows.findIndex(isMe);
@@ -26,7 +26,7 @@
         :L(`À égalité avec <b>${esc(a.pseudo)}</b> : utilise moins d'indices pour passer devant`,`Tied with <b>${esc(a.pseudo)}</b>: use fewer hints to get ahead`,`<b>${esc(a.pseudo)}</b>님과 동점: 힌트를 덜 쓰면 앞설 수 있어요`,`<b>${esc(a.pseudo)}</b>さんと同点：ヒントを減らせば上に行けます`)}
     return `<div class="rk-me"><div class="rk-mep"><small>${L("Ta place","Your place","내 순위","あなたの順位")}</small><b>${place(i+1)}</b></div><div class="rk-mei"><b>${L(`sur ${rows.length} détectives`,`out of ${rows.length} detectives`,`탐정 ${rows.length}명 중`,`探偵${rows.length}人中`)}</b><small>${next}</small></div></div>`}
   function row(r,n){const pc=Math.max(2,Math.round(100*r.solved/tot()));
-    return `<li class="rk-r${isMe(r)?" me":""}"><span class="rk-n">${n}</span><img src="${av(r.avatar)}" alt=""><div class="rk-b"><div class="rk-t"><b>${esc(r.pseudo)}</b><strong>${cases(r.solved)}</strong></div>
+    return `<li class="rk-r${isMe(r)?" me":""}"${dp(r)}><span class="rk-n">${n}</span>${cav(r,"")}<div class="rk-b"><div class="rk-t"><b>${esc(r.pseudo)}</b><strong>${cases(r.solved)}</strong></div>${ttl(r)}
       <div class="rk-bar"><i style="width:${pc}%"></i></div><small>⏱ ${fmt(r.time)} · 💡 ${hints(r.hints)}</small></div></li>`}
   function general(){const rows=RANK.rows;
     if(RANK.err&&!rows)return `<p class="rk-msg">${L("Classement indisponible pour l'instant.","Leaderboard unavailable right now.","지금은 순위를 볼 수 없어요.","いまはランキングを表示できません。")}</p>`;

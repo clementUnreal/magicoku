@@ -3,7 +3,7 @@
 var MECH_IDS=["dist","train","cnt","liar","frost","mirror","nox","poison","dark","mix"];
 function storyChap(){const m=C&&/^s(\d+)n(\d+)$/.exec(C.id);return m?+m[1]:0}
 function mechSpecial(){return (typeof RUSH!=="undefined"&&RUSH.on)||(typeof NIGHT!=="undefined"&&NIGHT.on)||(typeof LIAR!=="undefined"&&LIAR.on)}
-function mechOf(){if(mechSpecial())return null;const c=storyChap();return c?MECH_IDS[c-1]:null}
+function mechOf(){if(mechSpecial())return null;if(typeof DAILY!=="undefined"&&DAILY.on)return "daily";const c=storyChap();return c?MECH_IDS[c-1]:null}
 function mechDark(){if(mechSpecial())return false;return mechOf()==="dark"||!!(C&&C.dark)}
 function noX(){return !mechSpecial()&&!!C&&(mechOf()==="nox"||!!C.nox)}
 function mechLiar(){return !mechSpecial()&&C&&C.liar!=null&&mechOf()==="liar"}

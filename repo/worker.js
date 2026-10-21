@@ -3,6 +3,25 @@
 import { DurableObject } from "cloudflare:workers";
 
 const ADMIN = "clemonchichi";
+// ---- daily puzzle + shop (beta) ----
+const SHOP = {
+  // cross styles
+  "x:star": 60, "x:moon": 60, "x:heart": 60, "x:skull": 90, "x:paw": 90, "x:spark": 120,
+  // music styles
+  "m:box": 80, "m:lofi": 120, "m:fair": 120, "m:mystery": 150,
+  // characters for the profile picture
+  "c:mandrake": 150, "c:snowman": 150, "c:gargoyle": 200, "c:owl": 200, "c:cauldron": 120, "c:statue": 250,
+  // ornaments around the profile picture
+  "o:gold": 100, "o:flowers": 120, "o:stars": 150, "o:frost": 150, "o:flames": 200, "o:rainbow": 300,
+  // titles
+  "t:apprenti": 40, "t:limier": 80, "t:plume": 80, "t:lune": 150, "t:maitre": 250, "t:legende": 500,
+  // rename the suspects
+  "n:rename": 100,
+};
+const SLOT = { x: "x", m: "m", c: "c", o: "o", t: "t" };
+const today = () => new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+const dscore = (r) => r.t + 30 * r.e + 60 * r.h;
+const dcmp = (a, b) => dscore(a) - dscore(b) || a.at - b.at;
 const OLD = "https://brilliant-souffle-0e22cf.netlify.app/api/leaderboard";
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json", "cache-control": "no-store" } });
@@ -68,7 +87,9 @@ export class Leaderboard extends DurableObject {
     const cmp = (a, b) => b.solved - a.solved || a.hints - b.hints || a.time - b.time;
     const rows = dedupe([...all.values()].map((v) => v.row).filter(Boolean), cmp);
     rows.sort(cmp);
-    return rows.slice(0, 100);
+    const top = rows.slice(0, 100);
+    for (const r of top) { const w = await this.ctx.storage.get("w:" + String(r.pseudo || "").trim().toLowerCase()); if (w) r.cos = this.pub(w); }
+    return top;
   }
   async level(lid) {
     const all = await this.ctx.storage.list({ prefix: "p:" });
@@ -155,6 +176,98 @@ export class Leaderboard extends DurableObject {
     if (pseudo.toLowerCase() === ADMIN && /^[\w-]{8,64}$/.test(nid)) { const a = await this.admins(); if (!a.includes(nid)) { a.push(nid); await this.ctx.storage.put("__admins", a); } }
     return { status: 200, body: { pseudo: best.pseudo, avatar: best.avatar, progress } };
   }
+  async auth(id, token) {
+    const v = await this.ctx.storage.get("p:" + clean(id, 64));
+    if (!v || !v.tok || v.tok !== (await sha(token)) || !v.row) return null;
+    return v.row;
+  }
+  async wallet(pseudo) {
+    const k = "w:" + String(pseudo || "").trim().toLowerCase();
+    return (await this.ctx.storage.get(k)) || { coins: 0, owned: [], eq: {}, names: {}, wins: 0, played: 0 };
+  }
+  async saveWallet(pseudo, w) { await this.ctx.storage.put("w:" + String(pseudo || "").trim().toLowerCase(), w); }
+  // podium bonus for finished days, paid once
+  async settle() {
+    const t = today(), all = await this.ctx.storage.list({ prefix: "d:" });
+    for (const [k, d] of all) {
+      const date = k.slice(2);
+      if (date >= t || d.settled) continue;
+      const rows = Object.values(d.rows || {}).sort(dcmp);
+      const bonus = [30, 20, 10];
+      for (let i = 0; i < Math.min(3, rows.length); i++) {
+        const w = await this.wallet(rows[i].pseudo);
+        w.coins += bonus[i]; if (i === 0) w.wins = (w.wins || 0) + 1;
+        (w.log = w.log || []).unshift({ at: Date.now(), n: bonus[i], why: "podium:" + date + ":" + (i + 1) }); w.log = w.log.slice(0, 30);
+        await this.saveWallet(rows[i].pseudo, w);
+      }
+      d.settled = true; await this.ctx.storage.put(k, d);
+    }
+  }
+  pub(w) { return { title: w.eq.t || null, orn: w.eq.o || null, chara: w.eq.c || null }; }
+  async daily(date) {
+    await this.settle();
+    const date_ = /^\d{4}-\d{2}-\d{2}$/.test(date || "") ? date : today();
+    const d = (await this.ctx.storage.get("d:" + date_)) || { rows: {} };
+    const rows = Object.values(d.rows).sort(dcmp);
+    for (const r of rows) r.cos = this.pub(await this.wallet(r.pseudo));
+    return { date: date_, today: today(), rows: rows.slice(0, 100).map((r) => ({ pseudo: r.pseudo, avatar: r.avatar, t: r.t, e: r.e, h: r.h, s: dscore(r), cos: r.cos })) };
+  }
+  async dailySubmit(body) {
+    const row = await this.auth(body.id, String(body.token || ""));
+    if (!row) return { status: 403, body: { error: "forbidden" } };
+    const date = today();
+    if (body.date !== date) return { status: 409, body: { error: "not today", today: date } };
+    const key = "d:" + date, d = (await this.ctx.storage.get(key)) || { rows: {} }, me = String(row.pseudo).trim().toLowerCase();
+    const w = await this.wallet(row.pseudo);
+    if (d.rows[me]) return { status: 200, body: { already: true, coins: w.coins, earned: 0 } };
+    const r = { pseudo: row.pseudo, avatar: row.avatar, t: Math.max(1, Math.min(86400, Math.round(Number(body.t) || 0))), e: Math.max(0, Math.min(99, Number(body.e) || 0)), h: Math.max(0, Math.min(99, Number(body.h) || 0)), at: Date.now() };
+    d.rows[me] = r; await this.ctx.storage.put(key, d);
+    const earned = 20 + (r.e === 0 ? 10 : 0) + (r.h === 0 ? 10 : 0);
+    w.coins += earned; w.played = (w.played || 0) + 1;
+    (w.log = w.log || []).unshift({ at: Date.now(), n: earned, why: "daily:" + date }); w.log = w.log.slice(0, 30);
+    await this.saveWallet(row.pseudo, w);
+    const rows = Object.values(d.rows).sort(dcmp);
+    return { status: 200, body: { earned, coins: w.coins, rank: rows.findIndex((x) => x === r || x.pseudo === r.pseudo) + 1, of: rows.length } };
+  }
+  async shop(body) {
+    await this.settle();
+    const row = await this.auth(body.id, String(body.token || ""));
+    if (!row) return { status: 403, body: { error: "forbidden" } };
+    const w = await this.wallet(row.pseudo), item = String(body.item || "");
+    if (body.action === "buy") {
+      if (!(item in SHOP)) return { status: 400, body: { error: "unknown item" } };
+      if (w.owned.includes(item)) return { status: 200, body: w };
+      if (w.coins < SHOP[item]) return { status: 402, body: { error: "not enough", wallet: w } };
+      w.coins -= SHOP[item]; w.owned.push(item);
+      const sl = SLOT[item.split(":")[0]]; if (sl) w.eq[sl] = item;
+      await this.saveWallet(row.pseudo, w);
+    } else if (body.action === "equip") {
+      const sl = SLOT[item.split(":")[0]] || SLOT[String(body.slot || "")];
+      if (!sl) return { status: 400, body: { error: "bad slot" } };
+      if (item && !item.endsWith(":none") && !w.owned.includes(item)) return { status: 403, body: { error: "not owned" } };
+      if (!item || item.endsWith(":none")) delete w.eq[sl]; else w.eq[sl] = item;
+      await this.saveWallet(row.pseudo, w);
+    } else if (body.action === "names") {
+      if (!w.owned.includes("n:rename")) return { status: 403, body: { error: "not owned" } };
+      const out = {};
+      for (const [k, v] of Object.entries(body.names || {}).slice(0, 20)) { const kk = clean(k, 20), vv = clean(v, 16); if (kk && vv) out[kk] = vv; }
+      w.names = out; await this.saveWallet(row.pseudo, w);
+    } else if (body.action === "grant") {
+      // admin test helper: give coins to yourself
+      if (String(row.pseudo).trim().toLowerCase() !== ADMIN || !(await this.isAdmin(body.id, String(body.token || "")))) return { status: 403, body: { error: "forbidden" } };
+      w.coins += Math.max(0, Math.min(5000, Number(body.n) || 0)); await this.saveWallet(row.pseudo, w);
+    }
+    return { status: 200, body: w };
+  }
+  async profile(pseudo) {
+    const want = String(pseudo || "").trim().toLowerCase(); if (!want) return null;
+    const all = await this.ctx.storage.list({ prefix: "p:" });
+    let best = null;
+    for (const v of all.values()) if (v && v.row && String(v.row.pseudo).trim().toLowerCase() === want && (!best || v.row.solved > best.solved)) best = v.row;
+    if (!best) return null;
+    const w = await this.wallet(best.pseudo);
+    return { pseudo: best.pseudo, avatar: best.avatar, solved: best.solved, hints: best.hints, time: best.time, wins: w.wins || 0, played: w.played || 0, cos: this.pub(w) };
+  }
   async submit(body) {
     const id = clean(body.id, 64), token = String(body.token || "");
     if (!/^[\w-]{8,64}$/.test(id) || token.length < 8) return { status: 400, body: { error: "bad id" } };
@@ -187,6 +300,16 @@ export default {
     }
     // progress is no longer given out by name alone: a recovery code is needed
     if (url.pathname === "/api/progress") return json({});
+    if (url.pathname === "/api/daily" && request.method === "GET") return json(await env.LB.get(env.LB.idFromName("main")).daily(url.searchParams.get("date")));
+    if (url.pathname === "/api/profile") { const r = await env.LB.get(env.LB.idFromName("main")).profile(clean(url.searchParams.get("pseudo"), 20)); return r ? json(r) : json({ error: "unknown" }, 404); }
+    if (url.pathname === "/api/daily" || url.pathname === "/api/shop") {
+      if (request.method !== "POST") return json({ error: "method" }, 405);
+      let body;
+      try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
+      const lb = env.LB.get(env.LB.idFromName("main"));
+      const r = url.pathname === "/api/daily" ? await lb.dailySubmit(body) : await lb.shop(body);
+      return json(r.body, r.status);
+    }
     if (url.pathname === "/api/restore" || url.pathname === "/api/admin/codes") {
       if (request.method !== "POST") return json({ error: "method" }, 405);
       let body;

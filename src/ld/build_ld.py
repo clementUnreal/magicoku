@@ -25,6 +25,13 @@ for _c in range(10):
         if not os.path.exists(_p):continue
         _d=json.load(open(_p));out.append(dict(id=_lid,rooms=_d['rooms'],objs=_d['objs'],windows=[],solution=_d['solution'],clues=_d['clues'],killer=_d['killer'],**({'liar':_d['liar']} if 'liar' in _d else {}),**({'dark':True} if _d.get('dark') else {}),**({'nox':True} if _d.get('nox') else {})))
         _extra[_lid]=_SM.build(_lid,_d,_c,_k)
+_daily=[];_dmeta={}
+import glob as _gl
+from envrt import ENVS as _ENVS
+for _p in sorted(_gl.glob("lv/dy*.json"),key=lambda x:int(x.split("dy")[1].split(".")[0])):
+    _d=json.load(open(_p));_lid=_d["id"];_i=int(_lid[2:])-1
+    _daily.append(dict(id=_lid,rooms=_d['rooms'],objs=_d['objs'],windows=[],solution=_d['solution'],clues=_d['clues'],killer=_d['killer'],**({'nox':True} if _d.get('nox') else {})))
+    _m=_SM.build(_lid,_d,_ENVS.index(_d["env"]),_i%10);_m["level"]=["Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎"];_dmeta[_lid]=_m
 assets["sprites"].update(_spr())
 old=open('../mk/chunk_data_draw.js').read().split('\n')
 helpers='\n'.join(old[65:107])  # LANG .. look
@@ -81,7 +88,7 @@ for _i in range(1,11):
       f"<b>{_vk}</b>{_ga} 숨진 채 발견되었다. 용의자 모두를 심문했지만… <b>그중 한 명이 거짓말을 했다</b>. 이야기 속 진술 중 단 하나가 거짓이다. 어느 것인지 찾아내라.",
       f"<b>{_vj}</b>が息絶えているのが見つかった。容疑者全員を取り調べたが……<b>そのうち一人が嘘をついている</b>。物語の証言のうち、ひとつだけが偽りだ。どれなのか見抜け。"]
     _lmeta[_lid]=_m
-head="const DATA="+json.dumps(out,ensure_ascii=False,separators=(',',':'))+";\n"+open('meta.js').read()+"\nObject.assign(META,"+json.dumps(_extra,ensure_ascii=False)+");\nconst RUSH_DATA="+json.dumps(_rush,ensure_ascii=False,separators=(',',':'))+";\nObject.assign(META,"+json.dumps(_rmeta,ensure_ascii=False)+");\nconst NIGHT_DATA="+json.dumps(_night,ensure_ascii=False,separators=(',',':'))+";\nObject.assign(META,"+json.dumps(_nmeta,ensure_ascii=False)+");\nconst LIAR_DATA="+json.dumps(_liar,ensure_ascii=False,separators=(',',':'))+";\nObject.assign(META,"+json.dumps(_lmeta,ensure_ascii=False)+");\n"+helpers+"\n"
+head="const DAILY_DATA="+json.dumps(_daily,ensure_ascii=False,separators=(",",":"))+";\n";head+="const DATA="+json.dumps(out,ensure_ascii=False,separators=(',',':'))+";\n"+open('meta.js').read()+"\nObject.assign(META,"+json.dumps(_extra,ensure_ascii=False)+");\nObject.assign(META,"+json.dumps(_dmeta,ensure_ascii=False)+");\nconst RUSH_DATA="+json.dumps(_rush,ensure_ascii=False,separators=(',',':'))+";\nObject.assign(META,"+json.dumps(_rmeta,ensure_ascii=False)+");\nconst NIGHT_DATA="+json.dumps(_night,ensure_ascii=False,separators=(',',':'))+";\nObject.assign(META,"+json.dumps(_nmeta,ensure_ascii=False)+");\nconst LIAR_DATA="+json.dumps(_liar,ensure_ascii=False,separators=(',',':'))+";\nObject.assign(META,"+json.dumps(_lmeta,ensure_ascii=False)+");\n"+helpers+"\n"
 from envtext import CH as _CH,SHORT as _SH,OBJ as _OB,ON as _ON
 from envrt import NEW_WALK as _NW
 head+="var STORY_CH="+json.dumps([list(x) for x in _CH],ensure_ascii=False)+";var STORY_SHORT="+json.dumps([list(x) for x in _SH],ensure_ascii=False)+";\n"
@@ -243,8 +250,11 @@ exec(open('patch_lv2.py').read())
 exec(open('patch_timer.py').read())
 exec(open('patch_story.py').read())
 exec(open('patch_i18n.py').read())
-_i=s.rindex('</script>');s=s[:_i]+open('verdict.js').read()+open('kw.js').read()+open('news.js').read()+open('hint2.js').read()+open('nav.js').read()+open('rules2.js').read()+open('rush.js').read()+open('night.js').read()+open('liar.js').read()+open('modes.js').read()+open('storymode.js').read()+open('recover.js').read()+open('envtheme.js').read()+open('ambience.js').read()+open('levelview.js').read()+open('tuto2.js').read()+open('home2.js').read()+open('rank2.js').read()+open('reveal2.js').read()+open('mech.js').read()+open('mech2.js').read()+open('mech3.js').read()+open('fullscreen.js').read()+open('update.js').read()+'\nrender();\n'+s[_i:]
-s=s.replace('</style>',open('kw.css').read()+open('news.css').read()+open('hint2.css').read()+open('nav.css').read()+open('rush.css').read()+open('night.css').read()+open('liar.css').read()+open('modes.css').read()+open('storymode.css').read()+open('envtheme.css').read()+open('ambience.css').read()+open('levelview.css').read()+open('tuto2.css').read()+open('home2.css').read()+open('rank2.css').read()+open('reveal2.css').read()+open('mech.css').read()+'</style>',1)
+_i=s.rindex('</script>');s=s[:_i]+open('verdict.js').read()+open('kw.js').read()+open('news.js').read()+open('hint2.js').read()+open('nav.js').read()+open('rules2.js').read()+open('rush.js').read()+open('night.js').read()+open('liar.js').read()+open('modes.js').read()+open('storymode.js').read()+open('recover.js').read()+open('envtheme.js').read()+open('ambience.js').read()+open('levelview.js').read()+open('tuto2.js').read()+open('home2.js').read()+open('rank2.js').read()+open('reveal2.js').read()+open('mech.js').read()+open('mech2.js').read()+open('mech3.js').read()+open('fullscreen.js').read()+open('update.js').read()+open('beta.js').read()+'\nrender();\n'+s[_i:]
+s=s.replace('</style>',open('kw.css').read()+open('news.css').read()+open('hint2.css').read()+open('nav.css').read()+open('rush.css').read()+open('night.css').read()+open('liar.css').read()+open('modes.css').read()+open('storymode.css').read()+open('envtheme.css').read()+open('ambience.css').read()+open('levelview.css').read()+open('tuto2.css').read()+open('home2.css').read()+open('rank2.css').read()+open('reveal2.css').read()+open('mech.css').read()+open('beta.css').read()+'</style>',1)
 s=s.replace('</style>',open('verdict.css').read()+'</style>',1)
+_pn='const pname=p=>{const n=M.people[p][0];return (LANG==="ko"||LANG==="ja")&&NAMES[n]?NAMES[n][LANG==="ko"?0:1]:n};'
+assert _pn in s
+s=s.replace(_pn,'var RENAME={};const pname=p=>{const n=M.people[p][0];if(RENAME[n])return RENAME[n];return (LANG==="ko"||LANG==="ja")&&NAMES[n]?NAMES[n][LANG==="ko"?0:1]:n};')
 open('../crimes-mignons.html','w').write(s)
 print(len(s)//1024,"KB")
