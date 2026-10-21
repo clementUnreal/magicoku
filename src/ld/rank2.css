@@ -68,3 +68,5 @@
 .rk-ct{margin:4px 0 0;text-align:center;font:800 18px "Cinzel",Georgia,serif;color:#3a1f3d}
 .rk-note{margin:0;text-align:center;font:italic 13px var(--f-body);color:#7a6250}
 @media (max-width:360px){.rk-lvs{grid-template-columns:repeat(5,1fr)}}
+.rk-pc small{margin-bottom:2px!important}
+.rk-ps{font:600 12px/1.35 var(--f-body);color:#6b5040;margin-bottom:6px;white-space:nowrap}

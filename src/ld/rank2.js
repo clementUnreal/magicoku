@@ -14,7 +14,7 @@
   function podium(rows){const top=rows.slice(0,3);if(!top.length)return "";const order=[top[1],top[0],top[2]];
     return `<div class="rk-pod">${order.map((r,j)=>{if(!r)return `<div class="rk-pc empty"></div>`;const n=rows.indexOf(r)+1;
       return `<div class="rk-pc p${n}${isMe(r)?" me":""}"><div class="rk-pa">${n===1?`<span class="rk-crown">👑</span>`:""}<img src="${av(r.avatar)}" alt=""><span class="rk-md">${["🥇","🥈","🥉"][n-1]}</span></div>
-        <b class="rk-pn">${esc(r.pseudo)}</b><small>${cases(r.solved)}</small><div class="rk-ped"><span>${n}</span></div></div>`}).join("")}</div>`}
+        <b class="rk-pn">${esc(r.pseudo)}</b><small>${cases(r.solved)}</small><span class="rk-ps">⏱ ${fmt(r.time)}<br>💡 ${hints(r.hints)}</span><div class="rk-ped"><span>${n}</span></div></div>`}).join("")}</div>`}
   function mine(rows){const p=ACC.profile;
     if(!p||!p.pseudo)return `<div class="rk-me none"><span>🕵️</span><div><b>${L("Tu n'es pas encore classé","You're not ranked yet","아직 순위에 없어요","まだランキングに載っていません")}</b><small>${L("Crée ton compte pour entrer dans le classement !","Create your account to join the leaderboard!","계정을 만들면 순위에 들어가요!","アカウントを作ってランキングに参加しよう！")}</small></div><button class="rk-cta" id="rkAcc">${L("Créer","Create","만들기","作成")}</button></div>`;
     const i=rows.findIndex(isMe);

@@ -984,6 +984,8 @@ body.night #marks .mk.room{background:none!important}
 .rk-ct{margin:4px 0 0;text-align:center;font:800 18px "Cinzel",Georgia,serif;color:#3a1f3d}
 .rk-note{margin:0;text-align:center;font:italic 13px var(--f-body);color:#7a6250}
 @media (max-width:360px){.rk-lvs{grid-template-columns:repeat(5,1fr)}}
+.rk-pc small{margin-bottom:2px!important}
+.rk-ps{font:600 12px/1.35 var(--f-body);color:#6b5040;margin-bottom:6px;white-space:nowrap}
 /* ================= "Case closed" popup v2 ================= */
 #reveal .box.rv2{position:relative;width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow-y:auto;overflow-x:hidden;padding:0 18px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;
   background:radial-gradient(120% 60% at 50% 0%,#fff8e6,transparent 60%),linear-gradient(#f8eed8,#ead6ad);border:3px solid #d6ab4f;border-radius:20px;box-shadow:0 0 0 2px #5a3b12,0 0 0 7px rgba(214,171,79,.25),0 24px 60px #000c;scrollbar-width:none}
@@ -3163,7 +3165,7 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
   function podium(rows){const top=rows.slice(0,3);if(!top.length)return "";const order=[top[1],top[0],top[2]];
     return `<div class="rk-pod">${order.map((r,j)=>{if(!r)return `<div class="rk-pc empty"></div>`;const n=rows.indexOf(r)+1;
       return `<div class="rk-pc p${n}${isMe(r)?" me":""}"><div class="rk-pa">${n===1?`<span class="rk-crown">👑</span>`:""}<img src="${av(r.avatar)}" alt=""><span class="rk-md">${["🥇","🥈","🥉"][n-1]}</span></div>
-        <b class="rk-pn">${esc(r.pseudo)}</b><small>${cases(r.solved)}</small><div class="rk-ped"><span>${n}</span></div></div>`}).join("")}</div>`}
+        <b class="rk-pn">${esc(r.pseudo)}</b><small>${cases(r.solved)}</small><span class="rk-ps">⏱ ${fmt(r.time)}<br>💡 ${hints(r.hints)}</span><div class="rk-ped"><span>${n}</span></div></div>`}).join("")}</div>`}
   function mine(rows){const p=ACC.profile;
     if(!p||!p.pseudo)return `<div class="rk-me none"><span>🕵️</span><div><b>${L("Tu n'es pas encore classé","You're not ranked yet","아직 순위에 없어요","まだランキングに載っていません")}</b><small>${L("Crée ton compte pour entrer dans le classement !","Create your account to join the leaderboard!","계정을 만들면 순위에 들어가요!","アカウントを作ってランキングに参加しよう！")}</small></div><button class="rk-cta" id="rkAcc">${L("Créer","Create","만들기","作成")}</button></div>`;
     const i=rows.findIndex(isMe);
@@ -3484,7 +3486,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= */
-var APP_BUILD="848b9bbf40e2";
+var APP_BUILD="da35d2fd169f";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
