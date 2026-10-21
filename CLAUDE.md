@@ -8,7 +8,7 @@ Live site: https://magicoku.scorclem.workers.dev (Cloudflare Worker, deploys aut
 - `src/` — build sources. `sh src/build.sh` regenerates `repo/public/index.html`.
   Patches are applied in order by `src/ld/build_ld.py`; translations (KO/JA) live in `src/i18n/`.
   Story mode (10 chapters): environments/texts in `src/story/` (envrt.py, envtext.py, sprites/*.webp), levels `src/ld/lv/s{chapter}n{level}.json` (generator: `src/story/genchap.py`).
-  Chapter mechanics (one per story chapter): generator `src/story/genstory.py` (clue types dist/cnt/mirc/mird/mira/mid/knight, poison flasks, liar levels, `dark` flag); game side `src/ld/mech.js` (texts, liar/dark), `mech2.js` (train countdown ch.2, frost ch.5), `mech3.js` (chapter rule popup). Chapters 2, 5, 9 keep their levels (mechanic is runtime only).
+  Chapter mechanics (one per story chapter): generator `src/story/genstory.py` (clue types dist/cnt/mirc/mird/mira/mid (knight no longer used), poison flasks, liar levels, `dark` and `nox` (no crosses, ch.7) flags); game side `src/ld/mech.js` (texts, liar/dark), `mech2.js` (train countdown ch.2, frost ch.5), `mech3.js` (chapter rule popup). Chapters 2, 5, 9 keep their levels (mechanic is runtime only).
   Extra modes: rush (u*), night (n*), liar (l*) levels also in `src/ld/lv/`.
 
 ## Release checklist (every update)

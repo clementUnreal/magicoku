@@ -1,5 +1,26 @@
 [
  {
+  "id": 33,
+  "date": "2026-10-22",
+  "icon": "🏟️",
+  "fr": {
+   "t": "Stade des Balais : nouvelle règle",
+   "d": "Le crochet de balai disparaît. Dans le vacarme du stade, impossible de barrer des cases : pas de croix dans le chapitre 7 ! Tu peux seulement placer les suspects et écrire de petites notes. Les niveaux du chapitre 7 et quelques niveaux de la forteresse ont été renouvelés."
+  },
+  "en": {
+   "t": "Broom Stadium: a new rule",
+   "d": "The broom hook is gone. In the roar of the stadium you can't cross out squares: no crosses in chapter 7! You can only place suspects and write small notes. The chapter 7 levels and a few fortress levels have been renewed."
+  },
+  "ko": {
+   "t": "빗자루 경기장: 새 규칙",
+   "d": "빗자루 꺾기가 사라졌어요. 경기장이 너무 시끄러워서 7장에서는 칸에 X 표시를 할 수 없어요! 용의자를 배치하거나 작은 메모만 적을 수 있어요. 7장 레벨과 요새의 일부 레벨이 새로 바뀌었어요."
+  },
+  "ja": {
+   "t": "ほうき競技場：新しいルール",
+   "d": "ほうきターンはなくなりました。競技場の大歓声で、第7章ではマスに✕をつけられません！できるのは容疑者を置くことと、小さなメモを書くことだけ。第7章のレベルと要塞のいくつかのレベルが新しくなりました。"
+  }
+ },
+ {
   "id": 32,
   "date": "2026-10-21",
   "icon": "⛶",

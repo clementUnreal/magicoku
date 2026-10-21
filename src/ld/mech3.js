@@ -25,10 +25,10 @@ var MECH_INFO={
    "The lake reflects everything. “Reflection through the centre”: same distance from the centre of the map, on the other side. “Reflection across a diagonal”: on the other side of that diagonal, at the same distance (B3 and C2 are reflections across the long diagonal). “Halfway between A and B”: A and B are each other's reflection through that person.",
    "호수는 모든 것을 비춰요. ‘중심을 기준으로 반사’: 지도 중심에서 같은 거리, 반대편. ‘대각선을 기준으로 반사’: 그 대각선 반대편, 같은 거리(B3과 C2는 큰 대각선을 기준으로 반사된 자리예요). ‘A와 B 사이 한가운데’: A와 B가 그 사람을 기준으로 서로 반사된 자리에 있어요.",
    "湖はすべてを映す。「中心をはさんで鏡写し」：見取り図の中心から同じ距離の反対側。「対角線をはさんで鏡写し」：その対角線の反対側、同じ距離（B3とC2は長い対角線をはさんで鏡写し）。「AとBの真ん中」：AとBはその人をはさんで鏡写しの位置。"]],
- knight:["🧹",["Le crochet de balai","The broom hook","빗자루 꺾기","ほうきターン"],["Au stade, on vole en crochet : 2 cases tout droit, puis 1 sur le côté, comme le cavalier aux échecs. « À un crochet de balai de Basile » veut dire exactement une de ces 8 positions autour de lui.",
-   "At the stadium, players fly in hooks: 2 squares straight, then 1 to the side, like a knight in chess. “One broom hook from Basile” means exactly one of those 8 positions around him.",
-   "경기장에서는 꺾어서 날아요. 직진 2칸, 그다음 옆으로 1칸, 체스의 나이트처럼요. ‘바질에게서 빗자루 꺾기 한 번’은 그 주변의 8자리 중 하나라는 뜻이에요.",
-   "競技場では、まっすぐ2マス、そこから横に1マスと曲がって飛ぶ。チェスのナイトと同じ動き。「バジルからほうきターン1回」とは、そのまわりの8か所のどれかということ。"]],
+ nox:["🏟️",["Le vacarme du stade","The roar of the stadium","경기장의 함성","競技場の大歓声"],["Dans le vacarme des tribunes, impossible de se concentrer : dans ce chapitre, tu ne peux pas barrer de cases avec des croix. Tu peux seulement placer les suspects et écrire de petites notes (toucher rapide). À toi de tout garder en tête !",
+   "In the roar of the stands, it's impossible to concentrate: in this chapter you can't cross out squares. You can only place suspects and write small notes (quick tap). Keep everything in your head!",
+   "관중석이 너무 시끄러워 집중할 수 없어요. 이 장에서는 칸에 X 표시를 할 수 없어요. 용의자를 배치하거나 작은 메모(짧게 탭)만 적을 수 있어요. 모든 걸 머릿속에 기억하세요!",
+   "観客席の大歓声で集中できない！この章ではマスに✕をつけられません。できるのは容疑者を置くことと、小さなメモ（短くタップ）だけ。全部頭の中で覚えておこう！"]],
  poison:["☠️",["Les fioles de poison","The poison flasks","독약 병","毒薬のびん"],["Des fioles de poison traînent dans l'hospice. Personne ne peut se tenir sur une fiole, ni sur les 8 cases qui l'entourent (diagonales comprises), même de l'autre côté d'un mur.",
    "Poison flasks are lying around the hospice. Nobody can stand on a flask, or on the 8 squares around it (diagonals included), even on the other side of a wall.",
    "병원 여기저기에 독약 병이 놓여 있어요. 아무도 독약 병 위나, 그 주변 8칸(대각선 포함)에 있을 수 없어요. 벽 너머라도 마찬가지예요.",
@@ -37,11 +37,11 @@ var MECH_INFO={
    "A power cut plunges the ministry into darkness. Move your lantern (mouse, or finger on a phone) to reveal rooms and objects. Your characters and crosses always stay visible.",
    "정전으로 부처가 어둠에 잠겼어요. 등불(마우스, 휴대폰에서는 손가락)을 움직여 방과 물건을 찾아보세요. 배치한 인물과 X 표시는 항상 보여요.",
    "停電で魔法省が真っ暗に。ランタン（マウス、スマホでは指）を動かして部屋や家具を照らそう。置いた人物と✕はいつでも見えます。"]],
- mix:["🏰",["Le grand final","The grand finale","대단원","グランドフィナーレ"],["La forteresse mélange toutes les épreuves : empreintes, registre, reflets, crochets de balai, poisons… et parfois l'obscurité. Le rappel en bas du récit te dit lesquelles comptent dans chaque enquête.",
-   "The fortress mixes every trial: footprints, register, reflections, broom hooks, poisons… and sometimes darkness. The reminder at the bottom of the story tells you which ones apply to each case.",
-   "요새에서는 모든 시험이 섞여 나와요. 발자국, 출입 기록, 반사, 빗자루 꺾기, 독약… 그리고 가끔은 어둠까지. 이야기 맨 아래의 안내를 보면 사건마다 어떤 규칙이 적용되는지 알 수 있어요.",
-   "要塞ではすべての試練が混ざっている。足跡、記録、鏡写し、ほうきターン、毒薬……そして時には暗闇も。物語の下の案内を見れば、それぞれの事件でどれが使われているかわかります。"]]};
-function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=storyChap(),key="magicoku:mechSeen:"+c;
+ mix:["🏰",["Le grand final","The grand finale","대단원","グランドフィナーレ"],["La forteresse mélange toutes les épreuves : empreintes, registre, reflets, poisons, interdiction des croix… et parfois l'obscurité. Le rappel en bas du récit te dit lesquelles comptent dans chaque enquête.",
+   "The fortress mixes every trial: footprints, register, reflections, poisons, no crosses… and sometimes darkness. The reminder at the bottom of the story tells you which ones apply to each case.",
+   "요새에서는 모든 시험이 섞여 나와요. 발자국, 출입 기록, 반사, 독약, X 표시 금지… 그리고 가끔은 어둠까지. 이야기 맨 아래의 안내를 보면 사건마다 어떤 규칙이 적용되는지 알 수 있어요.",
+   "要塞ではすべての試練が混ざっている。足跡、記録、鏡写し、毒薬、✕禁止……そして時には暗闇も。物語の下の案内を見れば、それぞれの事件でどれが使われているかわかります。"]]};
+function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=storyChap(),key="magicoku:mechSeen:"+c+(m==="nox"?"x":"");
   let seen=null;try{seen=localStorage.getItem(key)}catch(_){}if(seen&&!force)return;try{localStorage.setItem(key,"1")}catch(_){}
   const [ic,t,d]=MECH_INFO[m];let el=$("#mechIntro");
   if(!el){el=document.createElement("div");el.id="mechIntro";el.className="modal";document.body.appendChild(el);el.addEventListener("click",e=>{if(e.target===el||e.target.closest("[data-mi]"))el.hidden=true})}

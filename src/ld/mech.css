@@ -39,3 +39,4 @@
   display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;justify-content:center;max-width:calc(100vw - 24px);padding:10px 18px;border-radius:999px;border:2px solid #f0cf7a;cursor:pointer;
   background:linear-gradient(#c43a54,#8d1d33);color:#fbefc8;font:600 15px var(--f-body);box-shadow:0 8px 24px #0008}
 #updBar.on{transform:translate(-50%,0)}#updBar span{text-decoration:underline;text-underline-offset:3px}
+#tX.nox{opacity:.4;filter:grayscale(1);position:relative}#tX.nox::after{content:"🚫";position:absolute;right:6px;top:4px;font-size:16px}

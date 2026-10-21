@@ -13,11 +13,11 @@ def cfg(c,k):
     if c==0:return {"mech":{"dist":4}}
     if c==2:return {"mech":{"cnt":4}}
     if c==5:return {"mech":{"mirror":4}}
-    if c==6:return {"mech":{"knight":4}}
+    if c==6:return {"nox":True}
     if c==7:return {"poison":1 if k<4 else 2}
-    if c==9:return [{"mech":{"dist":4}},{"mech":{"cnt":4}},{"mech":{"mirror":4}},{"mech":{"knight":4}},{"mech":{"dist":4},"poison":1},
-                    {"mech":{"cnt":4},"dark":True},{"mech":{"mirror":3,"knight":3}},{"mech":{"knight":4},"poison":2},
-                    {"mech":{"mirror":3,"cnt":3},"dark":True},{"mech":{"dist":3,"knight":3,"mirror":3},"poison":2,"dark":True}][k]
+    if c==9:return [{"mech":{"dist":4}},{"mech":{"cnt":4}},{"mech":{"mirror":4}},{"mech":{"dist":4,"cnt":3},"nox":True},{"mech":{"dist":4},"poison":1},
+                    {"mech":{"cnt":4},"dark":True},{"mech":{"mirror":4}},{"mech":{"dist":4},"poison":2,"nox":True},
+                    {"mech":{"mirror":3,"cnt":3},"dark":True},{"mech":{"dist":3,"cnt":3,"mirror":3},"poison":2,"dark":True}][k]
     return None
 def add_poison(rooms,objs,np_,rng):
     n=len(rooms);taken={(o[1],o[2]) for o in objs};free=[(r,c) for r in range(n) for c in range(n) if (r,c) not in taken]
@@ -41,6 +41,7 @@ def make(lid,cf,n,R,minS,maxS,lv,needH,seed,deadline):
         vr=gen.roomof(case,sol[0]);killer=[q for q in range(1,len(sol)) if gen.roomof(case,sol[q])==vr][0]
         r=dict(id=lid,rooms=rooms,objs=[list(o) for o in objs],windows=[],solution=sol,clues={str(k):[[c[0],list(c[1]) if isinstance(c[1],tuple) else c[1]] for c in v] for k,v in clues.items()},killer=killer,types=tmap,firstSingles=fs)
         if cf.get("dark"):r["dark"]=True
+        if cf.get("nox"):r["nox"]=True
         return r
     return None
 if __name__=="__main__":

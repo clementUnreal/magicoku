@@ -23,7 +23,7 @@ for _c in range(10):
     for _k in range(10):
         _lid=f"s{_c+1}n{_k+1}";_p=f"lv/{_lid}.json"
         if not os.path.exists(_p):continue
-        _d=json.load(open(_p));out.append(dict(id=_lid,rooms=_d['rooms'],objs=_d['objs'],windows=[],solution=_d['solution'],clues=_d['clues'],killer=_d['killer'],**({'liar':_d['liar']} if 'liar' in _d else {}),**({'dark':True} if _d.get('dark') else {})))
+        _d=json.load(open(_p));out.append(dict(id=_lid,rooms=_d['rooms'],objs=_d['objs'],windows=[],solution=_d['solution'],clues=_d['clues'],killer=_d['killer'],**({'liar':_d['liar']} if 'liar' in _d else {}),**({'dark':True} if _d.get('dark') else {}),**({'nox':True} if _d.get('nox') else {})))
         _extra[_lid]=_SM.build(_lid,_d,_c,_k)
 assets["sprites"].update(_spr())
 old=open('../mk/chunk_data_draw.js').read().split('\n')

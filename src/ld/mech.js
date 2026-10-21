@@ -1,10 +1,11 @@
 
 /* ================= Story mode: one mechanic per chapter ================= */
-var MECH_IDS=["dist","train","cnt","liar","frost","mirror","knight","poison","dark","mix"];
+var MECH_IDS=["dist","train","cnt","liar","frost","mirror","nox","poison","dark","mix"];
 function storyChap(){const m=C&&/^s(\d+)n(\d+)$/.exec(C.id);return m?+m[1]:0}
 function mechSpecial(){return (typeof RUSH!=="undefined"&&RUSH.on)||(typeof NIGHT!=="undefined"&&NIGHT.on)||(typeof LIAR!=="undefined"&&LIAR.on)}
 function mechOf(){if(mechSpecial())return null;const c=storyChap();return c?MECH_IDS[c-1]:null}
 function mechDark(){if(mechSpecial())return false;return mechOf()==="dark"||!!(C&&C.dark)}
+function noX(){return !mechSpecial()&&!!C&&(mechOf()==="nox"||!!C.nox)}
 function mechLiar(){return !mechSpecial()&&C&&C.liar!=null&&mechOf()==="liar"}
 function nearPoison(r,c){if(!OBJ)return false;for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const rr=r+a,cc=c+b;if(rr>=0&&rr<N&&cc>=0&&cc<N&&OBJ[rr][cc]==="poison")return true}return false}
 function hasPoison(){if(!OBJ)return false;for(let r=0;r<N;r++)for(let c=0;c<N;c++)if(OBJ[r][c]==="poison")return true;return false}
@@ -46,6 +47,7 @@ var MREL={dist:1,knight:1,mirc:1,mird:1,mira:1};
     if(set.has("knight"))out.push(L("Un <b>crochet de balai</b> = 2 cases tout droit puis 1 sur le côté, comme le cavalier aux échecs.","A <b>broom hook</b> = 2 squares straight then 1 to the side, like a knight in chess.","<b>빗자루 꺾기</b> = 직진 2칸 후 옆으로 1칸, 체스의 나이트처럼 움직여요.","<b>ほうきターン</b>＝まっすぐ2マス進んで横に1マス。チェスのナイトと同じです。"));
     if(set.has("mirc")||set.has("mird")||set.has("mira")||set.has("mid"))out.push(L("Un <b>reflet</b> se trouve à la même distance de l'autre côté du centre ou de la diagonale.","A <b>reflection</b> sits the same distance away on the other side of the centre or of the diagonal.","<b>반사된 자리</b>는 중심이나 대각선 반대편, 같은 거리에 있어요.","<b>鏡写し</b>の位置は、中心や対角線の反対側、同じ距離のところです。"));
     if(set.has("poison"))out.push(L("☠️ Personne ne peut se tenir sur une <b>fiole de poison</b> ni sur les 8 cases autour (diagonales comprises).","☠️ Nobody can stand on a <b>poison flask</b> or on the 8 squares around it (diagonals included).","☠️ <b>독약 병</b> 위나 그 주변 8칸(대각선 포함)에는 아무도 있을 수 없어요.","☠️ <b>毒薬のびん</b>の上と、そのまわり8マス（ななめも含む）には誰もいられません。"));
+    if(noX())out.push(L("🚫 Dans cette enquête, impossible de barrer des cases : pas de croix !","🚫 In this case you can't cross out squares: no crosses!","🚫 이 사건에서는 칸에 X 표시를 할 수 없어요!","🚫 この事件ではマスに✕をつけられません！"));
     if(set.has("cnt"))out.push(L("Le <b>registre</b> compte tout le monde, victime comprise.","The <b>register</b> counts everyone, victim included.","<b>기록</b>은 피해자를 포함해 모든 사람을 세요.","<b>記録</b>は被害者も含めて全員を数えます。"));
     return out.length?`<p class="st-mech">${out.join("<br>")}</p>`:""}
   const _sh=storyHTML;storyHTML=function(){
@@ -58,6 +60,11 @@ var MREL={dist:1,knight:1,mirc:1,mird:1,mira:1};
   const _r=render;render=function(){_r.apply(this,arguments);const b=$("#tHint");if(!b||mechSpecial())return;
     if(mechLiar()){b.classList.add("nohint");b.disabled=true;b.innerHTML=`<span>🚫 ${L("Pas d'indice","No hints","힌트 없음","ヒントなし")}</span><small>${L("Quelqu'un ment…","Someone is lying…","누군가 거짓말을 해요…","誰かが嘘をついている……")}</small>`;
       if(S.solved){const el=document.querySelector(`.recit p[data-p="${C.liar}"]`);if(el)el.classList.add("lie")}}};
+  /* no crosses (stadium) */
+  const nxToast=()=>toast(L("Pas de croix ici : dans le vacarme du stade, impossible de barrer des cases. Place les suspects ou écris de petites notes.","No crosses here: in the roar of the stadium you can't cross out squares. Place suspects or write small notes.","여기서는 X 표시를 할 수 없어요. 경기장이 너무 시끄러워요! 용의자를 배치하거나 작은 메모를 적으세요.","ここでは✕をつけられない。競技場が騒がしすぎる！容疑者を置くか、小さなメモを書こう。"));
+  const _ap=applyPaint;applyPaint=function(r,c,mode){if(noX()&&mode==="add")return;return _ap.apply(this,arguments)};
+  const _rr=render;render=function(){if(noX()){if(tool==="x")tool=null;if(S&&S.xs&&Object.keys(S.xs).length)S.xs={}}_rr.apply(this,arguments);const b=$("#tX");if(b){b.classList.toggle("nox",noX());b.setAttribute("aria-disabled",noX())}};
+  document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest("#tX")&&noX()){e.stopImmediatePropagation();e.preventDefault();try{play("forbid")}catch(_){}nxToast()}},true);
   /* poison: green halo on flasks */
   const _rb=renderBoard;renderBoard=function(){_rb.apply(this,arguments);document.body.classList.toggle("mech-poison",!mechSpecial()&&hasPoison());
     document.body.classList.toggle("liar",mechLiar()||(typeof LIAR!=="undefined"&&LIAR.on))};
