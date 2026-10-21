@@ -10,7 +10,7 @@ const SHOP = {
   // music styles
   "m:box": 80, "m:lofi": 120, "m:fair": 120, "m:mystery": 150,
   // characters for the profile picture
-  "c:mandrake": 150, "c:snowman": 150, "c:gargoyle": 200, "c:owl": 200, "c:cauldron": 120, "c:statue": 250,
+  "c:fox": 200, "c:cat": 200, "c:snowowl": 200, "c:toad": 250, "c:dragon": 350, "c:mandrake": 150, "c:snowman": 150, "c:gargoyle": 200, "c:owl": 200, "c:cauldron": 120, "c:statue": 250,
   // ornaments around the profile picture
   "o:gold": 100, "o:flowers": 120, "o:stars": 150, "o:frost": 150, "o:flames": 200, "o:rainbow": 300,
   // titles

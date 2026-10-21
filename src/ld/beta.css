@@ -136,3 +136,4 @@ body.xs-spark #marks .xm::after{content:"✨"}
   .home.shopmode .h2-bar{width:min(980px,calc(100vw - 48px))}
 }
 .sh-tabs{cursor:grab}
+.cav img.cos-por{object-fit:cover;object-position:50% 20%;background:radial-gradient(circle at 50% 40%,#fff8e6,#e9d6ad)}
