@@ -1,5 +1,26 @@
 [
  {
+  "id": 32,
+  "date": "2026-10-21",
+  "icon": "⛶",
+  "fr": {
+   "t": "Mode plein écran",
+   "d": "Active le plein écran dans les Options, ou avec le bouton ⛶ en haut de l'écran pendant une enquête. Sur iPhone, ajoute le jeu à l'écran d'accueil (Partager › Sur l'écran d'accueil) puis lance-le depuis son icône."
+  },
+  "en": {
+   "t": "Full screen mode",
+   "d": "Turn on full screen in Options, or with the ⛶ button at the top of the screen during a case. On iPhone, add the game to your home screen (Share › Add to Home Screen) and open it from its icon."
+  },
+  "ko": {
+   "t": "전체 화면 모드",
+   "d": "설정에서, 또는 사건을 푸는 중 화면 위쪽의 ⛶ 버튼으로 전체 화면을 켤 수 있어요. 아이폰에서는 게임을 홈 화면에 추가한 뒤(공유 › 홈 화면에 추가) 아이콘으로 열어 주세요."
+  },
+  "ja": {
+   "t": "全画面モード",
+   "d": "設定、または事件の最中に画面上の⛶ボタンで全画面にできます。iPhoneでは、ゲームをホーム画面に追加して（共有 › ホーム画面に追加）、アイコンから開いてね。"
+  }
+ },
+ {
   "id": 31,
   "date": "2026-10-21",
   "icon": "🧩",
