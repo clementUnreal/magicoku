@@ -1,24 +1,30 @@
 import random, json, sys
 from gen import *
+MECHK={"dist","knight","mirc","mird","mira","mid","cnt"}
+def nmech(clues):return sum(1 for v in clues.values() for c in v if c[0] in MECHK)
 def construct(case,sol,rng,lv):
-    P=case["n"];pools=[pool(case,sol,p,max(lv,0)) for p in range(P)]
+    P=case["n"];pools={p:pool(case,sol,p,max(lv,0)) for p in range(P)}
+    gp=gpool(case,sol)
+    if gp:pools[-1]=gp
+    mm=case.get("mechMin",0)
     clues={}
     for it in range(3*P):
         ok,fs,rem=human(case,clues,P,lv,True)
         if ok: break
         best=None
         cands=[]
-        for p in range(P):
+        for p in pools:
             if len(clues.get(p,[]))>=2:continue
             for cl,w in pools[p]:
                 if cl in clues.get(p,[]):continue
                 cands.append((p,cl,w))
         rng.shuffle(cands)
+        if mm:cands.sort(key=lambda t:0 if t[1][0] in MECHK else 1)
         for p,cl,w in cands[:60]:
             c2={k:list(v) for k,v in clues.items()};c2.setdefault(p,[]).append(cl)
             ok2,fs2,rem2=human(case,c2,P,lv,True)
             # prefer persons without clue, weighted
-            val=rem2-(0 if p in clues else 3)-w*0.5-rng.random()
+            val=rem2-(0 if (p in clues or p<0) else 3)-w*0.5-rng.random()-(2.5 if (mm and cl[0] in MECHK and nmech(clues)<mm+1) else 0)
             if best is None or val<best[0]:best=(val,c2)
         if best is None: return None
         clues=best[1]
@@ -26,7 +32,9 @@ def construct(case,sol,rng,lv):
     if not ok:return None
     # prune
     items=[(p,cl) for p in clues for cl in clues[p]];rng.shuffle(items)
+    if mm:items.sort(key=lambda t:1 if t[1][0] in MECHK else 0)
     for p,cl in items:
+        if cl[0] in MECHK and nmech(clues)<=mm:continue
         c2={k:[x for x in v if not(k==p and x==cl)] for k,v in clues.items()}
         c2={k:v for k,v in c2.items() if v}
         if human(case,c2,P,lv)[0]:clues=c2
@@ -39,6 +47,7 @@ def run(case,minS,maxS,lv,needHarder,tries=400,seed=0):
         if not clues:continue
         ok,fs=human(case,clues,P,lv)
         if not(minS<=fs<=maxS):continue
+        if nmech(clues)<case.get("mechMin",0):continue
         if needHarder and human(case,clues,P,lv-1)[0]:continue
         # give every suspect at least one clue, without making it easier than intended
         for p in range(P):

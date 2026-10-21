@@ -88,6 +88,7 @@ TITLES={
 }
 # new objects: (fr with article, en with article, ko, ja, fr "de" form)
 OBJ={
+ "poison":("une fiole de poison","a poison flask","독약 병","毒薬のびん","d'une fiole de poison"),
  "tree":("un arbre","a tree","나무","木","d'un arbre"),"shroom":("des champignons","some mushrooms","버섯","キノコ","des champignons"),
  "rock":("un rocher","a rock","바위","岩","d'un rocher"),"stump":("une souche","a tree stump","그루터기","切り株","d'une souche"),
  "lamp":("un réverbère","a lamp post","가로등","街灯","d'un réverbère"),"luggage":("une pile de valises","a pile of suitcases","여행 가방 더미","スーツケースの山","d'une pile de valises"),

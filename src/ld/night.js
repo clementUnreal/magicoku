@@ -1,24 +1,25 @@
 
 /* ================= NIGHT MODE: the lantern ================= */
 var NIGHT={on:false,i:0,x:.5,y:.5,t0:0};
+function darkOn(){return NIGHT.on||(typeof mechDark==="function"&&!!C&&mechDark())}
 function nightDone(){try{return JSON.parse(localStorage.getItem("magicoku:night")||"{}")}catch(e){return {}}}
 (function(){
   const _prep=prep;prep=function(){if(NIGHT.on){const k=ci,keep=DATA[k];DATA[k]=NIGHT_DATA[NIGHT.i];try{_prep()}finally{DATA[k]=keep}}else _prep()};
-  const _rs=renderStatic;renderStatic=function(){_rs.apply(this,arguments);document.body.classList.toggle("night",NIGHT.on);
+  const _rs=renderStatic;renderStatic=function(){_rs.apply(this,arguments);document.body.classList.toggle("night",darkOn());
     if(NIGHT.on){const t=$("#caseTitle");if(t)t.textContent=`${TX(M.level)} · ${TX(M.title)}`}};
   /* fog layer inside the plan, under the player's marks */
   function fog(){const plan=$("#plan");if(!plan)return null;let f=plan.querySelector(".nfog");
-    if(!NIGHT.on||S.solved){if(f)f.remove();return null}
+    if(!darkOn()||S.solved){if(f)f.remove();return null}
     if(!f){f=document.createElement("div");f.className="nfog";const mk=$("#marks");plan.insertBefore(f,mk||null)}
     return f}
   function light(){const f=fog();if(!f)return;const plan=$("#plan"),w=plan.clientWidth,cell=w*.936/N;
     f.style.setProperty("--x",(NIGHT.x*100).toFixed(2)+"%");f.style.setProperty("--y",(NIGHT.y*100).toFixed(2)+"%");f.style.setProperty("--r",Math.round(cell*1.55)+"px")}
   const _rb=renderBoard;renderBoard=function(){_rb.apply(this,arguments);light();bind()};
   function bind(){const plan=$("#plan");if(!plan||plan._nb)return;plan._nb=true;
-    const mv=e=>{if(!NIGHT.on)return;const r=plan.getBoundingClientRect();NIGHT.x=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width));NIGHT.y=Math.min(1,Math.max(0,(e.clientY-r.top)/r.height));light()};
+    const mv=e=>{if(!darkOn())return;const r=plan.getBoundingClientRect();NIGHT.x=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width));NIGHT.y=Math.min(1,Math.max(0,(e.clientY-r.top)/r.height));light()};
     plan.addEventListener("pointermove",mv);plan.addEventListener("pointerdown",mv)}
   /* in the dark, story keywords don't light up the map */
-  if(typeof kwApply==="function"){const _ka=kwApply;kwApply=function(){_ka.apply(this,arguments);if(NIGHT.on)document.querySelectorAll("#marks .mk.kwhl").forEach(e=>e.classList.remove("kwhl","kw-room","kw-obj","kw-row","kw-col","kw-person"))}}
+  if(typeof kwApply==="function"){const _ka=kwApply;kwApply=function(){_ka.apply(this,arguments);if(darkOn())document.querySelectorAll("#marks .mk.kwhl").forEach(e=>e.classList.remove("kwhl","kw-room","kw-obj","kw-row","kw-col","kw-person"))}}
   /* start / end */
   window.startNight=function(j,fresh_){NIGHT.on=true;NIGHT.i=j;NIGHT.x=.5;NIGHT.y=.5;$("#home").hidden=true;openCase(ci);
     if(fresh_||S.solved){S=fresh();S.hlog=[];hist=[];save()}NIGHT.t0=Date.now();render();renderStatic();light()};

@@ -9,6 +9,7 @@ function deduceR(known){known=known||{};const PL=Object.assign({},known,S.place)
   const INV={south:"north",north:"south",east:"west",west:"east"};
   for(let it=0;it<60;it++){
     let ch=false;const set=(p,n,why_)=>{if(n.length!==cand[p].length){const keep=new Set(n.map(K));cand[p].forEach(x=>{const k=K(x);if(!keep.has(k)&&!why[p].has(k))why[p].set(k,why_)});cand[p]=n;ch=true}};
+    if(it===0&&typeof hasPoison==="function"&&hasPoison())for(let p=0;p<P;p++)set(p,cand[p].filter(x=>!nearPoison(x[0],x[1])),{t:"poison"});
     for(let p=0;p<P;p++)if(cand[p].length===1){const [r,c]=cand[p][0];for(let q=0;q<P;q++)if(q!==p)set(q,cand[q].filter(x=>x[0]!==r&&x[1]!==c),{t:"line",q:p,r,c,placed:!!S.place[p],known:!S.place[p]&&!!known[p]})}
     for(let p=0;p<P;p++)for(const [k,v] of (C.clues[p]||[])){
       if(k==="same"){const rq=new Set(cand[v].map(rm));set(p,cand[p].filter(x=>rq.has(rm(x))),{t:"same",q:v});const rp=new Set(cand[p].map(rm));set(v,cand[v].filter(x=>rp.has(rm(x))),{t:"same",q:p})}
@@ -17,7 +18,18 @@ function deduceR(known){known=known||{};const PL=Object.assign({},known,S.place)
         else{const hi=Math.max(...cand[v].map(x=>x[i]));set(p,cand[p].filter(x=>x[i]<hi),{t:k,q:v});const lo=Math.min(...cand[p].map(x=>x[i]));set(v,cand[v].filter(x=>x[i]>lo),{t:INV[k],q:p})}}
       if(k==="alone"){for(let q=0;q<P;q++)if(q!==p&&cand[q].length===1){const R=rm(cand[q][0]);set(p,cand[p].filter(x=>rm(x)!==R),{t:"alone",q})}
         if(cand[p].length===1){const R=rm(cand[p][0]);for(let q=0;q<P;q++)if(q!==p)set(q,cand[q].filter(x=>rm(x)!==R),{t:"alone2",q:p})}}
+      if(typeof MREL!=="undefined"&&MREL[k]){const q=k==="dist"?v[0]:v;
+        set(p,cand[p].filter(x=>cand[q].some(y=>mrel(k,v,x,y))),{t:"rel",k,v,a:p,q});
+        set(q,cand[q].filter(y=>cand[p].some(x=>mrel(k,v,x,y))),{t:"rel",k,v,a:p,q:p})}
+      if(k==="mid"){const [a,b]=v,has=(arr,r,c)=>arr.some(z=>z[0]===r&&z[1]===c);
+        set(p,cand[p].filter(x=>cand[a].some(y=>has(cand[b],2*x[0]-y[0],2*x[1]-y[1]))),{t:"mid",a:p,b1:a,b2:b});
+        set(a,cand[a].filter(y=>cand[p].some(x=>has(cand[b],2*x[0]-y[0],2*x[1]-y[1]))),{t:"mid",a:p,b1:a,b2:b});
+        set(b,cand[b].filter(z=>cand[p].some(x=>has(cand[a],2*x[0]-z[0],2*x[1]-z[1]))),{t:"mid",a:p,b1:a,b2:b})}
     }
+    for(const [k,v] of ((C.clues&&C.clues["-1"])||[]))if(k==="cnt"){const [Y,n]=v;
+      const sure=[...Array(P).keys()].filter(q=>cand[q].length&&cand[q].every(x=>rm(x)===Y)),poss=[...Array(P).keys()].filter(q=>cand[q].some(x=>rm(x)===Y));
+      if(sure.length===n)poss.forEach(q=>{if(!sure.includes(q))set(q,cand[q].filter(x=>rm(x)!==Y),{t:"cntfull",Y,n})});
+      if(poss.length===n)poss.forEach(q=>set(q,cand[q].filter(x=>rm(x)===Y),{t:"cntneed",Y,n}))}
     if(!ch){for(const i of [0,1])for(let j=0;j<N;j++){const ps=[...Array(P).keys()].filter(p=>cand[p].some(x=>x[i]===j));if(ps.length===1)set(ps[0],cand[ps[0]].filter(x=>x[i]===j),{t:"only",i,j})}
       if(cand[0].length===1){const R=rm(cand[0][0]);const inR=[...Array(P).keys()].filter(q=>q>0&&cand[q].length===1&&rm(cand[q][0])===R);
         if(inR.length)for(let q=1;q<P;q++){if(!inR.includes(q))set(q,cand[q].filter(x=>rm(x)!==R),{t:"killer"})}
@@ -44,6 +56,15 @@ function hReason(p,w){const X=hb(p),Q=w.q!=null?hb(w.q):"",f=M.people[p][1]==="f
     case "alone2":return L(`${Q} était ${fq?"seule":"seul"} dans sa pièce : personne d'autre ne peut y être.`,`${Q} was alone in their room: nobody else can be there.`,`${Q}${particle(pname(w.q),"은","는")} 자기 방에 혼자 있었어요. 다른 사람은 그 방에 있을 수 없어요.`,`${Q}は部屋に一人きりでした。ほかの人はその部屋にいられません。`);
     case "only":{const ln=w.i===0?L(`la rangée ${ROWS[w.j]}`,`row ${ROWS[w.j]}`,`${ROWS[w.j]}행`,`${ROWS[w.j]}行`):L(`la colonne ${w.j+1}`,`column ${w.j+1}`,`${w.j+1}열`,`${w.j+1}列`);
       return L(`Il faut bien quelqu'un dans ${ln}, et ${X} est la seule personne qui peut encore y aller.`,`Someone has to be in ${ln}, and ${X} is the only person who can still go there.`,`${ln}에는 누군가 있어야 하는데, 아직 갈 수 있는 사람은 ${X}뿐이에요.`,`${ln}には誰かがいるはずで、まだ行けるのは${X}だけです。`)}
+    case "poison":return L(`☠️ Personne ne peut se tenir sur une fiole de poison ni sur les 8 cases autour.`,`☠️ Nobody can stand on a poison flask or on the 8 squares around it.`,`☠️ 독약 병 위나 그 주변 8칸에는 아무도 있을 수 없어요.`,`☠️ 毒薬のびんの上とまわり8マスには誰もいられません。`);
+    case "rel":{const A=hb(w.a),B=hb(w.a===p?(w.k==="dist"?w.v[0]:w.v):w.a),O=w.a===p?(w.k==="dist"?hb(w.v[0]):hb(w.v)):hb(w.a);
+      const what={dist:L(`à exactement ${w.v&&w.v[1]} pas l'un de l'autre`,`exactly ${w.v&&w.v[1]} steps apart`,`정확히 ${w.v&&w.v[1]}걸음 떨어져`,`ちょうど${w.v&&w.v[1]}歩離れて`),knight:L("à un crochet de balai l'un de l'autre","one broom hook apart","빗자루 꺾기 한 번 거리에","ほうきターン1回の距離に"),
+        mirc:L("en reflet par rapport au centre","reflections through the centre","중심을 기준으로 반사된 자리에","中心をはさんで鏡写しに"),mird:L("en reflet par rapport à la grande diagonale","reflections across the long diagonal","대각선을 기준으로 반사된 자리에","対角線をはさんで鏡写しに"),mira:L("en reflet par rapport à l'autre diagonale","reflections across the other diagonal","다른 대각선을 기준으로 반사된 자리에","もう一本の対角線をはさんで鏡写しに")}[w.k];
+      const pa=hb(p),other=p===w.a?(w.k==="dist"?hb(w.v[0]):hb(w.v)):hb(w.a);
+      return L(`${pa} et ${other} étaient ${what} : depuis ces cases, aucune case encore possible pour ${other} ne convient.`,`${pa} and ${other} were ${what}: from these squares, none of ${other}'s remaining squares fits.`,`${pa}${particle(pname(p),"과","와")} ${other}${particle(other.replace(/<[^>]+>/g,""),"은","는")} ${what} 있었어요. 이 칸들에서는 ${other}의 남은 칸과 맞지 않아요.`,`${pa}と${other}は${what}いました。これらのマスからだと、${other}の残りのマスと合いません。`)}
+    case "mid":return L(`${hb(w.a)} était exactement au milieu entre ${hb(w.b1)} et ${hb(w.b2)} : ces cases n'ont pas de « case symétrique » possible.`,`${hb(w.a)} was exactly halfway between ${hb(w.b1)} and ${hb(w.b2)}: these squares have no possible “mirror square”.`,`${hb(w.a)}${particle(pname(w.a),"은","는")} ${hb(w.b1)}${particle(pname(w.b1),"과","와")} ${hb(w.b2)} 사이 한가운데에 있었어요. 이 칸들에는 가능한 대칭 칸이 없어요.`,`${hb(w.a)}は${hb(w.b1)}と${hb(w.b2)}のちょうど真ん中にいました。これらのマスには対称になるマスがありません。`);
+    case "cntfull":return L(`D'après le registre, ${rname(w.Y)} accueillait exactement ${w.n} personne${w.n>1?"s":""}, et ${w.n>1?"elles sont":"elle est"} déjà toutes trouvées : personne d'autre ne peut y être.`,`According to the register, ${rname(w.Y)} held exactly ${w.n} ${w.n>1?"people":"person"}, all already found: nobody else can be there.`,`기록에 따르면 ${rname(w.Y)}에는 정확히 ${w.n}명이 있었고 이미 모두 찾았어요. 다른 사람은 그곳에 있을 수 없어요.`,`記録によると${rname(w.Y)}にはちょうど${w.n}人がいて、もう全員わかっています。ほかの人はそこにいられません。`);
+    case "cntneed":return L(`D'après le registre, ${rname(w.Y)} accueillait exactement ${w.n} personne${w.n>1?"s":""}, et seules ${w.n>1?w.n+" personnes peuvent":"une personne peut"} encore y aller : elles doivent toutes y être.`,`According to the register, ${rname(w.Y)} held exactly ${w.n} ${w.n>1?"people":"person"}, and only that many can still go there: they must all be there.`,`기록에 따르면 ${rname(w.Y)}에는 정확히 ${w.n}명이 있었는데, 아직 그곳에 갈 수 있는 사람도 딱 그만큼이에요. 모두 그곳에 있어야 해요.`,`記録によると${rname(w.Y)}にはちょうど${w.n}人がいて、まだそこへ行ける人もちょうどその数です。全員そこにいるはずです。`);
     case "killer":return L(`Règle du meurtrier : une seule personne était seule avec la victime dans sa pièce.`,`Murderer rule: exactly one person was alone with the victim in their room.`,`범인 규칙: 피해자와 같은 방에 단둘이 있던 사람은 딱 한 명이에요.`,`犯人のルール：被害者と同じ部屋で二人きりだったのは、ちょうど一人だけです。`);}
   return ""}
 function hintText(e){const X=hb(e.p),n=e.U?e.U.length:0;

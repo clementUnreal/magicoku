@@ -1,5 +1,26 @@
 [
  {
+  "id": 31,
+  "date": "2026-10-21",
+  "icon": "🧩",
+  "fr": {
+   "t": "Une règle originale par chapitre",
+   "d": "Chaque chapitre du Mode histoire a maintenant sa propre mécanique : empreintes dans la forêt, train à ne pas rater à la gare, registre de la banque, marchand menteur, grand gel au village, reflets du lac, crochets de balai au stade, fioles de poison à l'hospice, ministère plongé dans le noir… et tout à la fois à la forteresse. Une fenêtre t'explique chaque nouvelle règle, et le bouton « Règle du chapitre » la rappelle à tout moment. Les niveaux de ces chapitres ont été renouvelés ; ceux que tu avais résolus restent comptés."
+  },
+  "en": {
+   "t": "An original rule in every chapter",
+   "d": "Every Story mode chapter now has its own mechanic: footprints in the forest, a train not to miss at the station, the bank's register, a lying merchant, the big freeze in the village, the lake's reflections, broom hooks at the stadium, poison flasks at the hospice, a ministry plunged into darkness… and all of them at once in the fortress. A window explains each new rule, and the “Chapter rule” button reminds you at any time. The levels in these chapters have been renewed; the ones you had solved still count."
+  },
+  "ko": {
+   "t": "장마다 새로운 규칙",
+   "d": "이제 스토리 모드의 각 장마다 고유한 규칙이 있어요. 숲의 발자국, 역에서 놓치면 안 되는 기차, 은행의 출입 기록, 거짓말하는 상인, 마을의 대한파, 호수의 반사, 경기장의 빗자루 꺾기, 병원의 독약 병, 어둠에 잠긴 마법부… 그리고 요새에서는 이 모든 것이 한꺼번에! 새 규칙마다 설명 창이 나오고, ‘이 장의 규칙’ 버튼으로 언제든 다시 볼 수 있어요. 이 장들의 레벨은 새로 바뀌었고, 이미 해결한 레벨은 그대로 인정돼요."
+  },
+  "ja": {
+   "t": "章ごとにオリジナルのルール",
+   "d": "ストーリーモードの各章に、それぞれ独自のルールが加わりました。森の足跡、駅で乗り遅れてはいけない汽車、銀行の記録、嘘をつく商人、村の大寒波、湖の鏡写し、競技場のほうきターン、病院の毒薬のびん、暗闇に沈んだ魔法省……そして要塞ではそのすべてが一度に！新しいルールは説明の画面で紹介され、「この章のルール」ボタンでいつでも見返せます。これらの章のレベルは新しくなりましたが、すでに解いたレベルはそのまま数えられます。"
+  }
+ },
+ {
   "id": 30,
   "date": "2026-10-21",
   "icon": "⭐",
