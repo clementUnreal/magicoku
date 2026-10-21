@@ -2666,7 +2666,7 @@ var UNLOCK={hRush:{lvl:10,name:["le Défi chrono","the Time trial","타임 챌�
 /* ================= Discovery mode (chapters I-III) vs Story mode (chapters 1-10) ================= */
 var LVMODE="disc";
 /* story mode temporarily closed while it is being reworked — open only for the testers below */
-var STORY_TESTERS=["clemonchichi"];
+var STORY_TESTERS=[]; /* nobody gets everything unlocked any more (admin codes stay with ADMIN_NAME) */
 function isTester(){try{const p=ACC&&ACC.profile&&ACC.profile.pseudo;return !!(p&&STORY_TESTERS.includes(String(p).trim().toLowerCase()))}catch(e){return false}}
 function storyLocked(){return false} /* story mode is open to everyone (levels unlock one by one) */
 (function(){
