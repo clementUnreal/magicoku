@@ -13,6 +13,7 @@ Live site: https://magicoku.scorclem.workers.dev (Cloudflare Worker, deploys aut
 
 ## Release checklist (every update)
 1. Edit sources in `src/`, run `sh src/build.sh`.
+   (build.sh also writes `repo/public/version.json`; open games compare it to their build and show a "new version" banner.)
 2. Bump the cache name `magicoku-vN` in `repo/public/sw.js`.
 3. **Add an entry at the top of `repo/public/news.json`** (next `id`, today's date, an emoji `icon`,
    and `t`/`d` texts in `fr`, `en`, `ko`, `ja`). Players see it in the in-game "✨ Nouveautés" panel

@@ -1079,6 +1079,10 @@ body.night #marks .mk.room{background:none!important}
 .oc .obj.o-poison .spr{width:80%;height:80%;align-items:center}
 .oc .obj.o-poison .spr img{animation:pzb 2.4s ease-in-out infinite;filter:drop-shadow(0 0 6px #6dff7e) drop-shadow(0 2px 0 #2a182499)}
 @keyframes pzb{50%{transform:translateY(-6%) rotate(-4deg)}}
+#updBar{position:fixed;left:50%;top:max(10px,env(safe-area-inset-top,0px));z-index:200;transform:translate(-50%,-160%);transition:transform .45s cubic-bezier(.2,1.3,.4,1);
+  display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;justify-content:center;max-width:calc(100vw - 24px);padding:10px 18px;border-radius:999px;border:2px solid #f0cf7a;cursor:pointer;
+  background:linear-gradient(#c43a54,#8d1d33);color:#fbefc8;font:600 15px var(--f-body);box-shadow:0 8px 24px #0008}
+#updBar.on{transform:translate(-50%,0)}#updBar span{text-decoration:underline;text-underline-offset:3px}
 #verdict{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;background:rgba(12,6,24,0);transition:background .3s;pointer-events:auto}
 #verdict[hidden]{display:none}
 #verdict.on{background:rgba(12,6,24,.72)}
@@ -3478,6 +3482,22 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);paint()};
   const _rs=renderStatic;renderStatic=function(){_rs.apply(this,arguments);paint()};
   paint();
+})();
+/* ================= "new version available" banner ================= */
+var APP_BUILD="848b9bbf40e2";
+(function(){
+  let shown=false;
+  async function check(){if(shown||APP_BUILD.startsWith("__"))return;
+    try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const v=await r.json();
+      if(v&&v.b&&v.b!==APP_BUILD)show()}catch(_){}}
+  function show(){shown=true;const b=document.createElement("button");b.id="updBar";
+    b.innerHTML=`✨ <b>${L("Nouvelle version de Magicoku !","New version of Magicoku!","Magicoku 새 버전이 나왔어요!","Magicokuの新しいバージョン！")}</b> <span>${L("Touche ici pour mettre à jour","Tap here to update","눌러서 업데이트하기","タップして更新")}</span>`;
+    b.onclick=()=>{try{if(S)save()}catch(_){}b.textContent="…";
+      const go=()=>location.reload();
+      if(navigator.serviceWorker&&navigator.serviceWorker.getRegistration)navigator.serviceWorker.getRegistration().then(g=>g&&g.update()).catch(()=>{}).finally(()=>setTimeout(go,400));else go()};
+    document.body.appendChild(b);requestAnimationFrame(()=>b.classList.add("on"))}
+  setTimeout(check,4000);setInterval(check,5*60*1000);
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden)check()});
 })();
 
 render();
