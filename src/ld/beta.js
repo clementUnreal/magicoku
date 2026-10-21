@@ -85,7 +85,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
   const home=document.querySelector(".home-in");
   function panel(id){let p=$("#"+id);if(!p){p=document.createElement("div");p.className="home-panel beta-panel";p.id=id;p.hidden=true;home.appendChild(p)}return p}
   const MY=["pDaily","pShop","pProfile"];
-  const _show=show;show=function(pn){MY.forEach(id=>{const e=$("#"+id);if(e)e.hidden=true});
+  const _show=show;show=function(pn){MY.forEach(id=>{const e=$("#"+id);if(e)e.hidden=true});document.querySelector(".home-in").classList.toggle("shopmode",pn==="pShop");document.querySelector(".home").classList.toggle("shopmode",pn==="pShop");
     if(MY.includes(pn)){_show("__none__");["hMain","pLevels","pOptions","pAccount","pRank","pRush","pNight","pLiar"].forEach(id=>{const e=$("#"+id);if(e)e.hidden=true});
       const p=panel(pn);p.hidden=false;if(pn==="pDaily")renderDaily(true);else if(pn==="pShop")renderShop();else renderProfile();
       const bar=$("#h2Bar");if(bar)bar.querySelectorAll("button").forEach(b=>b.classList.toggle("on",(pn==="pProfile"&&b.id==="hAccount")||(pn==="pShop"&&b.id==="h2Shop")));
@@ -114,23 +114,30 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     if(fetch_){api("/api/daily?date="+date).then(r=>{if(r.ok){BETA.daily=r.d;if(BETA.tab==="today"&&!panel("pDaily").hidden)$("#dlRows").innerHTML=rowsHTML(r.d.rows)}}).catch(()=>{});
       api("/api/daily?date="+y).then(r=>{if(r.ok){BETA.dailyY=r.d;if(BETA.tab!=="today"&&!panel("pDaily").hidden)$("#dlRows").innerHTML=rowsHTML(r.d.rows)}}).catch(()=>{})}}
   /* ---------- shop ---------- */
+  const SPARK=`data:image/svg+xml;base64,${btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M44 8 C48 34 52 40 78 46 C52 52 48 58 44 86 C40 58 36 52 10 46 C36 40 40 34 44 8Z" fill="#f2c443" stroke="#3a1f3d" stroke-width="5" stroke-linejoin="round"/><path d="M44 22 C46 38 48 42 62 46 C48 48 46 52 44 62Z" fill="#ffe8a0"/><path d="M78 10 C79 20 81 22 90 23 C81 24 79 26 78 36 C77 26 75 24 66 23 C75 22 77 20 78 10Z" fill="#f2c443" stroke="#3a1f3d" stroke-width="4" stroke-linejoin="round"/></svg>')}`;
+  const MKI=k=>k==="spark"?SPARK:(typeof MK_IMG!=="undefined"&&MK_IMG[k])||"";
+  (function(){const st=document.createElement("style");st.textContent=["star","moon","heart","skull","paw","spark"].map(k=>`body.xs-${k} #marks .xm::after{content:"";display:block;width:118%;height:118%;background:url(${MKI(k)}) center/contain no-repeat}`).join("\n");document.head.appendChild(st)})();
+  const SUB={x:["Ta signature sur le plateau","Your signature on the board","판 위의 나만의 표시","盤上のきみのしるし"],m:["L'ambiance de l'Académie","The Academy's atmosphere","아카데미의 분위기","アカデミーの雰囲気"],c:["Ton visage dans le classement","Your face on the leaderboard","순위표 속 나의 얼굴","ランキングでのきみの顔"],
+    o:["Pour briller autour de ton portrait","To shine around your portrait","초상화를 빛내는 장식","肖像のまわりを輝かせよう"],t:["Sous ton nom, aux yeux de tous","Under your name, for all to see","모두가 보는 이름 아래 칭호","名前の下に、みんなに見える称号"],n:["Rebaptise les suspects","Rename the suspects","용의자 이름 바꾸기","容疑者に名前をつけ直そう"]};
   function preview(cat,it){const me=ACC.profile||{};
-    if(cat==="x")return `<span class="sp-x ${it[0]==="x:none"?"":"xs-"+it[0].slice(2)}">${it[0]==="x:none"?XSVG:it[2]}</span>`;
-    if(cat==="c")return it[0]==="c:none"?cosAv(me.avatar,null,"sp-av"):`<span class="cav sp-av"><img class="cos-chara" src="${SPR[it[2]]}" alt=""></span>`;
-    if(cat==="o")return `<span class="cav sp-av ${it[0]==="o:none"?"":"orn-"+it[0].slice(2)}"><img src="${POR[me.avatar]||POR[AVS[0]]}" alt=""></span>`;
-    if(cat==="t")return `<span class="sp-t">${it[0]==="t:none"?"—":TX(it[3])}</span>`;
-    return `<span class="sp-e">${it[2]}</span>`}
-  function renderShop(){const p=panel("pShop"),w=BETA.w,cat=BETA.shopCat,me=acc();
-    if(!me){p.innerHTML=back()+`<h2>🛍️ ${L("Boutique","Shop","상점","ショップ")}</h2><p class="rk-msg">${L("Crée ton compte pour utiliser la boutique.","Create an account to use the shop.","상점을 이용하려면 계정을 만드세요.","ショップを使うにはアカウントを作ってね。")}</p>`;return}
+    if(cat==="x")return `<span class="sp-tile">${it[0]==="x:none"?`<span class="sp-xsvg">${XSVG}</span>`:`<img src="${MKI(it[0].slice(2))}" alt="">`}</span>`;
+    if(cat==="c")return `<span class="sp-tile">${it[0]==="c:none"?cosAv(me.avatar,null,"sp-av"):`<img class="sp-big" src="${SPR[it[2]]}" alt="">`}</span>`;
+    if(cat==="o")return `<span class="sp-tile"><span class="cav sp-av ${it[0]==="o:none"?"":"orn-"+it[0].slice(2)}"><img src="${POR[me.avatar]||POR[AVS[0]]}" alt=""></span></span>`;
+    if(cat==="t")return `<span class="sp-tile"><span class="sp-t">${it[0]==="t:none"?"—":TX(it[3])}</span></span>`;
+    return `<span class="sp-tile"><span class="sp-e">${it[2]}</span></span>`}
+  const CAT_IC={x:`<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>`,m:"🎵",c:"🧙",o:"💫",t:"🏷️",n:"✒️"};
+  function renderShop(){const p=panel("pShop"),w=BETA.w,cat=BETA.shopCat,me=acc();p.classList.add("shop2");
+    const head=`<div class="sh-head"><button class="sh-back" data-bk aria-label="${L("Retour","Back","뒤로","戻る")}">←</button><div class="sh-title"><h2><i>✦</i>${L("Boutique","Shop","상점","ショップ")}<i>✦</i></h2><small>${L("Personnalise ton enquête","Customise your investigation","나만의 추리 꾸미기","捜査をカスタマイズ")}</small></div><div class="sh-coins">🌙 <b>${w?w.coins:"…"}</b></div></div>`;
+    if(!me){p.innerHTML=head+`<p class="rk-msg">${L("Crée ton compte pour utiliser la boutique.","Create an account to use the shop.","상점을 이용하려면 계정을 만드세요.","ショップを使うにはアカウントを作ってね。")}</p>`;return}
     const owned=new Set(w?w.owned:[]),eq=w?w.eq:{};
-    p.innerHTML=back()+`<h2>🛍️ ${L("Boutique","Shop","상점","ショップ")}</h2>${beta()}
-      <div class="sh-wallet">${L("Tes éclats de lune","Your moon shards","내 달 조각","月のかけら")} : ${shards(w?w.coins:"…")}${String(me.pseudo).toLowerCase()==="clemonchichi"?`<button class="sh-grant" id="shGrant">+500 (test)</button>`:""}</div>
-      <div class="rk-chips sh-cats">${SHOP_CATS.map(([k,ic,n])=>`<button class="rk-chip${k===cat?" on":""}" data-cat="${k}">${ic} ${TX(n)}</button>`).join("")}</div>
-      <div class="sh-grid">${SHOP_ITEMS[cat].map(it=>{const isNone=it[0].endsWith(":none"),own=isNone||owned.has(it[0]),on=isNone?!eq[cat]:eq[cat]===it[0];
-        const btn=cat==="n"?(own?`<button class="pill" data-ren>${L("Renommer","Rename","이름 바꾸기","名前を変える")}</button>`:`<button class="pill red" data-buy="${it[0]}">${it[1]} ${SHARD}</button>`)
-          :on?`<span class="sh-on">✓ ${L("Équipé","Equipped","장착 중","装備中")}</span>`:own?`<button class="pill" data-eq="${it[0]}">${L("Équiper","Equip","장착","装備")}</button>`:`<button class="pill red" data-buy="${it[0]}" ${w&&w.coins<it[1]?"disabled":""}>${it[1]} ${SHARD}</button>`;
-        return `<div class="sh-it${on?" on":""}"><div class="sh-pv">${preview(cat,it)}</div><b>${TX(it[3])}</b>${btn}</div>`}).join("")}</div>
-      ${cat==="n"&&owned.has("n:rename")?renEditor():""}<p class="sh-msg" id="shMsg"></p>`}
+    p.innerHTML=head+`<div class="sh-tabs">${SHOP_CATS.map(([k,ic,n])=>`<button class="sh-tab${k===cat?" on":""}" data-cat="${k}"><span class="sh-ti">${CAT_IC[k]}</span>${k==="x"?L("Marqueurs","Markers","표시","マーカー"):TX(n)}</button>`).join("")}</div>
+      <div class="sh-sub"><i></i><span>✦ ${TX(SUB[cat])} ✦</span><i></i></div>
+      <div class="sh-grid">${SHOP_ITEMS[cat].map(it=>{const isNone=it[0].endsWith(":none"),own=isNone||owned.has(it[0]),on=isNone?!eq[cat]:eq[cat]===it[0],poor=w&&w.coins<it[1];
+        const btn=cat==="n"?(own?`<button class="sh-btn eq" data-ren>${L("Renommer","Rename","이름 바꾸기","名前を変える")}</button>`:`<button class="sh-btn buy${poor?" poor":""}" data-buy="${it[0]}">🔒 ${it[1]} 🌙</button>`)
+          :on?`<span class="sh-btn on">✓ ${L("Équipé","Equipped","장착 중","装備中")}</span>`:own?`<button class="sh-btn eq" data-eq="${it[0]}">${L("Équiper","Equip","장착","装備")}</button>`:`<button class="sh-btn buy${poor?" poor":""}" data-buy="${it[0]}">🔒 ${it[1]} 🌙</button>`;
+        return `<div class="sh-it${on&&cat!=="n"?" on":""}"><div class="sh-pv">${preview(cat,it)}</div><b>${TX(it[3])}</b>${btn}</div>`}).join("")}</div>
+      ${cat==="n"&&owned.has("n:rename")?renEditor():""}<p class="sh-msg" id="shMsg"></p>
+      <div class="sh-foot">✦ ${L("Gagne des éclats en résolvant des enquêtes.","Earn shards by solving cases.","사건을 해결하면 달 조각을 받아요.","事件を解くとかけらがもらえます。")} ✦ ${String(me.pseudo).toLowerCase()==="clemonchichi"?`<button class="sh-grant" id="shGrant">+500 (test)</button>`:""}</div>`}
   function baseNames(){const s=new Set();Object.values(META).forEach(m=>(m.people||[]).forEach(pp=>s.add(pp[0])));return [...s].filter(Boolean).sort()}
   function renEditor(){const w=BETA.w||{names:{}};return `<div class="sh-ren"><p>${L("Donne de nouveaux noms aux personnages (laisse vide pour garder l'original). Ces noms ne changent que pour toi.","Give the characters new names (leave empty to keep the original). These names only change for you.","캐릭터에게 새 이름을 지어 주세요(비워 두면 원래 이름). 나에게만 바뀌어요.","キャラクターに新しい名前をつけよう（空欄なら元の名前）。自分にだけ反映されます。")}</p>
     ${baseNames().map(n=>`<label><span>${esc(n)}</span><input data-rn="${esc(n)}" maxlength="16" value="${esc((w.names||{})[n]||"")}" placeholder="${esc(n)}"></label>`).join("")}<button class="pill red" id="shRenSave">${L("Enregistrer les noms","Save the names","이름 저장","名前を保存")}</button></div>`}
@@ -163,7 +170,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     if(t.id==="dlPlay"){startDaily();return}
     if(t.dataset.dt){BETA.tab=t.dataset.dt==="today"?"today":"y";renderDaily(false);return}
     if(t.dataset.cat){BETA.shopCat=t.dataset.cat;renderShop();return}
-    if(t.dataset.buy){const it=shopItem(t.dataset.buy);if(t.dataset.armed){shopAct({action:"buy",item:it[0]})}else{t.dataset.armed=1;t.textContent=L("Acheter ?","Buy?","구매할까요?","買う？")}return}
+    if(t.dataset.buy){const it=shopItem(t.dataset.buy);if(BETA.w&&BETA.w.coins<it[1]){try{play("forbid")}catch(_){}const m=$("#shMsg");if(m)m.textContent=L(`Il te manque ${it[1]-BETA.w.coins} 🌙 pour cet objet.`,`You need ${it[1]-BETA.w.coins} more 🌙 for this item.`,`이 아이템을 사려면 🌙 ${it[1]-BETA.w.coins}개가 더 필요해요.`,`このアイテムにはあと🌙${it[1]-BETA.w.coins}個必要です。`);return}if(t.dataset.armed){shopAct({action:"buy",item:it[0]})}else{t.dataset.armed=1;t.classList.add("ask");t.textContent=L(`Acheter pour ${it[1]} 🌙 ?`,`Buy for ${it[1]} 🌙?`,`🌙 ${it[1]}개로 구매?`,`🌙${it[1]}で買う？`)}return}
     if(t.dataset.eq){shopAct({action:"equip",item:t.dataset.eq,slot:t.dataset.eq.split(":")[0]});return}
     if(t.hasAttribute("data-ren")){const ed=document.querySelector(".sh-ren");if(ed)ed.scrollIntoView({behavior:"smooth"});return}
     if(t.id==="shRenSave"){const names={};document.querySelectorAll("[data-rn]").forEach(i=>{if(i.value.trim())names[i.dataset.rn]=i.value.trim()});if(await shopAct({action:"names",names})){const m=$("#shMsg");if(m)m.textContent=L("Noms enregistrés !","Names saved!","이름을 저장했어요!","名前を保存しました！")}return}
