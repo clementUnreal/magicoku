@@ -274,8 +274,27 @@ export class Leaderboard extends DurableObject {
     const key = "p:" + id, prev = await this.ctx.storage.get(key), tok = await sha(token);
     if (prev && prev.tok && prev.tok !== tok) return { status: 403, body: { error: "forbidden" } };
     const row = { id, pseudo: clean(body.pseudo, 20) || "Détective", avatar: clean(body.avatar, 20), ...summarize(body.progress) };
-    await this.ctx.storage.put(key, { tok, row, prog: sanitizeProgress(body.progress), at: Date.now() });
-    return { status: 200, body: { ok: true } };
+    const prog = sanitizeProgress(body.progress);
+    // moon shards: +10 for every level solved for the first time from now on (per detective name)
+    let earned = 0;
+    try {
+      const pk = row.pseudo.trim().toLowerCase(), w = await this.wallet(row.pseudo);
+      if (!w.base) {
+        const done = new Set();
+        const all = await this.ctx.storage.list({ prefix: "p:" });
+        for (const v of all.values()) if (v && v.row && String(v.row.pseudo).trim().toLowerCase() === pk && v.prog) Object.keys(v.prog).forEach((k) => done.add(k));
+        w.done = [...done]; w.base = Date.now();
+      }
+      const done = new Set(w.done || []);
+      for (const k of Object.keys(prog)) if (!done.has(k)) { done.add(k); earned += 10; }
+      if (earned || !w.base0) {
+        w.done = [...done]; w.base0 = true; w.coins += earned;
+        if (earned) { (w.log = w.log || []).unshift({ at: Date.now(), n: earned, why: "levels" }); w.log = w.log.slice(0, 30); }
+        await this.saveWallet(row.pseudo, w);
+      }
+    } catch {}
+    await this.ctx.storage.put(key, { tok, row, prog, at: Date.now() });
+    return { status: 200, body: { ok: true, earned } };
   }
 }
 

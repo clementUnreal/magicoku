@@ -73,7 +73,14 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     try{localStorage.setItem("magicoku:daily:"+date,JSON.stringify({t,e,h,rank:r.d.rank}))}catch(_){}
     el.innerHTML=`<div class="dw-rank">${L(`Tu es <b>${r.d.rank===1?"1er":r.d.rank+"ᵉ"}</b> sur ${r.d.of} pour l'instant`,`You're <b>#${r.d.rank}</b> of ${r.d.of} so far`,`현재 ${r.d.of}명 중 <b>${r.d.rank}위</b>`,`現在${r.d.of}人中<b>${r.d.rank}位</b>`)}</div><div class="dw-gain">+${shards(r.d.earned)}</div><small>${L(`Total : ${r.d.coins} ${SHARD}`,`Total: ${r.d.coins} ${SHARD}`,`합계: ${r.d.coins} ${SHARD}`,`合計：${r.d.coins} ${SHARD}`)}</small>`;
     loadWallet()}
-  const _sr=showReveal;showReveal=function(){if(DAILY.on){dailyWin();return}return _sr.apply(this,arguments)};
+  const _sr=showReveal;showReveal=function(){if(DAILY.on){dailyWin();return}
+    const special=(typeof RUSH!=="undefined"&&RUSH.on)||(typeof NIGHT!=="undefined"&&NIGHT.on)||(typeof LIAR!=="undefined"&&LIAR.on);
+    const pr=ACC.profile&&ACC.profile.progress&&ACC.profile.progress[C.id],first=!special&&!!acc()&&!(pr&&pr.solved);
+    const out=_sr.apply(this,arguments);
+    if(first&&betaOn()){const box=document.querySelector("#reveal .box");const st=box&&box.querySelector(".rv-stars");
+      if(st)st.insertAdjacentHTML("afterend",`<div class="rv-shards">+10 ${SHARD} <small>${L("éclats de lune gagnés","moon shards earned","달 조각 획득","月のかけら獲得")}</small></div>`);
+      setTimeout(()=>loadWallet().then(()=>{try{renderHome()}catch(_){}}),2500)}
+    return out};
   /* ---------- panels ---------- */
   const home=document.querySelector(".home-in");
   function panel(id){let p=$("#"+id);if(!p){p=document.createElement("div");p.className="home-panel beta-panel";p.id=id;p.hidden=true;home.appendChild(p)}return p}
@@ -81,7 +88,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
   const _show=show;show=function(pn){MY.forEach(id=>{const e=$("#"+id);if(e)e.hidden=true});
     if(MY.includes(pn)){_show("__none__");["hMain","pLevels","pOptions","pAccount","pRank","pRush","pNight","pLiar"].forEach(id=>{const e=$("#"+id);if(e)e.hidden=true});
       const p=panel(pn);p.hidden=false;if(pn==="pDaily")renderDaily(true);else if(pn==="pShop")renderShop();else renderProfile();
-      const bar=$("#h2Bar");if(bar)bar.querySelectorAll("button").forEach(b=>b.classList.toggle("on",pn==="pProfile"&&b.id==="hAccount"));
+      const bar=$("#h2Bar");if(bar)bar.querySelectorAll("button").forEach(b=>b.classList.toggle("on",(pn==="pProfile"&&b.id==="hAccount")||(pn==="pShop"&&b.id==="h2Shop")));
       try{document.querySelector(".home").scrollTo(0,0)}catch(_){}}else _show(pn)};
   const back=()=>`<button class="hb small back top" data-bk>${L("← Retour","← Back","← 뒤로","← 戻る")}</button>`;
   const beta=()=>`<span class="beta-tag">BÊTA · ${L("visible par toi seul","only you can see this","나만 볼 수 있어요","自分だけに表示")}</span>`;
@@ -140,7 +147,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     const solved=Object.values(me.progress||{}).filter(x=>x.solved);
     const d={pseudo:me.pseudo,avatar:me.avatar,solved:solved.length,time:solved.reduce((a,x)=>a+(x.time||0),0),hints:solved.reduce((a,x)=>a+(x.hints||0),0),played:BETA.w?BETA.w.played:0,wins:BETA.w?BETA.w.wins:0,cos:myCos()};
     p.innerHTML=back()+`<h2>👤 ${L("Mon profil","My profile","내 프로필","プロフィール")}</h2>${beta()}${card(d,true)}
-      <div class="pf-acts"><button class="pill red" id="pfShop">🛍️ ${L("Boutique","Shop","상점","ショップ")}</button><button class="pill" id="pfDaily">🗓️ ${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")}</button><button class="pill" id="pfEdit">✏️ ${L("Modifier mon compte","Edit my account","계정 수정","アカウント編集")}</button></div>`}
+      <div class="pf-acts"><button class="pill red" id="pfDaily">🗓️ ${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")}</button><button class="pill" id="pfEdit">✏️ ${L("Modifier mon compte","Edit my account","계정 수정","アカウント編集")}</button></div>`}
   async function openProfile(pseudo){let m=$("#mProf");if(!m){m=document.createElement("div");m.id="mProf";m.className="modal";document.body.appendChild(m);m.addEventListener("click",e=>{if(e.target===m||e.target.closest(".mclose"))m.hidden=true})}
     m.innerHTML=`<div class="mbox pf-box"><button class="mclose" aria-label="✕">✕</button><p class="rk-msg">${L("Chargement…","Loading…","불러오는 중…","読み込み中…")}</p></div>`;m.hidden=false;
     const r=await api("/api/profile?pseudo="+encodeURIComponent(pseudo)).catch(()=>null);
@@ -148,6 +155,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
   /* ---------- events ---------- */
   document.addEventListener("click",async e=>{const t=e.target.closest&&e.target.closest("button,[data-prof]");if(!t)return;
     if(t.id==="h2Daily"){e.stopPropagation();show("pDaily");try{play("page")}catch(_){}return}
+    if(t.id==="h2Shop"){e.stopPropagation();show("pShop");try{play("page")}catch(_){}loadWallet().then(()=>{if(!panel("pShop").hidden)renderShop()});return}
     if(t.id==="hAccount"&&betaOn()&&ACC.profile&&ACC.profile.pseudo){e.stopPropagation();show("pProfile");loadWallet().then(()=>{if(!panel("pProfile").hidden)renderProfile()});return}
     if(!t.closest(".beta-panel")&&!t.closest("#rk2")&&!t.closest("#mProf"))return;
     if(t.dataset.prof!=null&&betaOn()){openProfile(t.dataset.prof);return}
@@ -163,7 +171,11 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     if(t.id==="pfShop"){show("pShop");return}if(t.id==="pfDaily"){show("pDaily");return}if(t.id==="pfEdit"){show("pAccount");return}
   },true);
   /* home: daily card (beta) + greeting cosmetics */
+  const BAG=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12.5H6.2zM9 8V6.5a3 3 0 0 1 6 0V8"/></svg>`;
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);const on=betaOn();let c=$("#h2Daily");
+    const bar=$("#h2Bar");let sb=$("#h2Shop");
+    if(bar){if(on&&!sb){sb=document.createElement("button");sb.id="h2Shop";const rk=$("#hRank");(rk&&rk.parentNode===bar?rk:bar.lastChild).after(sb)}
+      if(!on&&sb)sb.remove();if(sb)sb.innerHTML=BAG+`<span>${L("Boutique","Shop","상점","ショップ")}</span>`;bar.classList.toggle("five",on)}
     if(!on){if(c)c.remove();return}
     const sec=$("#h2Sec");if(!c&&sec){c=document.createElement("button");c.id="h2Daily";c.className="h2-daily";sec.before(c)}
     if(c){const date=parisDate();let mine=null;try{mine=JSON.parse(localStorage.getItem("magicoku:daily:"+date)||"null")}catch(_){}

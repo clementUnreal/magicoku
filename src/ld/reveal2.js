@@ -5,7 +5,7 @@
   const esc=s=>String(s==null?"":s).replace(/[<>&"]/g,"");
   const hintsW=n=>L(n>1?"indices":"indice",n>1?"hints":"hint","힌트","ヒント");
   const triesW=n=>L(n>1?"tentatives":"tentative",n>1?"tries":"try","시도","回挑戦");
-  const place=n=>L(n===1?"1re":n+"ᵉ",n===1?"1st":n===2?"2nd":n===3?"3rd":n+"th",n+"위",n+"位");
+  const place=n=>L(n===1?"1er":n+"ᵉ",n===1?"1st":n===2?"2nd":n===3?"3rd":n+"th",n+"위",n+"位");
   function isMe(r){const p=ACC.profile;if(!p||!p.pseudo)return false;return r.id===p.pid||String(r.pseudo||"").trim().toLowerCase()===String(p.pseudo).trim().toLowerCase()}
   function rankBlock(rows){
     if(!rows)return `<p class="rv-msg">${L("Classement indisponible hors ligne.","Ranking unavailable offline.","오프라인에서는 순위를 볼 수 없어요.","オフラインではランキングを表示できません。")}</p>`;

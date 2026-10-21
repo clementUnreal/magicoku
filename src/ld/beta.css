@@ -79,3 +79,6 @@ body.xs-paw #marks .xm::after{content:"🐾"}
 body.xs-spark #marks .xm::after{content:"✨"}
 #marks .xm.preview::after{opacity:.45}
 .sp-x{background:#e9dcc0;border-radius:10px}
+.h2-bar.five{grid-template-columns:repeat(5,1fr)}
+.h2-bar.five button span{font-size:clamp(10px,3vw,12.5px)}
+.rv-shards{font:900 22px "Cinzel",Georgia,serif;color:#6b4bb8;animation:rvpop .5s cubic-bezier(.2,1.5,.4,1) .6s both}.rv-shards small{font:600 13px var(--f-body);color:#7a6250}
