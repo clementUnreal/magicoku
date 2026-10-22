@@ -272,6 +272,21 @@ export class Leaderboard extends DurableObject {
     const w = await this.wallet(best.pseudo);
     return { pseudo: best.pseudo, avatar: best.avatar, solved: best.solved, hints: best.hints, time: best.time, wins: w.wins || 0, played: w.played || 0, cos: this.pub(w) };
   }
+  // ---- presence: who is playing right now ----
+  async ping(body) {
+    const row = await this.auth(body.id, String(body.token || ""));
+    if (!row) return { status: 403, body: { error: "forbidden" } };
+    const on = (await this.ctx.storage.get("__online")) || {}, now = Date.now();
+    for (const k in on) if (now - on[k].at > 3600000) delete on[k];
+    on[String(row.pseudo).trim().toLowerCase()] = { at: now, p: body.playing ? 1 : 0 };
+    await this.ctx.storage.put("__online", on);
+    return { status: 200, body: { ok: true } };
+  }
+  async presence() {
+    const on = (await this.ctx.storage.get("__online")) || {}, now = Date.now(), out = {};
+    for (const [k, v] of Object.entries(on)) out[k] = { ago: Math.round((now - v.at) / 1000), p: v.p };
+    return out;
+  }
   async submit(body) {
     const id = clean(body.id, 64), token = String(body.token || "");
     if (!/^[\w-]{8,64}$/.test(id) || token.length < 8) return { status: 400, body: { error: "bad id" } };
@@ -325,6 +340,11 @@ export default {
     if (url.pathname === "/api/progress") return json({});
     if (url.pathname === "/api/daily" && request.method === "GET") return json(await env.LB.get(env.LB.idFromName("main")).daily(url.searchParams.get("date")));
     if (url.pathname === "/api/profile") { const r = await env.LB.get(env.LB.idFromName("main")).profile(clean(url.searchParams.get("pseudo"), 20)); return r ? json(r) : json({ error: "unknown" }, 404); }
+    if (url.pathname === "/api/presence") return json(await env.LB.get(env.LB.idFromName("main")).presence());
+    if (url.pathname === "/api/ping" && request.method === "POST") {
+      let body; try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
+      const r = await env.LB.get(env.LB.idFromName("main")).ping(body); return json(r.body, r.status);
+    }
     if (url.pathname === "/api/daily" || url.pathname === "/api/shop") {
       if (request.method !== "POST") return json({ error: "method" }, 405);
       let body;

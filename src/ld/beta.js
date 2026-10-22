@@ -19,8 +19,8 @@ function shopItem(id){for(const k in SHOP_ITEMS)for(const it of SHOP_ITEMS[k])if
 function titleBan(id,cls){const k=id.slice(2),src=typeof TT_IMG!=="undefined"&&TT_IMG[k];const it=shopItem(id);if(!it)return "";return src?`<img class="cos-ban ${cls||""}" src="${src}" alt="${TX(it[3])}" title="${TX(it[3])}">`:`<small class="cos-title">${TX(it[3])}</small>`}
 function cosTitle(cos){if(!shopOn()||!cos||!cos.title)return "";return titleBan(cos.title)}
 function charaSrc(it){return it[2].startsWith("@")?(typeof CH_IMG!=="undefined"?CH_IMG[it[2].slice(1)]:""):SPR[it[2]]}
-function cosAv(avatar,cos,cls){const it=shopOn()&&cos&&cos.chara&&shopItem(cos.chara);const img=it?`<img class="${it[2].startsWith("@")?"cos-por":"cos-chara"}" src="${charaSrc(it)}" alt="">`:`<img src="${POR[avatar]||POR[AVS[0]]}" alt="">`;
-  return `<span class="cav ${cls||""} ${shopOn()&&cos&&cos.orn?"orn-"+cos.orn.slice(2):""}">${img}</span>`}
+function cosAv(avatar,cos,cls,pres){const it=shopOn()&&cos&&cos.chara&&shopItem(cos.chara);const img=it?`<img class="${it[2].startsWith("@")?"cos-por":"cos-chara"}" src="${charaSrc(it)}" alt="">`:`<img src="${POR[avatar]||POR[AVS[0]]}" alt="">`;
+  return `<span class="cav ${cls||""} ${shopOn()&&cos&&cos.orn?"orn-"+cos.orn.slice(2):""}"${pres?` data-pres="${String(pres).replace(/"/g,"")}"`:""}>${img}${pres&&typeof presDot==="function"?presDot(pres):""}</span>`}
 function myCos(){const w=BETA.w;return w?{title:w.eq.t||null,orn:w.eq.o||null,chara:w.eq.c||null}:null}
 const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
 (function(){
@@ -100,7 +100,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
   function rowsHTML(rows){if(!rows)return `<p class="rk-msg">${L("Chargement…","Loading…","불러오는 중…","読み込み中…")}</p>`;
     if(!rows.length)return `<p class="rk-msg">${L("Personne n'a encore résolu cette énigme. Sois le premier !","Nobody has solved this puzzle yet. Be the first!","아직 아무도 풀지 못했어요. 첫 번째가 되어 보세요!","まだ誰も解いていません。一番乗りを目指そう！")}</p>`;
     const me=(ACC.profile&&ACC.profile.pseudo||"").toLowerCase();
-    return `<ol class="rk-list">${rows.map((r,k)=>`<li class="rk-r${r.pseudo.toLowerCase()===me?" me":""}" data-prof="${esc(r.pseudo)}"><span class="rk-n">${["🥇","🥈","🥉"][k]||k+1}</span>${cosAv(r.avatar,r.cos)}<div class="rk-b"><div class="rk-t"><b>${esc(r.pseudo)}</b><strong>${fmtT(r.s)}</strong></div>${cosTitle(r.cos)}<small>⏱ ${fmtT(r.t)} · ❌ ${r.e} · 💡 ${r.h}</small></div></li>`).join("")}</ol>`}
+    return `<ol class="rk-list">${rows.map((r,k)=>`<li class="rk-r${r.pseudo.toLowerCase()===me?" me":""}" data-prof="${esc(r.pseudo)}"><span class="rk-n">${["🥇","🥈","🥉"][k]||k+1}</span>${cosAv(r.avatar,r.cos,"",r.pseudo)}<div class="rk-b"><div class="rk-t"><b>${esc(r.pseudo)}</b><strong>${fmtT(r.s)}</strong></div>${cosTitle(r.cos)}<small>⏱ ${fmtT(r.t)} · ❌ ${r.e} · 💡 ${r.h}</small></div></li>`).join("")}</ol>`}
   async function renderDaily(fetch_){const p=panel("pDaily"),date=parisDate(),i=dailyIndex(date),lv=DAILY_DATA[i],m=META[lv.id];
     let mine=null;try{mine=JSON.parse(localStorage.getItem("magicoku:daily:"+date)||"null")}catch(_){}
     if(!mine&&BETA.daily&&BETA.daily.date===date&&ACC.profile&&ACC.profile.pseudo){const r=BETA.daily.rows.find(x=>x.pseudo.toLowerCase()===ACC.profile.pseudo.toLowerCase());if(r)mine={t:r.t,e:r.e,h:r.h}}
@@ -169,7 +169,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     if(msg)msg.textContent=r&&r.status===402?L("Pas assez d'éclats de lune !","Not enough moon shards!","달 조각이 부족해요!","月のかけらが足りない！"):r&&r.status===423?L("Ces éclats appartiennent à un autre appareil. Demande ton code de récupération à l'administrateur pour les retrouver ici.","These shards belong to another device. Ask the admin for your recovery code to get them here.","이 달 조각은 다른 기기에 속해 있어요. 관리자에게 복구 코드를 받아 이곳에서 되찾으세요.","このかけらは別の端末のものです。管理者に復元コードをもらって、ここで取り戻してね。"):L("Impossible pour l'instant (connexion ?).","Not possible right now (connection?).","지금은 할 수 없어요(연결?).","今はできません（接続？）。");try{play("forbid")}catch(_){}return false}
   /* ---------- profile ---------- */
   function card(d,mine){const cos=d.cos||{};
-    return `<div class="pf-card"><div class="pf-top">${cosAv(d.avatar,cos,"pf-av")}<div class="pf-id"><b>${esc(d.pseudo)}</b>${cosTitle(cos)||(mine?`<small class="cos-title none">${L("Aucun titre","No title","칭호 없음","称号なし")}</small>`:"")}</div></div>
+    return `<div class="pf-card"><div class="pf-top">${cosAv(d.avatar,cos,"pf-av",d.pseudo)}<div class="pf-id"><b>${esc(d.pseudo)}</b>${typeof presText==="function"?presText(d.pseudo):""}${cosTitle(cos)||(mine?`<small class="cos-title none">${L("Aucun titre","No title","칭호 없음","称号なし")}</small>`:"")}</div></div>
       <div class="pf-stats"><div><b>${d.solved||0}</b><small>${L("enquêtes résolues","cases solved","해결한 사건","解決した事件")}</small></div><div><b>${fmt(d.time||0)}</b><small>${L("temps total","total time","총 시간","合計時間")}</small></div><div><b>${d.hints||0}</b><small>💡 ${L("indices","hints","힌트","ヒント")}</small></div>
       <div><b>${d.played||0}</b><small>🗓️ ${L("énigmes du jour","daily puzzles","오늘의 수수께끼","今日の謎")}</small></div><div><b>${d.wins||0}</b><small>🥇 ${L("victoires du jour","daily wins","일일 1위","デイリー1位")}</small></div>${mine?`<div><b>${BETA.w?BETA.w.coins:"…"}</b><small>${SHARD} ${L("éclats de lune","moon shards","달 조각","月のかけら")}</small></div>`:""}</div></div>`}
   function renderProfile(){const p=panel("pProfile"),me=ACC.profile;

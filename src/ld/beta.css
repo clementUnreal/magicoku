@@ -161,3 +161,10 @@ img.cos-ban{display:block;height:24px;width:auto;max-width:100%;object-fit:conta
 @keyframes mupulse{50%{box-shadow:0 0 0 6px #c43a5444}}
 .mu-play{width:30px;height:30px;font-size:12px;right:4px;bottom:4px}.sp-tile img{max-width:78%}
 .dl-done{background:#eaf7e6;border:2px solid #7cc07a;border-radius:12px;padding:12px;text-align:center;font:700 15px var(--f-body);color:#22502a}
+.pdot{position:absolute;right:-1px;bottom:-1px;width:28%;height:28%;min-width:11px;min-height:11px;max-width:18px;max-height:18px;border-radius:50%;background:#3cc45a;border:2.5px solid #fffaf0;box-shadow:0 0 0 1px #1a5a2a33;z-index:3}
+.pdot.play{background:#3cc45a;animation:pdotp 1.6s ease-in-out infinite}
+@keyframes pdotp{50%{box-shadow:0 0 0 4px #3cc45a55}}
+#presCount{display:flex;align-items:center;justify-content:center;gap:8px;font:700 14px var(--f-body);color:#22502a;margin-top:-4px}
+#presCount .pdot{position:static;width:11px;height:11px;border-width:2px}
+.ptxt{font:700 13px var(--f-body);color:#7a6250}.ptxt.on{color:#22502a}
+.rk-pa .pdot{right:auto;left:2px}

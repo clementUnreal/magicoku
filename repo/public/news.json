@@ -1,5 +1,26 @@
 [
  {
+  "id": 37,
+  "date": "2026-10-22",
+  "icon": "🟢",
+  "fr": {
+   "t": "Qui joue en ce moment ?",
+   "d": "Une pastille verte apparaît sur le portrait des détectives en ligne, dans le classement et les profils. Elle clignote quand ils sont en pleine enquête. Le classement indique aussi combien de détectives sont connectés, et un profil affiche « Vu il y a … min » quand le joueur vient de partir."
+  },
+  "en": {
+   "t": "Who's playing right now?",
+   "d": "A green dot appears on the portrait of online detectives, in the leaderboard and on profiles. It pulses when they're in the middle of a case. The leaderboard also shows how many detectives are online, and a profile says “Seen … min ago” when the player has just left."
+  },
+  "ko": {
+   "t": "지금 누가 플레이하고 있을까요?",
+   "d": "순위표와 프로필에서 접속 중인 탐정의 초상화에 초록색 점이 나타나요. 추리 중일 때는 깜빡여요. 순위표에는 접속 중인 탐정 수도 나오고, 방금 나간 플레이어의 프로필에는 ‘…분 전 접속’이 표시돼요."
+  },
+  "ja": {
+   "t": "いま誰が遊んでいる？",
+   "d": "ランキングやプロフィールで、オンラインの探偵の肖像に緑の点が出ます。捜査中のときは点滅します。ランキングにはオンラインの探偵の人数も表示され、さっきまでいた人のプロフィールには「…分前にオンライン」と出ます。"
+  }
+ },
+ {
   "id": 36,
   "date": "2026-10-22",
   "icon": "🔄",
