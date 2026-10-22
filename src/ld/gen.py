@@ -77,9 +77,11 @@ def propagate_new(case,clues,cand,P):
                     if ns!=cand[q]:cand[q]=ns;ch=True
     return ch
 LAST_ROUNDS=[0]
-def human(case,clues,P,level,retc=False):
+LAST_CAND=[None]
+def human(case,clues,P,level,retc=False,init=None):
     n=case["n"];LAST_ROUNDS[0]=0
-    cand=[set(x for x in case["cells"] if all(unary_ok(case,cl,*x) for cl in clues.get(p,[]))) for p in range(P)]
+    cand=[set(x for x in (init[p] if init else case["cells"]) if all(unary_ok(case,cl,*x) for cl in clues.get(p,[]))) for p in range(P)]
+    LAST_CAND[0]=cand
     first_singles=sum(1 for s in cand if len(s)==1)
     while True:
         if any(not s for s in cand):return (False,first_singles,999) if retc else (False,first_singles)
