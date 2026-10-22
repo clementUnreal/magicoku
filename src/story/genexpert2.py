@@ -14,6 +14,7 @@ EXP=[{"mech":{"dist":4}},{},{"mech":{"cnt":4}},"liar",{},{"mech":{"mirror":4}},{
      {"mech":{"dist":3,"cnt":3,"mirror":3},"poison":2,"dark":True,"nox":True}]
 BAN=("row","col","room")
 MINT=int(os.environ.get("MINT","4"))
+DMIN=int(os.environ.get("DMIN","3"))
 def full_ok(case,clues,cand,P):
     a=[next(iter(s)) for s in cand]
     if len(set(a))<P or len({x[0] for x in a})<P or len({x[1] for x in a})<P:return None
@@ -45,6 +46,27 @@ def tsolve(case,clues,P,sol):
                     init=[set(s) for s in cand];init[p].discard(x);cand=run_h(case,clues,P,init);trials+=1;found=True;break
             if found:break
         if not found:return None
+def deep(case,clues,P,cap=400):
+    """Solve like a human: always take the shallowest contradiction. Returns number of hypotheses whose
+    contradiction needs >=1 extra deduction round (the genuinely hard ones), or -1 if stuck."""
+    cand=run_h(case,clues,P);d=0;steps=0
+    while not all(len(s)==1 for s in cand):
+        steps+=1
+        if steps>cap:return -1
+        best=None
+        for p in range(P):
+            if len(cand[p])<2:continue
+            for x in sorted(cand[p]):
+                init=[set(s) for s in cand];init[p]={x}
+                c2=run_h(case,clues,P,init);rd=gen.LAST_ROUNDS[0] if all(c2) else 0
+                if any(not s for s in c2) or (all(len(s)==1 for s in c2) and full_ok(case,clues,c2,P) is None):
+                    if best is None or rd<best[0]:best=(rd,p,x)
+                    if rd==0:break
+            if best and best[0]==0:break
+        if not best:return -1
+        if best[0]>=1:d+=1
+        init=[set(s) for s in cand];init[best[1]].discard(best[2]);cand=run_h(case,clues,P,init)
+    return d
 def tot(case,clues,P):
     c=run_h(case,clues,P);return sum(len(s) for s in c) if all(c) else 10**6
 def build(case,sol,rng,mm):
@@ -88,15 +110,16 @@ def make(lid,cf,seed,deadline,n=9,R=9):
             sol=gen.rand_sol(case,rng);b=build(case,sol,rng,mm)
             if not b:continue
             t,clues=b;nc=sum(len(v) for v in clues.values())
-            print(lid,"cand trials",t,"clues",nc,flush=True)
-            if t<MINT:continue
+            if t<MINT:print(lid,"cand trials",t,"clues",nc,flush=True);continue
+            d=deep(case,clues,P);print(lid,"cand trials",t,"deep",d,"clues",nc,flush=True)
+            if d<DMIN:continue
             vr=gen.roomof(case,sol[0]);killer=[q for q in range(1,len(sol)) if gen.roomof(case,sol[q])==vr][0]
-            r=dict(id=lid,rooms=rooms,objs=[list(o) for o in objs],windows=[],solution=sol,clues={str(k):[[c[0],list(c[1]) if isinstance(c[1],tuple) else c[1]] for c in v] for k,v in clues.items()},killer=killer,types=tmap,firstSingles=0,trials=t)
+            r=dict(id=lid,rooms=rooms,objs=[list(o) for o in objs],windows=[],solution=sol,clues={str(k):[[c[0],list(c[1]) if isinstance(c[1],tuple) else c[1]] for c in v] for k,v in clues.items()},killer=killer,types=tmap,firstSingles=0,trials=t,deep=d)
             if cf.get("dark"):r["dark"]=True
             if cf.get("nox"):r["nox"]=True
-            sc=t*2-nc
+            sc=d*5+t-nc
             if best is None or sc>best[0]:best=(sc,r)
-            if t>=MINT+3:return r
+            if d>=DMIN+3:return r
     return best[1] if best else None
 def make_liar(lid,seed,deadline):
     # bigger board, no row/col/room giveaways for the honest clues
@@ -116,4 +139,4 @@ if __name__=="__main__":
             seed+=11
         r["id"]=lid;r["env"]=ENVS[c];r["expert"]=True
         if cf=="liar":r["dark"]=True
-        json.dump(r,open(path,"w"));print(lid,"OK trials",r.get("trials"),"clues",sum(len(v) for v in r["clues"].values()),round(time.time()-t),"s",flush=True)
+        json.dump(r,open(path,"w"));print(lid,"OK trials",r.get("trials"),"deep",r.get("deep"),"clues",sum(len(v) for v in r["clues"].values()),round(time.time()-t),"s",flush=True)
