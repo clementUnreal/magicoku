@@ -32,7 +32,7 @@ def one(lid,seed,deadline):
 if __name__=="__main__":
     w,W=int(ARGS[0]),int(ARGS[1]);K=int(ARGS[2]) if len(ARGS)>2 else 3
     G.genlv.RT0=dict(G.genlv.RT)
-    lids=["f11","m11","d11"]+[f"s{c+1}n11" for c in range(10)]
+    lids=[f"s{c+1}n11" for c in range(10)]
     for j,lid in enumerate(lids):
         if j%W!=w:continue
         path=f"lv/{lid}.json"
