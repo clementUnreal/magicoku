@@ -1,5 +1,26 @@
 [
  {
+  "id": 42,
+  "date": "2026-10-23",
+  "icon": "🧠",
+  "fr": {
+   "t": "Experts bien plus coriaces",
+   "d": "Les dix niveaux ★ Expert ont été entièrement refaits : plus d'indices « ligne », « colonne » ni « dans telle pièce », et il faudra raisonner par hypothèses (« si elle était ici… tout s'effondre plus loin »). Le Menteur du chapitre 4 passe en 8×8. Bon courage, détectives !"
+  },
+  "en": {
+   "t": "Much tougher experts",
+   "d": "All ten ★ Expert levels have been rebuilt: no more “row”, “column” or “in this room” clues, and you'll need to reason with hypotheses (“if she were here… everything falls apart further on”). Chapter 4's Liar is now 8×8. Good luck, detectives!"
+  },
+  "ko": {
+   "t": "훨씬 더 어려워진 전문가 레벨",
+   "d": "★ 전문가 레벨 10개를 완전히 새로 만들었어요. 이제 ‘행’, ‘열’, ‘이 방에 있다’ 같은 단서는 없고, 가설을 세워 추리해야 해요(“그녀가 여기 있다면… 나중에 모든 게 무너져요”). 4장의 거짓말쟁이 레벨은 8×8이 되었어요. 탐정 여러분, 행운을 빌어요!"
+  },
+  "ja": {
+   "t": "ぐっと手ごわいエキスパート",
+   "d": "★エキスパートレベル10個をすべて作り直しました。「行」「列」「この部屋にいる」といった手がかりはなくなり、仮説を立てて推理する必要があります（「彼女がここにいたら…先ですべてが崩れる」）。第4章の嘘つきは8×8になりました。探偵のみなさん、がんばって！"
+  }
+ },
+ {
   "id": 41,
   "date": "2026-10-23",
   "icon": "🛠️",

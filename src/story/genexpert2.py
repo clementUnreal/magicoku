@@ -155,7 +155,7 @@ genliar.count=fast_count
 def make_liar(lid,seed,deadline):
     # bigger board, no row/col/room giveaways for the honest clues
     _pool=genliar.pool
-    genliar.pool=lambda case,sol,p,lv:[(a,w) for a,w in _pool(case,sol,p,lv) if a[0] not in BAN]
+    genliar.pool=lambda case,sol,p,lv:[(a,w) for a,w in _pool(case,sol,p,lv) if a[0] not in ("row","col")]
     try:return genliar.make(lid,8,7,seed,deadline,None)
     finally:genliar.pool=_pool
 if __name__=="__main__":
