@@ -173,6 +173,7 @@ export class Leaderboard extends DurableObject {
     if (!best) return { status: 404, body: { error: "unknown" } };
     // the admin recovering on a new device keeps admin rights there
     const nid = clean(body.newId, 64);
+    if (/^[\w-]{8,64}$/.test(nid)) { const w = await this.wallet(best.pseudo); if (w.pids && !w.pids.includes(nid)) { w.pids.push(nid); await this.saveWallet(best.pseudo, w); } }
     if (pseudo.toLowerCase() === ADMIN && /^[\w-]{8,64}$/.test(nid)) { const a = await this.admins(); if (!a.includes(nid)) { a.push(nid); await this.ctx.storage.put("__admins", a); } }
     return { status: 200, body: { pseudo: best.pseudo, avatar: best.avatar, progress } };
   }
@@ -234,6 +235,9 @@ export class Leaderboard extends DurableObject {
     const row = await this.auth(body.id, String(body.token || ""));
     if (!row) return { status: 403, body: { error: "forbidden" } };
     const w = await this.wallet(row.pseudo), item = String(body.item || "");
+    // a wallet belongs to the devices that first used it (+ devices recovered with the code)
+    if (!w.pids || !w.pids.length) { w.pids = [row.id]; await this.saveWallet(row.pseudo, w); }
+    else if (!w.pids.includes(row.id)) return { status: 423, body: { error: "other device", coins: w.coins } };
     if (body.action === "buy") {
       if (!(item in SHOP)) return { status: 400, body: { error: "unknown item" } };
       if (w.owned.includes(item)) return { status: 200, body: w };

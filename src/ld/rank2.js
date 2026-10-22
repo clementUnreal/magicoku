@@ -5,7 +5,7 @@
   const box=document.createElement("div");box.id="rk2";$("#rankList").before(box);panel.classList.add("rk2p");
   const RK={tab:"all",ch:null,lv:null,rows:null,loading:false};
   const esc=s=>String(s==null?"":s).replace(/[<>&"]/g,"");
-  const av=a=>POR[a]||POR[AVS[0]];const cav=(r,c)=>typeof cosAv==="function"?cosAv(r.avatar,r.cos,c):`<img src="${av(r.avatar)}" alt="">`;const ttl=r=>typeof cosTitle==="function"?cosTitle(r.cos):"";const dp=r=>typeof betaOn==="function"&&betaOn()?` data-prof="${esc(r.pseudo)}"`:"";
+  const av=a=>POR[a]||POR[AVS[0]];const cav=(r,c)=>typeof cosAv==="function"?cosAv(r.avatar,r.cos,c):`<img src="${av(r.avatar)}" alt="">`;const ttl=r=>typeof cosTitle==="function"?cosTitle(r.cos):"";const dp=r=>typeof shopOn==="function"&&shopOn()?` data-prof="${esc(r.pseudo)}"`:"";
   const isMe=r=>{const p=ACC.profile;if(!p||!p.pseudo)return false;return r.id===p.pid||String(r.pseudo||"").trim().toLowerCase()===String(p.pseudo).trim().toLowerCase()};
   const place=n=>L(n===1?"1re":n+"ᵉ",n===1?"1st":n===2?"2nd":n===3?"3rd":n+"th",n+"위",n+"位");
   const cases=n=>L(`${n} ${n>1?"enquêtes":"enquête"}`,`${n} ${n>1?"cases":"case"}`,`사건 ${n}개`,`${n}件`);

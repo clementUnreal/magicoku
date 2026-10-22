@@ -1,5 +1,26 @@
 [
  {
+  "id": 34,
+  "date": "2026-10-22",
+  "icon": "🛍️",
+  "fr": {
+   "t": "La Boutique ouvre ses portes !",
+   "d": "Chaque enquête résolue pour la première fois te rapporte désormais 10 éclats de lune 🌙. Dépense-les dans le nouvel onglet Boutique : marqueurs pour remplacer les croix, musiques du menu, personnages et ornements pour ton portrait, titres à afficher sous ton pseudo, et même une plume pour renommer les suspects. Ton profil et le classement affichent ta tenue !"
+  },
+  "en": {
+   "t": "The Shop is open!",
+   "d": "Every case you solve for the first time now earns you 10 moon shards 🌙. Spend them in the new Shop tab: markers to replace the crosses, menu music, characters and ornaments for your portrait, titles to show under your name, and even a quill to rename the suspects. Your profile and the leaderboard show off your look!"
+  },
+  "ko": {
+   "t": "상점이 문을 열었어요!",
+   "d": "이제 처음 해결한 사건마다 달 조각 🌙 10개를 받아요. 새 상점 탭에서 사용해 보세요. X 표시를 바꿔 줄 마커, 메뉴 음악, 초상화용 캐릭터와 장식, 이름 아래 표시할 칭호, 그리고 용의자 이름을 바꾸는 깃펜까지! 프로필과 순위표에서 내 모습을 뽐낼 수 있어요."
+  },
+  "ja": {
+   "t": "ショップがオープン！",
+   "d": "初めて解いた事件ごとに、月のかけら🌙が10個もらえるようになりました。新しいショップタブで使おう：✕の代わりになるマーカー、メニューの音楽、肖像用のキャラクターと飾り、名前の下に出る称号、さらに容疑者の名前を変える羽ペンも！プロフィールとランキングで自分の装いを見せびらかそう。"
+  }
+ },
+ {
   "id": 33,
   "date": "2026-10-22",
   "icon": "🏟️",
