@@ -121,6 +121,37 @@ def make(lid,cf,seed,deadline,n=9,R=9):
             if best is None or sc>best[0]:best=(sc,r)
             if d>=DMIN+3:return r
     return best[1] if best else None
+def fast_count(case,clues,P,limit=2):
+    """Same result as genliar.count, but relational clues are checked as soon as their people are placed."""
+    cells=case["cells"];UN=genliar.UN
+    un={(p,i):set(x for x in cells if gen.unary_ok(case,cl,*x)) for p in clues for i,cl in enumerate(clues[p]) if cl[0] in UN}
+    rel=[(p,cl) for p in clues for cl in clues[p] if cl[0] not in UN]
+    def who(p,cl):
+        return {p,cl[1]} if cl[0] in("same","south","north","east","west") else set(range(P))
+    deg={p:0 for p in range(P)}
+    for p in clues:
+        for cl in clues[p]:
+            for q in ({p} if cl[0] in UN else who(p,cl)):deg[q]+=1
+    order=sorted(range(P),key=lambda p:-deg[p]);pos={p:i for i,p in enumerate(order)}
+    at={i:[] for i in range(P)}
+    for p,cl in rel:at[max(pos[q] for q in who(p,cl))].append((p,cl))
+    sols=[];sol=[None]*P;ur=set();uc=set()
+    def rec(i,bad):
+        if len(sols)>=limit:return
+        if i==P:
+            if gen.valid_solution(case,sol):sols.append((bad,list(sol)))
+            return
+        p=order[i]
+        for x in cells:
+            if x[0] in ur or x[1] in uc:continue
+            nb=bad+sum(1 for j,cl in enumerate(clues.get(p,[])) if cl[0] in UN and x not in un[(p,j)])
+            if nb>1:continue
+            sol[p]=x;nb+=sum(1 for q,cl in at[i] if not genliar.truth(case,cl,q,sol))
+            if nb>1:continue
+            ur.add(x[0]);uc.add(x[1]);rec(i+1,nb);ur.discard(x[0]);uc.discard(x[1])
+        sol[p]=None
+    rec(0,0);return sols
+genliar.count=fast_count
 def make_liar(lid,seed,deadline):
     # bigger board, no row/col/room giveaways for the honest clues
     _pool=genliar.pool
