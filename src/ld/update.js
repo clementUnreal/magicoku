@@ -1,4 +1,4 @@
-/* ================= "new version available" banner ================= */
+/* ================= "new version available" banner ================= (rev 2) */
 var APP_BUILD="__BUILD__";
 (function(){
   let shown=false;

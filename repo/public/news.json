@@ -1,5 +1,26 @@
 [
  {
+  "id": 36,
+  "date": "2026-10-22",
+  "icon": "🔄",
+  "fr": {
+   "t": "Des mises à jour plus fiables",
+   "d": "Quand une nouvelle version de Magicoku est disponible, touche le bandeau en haut de l'écran : le jeu se met à jour tout seul, sans effacer ta progression ni tes éclats de lune."
+  },
+  "en": {
+   "t": "More reliable updates",
+   "d": "When a new version of Magicoku is available, tap the banner at the top of the screen: the game updates itself without erasing your progress or your moon shards."
+  },
+  "ko": {
+   "t": "더 안정적인 업데이트",
+   "d": "Magicoku 새 버전이 나오면 화면 위쪽의 배너를 누르세요. 진행 상황과 달 조각은 그대로 둔 채 게임이 알아서 업데이트돼요."
+  },
+  "ja": {
+   "t": "アップデートがより確実に",
+   "d": "Magicokuの新しいバージョンが出たら、画面上のバナーをタップしてね。進行状況や月のかけらを消さずに、ゲームが自動で更新されます。"
+  }
+ },
+ {
   "id": 35,
   "date": "2026-10-22",
   "icon": "🗓️",
