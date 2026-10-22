@@ -21,6 +21,9 @@
   const st=$("#hStory");if(st){st.className="h2-link";$("#h2Go").after(st)}
   const CARDS=[["hPlay","disc"],["hRush","rush"],["hNight","night"],["hLiar","liar"]];
   for(const [id,k] of CARDS){const b=$("#"+id);if(b){b.className="h2-card c-"+k;grid.appendChild(b)}}
+  /* Chrono / Nuit / Menteur modes: temporarily disabled on the main menu */
+  const MODES_OFF=["hRush","hNight","hLiar"];
+  MODES_OFF.forEach(id=>{const b=$("#"+id);if(b)b.style.display="none"});grid.classList.add("solo");
   const nw=$("#hNews");if(nw){nw.className="h2-news";grid.after(nw)}
   const bar=document.createElement("nav");bar.className="h2-bar";bar.id="h2Bar";
   bar.innerHTML=`<button id="h2Home" class="on">${ic.home}<span></span></button>`;home.appendChild(bar);
@@ -55,6 +58,7 @@
     const s=$("#hStory");if(s)s.innerHTML=`${L("Choisir un niveau","Choose a level","레벨 선택","レベルを選ぶ")} <b>›</b>`;
     sec.innerHTML=`<i></i><span>${L("Une autre façon de jouer","Other ways to play","다른 방식으로 플레이하기","ほかの遊び方")}</span><i></i>`;
     for(const [id,k] of CARDS){const b=$("#"+id);if(!b)continue;const lk=b.classList.contains("lockm"),u=typeof UNLOCK!=="undefined"&&UNLOCK[id];
+      if(MODES_OFF.includes(id)){b.style.display="none";continue}
       b.innerHTML=`${IMG[k]?`<img src="${IMG[k]}" alt="">`:""}<span class="h2-ct"><b>${T(NAME[k])}</b>${lk&&u?`<small class="lk">🔒 ${L(`Niveau ${u.lvl} de Découverte`,`Discovery level ${u.lvl}`,`디스커버리 ${u.lvl}레벨 필요`,`ディスカバリーLv.${u.lvl}で解放`)}</small>`:`<small>${T(SUB[k])}</small>`}</span><span class="h2-chev">›</span>`}
     const lb=[["h2Home",["Accueil","Home","홈","ホーム"]],["hRank",["Classement","Leaderboard","랭킹","ランキング"]],["hRules",["Règles","Rules","규칙","ルール"]],["hAccount",["Profil","Profile","프로필","プロフィール"]]];
     lb.forEach(([id,a],n)=>{const b=$("#"+id);if(!b)return;b.innerHTML=(n?BAR[n-1][1]:ic.home)+`<span>${T(a)}</span>`});

@@ -1,5 +1,26 @@
 [
  {
+  "id": 41,
+  "date": "2026-10-23",
+  "icon": "🛠️",
+  "fr": {
+   "t": "Modes en pause",
+   "d": "Le Défi chrono, le Mode nuit et le Menteur sont mis en pause le temps de les améliorer. L'histoire, la découverte et l'énigme du jour restent disponibles, et les niveaux experts deviennent bien plus coriaces !"
+  },
+  "en": {
+   "t": "Modes on pause",
+   "d": "Time trial, Night mode and The Liar are paused while we improve them. Story, discovery and the daily puzzle are still available, and expert levels are getting much tougher!"
+  },
+  "ko": {
+   "t": "일시 중지된 모드",
+   "d": "타임 챌린지, 나이트 모드, 거짓말쟁이 모드는 개선을 위해 잠시 쉬어요. 스토리, 디스커버리, 오늘의 퍼즐은 그대로 즐길 수 있고, 전문가 레벨은 훨씬 더 어려워져요!"
+  },
+  "ja": {
+   "t": "一時休止中のモード",
+   "d": "タイムチャレンジ、ナイトモード、嘘つきモードは改良のため一時休止します。ストーリー、ディスカバリー、今日のパズルは引き続き遊べます。エキスパートレベルはぐっと手ごわくなります！"
+  }
+ },
+ {
   "id": 40,
   "date": "2026-10-22",
   "icon": "★",

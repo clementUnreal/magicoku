@@ -44,6 +44,7 @@
 .h2-sec i{flex-basis:40px}
 /* mode cards */
 .h2-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.h2-grid.solo{grid-template-columns:1fr}
 .h2-card{position:relative;min-height:104px;border-radius:14px;overflow:hidden;cursor:pointer;text-align:right;color:#fbefc8;padding:10px 20px 10px 38%;display:flex;align-items:center;justify-content:flex-end;
   border:2px solid var(--gold);box-shadow:0 0 0 1px #3b2408,0 8px 18px #0008,inset 0 0 0 1px #fff2;transition:transform .12s}
 .h2-card:active{transform:scale(.97)}
