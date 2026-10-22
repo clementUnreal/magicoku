@@ -70,3 +70,4 @@
 @media (max-width:360px){.rk-lvs{grid-template-columns:repeat(5,1fr)}}
 .rk-pc small{margin-bottom:2px!important}
 .rk-ps{font:600 12px/1.35 var(--f-body);color:#6b5040;margin-bottom:6px;white-space:nowrap}
+.rk-tabs{grid-template-columns:repeat(3,1fr)!important}.rk-tabs button{font-size:clamp(12.5px,3.6vw,15px)!important;padding:10px 4px!important}

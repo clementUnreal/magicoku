@@ -7,7 +7,7 @@
   const esc=s=>String(s==null?"":s).replace(/[<>&"]/g,"");
   const av=a=>POR[a]||POR[AVS[0]];const cav=(r,c)=>typeof cosAv==="function"?cosAv(r.avatar,r.cos,c,r.pseudo):`<img src="${av(r.avatar)}" alt="">`;const ttl=r=>typeof cosTitle==="function"?cosTitle(r.cos):"";const dp=r=>typeof shopOn==="function"&&shopOn()?` data-prof="${esc(r.pseudo)}"`:"";
   const isMe=r=>{const p=ACC.profile;if(!p||!p.pseudo)return false;return r.id===p.pid||String(r.pseudo||"").trim().toLowerCase()===String(p.pseudo).trim().toLowerCase()};
-  const place=n=>L(n===1?"1re":n+"ᵉ",n===1?"1st":n===2?"2nd":n===3?"3rd":n+"th",n+"위",n+"位");
+  const place=n=>L(n===1?"1er":n+"ᵉ",n===1?"1st":n===2?"2nd":n===3?"3rd":n+"th",n+"위",n+"位");
   const cases=n=>L(`${n} ${n>1?"enquêtes":"enquête"}`,`${n} ${n>1?"cases":"case"}`,`사건 ${n}개`,`${n}件`);
   const hints=n=>L(`${n} ${n>1?"indices":"indice"}`,`${n} ${n>1?"hints":"hint"}`,`힌트 ${n}개`,`ヒント${n}回`);
   const tot=()=>DATA.length;
@@ -28,6 +28,19 @@
   function row(r,n){const pc=Math.max(2,Math.round(100*r.solved/tot()));
     return `<li class="rk-r${isMe(r)?" me":""}"${dp(r)}><span class="rk-n">${n}</span>${cav(r,"")}<div class="rk-b"><div class="rk-t"><b>${esc(r.pseudo)}</b><strong>${cases(r.solved)}</strong></div>${ttl(r)}
       <div class="rk-bar"><i style="width:${pc}%"></i></div><small>⏱ ${fmt(r.time)} · 💡 ${hints(r.hints)}</small></div></li>`}
+  /* average time per solved case (min. 5 cases to be ranked) */
+  const MINC=5;
+  function averages(){const rows=RANK.rows;
+    if(!rows)return `<p class="rk-msg">${L("Chargement…","Loading…","불러오는 중…","読み込み中…")}</p>`;
+    const all=rows.filter(r=>r.solved>0).map(r=>Object.assign({},r,{avg:r.time/r.solved,ah:r.hints/r.solved}));
+    const ok=all.filter(r=>r.solved>=MINC).sort((a,b)=>a.avg-b.avg||a.ah-b.ah),wait=all.filter(r=>r.solved<MINC).sort((a,b)=>b.solved-a.solved);
+    const best=ok.length?ok[0].avg:1,line=(r,n)=>`<li class="rk-r${isMe(r)?" me":""}"${dp(r)}><span class="rk-n">${n?(["🥇","🥈","🥉"][n-1]||n):"·"}</span>${cav(r,"")}<div class="rk-b"><div class="rk-t"><b>${esc(r.pseudo)}</b><strong>⏱ ${fmt(Math.round(r.avg))}</strong></div>${ttl(r)}
+      ${n?`<div class="rk-bar"><i style="width:${Math.max(4,Math.round(100*best/r.avg))}%"></i></div>`:""}<small>${L("par enquête","per case","사건당","1件あたり")} · ${cases(r.solved)} · 💡 ${r.ah.toLocaleString(LANG==="fr"?"fr-FR":LANG==="ko"?"ko-KR":LANG==="ja"?"ja-JP":"en-GB",{minimumFractionDigits:1,maximumFractionDigits:1})} ${L("indice en moyenne","hints on average","평균 힌트","平均ヒント")}</small></div></li>`;
+    const mi=ok.findIndex(isMe);
+    return `<p class="rk-note">${L(`Classement par temps moyen pour résoudre une enquête. Il faut au moins ${MINC} enquêtes résolues pour y figurer.`,`Ranked by average time to solve a case. You need at least ${MINC} solved cases to appear.`,`사건 하나를 푸는 평균 시간 순위예요. ${MINC}개 이상 해결해야 순위에 올라요.`,`1件を解く平均時間のランキング。${MINC}件以上解くと載ります。`)}</p>`+
+      (mi>=0?`<div class="rk-me"><div class="rk-mep"><small>${L("Ta place","Your place","내 순위","あなたの順位")}</small><b>${place(mi+1)}</b></div><div class="rk-mei"><b>⏱ ${fmt(Math.round(ok[mi].avg))} ${L("par enquête","per case","사건당","1件あたり")}</b><small>${mi?L(`${fmt(Math.round(ok[mi].avg-ok[mi-1].avg))} de plus que <b>${esc(ok[mi-1].pseudo)}</b>`,`${fmt(Math.round(ok[mi].avg-ok[mi-1].avg))} slower than <b>${esc(ok[mi-1].pseudo)}</b>`,`<b>${esc(ok[mi-1].pseudo)}</b>님보다 ${fmt(Math.round(ok[mi].avg-ok[mi-1].avg))} 느려요`,`<b>${esc(ok[mi-1].pseudo)}</b>さんより${fmt(Math.round(ok[mi].avg-ok[mi-1].avg))}遅い`):L("Le détective le plus rapide ! ⚡","The fastest detective! ⚡","가장 빠른 탐정! ⚡","いちばん速い探偵！⚡")}</small></div></div>`:"")+
+      (ok.length?`<ol class="rk-list">${ok.map((r,k)=>line(r,k+1)).join("")}</ol>`:`<p class="rk-msg">${L("Personne n'a encore assez d'enquêtes.","Nobody has enough cases yet.","아직 조건을 채운 사람이 없어요.","まだ条件を満たした人はいません。")}</p>`)+
+      (wait.length?`<div class="ch-sub">${L(`Pas encore classés (moins de ${MINC} enquêtes)`,`Not ranked yet (fewer than ${MINC} cases)`,`아직 순위 없음(${MINC}개 미만)`,`まだ順位なし（${MINC}件未満）`)}</div><ol class="rk-list">${wait.map(r=>line(r,0)).join("")}</ol>`:"")}
   function general(){const rows=RANK.rows;
     if(RANK.err&&!rows)return `<p class="rk-msg">${L("Classement indisponible pour l'instant.","Leaderboard unavailable right now.","지금은 순위를 볼 수 없어요.","いまはランキングを表示できません。")}</p>`;
     if(!rows)return `<p class="rk-msg">${L("Chargement…","Loading…","불러오는 중…","読み込み中…")}</p>`;
@@ -56,8 +69,8 @@
         <p class="rk-note">${L("Classé par indices utilisés, puis par temps.","Ranked by hints used, then time.","힌트 사용 수, 그다음 시간 순이에요.","ヒントの数、次に時間で順位が決まります。")}</p>`}
     return grp+`<div class="rk-lvs">${lv}</div>`+res}
   function draw(){
-    box.innerHTML=`<div class="rk-tabs"><button data-rktab="all" class="${RK.tab==="all"?"on":""}">🏆 ${L("Général","Overall","전체","総合")}</button><button data-rktab="lv" class="${RK.tab==="lv"?"on":""}">🔍 ${L("Par enquête","By case","사건별","事件別")}</button></div>
-      <div class="rk-body">${RK.tab==="all"?general():perCase()}</div>`;
+    box.innerHTML=`<div class="rk-tabs"><button data-rktab="all" class="${RK.tab==="all"?"on":""}">🏆 ${L("Général","Overall","전체","総合")}</button><button data-rktab="avg" class="${RK.tab==="avg"?"on":""}">⏱ ${L("Moyenne","Average","평균","平均")}</button><button data-rktab="lv" class="${RK.tab==="lv"?"on":""}">🔍 ${L("Par enquête","By case","사건별","事件別")}</button></div>
+      <div class="rk-body">${RK.tab==="all"?general():RK.tab==="avg"?averages():perCase()}</div>`;
     if(RK.tab==="lv"&&RK.lv!=null&&RK.rows==null&&!RK.loading&&tierOf(RK.lv)===RK.ch)loadLv()}
   box.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
     if(t.dataset.rktab){RK.tab=t.dataset.rktab;try{play("select")}catch(_){}draw();return}

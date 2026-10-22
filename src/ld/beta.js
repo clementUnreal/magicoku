@@ -28,7 +28,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
   const acc=()=>ACC.profile&&ACC.profile.pseudo&&ACC.profile.pid&&ACC.profile.ptok?ACC.profile:null;
   async function api(path,body){const r=await fetch(path,body?{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}:{cache:"no-store"});let d=null;try{d=await r.json()}catch(_){}return {ok:r.ok,status:r.status,d}}
   /* ---------- wallet + cosmetics ---------- */
-  async function loadWallet(){const p=acc();if(!p||!shopOn())return;const r=await api("/api/shop",{id:p.pid,token:p.ptok,action:"get"}).catch(()=>null);if(r&&r.ok){BETA.lock=false;BETA.w=r.d;applyCos();try{localStorage.setItem("magicoku:wallet",JSON.stringify(r.d))}catch(_){}}else if(r&&r.status===423){BETA.lock=true;BETA.w=null;try{localStorage.removeItem("magicoku:wallet")}catch(_){}applyCos()}}
+  async function loadWallet(){const p=acc();if(!p||!shopOn())return;const r=await api("/api/shop",{id:p.pid,token:p.ptok,action:"get"}).catch(()=>null);if(r&&r.ok&&r.d&&r.d.eq){BETA.lock=false;BETA.w=r.d;applyCos();try{localStorage.setItem("magicoku:wallet",JSON.stringify(r.d))}catch(_){}}else if(r&&r.status===423){BETA.lock=true;BETA.w=null;try{localStorage.removeItem("magicoku:wallet")}catch(_){}applyCos()}}
   try{BETA.w=JSON.parse(localStorage.getItem("magicoku:wallet")||"null")}catch(_){}
   function applyCos(){const on=shopOn(),w=BETA.w,eq=on&&w?w.eq:{};
     document.body.className=document.body.className.replace(/\bxs-\S+/g,"").trim();if(eq.x)document.body.classList.add("xs-"+eq.x.slice(2));

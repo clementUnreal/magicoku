@@ -1,5 +1,26 @@
 [
  {
+  "id": 39,
+  "date": "2026-10-22",
+  "icon": "⏱️",
+  "fr": {
+   "t": "Classement des plus rapides",
+   "d": "Nouvel onglet « Moyenne » dans le classement : les détectives sont classés selon leur temps moyen pour résoudre une enquête. Il faut au moins 5 enquêtes résolues pour y figurer."
+  },
+  "en": {
+   "t": "Fastest detectives ranking",
+   "d": "New “Average” tab in the leaderboard: detectives are ranked by their average time to solve a case. You need at least 5 solved cases to appear."
+  },
+  "ko": {
+   "t": "가장 빠른 탐정 순위",
+   "d": "순위표에 새 ‘평균’ 탭이 생겼어요. 사건 하나를 푸는 평균 시간으로 탐정 순위를 매겨요. 사건을 5개 이상 해결해야 순위에 올라요."
+  },
+  "ja": {
+   "t": "最速探偵ランキング",
+   "d": "ランキングに新しい「平均」タブが登場。1件を解く平均時間で探偵を順位づけします。5件以上解くとランキングに載ります。"
+  }
+ },
+ {
   "id": 38,
   "date": "2026-10-22",
   "icon": "💬",

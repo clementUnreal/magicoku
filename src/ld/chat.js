@@ -13,7 +13,7 @@ var CHAT={view:"list",with:null,withName:null,msgs:[],sum:null,timer:null,blocke
   /* ---------- badge on the home screen ---------- */
   function unread(){const s=CHAT.sum;if(!s)return 0;return (s.g||0)+s.convs.reduce((a,c)=>a+c.un,0)}
   function paintBadge(){const b=$("#chatBtn");if(!b)return;const n=unread();b.innerHTML=`💬${n?`<span class="nbadge">${n>99?"99+":n}</span>`:""}`;b.title=L("Messages","Messages","메시지","メッセージ")}
-  async function refresh(){if(!acc())return;const r=await api({action:"summary"});if(r&&r.ok){CHAT.sum=r.d;CHAT.blocked=r.d.blocked||[];paintBadge();if(!panel().hidden&&CHAT.view==="list")render()}}
+  async function refresh(){if(!acc())return;const r=await api({action:"summary"});if(r&&r.ok&&r.d&&Array.isArray(r.d.convs)){CHAT.sum=r.d;CHAT.blocked=r.d.blocked||[];paintBadge();if(!panel().hidden&&CHAT.view==="list")render()}}
   /* ---------- panel ---------- */
   function panel(){let p=$("#pChat");if(!p){p=document.createElement("div");p.className="home-panel beta-panel chat-panel";p.id="pChat";p.hidden=true;document.querySelector(".home-in").appendChild(p)}return p}
   function head(title,backTo){return `<div class="ch-head"><button class="sh-back" data-chback="${backTo}" aria-label="${L("Retour","Back","뒤로","戻る")}">←</button><h2>${title}</h2><span></span></div>`}
