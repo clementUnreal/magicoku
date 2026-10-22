@@ -62,7 +62,7 @@ function isAdminUser(){const p=ACC&&ACC.profile;return !!(p&&p.pseudo&&String(p.
     const ids=DATA.map(c=>c.id).slice(0,50);p.progress=p.progress||{};
     let hintsLeft=Math.round(avgH*50),tAcc=0;
     ids.forEach((id,k)=>{const f=0.75+0.5*((k*37)%11)/10,t=Math.max(20,Math.round(avgT*f));tAcc+=t;
-      const hh=hintsLeft>0&&((k*7)%Math.max(1,Math.round(50/Math.max(1,Math.round(avgH*50)))))===0?1:0;hintsLeft-=hh;
+      const hh=Math.round((k+1)*avgH)-Math.round(k*avgH);
       p.progress[id]={solved:true,time:t,hints:hh,attempts:1,at:Date.now()}});
     /* keep the exact average: adjust the last level so the total matches */
     const last=p.progress[ids[49]];last.time=Math.max(20,last.time+Math.round(avgT*50)-tAcc);

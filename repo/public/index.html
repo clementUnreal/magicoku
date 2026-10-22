@@ -2990,7 +2990,7 @@ function isAdminUser(){const p=ACC&&ACC.profile;return !!(p&&p.pseudo&&String(p.
     const ids=DATA.map(c=>c.id).slice(0,50);p.progress=p.progress||{};
     let hintsLeft=Math.round(avgH*50),tAcc=0;
     ids.forEach((id,k)=>{const f=0.75+0.5*((k*37)%11)/10,t=Math.max(20,Math.round(avgT*f));tAcc+=t;
-      const hh=hintsLeft>0&&((k*7)%Math.max(1,Math.round(50/Math.max(1,Math.round(avgH*50)))))===0?1:0;hintsLeft-=hh;
+      const hh=Math.round((k+1)*avgH)-Math.round(k*avgH);
       p.progress[id]={solved:true,time:t,hints:hh,attempts:1,at:Date.now()}});
     /* keep the exact average: adjust the last level so the total matches */
     const last=p.progress[ids[49]];last.time=Math.max(20,last.time+Math.round(avgT*50)-tAcc);
@@ -3683,7 +3683,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="cb85204e0f97";
+var APP_BUILD="b3dfa81fd2d6";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
