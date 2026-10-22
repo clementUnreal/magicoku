@@ -1,5 +1,26 @@
 [
  {
+  "id": 35,
+  "date": "2026-10-22",
+  "icon": "🗓️",
+  "fr": {
+   "t": "L'énigme du jour",
+   "d": "Chaque jour, une nouvelle énigme, la même pour tous les détectives, et un seul essai ! Score : ton temps, plus 30 secondes par erreur et 1 minute par indice. La résoudre rapporte jusqu'à 40 éclats de lune 🌙, et le meilleur score de la journée gagne 100 éclats, versés le lendemain. Elle change chaque nuit à minuit (heure de Paris)."
+  },
+  "en": {
+   "t": "The daily puzzle",
+   "d": "Every day, a new puzzle, the same for every detective, and a single try! Score: your time, plus 30 seconds per error and 1 minute per hint. Solving it earns up to 40 moon shards 🌙, and the best score of the day wins 100 shards, paid the next day. It changes every night at midnight (Paris time)."
+  },
+  "ko": {
+   "t": "오늘의 수수께끼",
+   "d": "매일 모든 탐정에게 같은 새 수수께끼가 나오고, 도전은 단 한 번뿐! 점수는 걸린 시간에 오답 하나당 30초, 힌트 하나당 1분을 더해요. 해결하면 달 조각 🌙을 최대 40개 받고, 그날 최고 점수는 다음 날 100개를 받아요. 매일 밤 자정(파리 시간)에 바뀌어요."
+  },
+  "ja": {
+   "t": "今日の謎",
+   "d": "毎日、すべての探偵に同じ新しい謎が出て、挑戦は1回だけ！スコアは時間に、ミス1回につき30秒、ヒント1回につき1分を足したもの。解くと月のかけら🌙を最大40個、その日の最高スコアには翌日100個が贈られます。毎晩0時（パリ時間）に新しくなります。"
+  }
+ },
+ {
   "id": 34,
   "date": "2026-10-22",
   "icon": "🛍️",

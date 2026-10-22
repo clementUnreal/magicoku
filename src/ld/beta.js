@@ -3,7 +3,8 @@
 var DAILY={on:false,i:0,date:null};
 var BETA={w:null,daily:null,dailyY:null,tab:"today",shopCat:"x",prof:null};
 function betaOn(){return typeof isTester==="function"&&isTester()}
-function shopOn(){return true} /* shop, cosmetics and profile are open to everyone; the daily puzzle stays in beta */
+function shopOn(){return true}
+function dailyOn(){return true} /* daily puzzle open to everyone */ /* shop, cosmetics and profile are open to everyone; the daily puzzle stays in beta */
 function parisDate(d){return new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Paris",year:"numeric",month:"2-digit",day:"2-digit"}).format(d||new Date())}
 function dailyIndex(date){const t=Date.UTC(+date.slice(0,4),+date.slice(5,7)-1,+date.slice(8,10)),t0=Date.UTC(2026,0,1);return ((Math.round((t-t0)/864e5))%DAILY_DATA.length+DAILY_DATA.length)%DAILY_DATA.length}
 var SHOP_ITEMS={
@@ -54,8 +55,8 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
   const longDate=d=>{try{return new Date(d+"T12:00:00").toLocaleDateString(LANG==="fr"?"fr-FR":LANG==="ko"?"ko-KR":LANG==="ja"?"ja-JP":"en-GB",{day:"numeric",month:"long"})}catch(_){return d}};
   const _rs=renderStatic;renderStatic=function(){_rs.apply(this,arguments);document.body.classList.toggle("daily",DAILY.on);
     if(DAILY.on){const t=$("#caseTitle");if(t)t.textContent=`🗓️ ${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")} · ${longDate(DAILY.date)} · ${TX(M.title)}`}};
-  window.startDaily=function(){DAILY.on=true;DAILY.date=parisDate();DAILY.i=dailyIndex(DAILY.date);$("#home").hidden=true;openCase(ci);
-    if(S.date!==DAILY.date||S.solved){S=fresh();S.hlog=[];S.date=DAILY.date;hist=[];save()}render();renderStatic();try{renderTimer()}catch(_){}};
+  window.startDaily=function(){{let done=null;try{done=localStorage.getItem("magicoku:daily:"+parisDate())}catch(_){}if(done){try{play("forbid")}catch(_){}toast(L("Tu as déjà joué ton essai du jour.","You’ve already played today’s try.","오늘의 도전은 이미 끝났어요.","今日の挑戦はもう終わりです。"));return}}DAILY.on=true;DAILY.date=parisDate();DAILY.i=dailyIndex(DAILY.date);$("#home").hidden=true;openCase(ci);
+    if(S.date!==DAILY.date){S=fresh();S.hlog=[];S.date=DAILY.date;hist=[];save()}render();renderStatic();try{renderTimer()}catch(_){}};
   new MutationObserver(()=>{if(DAILY.on&&!$("#home").hidden){DAILY.on=false;const c=$("#dailyCard");if(c)c.hidden=true;document.body.classList.remove("daily");try{openCase(ci)}catch(e){}}}).observe($("#home"),{attributes:true,attributeFilter:["hidden"]});
   function dcard(){let c=$("#dailyCard");if(!c){c=document.createElement("div");c.id="dailyCard";c.className="modal";c.hidden=true;document.body.appendChild(c);
       c.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const a=b.dataset.a;c.hidden=true;
@@ -102,19 +103,21 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     return `<ol class="rk-list">${rows.map((r,k)=>`<li class="rk-r${r.pseudo.toLowerCase()===me?" me":""}" data-prof="${esc(r.pseudo)}"><span class="rk-n">${["🥇","🥈","🥉"][k]||k+1}</span>${cosAv(r.avatar,r.cos)}<div class="rk-b"><div class="rk-t"><b>${esc(r.pseudo)}</b><strong>${fmtT(r.s)}</strong></div>${cosTitle(r.cos)}<small>⏱ ${fmtT(r.t)} · ❌ ${r.e} · 💡 ${r.h}</small></div></li>`).join("")}</ol>`}
   async function renderDaily(fetch_){const p=panel("pDaily"),date=parisDate(),i=dailyIndex(date),lv=DAILY_DATA[i],m=META[lv.id];
     let mine=null;try{mine=JSON.parse(localStorage.getItem("magicoku:daily:"+date)||"null")}catch(_){}
+    if(!mine&&BETA.daily&&BETA.daily.date===date&&ACC.profile&&ACC.profile.pseudo){const r=BETA.daily.rows.find(x=>x.pseudo.toLowerCase()===ACC.profile.pseudo.toLowerCase());if(r)mine={t:r.t,e:r.e,h:r.h}}
+    let started=false;try{const st=JSON.parse(localStorage.getItem("crimes-mignons-wiz:"+lv.id)||"null");started=!!(st&&st.date===date&&!st.solved&&(st.time||Object.keys(st.place||{}).length))}catch(_){}
     const kinds=new Set(Object.values(lv.clues).flat().map(c=>c[0]));if(lv.objs.some(o=>o[0]==="poison"))kinds.add("poison");if(lv.nox)kinds.add("nox");
     const R={dist:"🐾",cnt:"📒",mirc:"🪞",mird:"🪞",mira:"🪞",mid:"🪞",poison:"☠️",nox:"🚫"};const icons=[...new Set([...kinds].map(k=>R[k]).filter(Boolean))].join(" ");
     const y=parisDate(new Date(Date.now()-864e5)),rows=BETA.tab==="today"?(BETA.daily&&BETA.daily.date===date?BETA.daily.rows:null):(BETA.dailyY?BETA.dailyY.rows:null);
-    p.innerHTML=back()+`<h2>🗓️ ${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")}</h2>${beta()}
+    p.innerHTML=back()+`<h2>🗓️ ${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")}</h2>
       <div class="dl-hero"><div><b>${esc(TX(m.title))}</b><small>${longDate(date)} · ${lv.rooms.length}×${lv.rooms.length}${icons?` · ${icons}`:""}</small>
       <small>${L(`Nouvelle énigme dans ${untilNext()}`,`New puzzle in ${untilNext()}`,`새 수수께끼까지 ${untilNext()}`,`次の謎まで${untilNext()}`)}</small></div></div>
       ${mine?`<div class="rk-me"><div class="rk-mep"><small>${L("Ton score","Your score","내 점수","スコア")}</small><b>${fmtT(mine.t+30*mine.e+60*mine.h)}</b></div><div class="rk-mei"><b>${L("Énigme résolue !","Puzzle solved!","해결 완료!","解決！")}</b><small>⏱ ${fmtT(mine.t)} · ❌ ${mine.e} · 💡 ${mine.h}</small></div></div>`:""}
-      <button class="h2-go dl-go" id="dlPlay"><span>${mine?L("Rejouer (hors classement)","Replay (unranked)","다시 하기(순위 미반영)","もう一度（ランキング対象外）"):L("Jouer","Play","플레이","プレイ")}</span><span class="h2-chev">›</span></button>
-      <p class="dl-rules">${L("Une seule énigme par jour, la même pour tout le monde. Seule ta première résolution compte. Score = temps + 30 s par erreur + 1 min par indice.","One puzzle a day, the same for everyone. Only your first solve counts. Score = time + 30 s per error + 1 min per hint.","하루에 한 문제, 모두에게 같은 문제예요. 첫 번째 결과만 반영돼요. 점수 = 시간 + 오답당 30초 + 힌트당 1분.","1日1問、全員同じ問題。最初の結果だけがカウントされます。スコア＝時間＋ミス1回30秒＋ヒント1回1分。")}<br>
-      ${SHARD} ${L("+20 en la résolvant, +10 sans erreur, +10 sans indice. Podium du jour, versé le lendemain : +30, +20, +10.","+20 for solving, +10 with no errors, +10 with no hints. Daily podium, paid the next day: +30, +20, +10.","해결 +20, 오답 없이 +10, 힌트 없이 +10. 오늘의 시상대(다음 날 지급): +30, +20, +10.","解くと+20、ミスなし+10、ヒントなし+10。今日の表彰台（翌日に付与）：+30、+20、+10。")}</p>
+      ${mine?`<div class="dl-done">✅ ${L("Tu as déjà joué ton essai du jour. Reviens demain pour une nouvelle énigme !","You’ve already played today’s try. Come back tomorrow for a new puzzle!","오늘의 도전은 이미 끝났어요. 내일 새 수수께끼로 다시 만나요!","今日の挑戦はもう終わり。明日の新しい謎でまた会おう！")}</div>`:`<button class="h2-go dl-go" id="dlPlay"><span>${started?L("Reprendre","Resume","이어서 하기","続ける"):L("Jouer","Play","플레이","プレイ")}</span><span class="h2-chev">›</span></button>`}
+      <p class="dl-rules">${L("Une seule énigme par jour, la même pour tout le monde, et <b>un seul essai</b> : impossible de rejouer. Score = temps + 30 s par erreur + 1 min par indice.","One puzzle a day, the same for everyone, and <b>a single try</b>: no replays. Score = time + 30 s per error + 1 min per hint.","하루에 한 문제, 모두에게 같은 문제이고 <b>도전은 한 번뿐</b>이에요. 다시 할 수 없어요. 점수 = 시간 + 오답당 30초 + 힌트당 1분.","1日1問、全員同じ問題で、<b>挑戦は1回だけ</b>。やり直しはできません。スコア＝時間＋ミス1回30秒＋ヒント1回1分。")}<br>
+      ${SHARD} ${L("+20 en la résolvant, +10 sans erreur, +10 sans indice. Le meilleur score de la journée gagne <b>+100</b>, versés le lendemain.","+20 for solving, +10 with no errors, +10 with no hints. The best score of the day wins <b>+100</b>, paid the next day.","해결 +20, 오답 없이 +10, 힌트 없이 +10. 그날 최고 점수는 <b>+100</b>(다음 날 지급).","解くと+20、ミスなし+10、ヒントなし+10。その日の最高スコアには<b>+100</b>（翌日に付与）。")}</p>
       <div class="rk-tabs"><button data-dt="today" class="${BETA.tab==="today"?"on":""}">${L("Aujourd'hui","Today","오늘","今日")}</button><button data-dt="y" class="${BETA.tab!=="today"?"on":""}">${L("Hier","Yesterday","어제","昨日")}</button></div>
       <div id="dlRows">${rowsHTML(rows)}</div>`;
-    if(fetch_){api("/api/daily?date="+date).then(r=>{if(r.ok){BETA.daily=r.d;if(BETA.tab==="today"&&!panel("pDaily").hidden)$("#dlRows").innerHTML=rowsHTML(r.d.rows)}}).catch(()=>{});
+    if(fetch_){api("/api/daily?date="+date).then(r=>{if(r.ok){BETA.daily=r.d;if(!panel("pDaily").hidden)renderDaily(false)}}).catch(()=>{});
       api("/api/daily?date="+y).then(r=>{if(r.ok){BETA.dailyY=r.d;if(BETA.tab!=="today"&&!panel("pDaily").hidden)$("#dlRows").innerHTML=rowsHTML(r.d.rows)}}).catch(()=>{})}}
   /* ---------- shop ---------- */
   const SPARK=`data:image/svg+xml;base64,${btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M44 8 C48 34 52 40 78 46 C52 52 48 58 44 86 C40 58 36 52 10 46 C36 40 40 34 44 8Z" fill="#f2c443" stroke="#3a1f3d" stroke-width="5" stroke-linejoin="round"/><path d="M44 22 C46 38 48 42 62 46 C48 48 46 52 44 62Z" fill="#ffe8a0"/><path d="M78 10 C79 20 81 22 90 23 C81 24 79 26 78 36 C77 26 75 24 66 23 C75 22 77 20 78 10Z" fill="#f2c443" stroke="#3a1f3d" stroke-width="4" stroke-linejoin="round"/></svg>')}`;
@@ -174,7 +177,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     const solved=Object.values(me.progress||{}).filter(x=>x.solved);
     const d={pseudo:me.pseudo,avatar:me.avatar,solved:solved.length,time:solved.reduce((a,x)=>a+(x.time||0),0),hints:solved.reduce((a,x)=>a+(x.hints||0),0),played:BETA.w?BETA.w.played:0,wins:BETA.w?BETA.w.wins:0,cos:myCos()};
     p.innerHTML=back()+`<h2>👤 ${L("Mon profil","My profile","내 프로필","プロフィール")}</h2>${card(d,true)}
-      <div class="pf-acts">${betaOn()?`<button class="pill red" id="pfDaily">🗓️ ${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")}</button>`:""}<button class="pill" id="pfEdit">✏️ ${L("Modifier mon compte","Edit my account","계정 수정","アカウント編集")}</button></div>`}
+      <div class="pf-acts">${dailyOn()?`<button class="pill red" id="pfDaily">🗓️ ${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")}</button>`:""}<button class="pill" id="pfEdit">✏️ ${L("Modifier mon compte","Edit my account","계정 수정","アカウント編集")}</button></div>`}
   async function openProfile(pseudo){let m=$("#mProf");if(!m){m=document.createElement("div");m.id="mProf";m.className="modal";document.body.appendChild(m);m.addEventListener("click",e=>{if(e.target===m||e.target.closest(".mclose"))m.hidden=true})}
     m.innerHTML=`<div class="mbox pf-box"><button class="mclose" aria-label="✕">✕</button><p class="rk-msg">${L("Chargement…","Loading…","불러오는 중…","読み込み中…")}</p></div>`;m.hidden=false;
     const r=await api("/api/profile?pseudo="+encodeURIComponent(pseudo)).catch(()=>null);
@@ -202,14 +205,14 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
   },true);
   /* home: daily card (beta) + greeting cosmetics */
   const BAG=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12.5H6.2zM9 8V6.5a3 3 0 0 1 6 0V8"/></svg>`;
-  const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);const on=shopOn(),dOn=betaOn();let c=$("#h2Daily");
+  const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);const on=shopOn(),dOn=dailyOn();let c=$("#h2Daily");
     const bar=$("#h2Bar");let sb=$("#h2Shop");
     if(bar){if(on&&!sb){sb=document.createElement("button");sb.id="h2Shop";const rk=$("#hRank");(rk&&rk.parentNode===bar?rk:bar.lastChild).after(sb)}
       if(!on&&sb)sb.remove();if(sb)sb.innerHTML=BAG+`<span>${L("Boutique","Shop","상점","ショップ")}</span>`;bar.classList.toggle("five",on)}
     if(!dOn){if(c)c.remove()}
     const sec=$("#h2Sec");if(dOn&&!c&&sec){c=document.createElement("button");c.id="h2Daily";c.className="h2-daily";sec.before(c)}
     if(c){const date=parisDate();let mine=null;try{mine=JSON.parse(localStorage.getItem("magicoku:daily:"+date)||"null")}catch(_){}
-      c.innerHTML=`<span class="hd-ic">🗓️</span><span class="hd-t"><b>${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")} <i class="beta-tag">BÊTA</i></b><small>${mine?L(`Résolue · score ${fmtT(mine.t+30*mine.e+60*mine.h)}`,`Solved · score ${fmtT(mine.t+30*mine.e+60*mine.h)}`,`해결 · 점수 ${fmtT(mine.t+30*mine.e+60*mine.h)}`,`解決・スコア ${fmtT(mine.t+30*mine.e+60*mine.h)}`):L("Une nouvelle énigme t'attend : affronte les autres détectives !","A new puzzle awaits: take on the other detectives!","새 수수께끼가 기다려요. 다른 탐정들과 겨뤄 보세요!","新しい謎が待っている。ほかの探偵と勝負だ！")}</small></span><span class="hd-w">${BETA.w?shards(BETA.w.coins):""}</span><span class="h2-chev">›</span>`}
+      c.innerHTML=`<span class="hd-ic">🗓️</span><span class="hd-t"><b>${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")}</b><small>${mine?L(`Résolue · score ${fmtT(mine.t+30*mine.e+60*mine.h)}`,`Solved · score ${fmtT(mine.t+30*mine.e+60*mine.h)}`,`해결 · 점수 ${fmtT(mine.t+30*mine.e+60*mine.h)}`,`解決・スコア ${fmtT(mine.t+30*mine.e+60*mine.h)}`):L("Une nouvelle énigme t'attend : affronte les autres détectives !","A new puzzle awaits: take on the other detectives!","새 수수께끼가 기다려요. 다른 탐정들과 겨뤄 보세요!","新しい謎が待っている。ほかの探偵と勝負だ！")}</small></span><span class="hd-w">${BETA.w?shards(BETA.w.coins):""}</span><span class="h2-chev">›</span>`}
     const w=$("#hWho img");const me=ACC.profile;if(w&&me&&myCos()&&(myCos().chara||myCos().orn)){w.outerHTML=cosAv(me.avatar,myCos(),"hw-av")}
     const ttl=$("#hWho .cos-title");if(!ttl&&myCos()&&myCos().title){const b=$("#hWho b");if(b)b.insertAdjacentHTML("afterend",cosTitle(myCos()))}};
   applyCos();setTimeout(()=>{loadWallet().then(()=>{try{renderHome()}catch(_){}})},1500);

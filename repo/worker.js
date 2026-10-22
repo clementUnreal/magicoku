@@ -194,8 +194,8 @@ export class Leaderboard extends DurableObject {
       const date = k.slice(2);
       if (date >= t || d.settled) continue;
       const rows = Object.values(d.rows || {}).sort(dcmp);
-      const bonus = [30, 20, 10];
-      for (let i = 0; i < Math.min(3, rows.length); i++) {
+      const bonus = [100];
+      for (let i = 0; i < Math.min(bonus.length, rows.length); i++) {
         const w = await this.wallet(rows[i].pseudo);
         w.coins += bonus[i]; if (i === 0) w.wins = (w.wins || 0) + 1;
         (w.log = w.log || []).unshift({ at: Date.now(), n: bonus[i], why: "podium:" + date + ":" + (i + 1) }); w.log = w.log.slice(0, 30);
