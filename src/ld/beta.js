@@ -14,7 +14,8 @@ var SHOP_ITEMS={
  n:[["n:rename",100,"✒️",["Plume de renommage","Renaming quill","이름 바꾸기 깃펜","名前変更の羽ペン"]]]};
 const SHOP_CATS=[["x","✕",["Croix","Crosses","X 표시","✕"]],["m","🎵",["Musique","Music","음악","音楽"]],["c","🧙",["Personnages","Characters","캐릭터","キャラクター"]],["o","💫",["Ornements","Ornaments","장식","飾り"]],["t","🏷️",["Titres","Titles","칭호","称号"]],["n","✒️",["Noms","Names","이름","名前"]]];
 function shopItem(id){for(const k in SHOP_ITEMS)for(const it of SHOP_ITEMS[k])if(it[0]===id)return it;return null}
-function cosTitle(cos){if(!betaOn()||!cos||!cos.title)return "";const it=shopItem(cos.title);return it?`<small class="cos-title">${TX(it[3])}</small>`:""}
+function titleBan(id,cls){const k=id.slice(2),src=typeof TT_IMG!=="undefined"&&TT_IMG[k];const it=shopItem(id);if(!it)return "";return src?`<img class="cos-ban ${cls||""}" src="${src}" alt="${TX(it[3])}" title="${TX(it[3])}">`:`<small class="cos-title">${TX(it[3])}</small>`}
+function cosTitle(cos){if(!betaOn()||!cos||!cos.title)return "";return titleBan(cos.title)}
 function charaSrc(it){return it[2].startsWith("@")?(typeof CH_IMG!=="undefined"?CH_IMG[it[2].slice(1)]:""):SPR[it[2]]}
 function cosAv(avatar,cos,cls){const it=betaOn()&&cos&&cos.chara&&shopItem(cos.chara);const img=it?`<img class="${it[2].startsWith("@")?"cos-por":"cos-chara"}" src="${charaSrc(it)}" alt="">`:`<img src="${POR[avatar]||POR[AVS[0]]}" alt="">`;
   return `<span class="cav ${cls||""} ${betaOn()&&cos&&cos.orn?"orn-"+cos.orn.slice(2):""}">${img}</span>`}
@@ -119,7 +120,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
   const MKI=k=>k==="spark"?SPARK:(typeof MK_IMG!=="undefined"&&MK_IMG[k])||"";
   (function(){const st=document.createElement("style");st.textContent=["star","moon","heart","skull","paw","spark"].map(k=>`body.xs-${k} #marks .xm::after{content:"";display:block;width:118%;height:118%;background:url(${MKI(k)}) center/contain no-repeat}`).join("\n");document.head.appendChild(st)})();
   const SUB={x:["Ta signature sur le plateau","Your signature on the board","판 위의 나만의 표시","盤上のきみのしるし"],m:["L'ambiance de l'Académie","The Academy's atmosphere","아카데미의 분위기","アカデミーの雰囲気"],c:["Ton visage dans le classement","Your face on the leaderboard","순위표 속 나의 얼굴","ランキングでのきみの顔"],
-    o:["Pour briller autour de ton portrait","To shine around your portrait","초상화를 빛내는 장식","肖像のまわりを輝かせよう"],t:["Sous ton nom, aux yeux de tous","Under your name, for all to see","모두가 보는 이름 아래 칭호","名前の下に、みんなに見える称号"],n:["Rebaptise les suspects","Rename the suspects","용의자 이름 바꾸기","容疑者に名前をつけ直そう"]};
+    o:["Pour briller autour de ton portrait","To shine around your portrait","초상화를 빛내는 장식","肖像のまわりを輝かせよう"],t:["Ta signature magique","Your magical signature","나만의 마법 서명","きみの魔法のサイン"],n:["Rebaptise les suspects","Rename the suspects","용의자 이름 바꾸기","容疑者に名前をつけ直そう"]};
   function preview(cat,it){const me=ACC.profile||{};
     if(cat==="x")return `<span class="sp-tile">${it[0]==="x:none"?`<span class="sp-xsvg">${XSVG}</span>`:`<img src="${MKI(it[0].slice(2))}" alt="">`}</span>`;
     if(cat==="c")return `<span class="sp-tile">${it[0]==="c:none"?cosAv(me.avatar,null,"sp-av"):`<img class="sp-big" src="${charaSrc(it)}" alt="">`}</span>`;
@@ -127,13 +128,22 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     if(cat==="t")return `<span class="sp-tile"><span class="sp-t">${it[0]==="t:none"?"—":TX(it[3])}</span></span>`;
     return `<span class="sp-tile"><span class="sp-e">${it[2]}</span></span>`}
   const CAT_IC={x:`<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>`,m:"🎵",c:"🧙",o:"💫",t:"🏷️",n:"✒️"};
+  const TDESC={"t:apprenti":["Les premiers indices.","The first clues.","첫 번째 단서들.","はじめての手がかり。"],"t:limier":["Rien ne t'échappe.","Nothing escapes you.","아무것도 놓치지 않아요.","何ひとつ見逃さない。"],
+    "t:plume":["L'instinct et la discrétion.","Instinct and discretion.","직감과 신중함.","直感と慎重さ。"],"t:lune":["Voir au-delà des apparences.","Seeing beyond appearances.","겉모습 너머를 보는 눈.","見た目の奥を見抜く。"],
+    "t:maitre":["Chaque détail compte.","Every detail counts.","모든 디테일이 중요해요.","細部こそが大切。"],"t:legende":["Un nom qui traverse les âges.","A name that spans the ages.","시대를 넘어 전해지는 이름.","時代を超えて語り継がれる名。"]};
+  function titlesTab(w){const me=ACC.profile||{},owned=new Set(w?w.owned:[]),eq=w?w.eq:{},cur=eq.t;
+    const prev=`<div class="tt-prev"><small>${L("Aperçu du profil","Profile preview","프로필 미리보기","プロフィールのプレビュー")}</small><div class="tt-pin">${cosAv(me.avatar,myCos(),"tt-av")}<div class="tt-pid"><b>${String(me.pseudo||"").replace(/[<>&"]/g,"")}</b>${cur?titleBan(cur,"big"):`<i>${L("Aucun titre","No title","칭호 없음","称号なし")}</i>`}</div></div></div>`;
+    const cards=SHOP_ITEMS.t.filter(it=>it[0]!=="t:none").map(it=>{const own=owned.has(it[0]),on=cur===it[0],poor=w&&w.coins<it[1];
+      const btn=on?`<span class="sh-btn on">✓ ${L("Équipé","Equipped","장착 중","装備中")}</span>`:own?`<button class="sh-btn eq" data-eq="${it[0]}">${L("Équiper","Equip","장착","装備")}</button>`:`<button class="sh-btn buy${poor?" poor":""}" data-buy="${it[0]}">🌙 ${it[1]}</button>`;
+      return `<div class="sh-it tt-it${on?" on":""}">${titleBan(it[0],"card")}${LANG!=="fr"?`<b class="tt-name">${TX(it[3])}</b>`:""}<p class="tt-d">${TX(TDESC[it[0]]||["","","",""])}</p>${btn}</div>`}).join("");
+    return prev+`<div class="sh-grid tt-grid">${cards}</div>`+(cur?`<button class="tt-rm" data-eq="t:none">🗑️ ${L("Retirer mon titre","Remove my title","칭호 해제","称号を外す")}</button>`:"")}
   function renderShop(){const p=panel("pShop"),w=BETA.w,cat=BETA.shopCat,me=acc();p.classList.add("shop2");
     const head=`<div class="sh-head"><button class="sh-back" data-bk aria-label="${L("Retour","Back","뒤로","戻る")}">←</button><div class="sh-title"><h2><i>✦</i>${L("Boutique","Shop","상점","ショップ")}<i>✦</i></h2><small>${L("Personnalise ton enquête","Customise your investigation","나만의 추리 꾸미기","捜査をカスタマイズ")}</small></div><div class="sh-coins">🌙 <b>${w?w.coins:"…"}</b></div></div>`;
     if(!me){p.innerHTML=head+`<p class="rk-msg">${L("Crée ton compte pour utiliser la boutique.","Create an account to use the shop.","상점을 이용하려면 계정을 만드세요.","ショップを使うにはアカウントを作ってね。")}</p>`;return}
     const owned=new Set(w?w.owned:[]),eq=w?w.eq:{};
     p.innerHTML=head+`<div class="sh-tabs">${SHOP_CATS.map(([k,ic,n])=>`<button class="sh-tab${k===cat?" on":""}" data-cat="${k}"><span class="sh-ti">${CAT_IC[k]}</span>${k==="x"?L("Marqueurs","Markers","표시","マーカー"):TX(n)}</button>`).join("")}</div>
       <div class="sh-sub"><i></i><span>✦ ${TX(SUB[cat])} ✦</span><i></i></div>
-      <div class="sh-grid">${SHOP_ITEMS[cat].map(it=>{const isNone=it[0].endsWith(":none"),own=isNone||owned.has(it[0]),on=isNone?!eq[cat]:eq[cat]===it[0],poor=w&&w.coins<it[1];
+      ${cat==="t"?titlesTab(w):""}<div class="sh-grid"${cat==="t"?" hidden":""}>${SHOP_ITEMS[cat].map(it=>{const isNone=it[0].endsWith(":none"),own=isNone||owned.has(it[0]),on=isNone?!eq[cat]:eq[cat]===it[0],poor=w&&w.coins<it[1];
         const btn=cat==="n"?(own?`<button class="sh-btn eq" data-ren>${L("Renommer","Rename","이름 바꾸기","名前を変える")}</button>`:`<button class="sh-btn buy${poor?" poor":""}" data-buy="${it[0]}">🔒 ${it[1]} 🌙</button>`)
           :on?`<span class="sh-btn on">✓ ${L("Équipé","Equipped","장착 중","装備中")}</span>`:own?`<button class="sh-btn eq" data-eq="${it[0]}">${L("Équiper","Equip","장착","装備")}</button>`:`<button class="sh-btn buy${poor?" poor":""}" data-buy="${it[0]}">🔒 ${it[1]} 🌙</button>`;
         return `<div class="sh-it${on&&cat!=="n"?" on":""}"><div class="sh-pv">${preview(cat,it)}</div><b>${TX(it[3])}</b>${btn}</div>`}).join("")}</div>

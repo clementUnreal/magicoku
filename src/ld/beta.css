@@ -137,3 +137,21 @@ body.xs-spark #marks .xm::after{content:"✨"}
 }
 .sh-tabs{cursor:grab}
 .cav img.cos-por{object-fit:cover;object-position:50% 20%;background:radial-gradient(circle at 50% 40%,#fff8e6,#e9d6ad)}
+/* titles as banners */
+img.cos-ban{display:block;height:24px;width:auto;max-width:100%;object-fit:contain;filter:drop-shadow(0 1px 1px #0004)}
+.rk-pc img.cos-ban{height:20px;margin:0 auto 2px}
+.pf-id img.cos-ban{height:34px}
+.home-who img.cos-ban{height:28px;margin:2px 0}
+.tt-prev{position:relative;border-radius:16px;padding:12px 16px 16px;border:2px solid #d6ab4f;color:#fbefc8;
+  background:radial-gradient(circle at 85% 30%,#f6b84a33,transparent 30%),radial-gradient(circle at 12% 60%,#f6b84a2a,transparent 25%),linear-gradient(135deg,#3a2050,#1f1230);box-shadow:inset 0 0 0 4px #1f1230,inset 0 0 0 5px #d6ab4f66,0 6px 16px #0005}
+.tt-prev>small{font:700 11px var(--f-body);letter-spacing:.1em;text-transform:uppercase;opacity:.8}
+.tt-pin{display:flex;align-items:center;gap:16px;margin-top:6px;justify-content:center}
+.cav.tt-av{width:clamp(70px,20vw,96px);height:clamp(70px,20vw,96px)}.cav.tt-av img{box-shadow:0 0 0 3px #d6ab4f,0 4px 10px #0008}
+.tt-pid{display:flex;flex-direction:column;gap:6px;min-width:0}.tt-pid b{font:800 clamp(18px,5vw,24px) var(--f-body)}.tt-pid i{opacity:.7}
+.tt-pid img.cos-ban.big{height:clamp(40px,11vw,56px)}
+.shop2 .tt-grid{grid-template-columns:1fr 1fr}
+.shop2 .tt-it{gap:6px;padding:12px 10px}
+.tt-it img.cos-ban.card{height:auto;width:100%;max-height:72px}
+.tt-name{font:700 14px var(--f-body)!important}
+.tt-d{margin:0;font:500 14px/1.3 var(--f-body);color:#4a3426;text-align:center}
+.tt-rm{align-self:center;border:0;background:none;font:700 15px "Cinzel",Georgia,serif;color:#3a1f3d;text-decoration:underline;text-underline-offset:4px;cursor:pointer}

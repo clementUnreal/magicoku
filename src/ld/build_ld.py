@@ -103,6 +103,7 @@ function ava(p,o={}){const k=M.people[p][5];if(k)return `<img class="pimg" src="
 '''
 import base64 as _b64,os as _os
 head+="var CH_IMG="+json.dumps({k:"data:image/webp;base64,"+_b64.b64encode(open(_os.path.join("..","home2","ch_"+k+".webp"),"rb").read()).decode() for k in ["dragon","toad","snowowl","fox","cat","pochacco"]})+";\n"
+head+="var TT_IMG="+json.dumps({k:"data:image/webp;base64,"+_b64.b64encode(open(_os.path.join("..","home2","tt_"+k+".webp"),"rb").read()).decode() for k in ["apprenti","limier","plume","lune","maitre","legende"]})+";\n"
 head+="var MK_IMG="+json.dumps({k:"data:image/webp;base64,"+_b64.b64encode(open(_os.path.join("..","home2","mk_"+k+".webp"),"rb").read()).decode() for k in ["cross","star","moon","heart","skull","paw"]})+";\n"
 head+="var HOME_IMG="+json.dumps({k:"data:image/webp;base64,"+_b64.b64encode(open(_os.path.join("..","home2",k+".webp"),"rb").read()).decode() for k in ["forest","disc","rush","night","liar"]})+";\n"
 head+="const SPR="+json.dumps(assets["sprites"])+";\n"
