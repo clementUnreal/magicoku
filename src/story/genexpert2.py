@@ -111,7 +111,7 @@ def make(lid,cf,seed,deadline,n=9,R=9):
             if not b:continue
             t,clues=b;nc=sum(len(v) for v in clues.values())
             if t<MINT:print(lid,"cand trials",t,"clues",nc,flush=True);continue
-            d=deep(case,clues,P);print(lid,"cand trials",t,"deep",d,"clues",nc,flush=True)
+            d=deep(case,clues,case["n"]);print(lid,"cand trials",t,"deep",d,"clues",nc,flush=True)
             if d<DMIN:continue
             vr=gen.roomof(case,sol[0]);killer=[q for q in range(1,len(sol)) if gen.roomof(case,sol[q])==vr][0]
             r=dict(id=lid,rooms=rooms,objs=[list(o) for o in objs],windows=[],solution=sol,clues={str(k):[[c[0],list(c[1]) if isinstance(c[1],tuple) else c[1]] for c in v] for k,v in clues.items()},killer=killer,types=tmap,firstSingles=0,trials=t,deep=d)
