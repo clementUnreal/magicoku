@@ -3690,7 +3690,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="7ab228cafd6a";
+var APP_BUILD="10b8b9865b3f";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -3929,7 +3929,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
 })();
 /* ================= presence: green dot for detectives playing right now ================= */
 var PRES={map:{}};
-function presOf(pseudo){const x=PRES.map[String(pseudo||"").trim().toLowerCase()];if(!x)return null;return x.ago<150?(x.p?"play":"on"):x.ago<3600?"recent":null}
+function presOf(pseudo){const x=PRES.map[String(pseudo||"").trim().toLowerCase()];if(!x)return null;return x.ago<300?(x.p?"play":"on"):x.ago<3600?"recent":null}
 function presDot(pseudo){const s=presOf(pseudo);return s==="play"||s==="on"?`<i class="pdot ${s}" title="${s==="play"?L("En pleine enquête","Investigating right now","지금 추리 중","捜査中"):L("En ligne","Online","접속 중","オンライン")}"></i>`:""}
 function presText(pseudo){const k=String(pseudo||"").trim().toLowerCase(),x=PRES.map[k],s=presOf(pseudo);if(!x)return "";
   if(s==="play")return `<span class="ptxt on">🟢 ${L("En pleine enquête","Investigating right now","지금 추리 중","いま捜査中")}</span>`;

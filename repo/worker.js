@@ -313,6 +313,11 @@ export class Leaderboard extends DurableObject {
       }
     } catch {}
     await this.ctx.storage.put(key, { tok, row, prog, at: Date.now() });
+    // any progress sync (even from an old version of the game) counts as "playing right now"
+    try {
+      const on = (await this.ctx.storage.get("__online")) || {}, pk = row.pseudo.trim().toLowerCase(), now = Date.now();
+      on[pk] = { at: now, p: 1 }; await this.ctx.storage.put("__online", on);
+    } catch {}
     return { status: 200, body: { ok: true, earned } };
   }
 }
