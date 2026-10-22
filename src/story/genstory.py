@@ -7,7 +7,7 @@ import gen;gen.WALK|=NEW_WALK
 import genlv,gen2,genliar
 DIFF=[(5,3,3,6,0,False),(6,4,3,6,0,False),(6,5,2,4,0,False),(6,5,1,2,1,True),(7,6,1,2,1,True),(7,7,1,2,1,True),(7,7,1,2,1,True),(8,7,1,2,1,True),(8,8,0,1,1,True),(9,8,0,1,1,True)]
 LIARSZ=[(5,3),(5,4),(5,4),(6,4),(6,4),(6,5),(6,5),(6,5),(6,5),(6,6)]
-MM=[1,1,1,2,2,2,2,2,3,3]
+MM=[1,1,1,2,2,2,2,2,3,3,3]
 # chapter index -> per-level config: mech weights, poison count, dark flag
 def cfg(c,k):
     if c==0:return {"mech":{"dist":4}}

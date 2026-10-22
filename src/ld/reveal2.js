@@ -29,7 +29,7 @@
       <div class="rv-file"><span class="rv-fi">📜</span><p>${story?story.innerHTML:""}</p></div>
       <div class="rv-stats"><div><b>${fmtT(t)}</b><small>⏱ ${L("temps","time","시간","時間")}</small></div><div><b>${a}</b><small>🎯 ${triesW(a)}</small></div><div><b>${h}</b><small>💡 ${hintsW(h)}</small></div></div>
       ${badges?`<div class="rv-bdgs">${badges}</div>`:""}
-      <div class="rv-prog"><div class="rv-pt"><span>${esc(TX(CH_SHORT[tr]))} · ${L("Niveau","Level","레벨","レベル")} ${k}/10</span><b>${done}/${idx.length} ${L("résolues","solved","해결","解決")}</b></div><div class="rv-bar"><i style="width:${Math.round(100*done/idx.length)}%"></i></div></div>
+      <div class="rv-prog"><div class="rv-pt"><span>${esc(TX(CH_SHORT[tr]))} · ${C.expert?"★ "+L("Expert","Expert","전문가","エキスパート"):L("Niveau","Level","레벨","レベル")+" "+k+"/10"}</span><b>${done}/${idx.length} ${L("résolues","solved","해결","解決")}</b></div><div class="rv-bar"><i style="width:${Math.round(100*done/idx.length)}%"></i></div></div>
       <div class="rv-rank"><h4>🏆 ${L("Classement de cette enquête","This case's ranking","이 사건의 순위","この事件のランキング")}</h4><div id="rvRk">${ACC.profile&&ACC.profile.pseudo?`<p class="rv-msg">${L("Chargement…","Loading…","불러오는 중…","読み込み中…")}</p>`:`<p class="rv-msg">${L("Crée ton compte pour te comparer aux autres détectives !","Create an account to compare with other detectives!","계정을 만들면 다른 탐정과 비교할 수 있어요!","アカウントを作ってほかの探偵と比べよう！")}</p>`}</div></div>
       <div class="acts"><button class="pill" id="rvClose">${L("Admirer ma grille","Admire my grid","내 격자 감상하기","自分のグリッドを眺める")}</button>${hasNext?`<button class="pill red" id="rvNext">${L("Enquête suivante","Next case","다음 사건","次の事件")} ›</button>`:""}</div>`;
     $("#rvClose").onclick=()=>ov.hidden=true;

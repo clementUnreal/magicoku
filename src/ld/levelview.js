@@ -17,10 +17,10 @@ var CH_TAG={
   ["Dix enquêtes au bout de la brume.","Ten cases at the end of the mist.","안개 끝에서 펼쳐지는 열 개의 사건.","霧の果てで起きる十の事件。"]]};
 var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","stall","snowman","anchor","broomrack","medcab","fountain","gargoyle"]};
 (function(){
-  const DIFF=[["Facile","Easy","쉬움","やさしい"],["Moyen","Medium","보통","ふつう"],["Difficile","Hard","어려움","むずかしい"]];
+  const DIFF=[["Facile","Easy","쉬움","やさしい"],["Moyen","Medium","보통","ふつう"],["Difficile","Hard","어려움","むずかしい"],["Expert","Expert","전문가","エキスパート"]];
   const tiers=()=>LVMODE==="story"?[...Array(10).keys()].map(k=>k+3):[0,1,2];
   const idxOf=t=>DATA.map((c,i)=>i).filter(i=>tierOf(i)===t);
-  const diffOf=(t,k)=>t<3?t:(k<3?0:k<8?1:2);
+  const diffOf=(t,k)=>k>=10?3:t<3?t:(k<3?0:k<8?1:2);
   function chName(t){const full=TX(CHAPTERS[t]);const p=full.split(/ · |・/);return {num:p[0],name:p.slice(1).join(" · ")||full}}
   function thumb(i){const c=DATA[i],m=META[c.id],n=c.rooms.length,P=100/n,env=m&&m.env,TW=(env&&typeof TH_WALL!=="undefined"&&TH_WALL[env])||null;
     /* floors: same textures as the real board (story chapters), soft checker + light texture otherwise */
@@ -58,9 +58,9 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
   function render(enter){const v=ensure();pickDefaults(enter);const ts=tiers(),mode=LVMODE==="story"?"story":"disc",t=LVV.ch,ix=idxOf(t),pos=ts.indexOf(t);
     const done=ix.filter(lvlSolved).length,cn=chName(t);
     const side=ts.map((tt,k)=>{const c=chName(tt),open=chOpen(tt),all=idxOf(tt).every(lvlSolved);return `<button class="lvch${tt===t?" on":""}${open?"":" locked"}" data-ch="${tt}"><span class="ci"><img src="${SPR[CH_ICON[mode][k]]}" alt=""></span><span class="ct"><b>${c.num.replace(/^(Chapitre|Chapter) /,"")}</b> · ${c.name}</span>${open?(all?`<span class="cs">✓</span>`:`<span class="cs">›</span>`):`<span class="cs">🔒</span>`}</button>`}).join("");
-    const cards=ix.map((i,k)=>{const ok=lvlSolved(i),u=unlocked(i),d=diffOf(t,k),sz=DATA[i].rooms.length;
-      return `<button class="lvc${ok?" done":""}${u?"":" locked"}${LVV.sel===i?" sel":""}" data-lv="${i}"><span class="lvh"><b>${L("Niveau","Level","레벨","レベル")} ${k+1}</b>${ok?`<i class="ok">✓</i>`:u?"":`<i class="lk">🔒</i>`}</span><span class="lvt">${thumb(i)}</span><span class="lvn">${TX(META[DATA[i].id].title)}</span><span class="lvs">${sz} × ${sz}</span><span class="lvd d${d}">${TX(DIFF[d])}</span>${LVV.sel===i?`<span class="lvp">${L("À jouer","Up next","플레이","プレイ")}</span>`:""}</button>`}).join("");
-    const legend=mode==="story"?`<div class="lvleg"><span><i class="d0"></i>${L("Faciles 1–3","Easy 1–3","쉬움 1~3","やさしい 1〜3")}</span><span><i class="d1"></i>${L("Moyens 4–8","Medium 4–8","보통 4~8","ふつう 4〜8")}</span><span><i class="d2"></i>${L("Difficiles 9–10","Hard 9–10","어려움 9~10","むずかしい 9〜10")}</span></div>`:`<div class="lvleg"></div>`;
+    const cards=ix.map((i,k)=>{const ex=k>=10,ok=lvlSolved(i),u=unlocked(i),d=diffOf(t,k),sz=DATA[i].rooms.length;
+      return `<button class="lvc${ex?" expert":""}${ok?" done":""}${u?"":" locked"}${LVV.sel===i?" sel":""}" data-lv="${i}"><span class="lvh"><b>${k>=10?"★ "+L("Expert","Expert","전문가","エキスパート"):L("Niveau","Level","레벨","レベル")+" "+(k+1)}</b>${ok?`<i class="ok">✓</i>`:u?"":`<i class="lk">🔒</i>`}</span><span class="lvt">${thumb(i)}</span><span class="lvn">${TX(META[DATA[i].id].title)}</span><span class="lvs">${sz} × ${sz}</span><span class="lvd d${d}">${TX(DIFF[d])}</span>${LVV.sel===i?`<span class="lvp">${L("À jouer","Up next","플레이","プレイ")}</span>`:""}</button>`}).join("");
+    const legend=mode==="story"?`<div class="lvleg"><span><i class="d0"></i>${L("Faciles 1–3","Easy 1–3","쉬움 1~3","やさしい 1〜3")}</span><span><i class="d1"></i>${L("Moyens 4–8","Medium 4–8","보통 4~8","ふつう 4〜8")}</span><span><i class="d2"></i>${L("Difficiles 9–10","Hard 9–10","어려움 9~10","むずかしい 9〜10")}</span><span><i class="d3"></i>${L("Expert 11","Expert 11","전문가 11","エキスパート 11")}</span></div>`:`<div class="lvleg"><span><i class="d3"></i>${L("Niveau 11 : expert","Level 11: expert","11레벨: 전문가","レベル11：エキスパート")}</span></div>`;
     const title=mode==="story"?"📖 "+L("Mode histoire","Story mode","스토리 모드","ストーリーモード"):"🧭 "+L("Mode découverte","Discovery mode","디스커버리 모드","ディスカバリーモード");
     const k=LVV.sel!=null?ix.indexOf(LVV.sel)+1:0;
     v.className="lvv lvv-"+mode+(mode==="story"?" env-"+(META[DATA[ix[0]].id].env||""):"");
@@ -69,7 +69,7 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
       <section class="lvmain"><div class="lvhead"><div><small>${mode==="story"?L("Histoire","Story","스토리","ストーリー"):L("Découverte","Discovery","디스커버리","ディスカバリー")} / ${cn.num}</small><h2>${cn.name}</h2><p>${TX(CH_TAG[mode][pos]||["","","",""])}</p></div>
         <div class="lvprog"><span><b>${done} / ${ix.length}</b> ${L("enquêtes résolues","cases solved","사건 해결","件解決")}</span><i><em style="width:${100*done/ix.length}%"></em></i></div></div>
         <div class="lvgrid">${cards}</div></section></div>
-      <footer class="lvfoot"><button class="hb small" data-act="back">← ${L("Retour","Back","뒤로","戻る")}</button>${legend}<button class="hb big lvgo" data-act="play"${LVV.sel==null?" disabled":""}>${LVV.sel==null?(done===ix.length?L("Chapitre terminé ✓","Chapter complete ✓","장 완료 ✓","章クリア ✓"):"—"):L(`Jouer le niveau ${k}`,`Play level ${k}`,`${k}레벨 플레이`,`レベル${k}をプレイ`)} ›</button></footer>`}
+      <footer class="lvfoot"><button class="hb small" data-act="back">← ${L("Retour","Back","뒤로","戻る")}</button>${legend}<button class="hb big lvgo" data-act="play"${LVV.sel==null?" disabled":""}>${LVV.sel==null?(done===ix.length?L("Chapitre terminé ✓","Chapter complete ✓","장 완료 ✓","章クリア ✓"):"—"):(k>=11?L("Jouer le niveau expert ★","Play the expert level ★","전문가 레벨 플레이 ★","エキスパートをプレイ ★"):L(`Jouer le niveau ${k}`,`Play level ${k}`,`${k}레벨 플레이`,`レベル${k}をプレイ`))} ›</button></footer>`}
   window.renderLevelView=render;
   const _show=show;show=function(panel){const v=ensure();if(panel==="pLevels"){_show("__none__");["hMain","pLevels","pOptions","pAccount","pRank","pRush","pNight","pLiar"].forEach(id=>{const e=$("#"+id);if(e)e.hidden=true});
       v.hidden=false;document.querySelector(".home-in").classList.add("lvmode");render(true);$("#home").scrollTop=0;return}

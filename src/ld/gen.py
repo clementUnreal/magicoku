@@ -76,8 +76,9 @@ def propagate_new(case,clues,cand,P):
                     ns={x for x in cand[q] if R[x[0]][x[1]]==Y}
                     if ns!=cand[q]:cand[q]=ns;ch=True
     return ch
+LAST_ROUNDS=[0]
 def human(case,clues,P,level,retc=False):
-    n=case["n"]
+    n=case["n"];LAST_ROUNDS[0]=0
     cand=[set(x for x in case["cells"] if all(unary_ok(case,cl,*x) for cl in clues.get(p,[]))) for p in range(P)]
     first_singles=sum(1 for s in cand if len(s)==1)
     while True:
@@ -121,6 +122,7 @@ def human(case,clues,P,level,retc=False):
                             if q==p:continue
                             ns={x for x in cand[q] if roomof(case,x)!=rm}
                             if ns!=cand[q]:cand[q]=ns;ch=True
+        LAST_ROUNDS[0]+=1
         if any(not s_ for s_ in cand):continue
         if propagate_new(case,clues,cand,P):ch=True
         if ch:continue

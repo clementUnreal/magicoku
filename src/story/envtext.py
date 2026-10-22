@@ -119,3 +119,15 @@ ON={
  "bed":(("allongé sur un lit","allongée sur un lit"),"lying on a bed","침대에 누워 있었다","ベッドに横になっていた"),
  "straw":(("assis sur une botte de paille","assise sur une botte de paille"),"sitting on a bale of straw","짚단 위에 앉아 있었다","わらの束に座っていた"),
 }
+
+# expert level titles (level 11)
+TITLES["forest"].append(('Le Roi de la Forêt', 'The King of the Forest', '숲의 왕', '森の王'))
+TITLES["station"].append(('Le Dernier Express', 'The Last Express', '마지막 특급', '最終特急'))
+TITLES["bank"].append(('Le Coffre Sans Fond', 'The Bottomless Vault', '바닥 없는 금고', '底なしの金庫'))
+TITLES["alley"].append(('La Foire aux Menteurs', "The Liars' Fair", '거짓말쟁이 장터', '嘘つきの市'))
+TITLES["village"].append(('La Nuit la Plus Froide', 'The Coldest Night', '가장 추운 밤', 'いちばん寒い夜'))
+TITLES["lake"].append(('Le Miroir Noir', 'The Black Mirror', '검은 거울', '黒い鏡'))
+TITLES["stadium"].append(('La Finale du Siècle', 'The Final of the Century', '세기의 결승전', '世紀の決勝戦'))
+TITLES["hospital"].append(('Le Remède Interdit', 'The Forbidden Cure', '금지된 치료약', '禁じられた薬'))
+TITLES["ministry"].append(('Le Bureau Sans Porte', 'The Office With No Door', '문 없는 집무실', '扉のない執務室'))
+TITLES["fortress"].append(('Le Trône des Brumes', 'The Throne of Mists', '안개의 왕좌', '霧の玉座'))

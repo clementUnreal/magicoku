@@ -10,20 +10,20 @@ from metagen import build as _mb
 _base={o['id']:o for o in out};out=[];_extra={}
 for tier,first in (("f","facile"),("m","moyen"),("d","difficile")):
     out.append(_base[first])
-    for i in range(2,11):
+    for i in range(2,12):
         lid=f"{tier}{i}";p=f"lv/{lid}.json"
         if not os.path.exists(p):continue
-        d=json.load(open(p));out.append(dict(id=lid,rooms=d['rooms'],objs=d['objs'],windows=[],solution=d['solution'],clues=d['clues'],killer=d['killer']))
+        d=json.load(open(p));out.append(dict(id=lid,rooms=d['rooms'],objs=d['objs'],windows=[],solution=d['solution'],clues=d['clues'],killer=d['killer'],**({'expert':True} if d.get('expert') else {})))
         _extra[lid]=_mb(lid,d,i-2)
 # ---- story mode (chapters 1-10) ----
 import sys as _sx;_sx.path.insert(0,'../story')
 import storymeta as _SM
 from sprites import uris as _spr
 for _c in range(10):
-    for _k in range(10):
+    for _k in range(11):
         _lid=f"s{_c+1}n{_k+1}";_p=f"lv/{_lid}.json"
         if not os.path.exists(_p):continue
-        _d=json.load(open(_p));out.append(dict(id=_lid,rooms=_d['rooms'],objs=_d['objs'],windows=[],solution=_d['solution'],clues=_d['clues'],killer=_d['killer'],**({'liar':_d['liar']} if 'liar' in _d else {}),**({'dark':True} if _d.get('dark') else {}),**({'nox':True} if _d.get('nox') else {})))
+        _d=json.load(open(_p));out.append(dict(id=_lid,rooms=_d['rooms'],objs=_d['objs'],windows=[],solution=_d['solution'],clues=_d['clues'],killer=_d['killer'],**({'liar':_d['liar']} if 'liar' in _d else {}),**({'dark':True} if _d.get('dark') else {}),**({'nox':True} if _d.get('nox') else {}),**({'expert':True} if _d.get('expert') else {})))
         _extra[_lid]=_SM.build(_lid,_d,_c,_k)
 _daily=[];_dmeta={}
 import glob as _gl
@@ -254,7 +254,7 @@ exec(open('patch_lv2.py').read())
 exec(open('patch_timer.py').read())
 exec(open('patch_story.py').read())
 exec(open('patch_i18n.py').read())
-_i=s.rindex('</script>');s=s[:_i]+open('verdict.js').read()+open('kw.js').read()+open('news.js').read()+open('hint2.js').read()+open('nav.js').read()+open('rules2.js').read()+open('rush.js').read()+open('night.js').read()+open('liar.js').read()+open('modes.js').read()+open('storymode.js').read()+open('recover.js').read()+open('envtheme.js').read()+open('ambience.js').read()+open('levelview.js').read()+open('tuto2.js').read()+open('home2.js').read()+open('rank2.js').read()+open('reveal2.js').read()+open('mech.js').read()+open('mech2.js').read()+open('mech3.js').read()+open('fullscreen.js').read()+open('update.js').read()+open('beta.js').read()+open('presence.js').read()+open('chat.js').read()+'\nrender();\n'+s[_i:]
+_i=s.rindex('</script>');s=s[:_i]+open('verdict.js').read()+open('kw.js').read()+open('news.js').read()+open('hint2.js').read()+open('nav.js').read()+open('rules2.js').read()+open('rush.js').read()+open('night.js').read()+open('liar.js').read()+open('modes.js').read()+open('storymode.js').read()+open('recover.js').read()+open('envtheme.js').read()+open('ambience.js').read()+open('levelview.js').read()+open('tuto2.js').read()+open('home2.js').read()+open('rank2.js').read()+open('reveal2.js').read()+open('mech.js').read()+open('mech2.js').read()+open('mech3.js').read()+open('fullscreen.js').read()+open('update.js').read()+open('beta.js').read()+open('presence.js').read()+open('chat.js').read()+open('expert.js').read()+'\nrender();\n'+s[_i:]
 s=s.replace('</style>',open('kw.css').read()+open('news.css').read()+open('hint2.css').read()+open('nav.css').read()+open('rush.css').read()+open('night.css').read()+open('liar.css').read()+open('modes.css').read()+open('storymode.css').read()+open('envtheme.css').read()+open('ambience.css').read()+open('levelview.css').read()+open('tuto2.css').read()+open('home2.css').read()+open('rank2.css').read()+open('reveal2.css').read()+open('mech.css').read()+open('beta.css').read()+'</style>',1)
 s=s.replace('</style>',open('verdict.css').read()+'</style>',1)
 _pn='const pname=p=>{const n=M.people[p][0];return (LANG==="ko"||LANG==="ja")&&NAMES[n]?NAMES[n][LANG==="ko"?0:1]:n};'

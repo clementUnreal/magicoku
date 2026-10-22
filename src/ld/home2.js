@@ -29,7 +29,7 @@
   const op=$("#hOptions");if(op){op.className="h2-gear";home.appendChild(op)}
   nav.classList.add("h2");document.querySelector(".home-in").classList.add("h2in");
   /* ---------- story progress ---------- */
-  const SIDX=DATA.map((c,i)=>/^s\d+n\d+$/.test(c.id)?i:-1).filter(i=>i>=0);
+  const SIDX=DATA.map((c,i)=>/^s\d+n\d+$/.test(c.id)&&!c.expert?i:-1).filter(i=>i>=0);
   function current(){if(!SIDX.length)return null;const nx=SIDX.find(i=>unlocked(i)&&!lvlSolved(i));
     if(nx!=null)return {i:nx,done:false,fresh:!SIDX.some(lvlSolved)};return {i:SIDX[SIDX.length-1],done:SIDX.every(lvlSolved)}}
   function go(i){lastSel=i;try{LVMODE="story"}catch(_){}try{play("select")}catch(_){}home.hidden=true;openCase(i);

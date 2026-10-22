@@ -3,3 +3,4 @@ src/ld/__pycache__/
 src/i18n/__pycache__/
 src/story/*.log
 src/ld/lv_old/
+src/story/gx*.log
