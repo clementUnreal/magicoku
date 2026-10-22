@@ -1,5 +1,26 @@
 [
  {
+  "id": 40,
+  "date": "2026-10-22",
+  "icon": "★",
+  "fr": {
+   "t": "Niveaux experts",
+   "d": "Chaque chapitre de l'histoire a désormais un 11ᵉ niveau ★ Expert : une grille 9×9, très peu d'indices et aucun suspect évident. Il se débloque après le niveau 10 et ne bloque pas le chapitre suivant. Les détectives qui ont déjà fini un chapitre peuvent y retourner pour le relever !"
+  },
+  "en": {
+   "t": "Expert levels",
+   "d": "Every story chapter now has an 11th ★ Expert level: a 9×9 grid, very few clues and no obvious suspect. It unlocks after level 10 and doesn't block the next chapter. Already finished a chapter? Go back and take on the challenge!"
+  },
+  "ko": {
+   "t": "전문가 레벨",
+   "d": "스토리의 모든 챕터에 11번째 ★ 전문가 레벨이 생겼어요. 9×9 격자, 아주 적은 단서, 뻔한 용의자 없음! 레벨 10을 깨면 열리고, 다음 챕터 진행을 막지 않아요. 이미 끝낸 챕터도 다시 가서 도전해 보세요!"
+  },
+  "ja": {
+   "t": "エキスパートレベル",
+   "d": "ストーリーの全章に11番目の★エキスパートレベルが登場。9×9のグリッド、ごくわずかな手がかり、怪しい容疑者なし！レベル10クリアで解放され、次の章の進行は妨げません。クリア済みの章にも戻って挑戦しよう！"
+  }
+ },
+ {
   "id": 39,
   "date": "2026-10-22",
   "icon": "⏱️",
