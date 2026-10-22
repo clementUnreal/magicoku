@@ -352,8 +352,10 @@ export default {
     }
     if (url.pathname.startsWith("/api/")) return json({ error: "not found" }, 404);
     const res = await env.ASSETS.fetch(request);
-    if (url.pathname === "/sw.js") {
-      const h = new Headers(res.headers); h.set("cache-control", "no-cache");
+    // never let the browser reuse an old copy of the page, the service worker or the version file
+    const ct = res.headers.get("content-type") || "";
+    if (url.pathname === "/sw.js" || url.pathname === "/" || url.pathname.endsWith(".html") || url.pathname.endsWith("version.json") || ct.includes("text/html")) {
+      const h = new Headers(res.headers); h.set("cache-control", "no-cache, must-revalidate");
       return new Response(res.body, { status: res.status, headers: h });
     }
     return res;
