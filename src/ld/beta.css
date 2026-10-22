@@ -168,3 +168,34 @@ img.cos-ban{display:block;height:24px;width:auto;max-width:100%;object-fit:conta
 #presCount .pdot{position:static;width:11px;height:11px;border-width:2px}
 .ptxt{font:700 13px var(--f-body);color:#7a6250}.ptxt.on{color:#22502a}
 .rk-pa .pdot{right:auto;left:2px}
+/* ================= chat ================= */
+.h2-gear.ch-btn{right:max(70px,calc(env(safe-area-inset-right,0px) + 70px));font-size:22px;color:#fbefc8}
+.h2-gear.ch-btn .nbadge{position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;border-radius:10px;background:#d6404f;color:#fff;font:800 12px var(--f-body);display:grid;place-items:center;padding:0 4px;box-shadow:0 0 0 2px #2a1830}
+.home.chatmode .home-logo,.home.chatmode .home-who,.home.chatmode .h2-gear{display:none!important}
+.chat-panel{gap:10px}
+.ch-head{display:grid;grid-template-columns:52px 1fr 52px;align-items:center}
+.ch-head h2{margin:0;text-align:center;font:900 clamp(20px,6vw,28px) "Cinzel",Georgia,serif!important;color:#6b1530!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ch-row{display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;border-radius:12px;border:1.5px solid #e2cfa4;background:#fffaf0;cursor:pointer;text-align:left;position:relative}
+.ch-row .nbadge{position:static;min-width:22px;height:22px;border-radius:11px;background:#d6404f;color:#fff;font:800 12px var(--f-body);display:grid;place-items:center;padding:0 5px}
+.ch-global{background:linear-gradient(135deg,#3b2a6a,#1f1640);color:#fbefc8;border-color:#d6ab4f}
+.ch-gic{font-size:30px}
+.ch-rt{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}.ch-rt b{font:800 16px var(--f-body)}.ch-rt small{font:500 13.5px var(--f-body);opacity:.85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ch-when{font:600 12px var(--f-body);color:#7a6250;white-space:nowrap}
+.ch-sub{font:800 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:#9a7426;margin-top:6px}
+.cav.ch-av{width:40px;height:40px}
+.ch-tools{display:flex;justify-content:space-between;gap:10px}
+.ch-tools .tlink{background:none;border:0;font:700 14px var(--f-body);color:#6b4bb8;cursor:pointer;text-decoration:underline}
+.ch-rule{margin:0;font:italic 13px var(--f-body);color:#7a6250;text-align:center}
+.ch-list{display:flex;flex-direction:column;gap:8px;max-height:min(56vh,520px);overflow-y:auto;padding:8px;border-radius:12px;background:#f3e5c4;box-shadow:inset 0 2px 6px #0002}
+.ch-msg{display:flex;align-items:flex-end;gap:8px;max-width:88%}
+.ch-msg.own{align-self:flex-end;flex-direction:row-reverse}
+.ch-bub{background:#fffaf0;border-radius:14px 14px 14px 4px;padding:7px 11px;box-shadow:0 1px 2px #0002;min-width:0}
+.ch-msg.own .ch-bub{background:linear-gradient(#c43a54,#8d1d33);color:#fbefc8;border-radius:14px 14px 4px 14px}
+.ch-bub b{display:block;font:800 13px var(--f-body);color:#6b4bb8;cursor:pointer}
+.ch-bub p{margin:0;font:500 15.5px/1.35 var(--f-body);overflow-wrap:anywhere;white-space:pre-wrap}
+.ch-bub small{display:block;font:500 11px var(--f-body);opacity:.7;margin-top:2px}
+.ch-del{background:none;border:0;color:inherit;font:700 11px var(--f-body);text-decoration:underline;cursor:pointer;padding:0}
+.ch-form{display:flex;gap:8px}
+.ch-form input{flex:1;min-width:0;padding:12px 14px;border-radius:999px;border:2px solid #d6ab4f;font:500 16px var(--f-body);background:#fff;color:#3a1f3d}
+.ch-form .pill{flex:none}
+#pfMsg{align-self:center;margin-top:4px}

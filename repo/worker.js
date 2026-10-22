@@ -287,6 +287,69 @@ export class Leaderboard extends DurableObject {
     for (const [k, v] of Object.entries(on)) out[k] = { ago: Math.round((now - v.at) / 1000), p: v.p };
     return out;
   }
+  // ---- chat: global thread + private messages ----
+  async chat(body) {
+    const row = await this.auth(body.id, String(body.token || ""));
+    if (!row) return { status: 403, body: { error: "forbidden" } };
+    const me = String(row.pseudo).trim().toLowerCase(), now = Date.now();
+    const dmKey = (a, b) => "dm:" + [a, b].sort().join("|");
+    const meta = (await this.ctx.storage.get("cm:" + me)) || { seen: {}, blocked: [], last: 0, convs: {} };
+    const save = () => this.ctx.storage.put("cm:" + me, meta);
+    const known = async (p) => { const all = await this.ctx.storage.list({ prefix: "p:" }); for (const v of all.values()) if (v && v.row && String(v.row.pseudo).trim().toLowerCase() === p) return v.row; return null; };
+    const a = body.action;
+    if (a === "send") {
+      const text = String(body.text || "").replace(/[\u0000-\u001f]/g, " ").trim().slice(0, 300);
+      if (!text) return { status: 400, body: { error: "empty" } };
+      if (now - (meta.last || 0) < 2000) return { status: 429, body: { error: "slow down" } };
+      meta.last = now;
+      const msg = { i: crypto.randomUUID().slice(0, 12), f: row.pseudo, av: row.avatar || "", t: text, at: now };
+      const to = String(body.to || "").trim().toLowerCase();
+      if (!to) {
+        const g = (await this.ctx.storage.get("c:global")) || []; g.push(msg); await this.ctx.storage.put("c:global", g.slice(-200));
+      } else {
+        if (to === me) return { status: 400, body: { error: "self" } };
+        const other = await known(to); if (!other) return { status: 404, body: { error: "unknown" } };
+        const om = (await this.ctx.storage.get("cm:" + to)) || { seen: {}, blocked: [], last: 0, convs: {} };
+        if ((om.blocked || []).includes(me)) return { status: 200, body: { ok: true } }; // silently dropped
+        const k = dmKey(me, to), l = (await this.ctx.storage.get(k)) || []; l.push(msg); await this.ctx.storage.put(k, l.slice(-300));
+        meta.convs[to] = { n: other.pseudo, av: other.avatar || "", at: now }; meta.seen[to] = now;
+        om.convs = om.convs || {}; om.convs[me] = { n: row.pseudo, av: row.avatar || "", at: now }; await this.ctx.storage.put("cm:" + to, om);
+      }
+      await save();
+      return { status: 200, body: { ok: true, msg } };
+    }
+    if (a === "list") {
+      const w = String(body.with || "").trim().toLowerCase();
+      let l = w ? ((await this.ctx.storage.get(dmKey(me, w))) || []) : ((await this.ctx.storage.get("c:global")) || []);
+      l = l.filter((m) => !(meta.blocked || []).includes(String(m.f).trim().toLowerCase()));
+      meta.seen[w || "_g"] = now; await save();
+      return { status: 200, body: { msgs: l.slice(-120), blocked: meta.blocked || [] } };
+    }
+    if (a === "summary") {
+      const g = (await this.ctx.storage.get("c:global")) || [];
+      const gu = g.filter((m) => m.at > (meta.seen._g || 0) && String(m.f).trim().toLowerCase() !== me && !(meta.blocked || []).includes(String(m.f).trim().toLowerCase())).length;
+      const convs = [];
+      for (const [k, c] of Object.entries(meta.convs || {})) {
+        if ((meta.blocked || []).includes(k)) continue;
+        const l = (await this.ctx.storage.get(dmKey(me, k))) || [], last = l[l.length - 1];
+        const un = l.filter((m) => m.at > (meta.seen[k] || 0) && String(m.f).trim().toLowerCase() !== me).length;
+        convs.push({ k, n: c.n, av: c.av, at: last ? last.at : c.at, last: last ? last.t.slice(0, 60) : "", lastMe: last ? String(last.f).trim().toLowerCase() === me : false, un });
+      }
+      convs.sort((x, y) => y.at - x.at);
+      return { status: 200, body: { g: gu, gLast: g.length ? { f: g[g.length - 1].f, t: g[g.length - 1].t.slice(0, 60), at: g[g.length - 1].at } : null, convs, blocked: meta.blocked || [] } };
+    }
+    if (a === "block" || a === "unblock") {
+      const w = String(body.who || "").trim().toLowerCase(); if (!w || w === me) return { status: 400, body: { error: "bad" } };
+      meta.blocked = (meta.blocked || []).filter((x) => x !== w); if (a === "block") meta.blocked.push(w);
+      await save(); return { status: 200, body: { blocked: meta.blocked } };
+    }
+    if (a === "delete") {
+      if (me !== ADMIN || !(await this.isAdmin(body.id, String(body.token || "")))) return { status: 403, body: { error: "forbidden" } };
+      const g = (await this.ctx.storage.get("c:global")) || []; await this.ctx.storage.put("c:global", g.filter((m) => m.i !== body.mid));
+      return { status: 200, body: { ok: true } };
+    }
+    return { status: 400, body: { error: "action" } };
+  }
   async submit(body) {
     const id = clean(body.id, 64), token = String(body.token || "");
     if (!/^[\w-]{8,64}$/.test(id) || token.length < 8) return { status: 400, body: { error: "bad id" } };
@@ -345,6 +408,10 @@ export default {
     if (url.pathname === "/api/progress") return json({});
     if (url.pathname === "/api/daily" && request.method === "GET") return json(await env.LB.get(env.LB.idFromName("main")).daily(url.searchParams.get("date")));
     if (url.pathname === "/api/profile") { const r = await env.LB.get(env.LB.idFromName("main")).profile(clean(url.searchParams.get("pseudo"), 20)); return r ? json(r) : json({ error: "unknown" }, 404); }
+    if (url.pathname === "/api/chat" && request.method === "POST") {
+      let body; try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
+      const r = await env.LB.get(env.LB.idFromName("main")).chat(body); return json(r.body, r.status);
+    }
     if (url.pathname === "/api/presence") return json(await env.LB.get(env.LB.idFromName("main")).presence());
     if (url.pathname === "/api/ping" && request.method === "POST") {
       let body; try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }

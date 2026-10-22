@@ -1,5 +1,26 @@
 [
  {
+  "id": 38,
+  "date": "2026-10-22",
+  "icon": "💬",
+  "fr": {
+   "t": "Discute avec les autres détectives",
+   "d": "Touche la bulle 💬 en haut de l'accueil. Le fil global permet de parler à tout le monde, et tu peux écrire en privé à un détective : touche son nom dans le classement, puis « Envoyer un message ». Une pastille rouge t'indique les nouveaux messages. Tu peux bloquer quelqu'un depuis sa conversation."
+  },
+  "en": {
+   "t": "Chat with the other detectives",
+   "d": "Tap the 💬 bubble at the top of the home screen. The global thread lets you talk to everyone, and you can write privately to a detective: tap their name in the leaderboard, then “Send a message”. A red badge shows new messages. You can block someone from their conversation."
+  },
+  "ko": {
+   "t": "다른 탐정들과 이야기해요",
+   "d": "홈 화면 위쪽의 💬 말풍선을 누르세요. 전체 채팅에서는 모두와 이야기할 수 있고, 순위표에서 탐정 이름을 누른 뒤 ‘메시지 보내기’로 개인 메시지도 보낼 수 있어요. 새 메시지는 빨간 배지로 알려 줘요. 대화 화면에서 상대를 차단할 수도 있어요."
+  },
+  "ja": {
+   "t": "ほかの探偵とおしゃべり",
+   "d": "ホーム画面上の💬をタップしてね。全体チャットではみんなと話せて、ランキングで名前をタップして「メッセージを送る」を押せば個人メッセージも送れます。新しいメッセージは赤いバッジでお知らせ。会話画面から相手をブロックすることもできます。"
+  }
+ },
+ {
   "id": 37,
   "date": "2026-10-22",
   "icon": "🟢",
