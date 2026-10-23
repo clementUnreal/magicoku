@@ -1,5 +1,26 @@
 [
  {
+  "id": 46,
+  "date": "2026-10-23",
+  "icon": "⚖️",
+  "fr": {
+   "t": "Désigne le coupable !",
+   "d": "Une enquête ne se termine plus sans accusation : quand tout le monde est placé et que tu appuies sur « Valider », choisis qui est le coupable parmi les suspects. Accuser un innocent compte comme une tentative ratée. Indice : c'est la seule personne seule avec la victime…"
+  },
+  "en": {
+   "t": "Name the culprit!",
+   "d": "A case no longer ends without an accusation: once everyone is placed and you press “Check”, pick the culprit among the suspects. Accusing an innocent counts as a failed try. Hint: it's the only person alone with the victim…"
+  },
+  "ko": {
+   "t": "범인을 지목하세요!",
+   "d": "이제 고발 없이는 사건이 끝나지 않아요. 모두를 배치하고 ‘확인’을 누르면 용의자 중에서 범인을 골라야 해요. 무고한 사람을 고발하면 실패한 시도로 계산돼요. 힌트: 피해자와 단둘이 있던 사람이에요…"
+  },
+  "ja": {
+   "t": "犯人を指名しよう！",
+   "d": "告発なしでは事件は終わりません。全員を配置して「チェック」を押したら、容疑者の中から犯人を選ぼう。無実の人を告発すると失敗した挑戦として数えられます。ヒント：被害者と2人きりだった人……"
+  }
+ },
+ {
   "id": 45,
   "date": "2026-10-23",
   "icon": "🔤",
