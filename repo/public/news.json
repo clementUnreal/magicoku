@@ -1,5 +1,26 @@
 [
  {
+  "id": 43,
+  "date": "2026-10-23",
+  "icon": "✏️",
+  "fr": {
+   "t": "Barre les témoignages",
+   "d": "Une fois un personnage posé sur le plan, un petit bouton ✓ apparaît à côté de son paragraphe dans l'histoire : touche-le (ou touche le texte) pour le barrer et y voir plus clair. Touche ↺ pour annuler."
+  },
+  "en": {
+   "t": "Strike out statements",
+   "d": "Once a character is placed on the map, a small ✓ button appears next to their paragraph in the story: tap it (or tap the text) to strike it out and keep things clear. Tap ↺ to undo."
+  },
+  "ko": {
+   "t": "진술에 줄 긋기",
+   "d": "지도에 인물을 놓으면 이야기 속 그 인물의 문단 옆에 작은 ✓ 버튼이 나타나요. 버튼(또는 글)을 눌러 줄을 그으면 한눈에 정리할 수 있어요. ↺를 누르면 취소돼요."
+  },
+  "ja": {
+   "t": "証言に取り消し線",
+   "d": "人物をマップに置くと、ストーリーのその人物の段落の横に小さな✓ボタンが出ます。ボタン（または文）をタップすると取り消し線が引かれ、すっきり整理できます。↺で元に戻せます。"
+  }
+ },
+ {
   "id": 42,
   "date": "2026-10-23",
   "icon": "🧠",

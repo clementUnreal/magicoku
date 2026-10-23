@@ -3744,7 +3744,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="1777fa3d6c76";
+var APP_BUILD="293431597586";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -4084,6 +4084,39 @@ var CHAT={view:"list",with:null,withName:null,msgs:[],sum:null,timer:null,blocke
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);document.querySelectorAll(".lvc.expert").forEach(b=>b.title=L("Niveau expert : plus grand, moins d'indices, beaucoup plus de réflexion.","Expert level: bigger, fewer clues, much more thinking.","전문가 레벨: 더 크고, 단서는 적고, 훨씬 더 많은 추리가 필요해요.","エキスパートレベル：より大きく、手がかりは少なく、もっと考える必要があります。"))};
   const _oc=openCase;openCase=function(i){const r=_oc.apply(this,arguments);if(isEx(i)&&!(typeof RUSH!=="undefined"&&RUSH.on)){let seen=null;try{seen=localStorage.getItem("magicoku:expertSeen")}catch(_){}
       if(!seen){try{localStorage.setItem("magicoku:expertSeen","1")}catch(_){}setTimeout(()=>toast(L("★ Niveau expert : un plateau plus grand, très peu d'indices et aucun suspect évident. Prends ton temps !","★ Expert level: a bigger board, very few clues and no obvious suspect. Take your time!","★ 전문가 레벨: 더 큰 판, 아주 적은 단서, 뻔한 용의자는 없어요. 천천히 생각하세요!","★ エキスパートレベル：盤面は大きく、手がかりはわずか、わかりやすい容疑者はいません。じっくり考えよう！")),900)}}return r};
+})();
+
+/* ================= strike out a suspect's paragraph once they are placed ================= */
+(function(){
+  const css=document.createElement("style");
+  css.textContent=`.recit p.can-strike{position:relative;padding-right:34px;cursor:pointer}
+.recit p .stk{position:absolute;right:2px;top:3px;width:26px;height:26px;border-radius:50%;border:1.5px solid #b08a3e;background:#fff8e6;color:#7a5a1e;font:700 13px/1 system-ui,sans-serif;display:grid;place-items:center;cursor:pointer;padding:0;box-shadow:0 1px 3px rgba(80,50,10,.25);transition:transform .15s,background .15s}
+.recit p .stk:hover{transform:scale(1.1);background:#ffeec2}
+.recit p.struck{text-decoration:line-through;text-decoration-color:#8a6a3a;text-decoration-thickness:2px;opacity:.5}
+.recit p.struck .stk{opacity:1;background:#e9dcc0}`;
+  document.head.appendChild(css);
+  const tip=on=>on?L("Ne plus barrer","Unstrike","줄 지우기 취소","取り消し線を外す"):L("Barrer ce texte","Strike out this text","이 글에 줄 긋기","この文に取り消し線を引く");
+  function decorate(){
+    const st=S.strike||(S.strike={});
+    document.querySelectorAll(".recit p[data-p]").forEach(el=>{
+      const p=+el.dataset.p,placed=!!(S.place&&S.place[p]);
+      if(!placed&&st[p])delete st[p];
+      const on=placed&&!!st[p];
+      el.classList.toggle("can-strike",placed);el.classList.toggle("struck",on);
+      let b=el.querySelector(".stk");
+      if(placed){if(!b){b=document.createElement("button");b.type="button";b.className="stk";el.appendChild(b)}
+        b.textContent=on?"↺":"✓";b.title=tip(on);b.setAttribute("aria-label",tip(on))}
+      else if(b)b.remove();
+    });
+  }
+  function toggle(p){S.strike=S.strike||{};if(S.strike[p])delete S.strike[p];else S.strike[p]=1;try{save()}catch(_){}decorate();try{play("select")}catch(_){}}
+  const _rc=renderCards;renderCards=function(){const r=_rc.apply(this,arguments);try{decorate()}catch(_){}return r};
+  /* tap the ✓ button, or tap the plain text of a placed suspect's paragraph */
+  document.addEventListener("click",e=>{const t=e.target;if(!t||!t.closest)return;
+    const b=t.closest(".recit .stk");
+    if(b){e.preventDefault();e.stopPropagation();toggle(+b.closest("p").dataset.p);return}
+    if(t.matches&&t.matches(".recit p.can-strike")){toggle(+t.dataset.p)}},true);
+  try{decorate()}catch(_){}
 })();
 
 render();
