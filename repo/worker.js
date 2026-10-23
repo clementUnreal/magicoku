@@ -219,6 +219,14 @@ export class Leaderboard extends DurableObject {
     const date = today();
     if (body.date !== date) return { status: 409, body: { error: "not today", today: date } };
     const key = "d:" + date, d = (await this.ctx.storage.get(key)) || { rows: {} }, me = String(row.pseudo).trim().toLowerCase();
+    // admin correction of his own time for the day (one-shot request from the admin device)
+    if (body.admin === "settime") {
+      if (me !== ADMIN || !(await this.isAdmin(body.id, String(body.token || "")))) return { status: 403, body: { error: "forbidden" } };
+      if (!d.rows[me]) return { status: 404, body: { error: "not played" } };
+      Object.assign(d.rows[me], { t: Math.max(1, Math.min(86400, Math.round(Number(body.t) || 0))), e: 0, h: 0 });
+      await this.ctx.storage.put(key, d);
+      return { status: 200, body: { ok: true, row: d.rows[me] } };
+    }
     const w = await this.wallet(row.pseudo);
     if (d.rows[me]) return { status: 200, body: { already: true, coins: w.coins, earned: 0 } };
     const r = { pseudo: row.pseudo, avatar: row.avatar, t: Math.max(1, Math.min(86400, Math.round(Number(body.t) || 0))), e: Math.max(0, Math.min(99, Number(body.e) || 0)), h: Math.max(0, Math.min(99, Number(body.h) || 0)), at: Date.now() };

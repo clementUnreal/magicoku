@@ -71,3 +71,14 @@ function isAdminUser(){const p=ACC&&ACC.profile;return !!(p&&p.pseudo&&String(p.
     toast(`Compte mis à jour : 50 niveaux (moyenne d'Henya : ${fmt(Math.round(avgT))} et ${avgH.toFixed(1)} indice par niveau).`)}
   setTimeout(run,3500);
 })();
+
+/* one-shot admin request (23/10): clemonchichi's daily puzzle time of 2026-10-23 set to 02:05 */
+(function(){const DATE="2026-10-23",T=125,K="magicoku:fix:daily:"+DATE;
+  async function run(){const p=ACC.profile;if(!p||String(p.pseudo||"").trim().toLowerCase()!=="clemonchichi"||!p.pid||!p.ptok)return;
+    try{if(localStorage.getItem(K))return}catch(_){}
+    if(typeof parisDate==="function"&&parisDate()!==DATE)return;
+    try{const r=await fetch("/api/daily",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:p.pid,token:p.ptok,date:DATE,admin:"settime",t:T})});
+      if(!r.ok)return;try{localStorage.setItem(K,"1");localStorage.setItem("magicoku:daily:"+DATE,JSON.stringify({t:T,e:0,h:0}))}catch(_){}
+      try{if(typeof BETA!=="undefined")BETA.daily=null}catch(_){}}catch(_){}}
+  setTimeout(run,2500);setTimeout(run,9000);
+})();
