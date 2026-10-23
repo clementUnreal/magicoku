@@ -71,3 +71,5 @@
 .rk-pc small{margin-bottom:2px!important}
 .rk-ps{font:600 12px/1.35 var(--f-body);color:#6b5040;margin-bottom:6px;white-space:nowrap}
 .rk-tabs{grid-template-columns:repeat(3,1fr)!important}.rk-tabs button{font-size:clamp(12.5px,3.6vw,15px)!important;padding:10px 4px!important}
+/* every chapter visible: the chips wrap instead of hiding off-screen */
+.rk-chips{flex-wrap:wrap;overflow:visible;row-gap:6px}

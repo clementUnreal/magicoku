@@ -1,5 +1,26 @@
 [
  {
+  "id": 47,
+  "date": "2026-10-23",
+  "icon": "👆",
+  "fr": {
+   "t": "Tout est visible",
+   "d": "Dans le classement par enquête, tous les chapitres s'affichent désormais d'un coup d'œil. Et partout dans le jeu, les rangées qui dépassent se font glisser au doigt, à la souris (clic maintenu) ou à la molette."
+  },
+  "en": {
+   "t": "Everything in view",
+   "d": "In the per-case ranking, every chapter now shows at a glance. And everywhere in the game, rows that overflow can be slid with a finger, the mouse (click and drag) or the wheel."
+  },
+  "ko": {
+   "t": "한눈에 보여요",
+   "d": "사건별 순위에서 이제 모든 챕터가 한눈에 보여요. 게임 곳곳에서 화면을 넘치는 줄은 손가락, 마우스(누른 채 끌기), 휠로 밀어 볼 수 있어요."
+  },
+  "ja": {
+   "t": "ぜんぶ見える",
+   "d": "事件別ランキングで、すべての章がひと目で見えるようになりました。ゲーム内のはみ出した列は、指・マウス（押したままドラッグ）・ホイールでスライドできます。"
+  }
+ },
+ {
   "id": 46,
   "date": "2026-10-23",
   "icon": "⚖️",

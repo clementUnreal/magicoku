@@ -992,6 +992,8 @@ body.night #marks .mk.room{background:none!important}
 .rk-pc small{margin-bottom:2px!important}
 .rk-ps{font:600 12px/1.35 var(--f-body);color:#6b5040;margin-bottom:6px;white-space:nowrap}
 .rk-tabs{grid-template-columns:repeat(3,1fr)!important}.rk-tabs button{font-size:clamp(12.5px,3.6vw,15px)!important;padding:10px 4px!important}
+/* every chapter visible: the chips wrap instead of hiding off-screen */
+.rk-chips{flex-wrap:wrap;overflow:visible;row-gap:6px}
 /* ================= "Case closed" popup v2 ================= */
 #reveal .box.rv2{position:relative;width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow-y:auto;overflow-x:hidden;padding:0 18px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;
   background:radial-gradient(120% 60% at 50% 0%,#fff8e6,transparent 60%),linear-gradient(#f8eed8,#ead6ad);border:3px solid #d6ab4f;border-radius:20px;box-shadow:0 0 0 2px #5a3b12,0 0 0 7px rgba(214,171,79,.25),0 24px 60px #000c;scrollbar-width:none}
@@ -3765,7 +3767,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="f6d5e798006a";
+var APP_BUILD="9640e745ea00";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -4286,6 +4288,36 @@ var CHAT={view:"list",with:null,withName:null,msgs:[],sum:null,timer:null,blocke
     });
   };
   document.addEventListener("keydown",e=>{if(e.key==="Escape"){const ov=$("#accuse");if(ov&&!ov.hidden)ov.hidden=true}});
+})();
+
+/* ================= horizontal rows: drag with the mouse, swipe with the finger, wheel scrolls sideways ================= */
+(function(){
+  const css=document.createElement("style");
+  css.textContent=`.hscroll{overflow-x:auto!important;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;overscroll-behavior-x:contain;cursor:grab}
+.hscroll.dragging{cursor:grabbing;user-select:none;scroll-behavior:auto}
+.hscroll.dragging *{pointer-events:none}`;
+  document.head.appendChild(css);
+  const scrollsX=el=>{if(!(el instanceof Element))return false;const o=getComputedStyle(el).overflowX;return (o==="auto"||o==="scroll")&&el.scrollWidth>el.clientWidth+2};
+  const rowOf=t=>{for(let el=t;el&&el!==document.body;el=el.parentElement)if(scrollsX(el))return el;return null};
+  /* mouse drag (touch already scrolls natively) */
+  let drag=null;
+  document.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse"||e.button!==0)return;const r=rowOf(e.target);if(!r)return;
+    r.classList.add("hscroll");drag={r,x:e.clientX,s:r.scrollLeft,moved:false}},true);
+  document.addEventListener("pointermove",e=>{if(!drag)return;const dx=e.clientX-drag.x;
+    if(!drag.moved&&Math.abs(dx)>5){drag.moved=true;drag.r.classList.add("dragging")}
+    if(drag.moved){drag.r.scrollLeft=drag.s-dx;e.preventDefault()}},true);
+  const end=()=>{if(!drag)return;const d=drag;drag=null;if(d.moved){d.r.classList.remove("dragging");
+      /* swallow the click that follows a drag so no chip gets selected by accident */
+      const stop=ev=>{ev.stopPropagation();ev.preventDefault()};document.addEventListener("click",stop,{capture:true,once:true});setTimeout(()=>document.removeEventListener("click",stop,true),50)}};
+  document.addEventListener("pointerup",end,true);document.addEventListener("pointercancel",end,true);
+  /* vertical mouse wheel scrolls a horizontal row sideways */
+  document.addEventListener("wheel",e=>{if(e.ctrlKey||Math.abs(e.deltaY)<=Math.abs(e.deltaX))return;const r=rowOf(e.target);if(!r)return;
+    const max=r.scrollWidth-r.clientWidth;if((e.deltaY<0&&r.scrollLeft<=0)||(e.deltaY>0&&r.scrollLeft>=max-1))return;
+    r.scrollLeft+=e.deltaY;e.preventDefault()},{passive:false,capture:true});
+  /* mark rows so the cursor shows they can be dragged */
+  const mark=()=>document.querySelectorAll(".sh-tabs,.lvside,.rk-tabs,.rk-lvs,.chips,.h2-grid,.lvgrid").forEach(el=>el.classList.toggle("hscroll",scrollsX(el)));
+  new MutationObserver(()=>{clearTimeout(mark.t);mark.t=setTimeout(mark,120)}).observe(document.body,{childList:true,subtree:true});
+  window.addEventListener("resize",mark);setTimeout(mark,800);
 })();
 
 render();
