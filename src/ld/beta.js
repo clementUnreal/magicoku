@@ -30,9 +30,16 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
   /* ---------- wallet + cosmetics ---------- */
   async function loadWallet(){const p=acc();if(!p||!shopOn())return;const r=await api("/api/shop",{id:p.pid,token:p.ptok,action:"get"}).catch(()=>null);if(r&&r.ok&&r.d&&r.d.eq){BETA.lock=false;BETA.w=r.d;applyCos();try{localStorage.setItem("magicoku:wallet",JSON.stringify(r.d))}catch(_){}}else if(r&&r.status===423){BETA.lock=true;BETA.w=null;try{localStorage.removeItem("magicoku:wallet")}catch(_){}applyCos()}}
   try{BETA.w=JSON.parse(localStorage.getItem("magicoku:wallet")||"null")}catch(_){}
+  /* ---------- renaming quill: shared names for every player, sold at auction ---------- */
+  try{BETA.q=JSON.parse(localStorage.getItem("magicoku:quill")||"null")}catch(_){}
+  function setQuill(q){if(!q||!q.names)return;const before=JSON.stringify(BETA.q&&BETA.q.names||{});BETA.q=q;try{localStorage.setItem("magicoku:quill",JSON.stringify(q))}catch(_){}
+    applyCos();if(JSON.stringify(q.names)!==before){try{render()}catch(_){}try{renderHome()}catch(_){}}}
+  async function loadQuill(){const r=await api("/api/names").catch(()=>null);if(r&&r.ok&&r.d)setQuill(r.d)}
+  setTimeout(loadQuill,1200);setInterval(()=>{if(!document.hidden)loadQuill()},180000);
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadQuill()});
   function applyCos(){const on=shopOn(),w=BETA.w,eq=on&&w?w.eq:{};
     document.body.className=document.body.className.replace(/\bxs-\S+/g,"").trim();if(eq.x)document.body.classList.add("xs-"+eq.x.slice(2));
-    for(const k in RENAME)delete RENAME[k];if(on&&w&&w.names)Object.assign(RENAME,w.names);
+    for(const k in RENAME)delete RENAME[k];if(BETA.q&&BETA.q.names)Object.assign(RENAME,BETA.q.names);
     MUS.style=eq.m?eq.m.slice(2):"waltz"}
   /* ---------- music styles ---------- */
   const NOTE_=n=>440*Math.pow(2,(n-69)/12);
@@ -156,15 +163,23 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     p.innerHTML=head+`<div class="sh-tabs">${SHOP_CATS.map(([k,ic,n])=>`<button class="sh-tab${k===cat?" on":""}" data-cat="${k}"><span class="sh-ti">${CAT_IC[k]}</span>${k==="x"?L("Marqueurs","Markers","표시","マーカー"):TX(n)}</button>`).join("")}</div>
       <div class="sh-sub"><i></i><span>✦ ${TX(SUB[cat])} ✦</span><i></i></div>
       ${cat==="t"?titlesTab(w):""}<div class="sh-grid"${cat==="t"?" hidden":""}>${SHOP_ITEMS[cat].map(it=>{const isNone=it[0].endsWith(":none"),own=isNone||owned.has(it[0]),on=isNone?!eq[cat]:eq[cat]===it[0],poor=w&&w.coins<it[1];
-        const btn=cat==="n"?(own?`<button class="sh-btn eq" data-ren>${L("Renommer","Rename","이름 바꾸기","名前を変える")}</button>`:`<button class="sh-btn buy${poor?" poor":""}" data-buy="${it[0]}">🔒 ${it[1]} 🌙</button>`)
-          :on?`<span class="sh-btn on">✓ ${L("Équipé","Equipped","장착 중","装備中")}</span>`:own?`<button class="sh-btn eq" data-eq="${it[0]}">${L("Équiper","Equip","장착","装備")}</button>`:`<button class="sh-btn buy${poor?" poor":""}" data-buy="${it[0]}">🔒 ${it[1]} 🌙</button>`;
+        const qp=qPrice(),qOwn=w&&w.quill>0;
+        if(cat==="n")return quillCard(it,qOwn,qp,w&&w.coins<qp);
+        const btn=on?`<span class="sh-btn on">✓ ${L("Équipé","Equipped","장착 중","装備中")}</span>`:own?`<button class="sh-btn eq" data-eq="${it[0]}">${L("Équiper","Equip","장착","装備")}</button>`:`<button class="sh-btn buy${poor?" poor":""}" data-buy="${it[0]}">🔒 ${it[1]} 🌙</button>`;
         return `<div class="sh-it${on&&cat!=="n"?" on":""}"><div class="sh-pv">${preview(cat,it)}</div><b>${TX(it[3])}</b>${btn}</div>`}).join("")}</div>
-      ${cat==="n"&&owned.has("n:rename")?renEditor():""}<p class="sh-msg" id="shMsg"></p>
+      ${cat==="n"&&w&&w.quill>0?renEditor():""}<p class="sh-msg" id="shMsg"></p>
       <div class="sh-foot">✦ ${L("Gagne des éclats en résolvant des enquêtes.","Earn shards by solving cases.","사건을 해결하면 달 조각을 받아요.","事件を解くとかけらがもらえます。")} ✦ ${String(me.pseudo).toLowerCase()==="clemonchichi"?`<button class="sh-grant" id="shGrant">+500 (test)</button>`:""}</div>`}
   function baseNames(){const s=new Set();Object.values(META).forEach(m=>(m.people||[]).forEach(pp=>s.add(pp[0])));return [...s].filter(Boolean).sort()}
-  function renEditor(){const w=BETA.w||{names:{}};return `<div class="sh-ren"><p>${L("Donne de nouveaux noms aux personnages (laisse vide pour garder l'original). Ces noms ne changent que pour toi.","Give the characters new names (leave empty to keep the original). These names only change for you.","캐릭터에게 새 이름을 지어 주세요(비워 두면 원래 이름). 나에게만 바뀌어요.","キャラクターに新しい名前をつけよう（空欄なら元の名前）。自分にだけ反映されます。")}</p>
-    ${baseNames().map(n=>`<label><span>${esc(n)}</span><input data-rn="${esc(n)}" maxlength="16" value="${esc((w.names||{})[n]||"")}" placeholder="${esc(n)}"></label>`).join("")}<button class="pill red" id="shRenSave">${L("Enregistrer les noms","Save the names","이름 저장","名前を保存")}</button></div>`}
+  function qPrice(){return BETA.q&&BETA.q.price||100}
+  function quillCard(it,own,price,poor){const q=BETA.q||{},by=q.by?esc(q.by):null;
+    const btn=own?`<button class="sh-btn eq" data-ren>✒️ ${L("Renommer maintenant","Rename now","지금 이름 바꾸기","今すぐ名前を変える")}</button>`:`<button class="sh-btn buy${poor?" poor":""}" data-buy="n:rename">🔒 ${price} 🌙</button>`;
+    return `<div class="sh-it sh-quill"><div class="sh-pv">${preview("n",it)}</div><b>${TX(it[3])}</b>
+      <p class="sh-qd">${L("Aux enchères ! Celui qui l'achète renomme les personnages <b>pour tous les joueurs</b>. Chaque achat fait monter le prix de 50 🌙.","Up for auction! Whoever buys it renames the characters <b>for every player</b>. Each purchase raises the price by 50 🌙.","경매 중! 구매한 사람이 <b>모든 플레이어</b>의 캐릭터 이름을 바꿔요. 구매할 때마다 가격이 50 🌙씩 올라요.","オークション中！買った人が<b>全プレイヤー</b>のキャラクター名を変えられます。購入のたびに価格が50🌙上がります。")}</p>
+      <small class="sh-qby">${by?L(`Dernier coup de plume : <b>${by}</b>`,`Last stroke of the quill: <b>${by}</b>`,`마지막으로 이름을 바꾼 사람: <b>${by}</b>`,`最後に名前を変えた人：<b>${by}</b>`):L("Personne ne l'a encore achetée.","Nobody has bought it yet.","아직 아무도 사지 않았어요.","まだ誰も買っていません。")}</small>${btn}</div>`}
+  function renEditor(){const names=BETA.q&&BETA.q.names||{};return `<div class="sh-ren"><p>${L("Tu tiens la plume ! Les noms que tu choisis remplacent ceux de <b>tout le monde</b>, pour tous les joueurs. Laisse une case vide pour rendre au personnage son nom d'origine. Tu n'as droit qu'à un envoi : ensuite, la plume repart aux enchères.","You hold the quill! The names you choose replace everyone's, <b>for every player</b>. Leave a box empty to give the character back its original name. You get one submission: then the quill goes back up for auction.","깃펜을 손에 넣었어요! 고른 이름이 <b>모든 플레이어</b>에게 적용돼요. 칸을 비워 두면 원래 이름으로 돌아가요. 저장은 한 번뿐이고, 그 뒤 깃펜은 다시 경매에 나와요.","羽ペンを手に入れた！選んだ名前は<b>全プレイヤー</b>に反映されます。空欄にすると元の名前に戻ります。送信は1回だけ。その後、羽ペンは再びオークションへ。")}</p>
+    ${baseNames().map(n=>`<label><span>${esc(n)}</span><input data-rn="${esc(n)}" maxlength="16" value="${esc(names[n]||"")}" placeholder="${esc(n)}"></label>`).join("")}<button class="pill red" id="shRenSave">${L("Renommer pour tout le monde","Rename for everyone","모두에게 이름 바꾸기","全員の名前を変える")}</button></div>`}
   async function shopAct(body){const p=acc();if(!p)return;const r=await api("/api/shop",Object.assign({id:p.pid,token:p.ptok},body)).catch(()=>null);const msg=$("#shMsg");
+    if(r&&r.d&&r.d.gq)setQuill(r.d.gq);
     if(r&&r.ok){BETA.w=r.d;applyCos();try{localStorage.setItem("magicoku:wallet",JSON.stringify(r.d))}catch(_){}try{play("win")}catch(_){}renderShop();renderHome();return true}
     if(msg)msg.textContent=r&&r.status===402?L("Pas assez d'éclats de lune !","Not enough moon shards!","달 조각이 부족해요!","月のかけらが足りない！"):r&&r.status===423?L("Ces éclats appartiennent à un autre appareil. Demande ton code de récupération à l'administrateur pour les retrouver ici.","These shards belong to another device. Ask the admin for your recovery code to get them here.","이 달 조각은 다른 기기에 속해 있어요. 관리자에게 복구 코드를 받아 이곳에서 되찾으세요.","このかけらは別の端末のものです。管理者に復元コードをもらって、ここで取り戻してね。"):L("Impossible pour l'instant (connexion ?).","Not possible right now (connection?).","지금은 할 수 없어요(연결?).","今はできません（接続？）。");try{play("forbid")}catch(_){}return false}
   /* ---------- profile ---------- */
@@ -187,7 +202,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
   /* ---------- events ---------- */
   document.addEventListener("click",async e=>{const t=e.target.closest&&e.target.closest("button,[data-prof]");if(!t)return;
     if(t.id==="h2Daily"){e.stopPropagation();show("pDaily");try{play("page")}catch(_){}return}
-    if(t.id==="h2Shop"){e.stopPropagation();show("pShop");try{play("page")}catch(_){}loadWallet().then(()=>{if(!panel("pShop").hidden)renderShop()});return}
+    if(t.id==="h2Shop"){e.stopPropagation();show("pShop");try{play("page")}catch(_){}Promise.all([loadWallet(),loadQuill()]).then(()=>{if(!panel("pShop").hidden)renderShop()});return}
     if(t.id==="hAccount"&&shopOn()&&ACC.profile&&ACC.profile.pseudo){e.stopPropagation();show("pProfile");loadWallet().then(()=>{if(!panel("pProfile").hidden)renderProfile()});return}
     if(!t.closest(".beta-panel")&&!t.closest("#rk2")&&!t.closest("#mProf"))return;
     if(t.dataset.prof!=null&&shopOn()){openProfile(t.dataset.prof);return}
@@ -196,10 +211,12 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     if(t.dataset.dt){BETA.tab=t.dataset.dt==="today"?"today":"y";renderDaily(false);return}
     if(t.dataset.play){playPreview(t.dataset.play);return}
     if(t.dataset.cat){stopPreview();BETA.shopCat=t.dataset.cat;renderShop();return}
+    if(t.dataset.buy==="n:rename"){const pr=qPrice();if(BETA.w&&BETA.w.coins<pr){try{play("forbid")}catch(_){}const m=$("#shMsg");if(m)m.textContent=L(`Il te manque ${pr-BETA.w.coins} 🌙 pour la plume.`,`You need ${pr-BETA.w.coins} more 🌙 for the quill.`,`깃펜을 사려면 🌙 ${pr-BETA.w.coins}개가 더 필요해요.`,`羽ペンにはあと🌙${pr-BETA.w.coins}個必要です。`);return}
+      if(t.dataset.armed){if(await shopAct({action:"buyquill"})){const ed=document.querySelector(".sh-ren");if(ed)ed.scrollIntoView({behavior:"smooth"})}}else{t.dataset.armed=1;t.classList.add("ask");t.textContent=L(`Acheter pour ${pr} 🌙 ?`,`Buy for ${pr} 🌙?`,`🌙 ${pr}개로 구매?`,`🌙${pr}で買う？`)}return}
     if(t.dataset.buy){const it=shopItem(t.dataset.buy);if(BETA.w&&BETA.w.coins<it[1]){try{play("forbid")}catch(_){}const m=$("#shMsg");if(m)m.textContent=L(`Il te manque ${it[1]-BETA.w.coins} 🌙 pour cet objet.`,`You need ${it[1]-BETA.w.coins} more 🌙 for this item.`,`이 아이템을 사려면 🌙 ${it[1]-BETA.w.coins}개가 더 필요해요.`,`このアイテムにはあと🌙${it[1]-BETA.w.coins}個必要です。`);return}if(t.dataset.armed){shopAct({action:"buy",item:it[0]})}else{t.dataset.armed=1;t.classList.add("ask");t.textContent=L(`Acheter pour ${it[1]} 🌙 ?`,`Buy for ${it[1]} 🌙?`,`🌙 ${it[1]}개로 구매?`,`🌙${it[1]}で買う？`)}return}
     if(t.dataset.eq){shopAct({action:"equip",item:t.dataset.eq,slot:t.dataset.eq.split(":")[0]});return}
     if(t.hasAttribute("data-ren")){const ed=document.querySelector(".sh-ren");if(ed)ed.scrollIntoView({behavior:"smooth"});return}
-    if(t.id==="shRenSave"){const names={};document.querySelectorAll("[data-rn]").forEach(i=>{if(i.value.trim())names[i.dataset.rn]=i.value.trim()});if(await shopAct({action:"names",names})){const m=$("#shMsg");if(m)m.textContent=L("Noms enregistrés !","Names saved!","이름을 저장했어요!","名前を保存しました！")}return}
+    if(t.id==="shRenSave"){const names={};document.querySelectorAll("[data-rn]").forEach(i=>{if(i.value.trim())names[i.dataset.rn]=i.value.trim()});if(await shopAct({action:"names",names})){const m=$("#shMsg");if(m)m.textContent=L("C'est signé ! Les nouveaux noms s'affichent chez tous les joueurs.","Signed! The new names now show for every player.","완료! 새 이름이 모든 플레이어에게 보여요.","署名完了！新しい名前が全プレイヤーに表示されます。")}return}
     if(t.id==="shGrant"){shopAct({action:"grant",n:500});return}
     if(t.id==="pfShop"){show("pShop");return}if(t.id==="pfDaily"){show("pDaily");return}if(t.id==="pfEdit"){show("pAccount");return}
   },true);

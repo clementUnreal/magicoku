@@ -4,6 +4,7 @@ import { DurableObject } from "cloudflare:workers";
 
 const ADMIN = "clemonchichi";
 // ---- daily puzzle + shop (beta) ----
+const QUILL_BASE = 100, QUILL_STEP = 50;
 const SHOP = {
   // cross styles
   "x:star": 60, "x:moon": 60, "x:heart": 60, "x:skull": 90, "x:paw": 90, "x:spark": 120,
@@ -15,7 +16,7 @@ const SHOP = {
   "o:gold": 100, "o:flowers": 120, "o:stars": 150, "o:frost": 150, "o:flames": 200, "o:rainbow": 300,
   // titles
   "t:apprenti": 40, "t:limier": 80, "t:plume": 80, "t:lune": 150, "t:maitre": 250, "t:legende": 500,
-  // rename the suspects
+  // rename the suspects: price set by the auction (QUILL_BASE + QUILL_STEP per purchase)
   "n:rename": 100,
 };
 const SLOT = { x: "x", m: "m", c: "c", o: "o", t: "t" };
@@ -238,6 +239,9 @@ export class Leaderboard extends DurableObject {
     const rows = Object.values(d.rows).sort(dcmp);
     return { status: 200, body: { earned, coins: w.coins, rank: rows.findIndex((x) => x === r || x.pseudo === r.pseudo) + 1, of: rows.length } };
   }
+  // the renaming quill is an auction: the names are shared by every player, each purchase costs 50 more
+  async quill() { return (await this.ctx.storage.get("__quill")) || { names: {}, n: 0, by: null, at: 0 }; }
+  pubQuill(q) { return { names: q.names || {}, price: QUILL_BASE + QUILL_STEP * (q.n || 0), by: q.by || null, at: q.at || 0, n: q.n || 0 }; }
   async shop(body) {
     await this.settle();
     const row = await this.auth(body.id, String(body.token || ""));
@@ -246,6 +250,18 @@ export class Leaderboard extends DurableObject {
     // a wallet belongs to the devices that first used it (+ devices recovered with the code)
     if (!w.pids || !w.pids.length) { w.pids = [row.id]; await this.saveWallet(row.pseudo, w); }
     else if (!w.pids.includes(row.id)) return { status: 423, body: { error: "other device", coins: w.coins } };
+    // old personal renaming quill (bought before the auction): refunded once
+    if (w.owned.includes("n:rename")) { w.owned = w.owned.filter((x) => x !== "n:rename"); w.coins += 100; w.names = {}; await this.saveWallet(row.pseudo, w); }
+    const q = await this.quill();
+    if (body.action === "buyquill" || (body.action === "buy" && item === "n:rename")) {
+      const price = QUILL_BASE + QUILL_STEP * (q.n || 0);
+      if ((w.quill || 0) > 0) return { status: 200, body: Object.assign({}, w, { gq: this.pubQuill(q) }) };
+      if (w.coins < price) return { status: 402, body: { error: "not enough", wallet: w, gq: this.pubQuill(q) } };
+      w.coins -= price; w.quill = 1; q.n = (q.n || 0) + 1;
+      (w.log = w.log || []).unshift({ at: Date.now(), n: -price, why: "quill" }); w.log = w.log.slice(0, 30);
+      await this.ctx.storage.put("__quill", q); await this.saveWallet(row.pseudo, w);
+      return { status: 200, body: Object.assign({}, w, { gq: this.pubQuill(q) }) };
+    }
     if (body.action === "buy") {
       if (!(item in SHOP)) return { status: 400, body: { error: "unknown item" } };
       if (w.owned.includes(item)) return { status: 200, body: w };
@@ -260,17 +276,19 @@ export class Leaderboard extends DurableObject {
       if (!item || item.endsWith(":none")) delete w.eq[sl]; else w.eq[sl] = item;
       await this.saveWallet(row.pseudo, w);
     } else if (body.action === "names") {
-      if (!w.owned.includes("n:rename")) return { status: 403, body: { error: "not owned" } };
+      if (!((w.quill || 0) > 0)) return { status: 403, body: { error: "not owned", gq: this.pubQuill(q) } };
       const out = {};
-      for (const [k, v] of Object.entries(body.names || {}).slice(0, 20)) { const kk = clean(k, 20), vv = clean(v, 16); if (kk && vv) out[kk] = vv; }
-      w.names = out; await this.saveWallet(row.pseudo, w);
+      for (const [k, v] of Object.entries(body.names || {}).slice(0, 40)) { const kk = clean(k, 20), vv = clean(v, 16); if (kk && vv && vv !== kk) out[kk] = vv; }
+      q.names = out; q.by = row.pseudo; q.at = Date.now(); w.quill = 0;
+      await this.ctx.storage.put("__quill", q); await this.saveWallet(row.pseudo, w);
     } else if (body.action === "grant") {
       // admin test helper: give coins to yourself
       if (String(row.pseudo).trim().toLowerCase() !== ADMIN || !(await this.isAdmin(body.id, String(body.token || "")))) return { status: 403, body: { error: "forbidden" } };
       w.coins += Math.max(0, Math.min(5000, Number(body.n) || 0)); await this.saveWallet(row.pseudo, w);
     }
-    return { status: 200, body: w };
+    return { status: 200, body: Object.assign({}, w, { gq: this.pubQuill(q) }) };
   }
+  async names() { return this.pubQuill(await this.quill()); }
   async profile(pseudo) {
     const want = String(pseudo || "").trim().toLowerCase(); if (!want) return null;
     const all = await this.ctx.storage.list({ prefix: "p:" });
@@ -414,6 +432,7 @@ export default {
     }
     // progress is no longer given out by name alone: a recovery code is needed
     if (url.pathname === "/api/progress") return json({});
+    if (url.pathname === "/api/names" && request.method === "GET") return json(await env.LB.get(env.LB.idFromName("main")).names());
     if (url.pathname === "/api/daily" && request.method === "GET") return json(await env.LB.get(env.LB.idFromName("main")).daily(url.searchParams.get("date")));
     if (url.pathname === "/api/profile") { const r = await env.LB.get(env.LB.idFromName("main")).profile(clean(url.searchParams.get("pseudo"), 20)); return r ? json(r) : json({ error: "unknown" }, 404); }
     if (url.pathname === "/api/chat" && request.method === "POST") {

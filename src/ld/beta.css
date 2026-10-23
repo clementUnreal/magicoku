@@ -199,3 +199,9 @@ img.cos-ban{display:block;height:24px;width:auto;max-width:100%;object-fit:conta
 .ch-form input{flex:1;min-width:0;padding:12px 14px;border-radius:999px;border:2px solid #d6ab4f;font:500 16px var(--f-body);background:#fff;color:#3a1f3d}
 .ch-form .pill{flex:none}
 #pfMsg{align-self:center;margin-top:4px}
+.sh-it.sh-quill{grid-column:1/-1;justify-self:center;width:100%;max-width:440px;gap:8px;padding:14px 14px 16px;background:linear-gradient(#fffaf0,#fff3dc);border-color:#d9b871}
+.sh-quill .sh-qd{margin:0;font:400 13.5px/1.45 var(--f-body);color:#4a3a30}
+.sh-quill .sh-qby{font:400 12.5px var(--f-body);color:#7a5a1e}
+.sh-quill .sh-btn{min-width:150px}
+.sh-ren p b{color:#a8323e}
+.sh-quill .sh-qd b,.sh-quill .sh-qby b{display:inline;min-height:0;font:inherit;font-weight:700;color:#3a1f3d}

@@ -1,5 +1,26 @@
 [
  {
+  "id": 44,
+  "date": "2026-10-23",
+  "icon": "✒️",
+  "fr": {
+   "t": "La plume aux enchères",
+   "d": "La plume de renommage est désormais aux enchères ! Celui qui l'achète renomme les personnages pour tous les joueurs (initiales sur le plan comprises). Elle coûte 100 🌙, puis 50 🌙 de plus à chaque achat. Ceux qui avaient l'ancienne plume ont été remboursés."
+  },
+  "en": {
+   "t": "The quill goes to auction",
+   "d": "The renaming quill is now up for auction! Whoever buys it renames the characters for every player (initials on the map included). It costs 100 🌙, then 50 🌙 more with each purchase. Owners of the old quill have been refunded."
+  },
+  "ko": {
+   "t": "경매에 나온 깃펜",
+   "d": "이름 바꾸기 깃펜이 이제 경매에 나왔어요! 구매한 사람이 모든 플레이어의 캐릭터 이름을 바꿔요(지도 위 이니셜 포함). 처음엔 100 🌙, 구매할 때마다 50 🌙씩 올라요. 예전 깃펜을 가진 분들은 환불받았어요."
+  },
+  "ja": {
+   "t": "羽ペンがオークションに",
+   "d": "名前変更の羽ペンがオークションになりました！買った人が全プレイヤーのキャラクター名を変えられます（マップ上のイニシャルも）。最初は100🌙、購入のたびに50🌙ずつ上がります。旧羽ペンの持ち主には返金済みです。"
+  }
+ },
+ {
   "id": 43,
   "date": "2026-10-23",
   "icon": "✏️",

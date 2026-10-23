@@ -260,5 +260,14 @@ s=s.replace('</style>',open('verdict.css').read()+'</style>',1)
 _pn='const pname=p=>{const n=M.people[p][0];return (LANG==="ko"||LANG==="ja")&&NAMES[n]?NAMES[n][LANG==="ko"?0:1]:n};'
 assert _pn in s
 s=s.replace(_pn,'var RENAME={};const pname=p=>{const n=M.people[p][0];if(RENAME[n])return RENAME[n];return (LANG==="ko"||LANG==="ja")&&NAMES[n]?NAMES[n][LANG==="ko"?0:1]:n};')
+# marker initials follow the shared names chosen with the renaming quill
+_oi='const ini=p=>M.people[p][0].replace(/^(Pr|Sir|Maître|Dr|Dame) /,"")[0];'
+assert _oi in s
+s=s.replace(_oi,'const ini=p=>{const n=M.people[p][0],r=(typeof RENAME!=="undefined"&&RENAME[n])||n;return [...r.replace(/^(Pr|Pr\\.|Sir|Maître|Dr|Dame|Professeur|Madame|Monsieur) /i,"").trim()||r][0].toUpperCase()};',1)
+# the case intro also follows the shared names (renaming quill)
+_os='$("#story").innerHTML=TX(M.story);'
+assert _os in s
+s=s.replace(_os,'$("#story").innerHTML=renTxt(TX(M.story));',1)
+s=s.replace('var RENAME={};','var RENAME={};function renTxt(h){h=String(h);for(const n in RENAME){const v=String(RENAME[n]).replace(/[<>&"]/g,"");const loc=(LANG==="ko"||LANG==="ja")&&typeof NAMES!=="undefined"&&NAMES[n]?NAMES[n][LANG==="ko"?0:1]:null;for(const o of [n,typeof loc==="string"?loc:null])if(o)h=h.split(o).join(v)}return h}',1)
 open('../crimes-mignons.html','w').write(s)
 print(len(s)//1024,"KB")
