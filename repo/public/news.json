@@ -1,5 +1,26 @@
 [
  {
+  "id": 48,
+  "date": "2026-10-23",
+  "icon": "👥",
+  "fr": {
+   "t": "Enquête à plusieurs",
+   "d": "Nouveau mode en équipe, dès 3 détectives ! Crée une salle, partage son code, et chacun se déclare prêt. Chaque détective ne reçoit qu'une partie des témoignages et porte une loupe : 🗺️ Cartographe (voit les pièces, pas les objets) ou 🔍 Inspecteur (voit les objets, pas les pièces). Plateau partagé, discussion d'équipe… et accusation commune !"
+  },
+  "en": {
+   "t": "Team case",
+   "d": "A new team mode, from 3 detectives! Create a room, share its code, and everyone says they're ready. Each detective only gets part of the testimonies and wears a lens: 🗺️ Cartographer (sees rooms, not objects) or 🔍 Inspector (sees objects, not rooms). Shared board, team chat… and a joint accusation!"
+  },
+  "ko": {
+   "t": "팀 수사",
+   "d": "탐정 3명부터 즐기는 새 팀 모드! 방을 만들고 코드를 공유한 뒤 모두 준비 완료를 누르세요. 탐정마다 증언의 일부만 받고 돋보기를 하나 써요: 🗺️ 지도 제작자(방은 보이고 물건은 안 보임) 또는 🔍 조사관(물건은 보이고 방은 안 보임). 함께 쓰는 판, 팀 대화… 그리고 함께 하는 고발!"
+  },
+  "ja": {
+   "t": "みんなで捜査",
+   "d": "探偵3人から遊べる新しいチームモード！ルームを作ってコードを共有し、全員で準備OKを押そう。探偵はそれぞれ証言の一部だけを持ち、ルーペをひとつ使う：🗺️ 地図係（部屋は見えるが物は見えない）か 🔍 調査係（物は見えるが部屋は見えない）。共有の盤、チームの会話……そしてみんなで告発！"
+  }
+ },
+ {
   "id": 47,
   "date": "2026-10-23",
   "icon": "👆",

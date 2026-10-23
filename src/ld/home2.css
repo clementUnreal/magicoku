@@ -85,3 +85,4 @@
 .home-nav.h2,.h2-bar{word-break:keep-all;overflow-wrap:anywhere}
 .h2-card.c-disc .h2-ct b{white-space:nowrap}
 .h2-bar button span{white-space:nowrap;font-size:clamp(11px,3.3vw,13px);overflow-wrap:normal;word-break:normal}
+.h2-card.c-coop{background:linear-gradient(135deg,#6b2a55,#2d1430)}

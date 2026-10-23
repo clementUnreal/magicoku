@@ -40,6 +40,7 @@
       const b=t.closest(".acc-p");if(b){pick=+b.dataset.acc;ov.querySelectorAll(".acc-p").forEach(x=>x.classList.toggle("on",x===b));$("#accGo").disabled=false;$("#accMsg").textContent="";try{play("select")}catch(_){}return}
       if(t.closest("#accGo")&&pick!=null){ov.hidden=true;go(pick)}};
   }
+  window.accuseSheet=sheet;
   function wrongAccusation(p){
     S.attempts=(S.attempts||0)+1;try{save()}catch(_){}try{renderTimer()}catch(_){}
     const msg=L(`${pname(p)} n'a rien à se reprocher… Qui était seul avec ${pname(0)} ?`,`${pname(p)} is innocent… Who was alone with ${pname(0)}?`,`${pname(p)}은(는) 결백해요… ${pname(0)}와(과) 단둘이 있던 사람은 누구일까요?`,`${pname(p)}は無実だ……${pname(0)}と2人きりだったのは誰？`);

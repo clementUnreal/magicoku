@@ -328,6 +328,88 @@ export class Leaderboard extends DurableObject {
     return out;
   }
   // ---- chat: global thread + private messages ----
+  // ---- co-op rooms: lobby, shared board, room chat (polling) ----
+  async coop(body) {
+    const row = await this.auth(body.id, String(body.token || ""));
+    if (!row) return { status: 403, body: { error: "forbidden" } };
+    const me = String(row.pseudo).trim(), meK = me.toLowerCase(), now = Date.now(), act = String(body.action || "");
+    const A = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+    const key = (c) => "co:" + String(c || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 4);
+    const pub = (r) => ({ code: r.code, host: r.host, status: r.status, lvl: r.lvl || null, ver: r.ver, place: r.place, xs: r.xs, attempts: r.attempts || 0,
+      startedAt: r.startedAt || 0, won: r.won || null, order: r.order || null, msgs: (r.msgs || []).slice(-60), test: !!r.test,
+      players: r.players.map((p) => ({ pseudo: p.pseudo, avatar: p.avatar, ready: !!p.ready, on: now - (p.seen || 0) < 25000 })) });
+    const bump = async (k, r) => { r.ver = (r.ver || 0) + 1; r.at = now; await this.ctx.storage.put(k, r); return { status: 200, body: pub(r) }; };
+    if (act === "create") {
+      // clean up rooms older than 8 hours
+      const old = await this.ctx.storage.list({ prefix: "co:" });
+      for (const [k, v] of old) if (!v || now - (v.at || 0) > 8 * 3600e3) await this.ctx.storage.delete(k);
+      let code = "";
+      for (let t = 0; t < 40; t++) { code = ""; for (let i = 0; i < 4; i++) code += A[Math.floor(Math.random() * A.length)]; if (!(await this.ctx.storage.get("co:" + code))) break; }
+      const pool = (Array.isArray(body.pool) ? body.pool : []).map((x) => clean(x, 12)).filter(Boolean).slice(0, 200);
+      const r = { code, host: me, status: "lobby", players: [{ pseudo: me, avatar: clean(row.avatar, 20), ready: false, seen: now }], place: {}, xs: {}, msgs: [], pool, ver: 0 };
+      return bump("co:" + code, r);
+    }
+    const k = key(body.code), r = await this.ctx.storage.get(k);
+    if (!r) return { status: 404, body: { error: "no room" } };
+    let p = r.players.find((x) => x.pseudo.toLowerCase() === meK);
+    if (act === "join") {
+      if (!p) { if (r.status !== "lobby") return { status: 409, body: { error: "started" } }; if (r.players.length >= 6) return { status: 409, body: { error: "full" } };
+        p = { pseudo: me, avatar: clean(row.avatar, 20), ready: false, seen: now }; r.players.push(p); }
+      p.seen = now; return bump(k, r);
+    }
+    if (!p) return { status: 403, body: { error: "not in room" } };
+    const wasOn = now - (p.seen || 0) < 25000; p.seen = now;
+    if (act === "state") {
+      if (!wasOn) return bump(k, r); // someone came back: everybody refreshes the presence dots
+      await this.ctx.storage.put(k, r);
+      return Number(body.v) === r.ver ? { status: 200, body: { same: true, ver: r.ver } } : { status: 200, body: pub(r) };
+    }
+    if (act === "leave") {
+      r.players = r.players.filter((x) => x !== p);
+      if (!r.players.length) { await this.ctx.storage.delete(k); return { status: 200, body: { left: true } }; }
+      if (r.host.toLowerCase() === meK) r.host = r.players[0].pseudo;
+      await bump(k, r); return { status: 200, body: { left: true } };
+    }
+    if (act === "say") {
+      const t = clean(body.text, 240); if (!t) return { status: 400, body: { error: "empty" } };
+      (r.msgs = r.msgs || []).push({ f: me, t, at: now }); r.msgs = r.msgs.slice(-60); return bump(k, r);
+    }
+    if (act === "ready") {
+      if (r.status !== "lobby") return bump(k, r);
+      p.ready = !!body.ready;
+      const all = r.players.length >= 3 && r.players.every((x) => x.ready);
+      const test = !!body.test && meK === ADMIN && r.host.toLowerCase() === meK && r.players.every((x) => x.ready);
+      if ((all || test) && r.pool && r.pool.length) {
+        r.status = "play"; r.lvl = r.pool[Math.floor(Math.random() * r.pool.length)]; r.startedAt = now; r.place = {}; r.xs = {}; r.attempts = 0; r.won = null; r.test = !all;
+        r.order = r.players.map((x) => x.pseudo);
+      }
+      return bump(k, r);
+    }
+    if (act === "ops") {
+      if (r.status !== "play") return bump(k, r);
+      for (const o of (Array.isArray(body.ops) ? body.ops : []).slice(0, 60)) {
+        if (o.t === "p") { const who = String(Math.max(0, Math.min(20, Number(o.p) || 0)));
+          if (o.cell && Array.isArray(o.cell)) { const cell = [Math.max(0, Math.min(11, Number(o.cell[0]) || 0)), Math.max(0, Math.min(11, Number(o.cell[1]) || 0))];
+            for (const q in r.place) if (r.place[q][0] === cell[0] && r.place[q][1] === cell[1]) delete r.place[q];
+            r.place[who] = cell; delete r.xs[cell[0] + "," + cell[1]]; }
+          else delete r.place[who]; }
+        else if (o.t === "x") { const c = String(o.k || "").replace(/[^0-9,]/g, "").slice(0, 5); if (!/^\d+,\d+$/.test(c)) continue; if (o.on) r.xs[c] = 1; else delete r.xs[c]; }
+        else if (o.t === "clear") { r.place = {}; r.xs = {}; }
+      }
+      return bump(k, r);
+    }
+    if (act === "miss") { if (r.status === "play") r.attempts = (r.attempts || 0) + 1; return bump(k, r); }
+    if (act === "won") {
+      if (r.status === "play") { r.status = "won"; r.won = { by: me, at: now, time: Math.round((now - (r.startedAt || now)) / 1000), attempts: r.attempts || 0 }; }
+      return bump(k, r);
+    }
+    if (act === "again") {
+      if (r.status !== "won") return bump(k, r);
+      r.status = "lobby"; r.lvl = null; r.place = {}; r.xs = {}; r.won = null; r.players.forEach((x) => (x.ready = false));
+      return bump(k, r);
+    }
+    return { status: 400, body: { error: "bad action" } };
+  }
   async chat(body) {
     const row = await this.auth(body.id, String(body.token || ""));
     if (!row) return { status: 403, body: { error: "forbidden" } };
@@ -449,6 +531,10 @@ export default {
     if (url.pathname === "/api/names" && request.method === "GET") return json(await env.LB.get(env.LB.idFromName("main")).names());
     if (url.pathname === "/api/daily" && request.method === "GET") return json(await env.LB.get(env.LB.idFromName("main")).daily(url.searchParams.get("date")));
     if (url.pathname === "/api/profile") { const r = await env.LB.get(env.LB.idFromName("main")).profile(clean(url.searchParams.get("pseudo"), 20)); return r ? json(r) : json({ error: "unknown" }, 404); }
+    if (url.pathname === "/api/coop" && request.method === "POST") {
+      let body; try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
+      const r = await env.LB.get(env.LB.idFromName("main")).coop(body); return json(r.body, r.status);
+    }
     if (url.pathname === "/api/chat" && request.method === "POST") {
       let body; try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
       const r = await env.LB.get(env.LB.idFromName("main")).chat(body); return json(r.body, r.status);
