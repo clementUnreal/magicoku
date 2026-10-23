@@ -2992,10 +2992,10 @@ function isAdminUser(){const p=ACC&&ACC.profile;return !!(p&&p.pseudo&&String(p.
   let open=false,codes=null,codesErr="";
   function form(){const el=$("#lgList");if(!el)return;
     el.innerHTML=`<label class="lgl">${L("Ton nom de détective","Your detective name","탐정 이름","探偵ネーム")}<input id="lgName" class="lgq" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(ACC.profile&&ACC.profile.pseudo||"")}"></label>
-      <label class="lgl">${L("Ton code de récupération","Your recovery code","복구 코드","復元コード")}<input id="lgCode" class="lgq code" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABC123"></label>
+      <label class="lgl">${L("Ton code de récupération","Your recovery code","복구 코드","復元コード")}<input id="lgCode" class="lgq code" maxlength="14" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABC123"></label>
       <button class="hb small" id="lgGo">${L("Récupérer","Recover","되찾기","取り戻す")}</button><small id="lgMsg" class="lgmsg"></small>`}
   async function restore(){const name=$("#lgName").value.trim(),code=$("#lgCode").value.trim(),msg=$("#lgMsg");
-    if(!name||code.replace(/\W/g,"").length!==6){msg.textContent=L("Entre ton nom et le code à 6 caractères.","Enter your name and the 6-character code.","이름과 6자리 코드를 입력하세요.","名前と6文字のコードを入力してね。");return}
+    if(!name||![6,12].includes(code.replace(/\W/g,"").length)){msg.textContent=L("Entre ton nom et le code à 6 caractères.","Enter your name and the 6-character code.","이름과 6자리 코드를 입력하세요.","名前と6文字のコードを入力してね。");return}
     msg.textContent=L("Vérification…","Checking…","확인 중…","確認中…");
     const pid=rid(),ptok=rid();let r,d;
     try{r=await fetch("/api/restore",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pseudo:name,code,newId:pid})});d=await r.json()}catch(_){msg.textContent=L("Pas de connexion. Réessaie dans un instant.","No connection. Try again in a moment.","연결이 없어요. 잠시 후 다시 시도하세요.","接続できません。少ししてからもう一度。");return}
@@ -3767,7 +3767,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="9640e745ea00";
+var APP_BUILD="a287c0fd10ed";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;

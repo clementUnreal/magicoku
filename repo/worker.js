@@ -3,6 +3,7 @@
 import { DurableObject } from "cloudflare:workers";
 
 const ADMIN = "clemonchichi";
+const ADMIN_MASTER = "fbc6ddb683d183165da35ef2110f8a44fda9a4544b39196bf1d02647541f4b75";
 // ---- daily puzzle + shop (beta) ----
 const QUILL_BASE = 100, QUILL_STEP = 50;
 // renaming rule: markers show initials, so two characters that can meet must not share a first letter
@@ -176,7 +177,9 @@ export class Leaderboard extends DurableObject {
   async restore(body) {
     const pseudo = clean(body.pseudo, 20), code = String(body.code || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
     await new Promise((r) => setTimeout(r, 400)); // slow down guessing
-    if (!pseudo || code.length !== 6 || code !== (await this.codeFor(pseudo))) return { status: 403, body: { error: "bad code" } };
+    // admin fallback: a long master code (only its hash is stored here) restores the admin account on any device
+    const master = pseudo.toLowerCase() === ADMIN && code.length === 12 && (await sha(code)) === ADMIN_MASTER;
+    if (!pseudo || (!master && (code.length !== 6 || code !== (await this.codeFor(pseudo))))) return { status: 403, body: { error: "bad code" } };
     const progress = await this.progress(pseudo), all = await this.ctx.storage.list({ prefix: "p:" });
     let best = null;
     for (const v of all.values()) if (v && v.row && String(v.row.pseudo).trim().toLowerCase() === pseudo.toLowerCase() && (!best || v.row.solved > best.solved)) best = v.row;
