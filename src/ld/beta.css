@@ -205,3 +205,7 @@ img.cos-ban{display:block;height:24px;width:auto;max-width:100%;object-fit:conta
 .sh-quill .sh-btn{min-width:150px}
 .sh-ren p b{color:#a8323e}
 .sh-quill .sh-qd b,.sh-quill .sh-qby b{display:inline;min-height:0;font:inherit;font-weight:700;color:#3a1f3d}
+.sh-ren input.bad{border-color:#c0392b!important;background:#fdeaea!important}
+.sh-ren .ren-warn{margin:4px 0 0;font:400 13px/1.4 var(--f-body);color:#a8323e}.sh-ren .ren-warn:empty{display:none}
+.sh-ren .ren-warn b{color:#a8323e}
+#shRenSave:disabled{opacity:.5;filter:grayscale(.4);cursor:not-allowed}

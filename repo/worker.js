@@ -5,6 +5,15 @@ import { DurableObject } from "cloudflare:workers";
 const ADMIN = "clemonchichi";
 // ---- daily puzzle + shop (beta) ----
 const QUILL_BASE = 100, QUILL_STEP = 50;
+// renaming rule: markers show initials, so two characters that can meet must not share a first letter
+const VICTIMS = ["Pr Violette", "Dame Valentine", "Maître Vitriol"], SUSPECTS = ["Ambroise", "Basile", "Capucine", "Dahlia", "Elias", "Flora", "Gaspard", "Héloïse"];
+const initialOf = (n) => { const t = String(n).replace(/^(Pr|Pr\.|Sir|Maître|Dr|Dame|Professeur|Madame|Monsieur) /i, "").trim() || String(n); return [...t][0].normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase(); };
+function nameClash(names) {
+  const eff = (n) => names[n] || n, seen = new Map();
+  for (const n of SUSPECTS) { const i = initialOf(eff(n)); if (seen.has(i)) return [seen.get(i), eff(n), i]; seen.set(i, eff(n)); }
+  for (const v of VICTIMS) { const i = initialOf(eff(v)); if (seen.has(i)) return [seen.get(i), eff(v), i]; }
+  return null;
+}
 const SHOP = {
   // cross styles
   "x:star": 60, "x:moon": 60, "x:heart": 60, "x:skull": 90, "x:paw": 90, "x:spark": 120,
@@ -279,6 +288,8 @@ export class Leaderboard extends DurableObject {
       if (!((w.quill || 0) > 0)) return { status: 403, body: { error: "not owned", gq: this.pubQuill(q) } };
       const out = {};
       for (const [k, v] of Object.entries(body.names || {}).slice(0, 40)) { const kk = clean(k, 20), vv = clean(v, 16); if (kk && vv && vv !== kk) out[kk] = vv; }
+      const clash = nameClash(out);
+      if (clash) return { status: 409, body: { error: "same initial", clash, gq: this.pubQuill(q) } };
       q.names = out; q.by = row.pseudo; q.at = Date.now(); w.quill = 0;
       await this.ctx.storage.put("__quill", q); await this.saveWallet(row.pseudo, w);
     } else if (body.action === "grant") {

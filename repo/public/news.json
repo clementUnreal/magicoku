@@ -1,5 +1,26 @@
 [
  {
+  "id": 45,
+  "date": "2026-10-23",
+  "icon": "🔤",
+  "fr": {
+   "t": "Une lettre par personnage",
+   "d": "Avec la plume de renommage, chaque personnage doit désormais commencer par une lettre différente : c'est elle qui s'affiche sur les marqueurs du plan. Si deux noms commencent pareil, la plume te prévient avant de valider."
+  },
+  "en": {
+   "t": "One letter per character",
+   "d": "With the renaming quill, every character must now start with a different letter: it's what the map markers show. If two names start the same way, the quill warns you before you confirm."
+  },
+  "ko": {
+   "t": "캐릭터마다 다른 첫 글자",
+   "d": "이름 바꾸기 깃펜을 쓸 때 이제 모든 캐릭터의 첫 글자가 달라야 해요. 지도 표시에 첫 글자가 나오기 때문이에요. 두 이름의 첫 글자가 같으면 저장하기 전에 알려 줘요."
+  },
+  "ja": {
+   "t": "1人1文字",
+   "d": "名前変更の羽ペンでは、全キャラクターの頭文字がちがう必要があります。マップのマーカーに頭文字が表示されるからです。2つの名前の頭文字が同じなら、確定の前に羽ペンが教えてくれます。"
+  }
+ },
+ {
   "id": 44,
   "date": "2026-10-23",
   "icon": "✒️",
