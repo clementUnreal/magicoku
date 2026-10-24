@@ -1408,6 +1408,25 @@ body.vshake .wrap{animation:vshake .35s}
 @media (max-height:720px){.home-in.h2in{gap:10px}.h2-art{height:60px}.h2-body{padding:8px 12px 12px}.h2-ch{font-size:13.5px}.h2-lv{margin-top:2px}.h2-go{min-height:48px;font-size:18px}.h2-link{min-height:44px;margin-top:6px}.h2-daily{min-height:64px;padding:8px 10px 8px 12px}.h2-daily .hd-rw{display:none}.h2-card{min-height:66px}.home-in.h2in .home-logo{min-height:54px}}
 .h2-card{padding-left:66px}.h2-card img{width:46px;height:46px}
 .home.h2lv #hWho.h3-av{display:none}
+/* v3.1: readable secondary info in a simple font, lighter secondary action, calmer background, real phone width */
+:root{--f-simple:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans","Apple SD Gothic Neo","Hiragino Sans",sans-serif}
+.h2-ct small,.h2-daily .hd-st,.h2-daily .hd-rw,.h2-lv,.h2-lv span,.h2-bar button span,.h2-news .h2-nt,.h2-link{font-family:var(--f-simple)!important}
+.h2-ct small{font-size:14px!important;font-weight:600!important;color:#f3e9d6!important}
+.h2-daily .hd-st{font-size:15px!important;font-weight:700!important}
+.h2-daily .hd-rw{font-size:15px!important;font-weight:600!important;opacity:1!important;display:block!important}
+.h2-lv{font-size:16px!important;font-weight:700!important}
+.h2-bar button span{font-size:clamp(12px,3.4vw,13.5px)!important;font-weight:700!important}
+.h2-news .h2-nt{font-size:16px!important;font-weight:700!important}
+.h2-link{width:auto!important;min-height:44px!important;margin:8px auto 0!important;padding:0 18px!important;border:0!important;background:none!important;font-size:15px!important;font-weight:700!important;color:#6b1530!important;text-decoration:underline!important;text-decoration-color:rgba(107,21,48,.35)!important;text-underline-offset:4px}
+.h2-link::after{content:" ›";text-decoration:none}
+.home-fx{opacity:.55;-webkit-mask-image:linear-gradient(90deg,#000 0,rgba(0,0,0,.15) 22%,transparent 34%,transparent 66%,rgba(0,0,0,.15) 78%,#000 100%);mask-image:linear-gradient(90deg,#000 0,rgba(0,0,0,.15) 22%,transparent 34%,transparent 66%,rgba(0,0,0,.15) 78%,#000 100%)}
+.home-in.h2in{max-width:560px;width:100%;box-sizing:border-box;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.home-nav.h2{max-width:none;width:100%;align-self:stretch}
+@media (max-height:720px){.h2-daily .hd-rw{display:block!important}}
+#home:has(.home-in.h2in){padding-left:0!important;padding-right:0!important}
+.h2-link::after{content:"\00a0›"!important}
+.h2-ct small{white-space:nowrap}
+@media (max-width:380px){.h2-grid{grid-template-columns:1fr!important}.h2-card{min-height:62px!important}}
 /* ================= one typeface for the whole game: Fraunces (soft), storybook-puzzle style ================= */
 @font-face{font-family:"Magi";src:url("fraunces.woff") format("woff");font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:"Magi";src:url("fraunces-italic.woff") format("woff");font-weight:400 900;font-style:italic;font-display:swap}
@@ -3445,7 +3464,7 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
   /* ---------- paint ---------- */
   const SUB={disc:["À ton rythme","At your own pace","나만의 속도로","自分のペースで"],rush:["Contre la montre","Against the clock","시간과의 승부","時間との勝負"],
     night:["Enquêtes nocturnes","Cases by night","한밤의 사건","夜の事件"],liar:["Démêle le vrai du faux","Sort truth from lies","진실과 거짓을 가려내요","真実と嘘を見抜こう"]};
-  const NAME={disc:["Mode<br>découverte","Discovery<br>mode","디스커버리<br>모드","ディスカバリー<br>モード"],rush:["Défi chrono","Time trial","타임 챌린지","タイムチャレンジ"],
+  const NAME={disc:["Découverte","Discovery","디스커버리","ディスカバリー"],rush:["Défi chrono","Time trial","타임 챌린지","タイムチャレンジ"],
     night:["Mode nuit","Night mode","나이트 모드","ナイトモード"],liar:["Le Menteur","The Liar","거짓말쟁이","嘘つき"]};
   const T=a=>L(a[0],a[1],a[2],a[3]);
   function paint(){
@@ -3839,7 +3858,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="a66995deb195";
+var APP_BUILD="dc94efe02c1b";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -4105,7 +4124,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
       const sc=mine?fmtT(mine.t+30*mine.e+60*mine.h):"";
       c.innerHTML=`<span class="hd-ic">🗓️</span><span class="hd-t"><b>${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")}</b>
         <small class="hd-st ${mine?"done":"ok"}">${mine?L(`✓ Résolue · score ${sc}`,`✓ Solved · score ${sc}`,`✓ 해결 · 점수 ${sc}`,`✓ 解決・スコア ${sc}`):L("● Disponible","● Available","● 도전 가능","● 挑戦できます")}</small>
-        <small class="hd-rw">${L("Récompense : jusqu'à 40\u00a0🌙, +100 au meilleur score","Reward: up to 40 🌙, +100 for the best score","보상: 최대 40 🌙, 최고 점수는 +100","報酬：最大40🌙、最高スコアは+100")}</small></span>
+        <small class="hd-rw">${L("Jusqu'à 40\u00a0🌙","Up to 40\u00a0🌙","최대 40\u00a0🌙","最大40\u00a0🌙")}</small></span>
         <span class="hd-act">${mine?L("Classement","Ranking","순위","順位"):L("Jouer","Play","플레이","プレイ")}</span>`}
     const w=$("#hWho img");const me=ACC.profile;if(w&&me&&myCos()&&(myCos().chara||myCos().orn)){w.outerHTML=cosAv(me.avatar,myCos(),"hw-av")}
     const ttl=$("#hWho .cos-title");if(!ttl&&myCos()&&myCos().title){const b=$("#hWho b");if(b)b.insertAdjacentHTML("afterend",cosTitle(myCos()))}};
@@ -4560,7 +4579,7 @@ body.coop-on #tHint{display:none!important}
     `<b>探偵は3人以上。</b>それぞれ<b>証言の一部</b>だけを持ち、ルーペをひとつ使う：🗺️ <b>地図係</b>（部屋は見えるが物は見えない）か 🔍 <b>調査係</b>（物は見えるが部屋は見えない）。盤は共有。地図を説明し合い、証言を照らし合わせて、みんなで犯人を指名しよう。`)}</div>`}
   function openOverlay(){const o=overlay();o.hidden=false;if(COOP.room&&COOP.room.status!=="lobby"&&COOP.play){o.hidden=true;$("#home").hidden=true;return}renderLobby()}
   function renderLobby(msg){const o=overlay(),room=COOP.room;
-    const head=`<button class="cp-x" aria-label="✕">✕</button><h2>👥 ${L("Enquête à plusieurs","Team case","팀 수사","みんなで捜査")}</h2>`;
+    const head=`<button class="cp-x" aria-label="✕">✕</button><h2>👥 ${L("Multijoueur","Multiplayer","멀티플레이","マルチプレイ")}</h2>`;
     if(!acc()){o.innerHTML=`<div class="cp-box">${head}${howTo()}<p class="cp-sub">${L("Crée d'abord ton compte de détective pour jouer en équipe.","Create your detective account first to play as a team.","팀으로 플레이하려면 먼저 탐정 계정을 만드세요.","チームで遊ぶには、まず探偵アカウントを作ろう。")}</p></div>`;return}
     if(!room){o.innerHTML=`<div class="cp-box">${head}<p class="cp-sub">${L("Résolvez une enquête ensemble, chacun avec ses propres indices.","Solve a case together, each with your own clues.","각자의 단서로 함께 사건을 풀어요.","それぞれの手がかりで、いっしょに事件を解こう。")}</p>${howTo()}
       <div class="cp-row"><button class="pill red" id="cpCreate">✨ ${L("Créer une salle","Create a room","방 만들기","ルームを作る")}</button></div>
@@ -4588,7 +4607,7 @@ body.coop-on #tHint{display:none!important}
   function homeCard(){const grid=document.querySelector(".h2-grid");if(!grid)return;let b=$("#hCoop");
     if(!b){b=document.createElement("button");b.id="hCoop";b.className="h2-card c-coop";grid.appendChild(b);grid.classList.remove("solo")}
     const im=typeof HOME_IMG!=="undefined"&&(HOME_IMG.liar||HOME_IMG.night);
-    b.innerHTML=`${im?`<img src="${im}" alt="">`:""}<span class="h2-ct"><b>${L("Enquête<br>à plusieurs","Team<br>case","팀<br>수사","みんなで<br>捜査")}</b><small>${COOP.play?L("Partie en cours","Game in progress","진행 중","進行中"):L("3 détectives ou plus","3 detectives or more","탐정 3명 이상","探偵3人以上")}</small></span><span class="h2-chev">›</span>`}
+    b.innerHTML=`${im?`<img src="${im}" alt="">`:""}<span class="h2-ct"><b>${L("Multijoueur","Multiplayer","멀티플레이","マルチプレイ")}</b><small>${COOP.play?L("Partie en cours","Game in progress","진행 중","進行中"):L("Dès 3 joueurs","From 3 players","3명부터","3人から")}</small></span><span class="h2-chev">›</span>`}
   document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#hCoop");if(!t)return;e.stopPropagation();try{play("page")}catch(_){}
     if(COOP.play&&COOP.room&&COOP.room.status!=="lobby"){$("#home").hidden=true;renderBar();return}openOverlay()},true);
   /* back to the menu during a game: the bar stays, the room stays */

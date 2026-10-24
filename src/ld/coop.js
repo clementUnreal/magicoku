@@ -162,7 +162,7 @@ body.coop-on #tHint{display:none!important}
     `<b>探偵は3人以上。</b>それぞれ<b>証言の一部</b>だけを持ち、ルーペをひとつ使う：🗺️ <b>地図係</b>（部屋は見えるが物は見えない）か 🔍 <b>調査係</b>（物は見えるが部屋は見えない）。盤は共有。地図を説明し合い、証言を照らし合わせて、みんなで犯人を指名しよう。`)}</div>`}
   function openOverlay(){const o=overlay();o.hidden=false;if(COOP.room&&COOP.room.status!=="lobby"&&COOP.play){o.hidden=true;$("#home").hidden=true;return}renderLobby()}
   function renderLobby(msg){const o=overlay(),room=COOP.room;
-    const head=`<button class="cp-x" aria-label="✕">✕</button><h2>👥 ${L("Enquête à plusieurs","Team case","팀 수사","みんなで捜査")}</h2>`;
+    const head=`<button class="cp-x" aria-label="✕">✕</button><h2>👥 ${L("Multijoueur","Multiplayer","멀티플레이","マルチプレイ")}</h2>`;
     if(!acc()){o.innerHTML=`<div class="cp-box">${head}${howTo()}<p class="cp-sub">${L("Crée d'abord ton compte de détective pour jouer en équipe.","Create your detective account first to play as a team.","팀으로 플레이하려면 먼저 탐정 계정을 만드세요.","チームで遊ぶには、まず探偵アカウントを作ろう。")}</p></div>`;return}
     if(!room){o.innerHTML=`<div class="cp-box">${head}<p class="cp-sub">${L("Résolvez une enquête ensemble, chacun avec ses propres indices.","Solve a case together, each with your own clues.","각자의 단서로 함께 사건을 풀어요.","それぞれの手がかりで、いっしょに事件を解こう。")}</p>${howTo()}
       <div class="cp-row"><button class="pill red" id="cpCreate">✨ ${L("Créer une salle","Create a room","방 만들기","ルームを作る")}</button></div>
@@ -190,7 +190,7 @@ body.coop-on #tHint{display:none!important}
   function homeCard(){const grid=document.querySelector(".h2-grid");if(!grid)return;let b=$("#hCoop");
     if(!b){b=document.createElement("button");b.id="hCoop";b.className="h2-card c-coop";grid.appendChild(b);grid.classList.remove("solo")}
     const im=typeof HOME_IMG!=="undefined"&&(HOME_IMG.liar||HOME_IMG.night);
-    b.innerHTML=`${im?`<img src="${im}" alt="">`:""}<span class="h2-ct"><b>${L("Enquête<br>à plusieurs","Team<br>case","팀<br>수사","みんなで<br>捜査")}</b><small>${COOP.play?L("Partie en cours","Game in progress","진행 중","進行中"):L("3 détectives ou plus","3 detectives or more","탐정 3명 이상","探偵3人以上")}</small></span><span class="h2-chev">›</span>`}
+    b.innerHTML=`${im?`<img src="${im}" alt="">`:""}<span class="h2-ct"><b>${L("Multijoueur","Multiplayer","멀티플레이","マルチプレイ")}</b><small>${COOP.play?L("Partie en cours","Game in progress","진행 중","進行中"):L("Dès 3 joueurs","From 3 players","3명부터","3人から")}</small></span><span class="h2-chev">›</span>`}
   document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#hCoop");if(!t)return;e.stopPropagation();try{play("page")}catch(_){}
     if(COOP.play&&COOP.room&&COOP.room.status!=="lobby"){$("#home").hidden=true;renderBar();return}openOverlay()},true);
   /* back to the menu during a game: the bar stays, the room stays */

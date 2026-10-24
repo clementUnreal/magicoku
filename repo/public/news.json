@@ -1,5 +1,26 @@
 [
  {
+  "id": 51,
+  "date": "2026-10-24",
+  "icon": "📱",
+  "fr": {
+   "t": "Accueil encore plus lisible",
+   "d": "Textes d'information plus grands, noms de modes raccourcis (« Découverte », « Multijoueur »), fond étoilé plus discret et cartes qui occupent toute la largeur du téléphone."
+  },
+  "en": {
+   "t": "An even easier home screen",
+   "d": "Bigger info texts, shorter mode names (“Discovery”, “Multiplayer”), a quieter starry background and cards that use the full width of your phone."
+  },
+  "ko": {
+   "t": "더 읽기 쉬워진 첫 화면",
+   "d": "안내 글씨가 커지고, 모드 이름이 짧아졌어요(‘디스커버리’, ‘멀티플레이’). 별빛 배경은 더 은은해지고, 카드는 휴대폰 화면 너비를 꽉 채워요."
+  },
+  "ja": {
+   "t": "さらに見やすいホーム",
+   "d": "案内の文字を大きくし、モード名を短く（「ディスカバリー」「マルチプレイ」）。星空の背景は控えめになり、カードはスマホの横幅いっぱいに広がります。"
+  }
+ },
+ {
   "id": 50,
   "date": "2026-10-24",
   "icon": "🔤",

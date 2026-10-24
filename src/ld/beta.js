@@ -247,7 +247,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
       const sc=mine?fmtT(mine.t+30*mine.e+60*mine.h):"";
       c.innerHTML=`<span class="hd-ic">🗓️</span><span class="hd-t"><b>${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")}</b>
         <small class="hd-st ${mine?"done":"ok"}">${mine?L(`✓ Résolue · score ${sc}`,`✓ Solved · score ${sc}`,`✓ 해결 · 점수 ${sc}`,`✓ 解決・スコア ${sc}`):L("● Disponible","● Available","● 도전 가능","● 挑戦できます")}</small>
-        <small class="hd-rw">${L("Récompense : jusqu'à 40\u00a0🌙, +100 au meilleur score","Reward: up to 40 🌙, +100 for the best score","보상: 최대 40 🌙, 최고 점수는 +100","報酬：最大40🌙、最高スコアは+100")}</small></span>
+        <small class="hd-rw">${L("Jusqu'à 40\u00a0🌙","Up to 40\u00a0🌙","최대 40\u00a0🌙","最大40\u00a0🌙")}</small></span>
         <span class="hd-act">${mine?L("Classement","Ranking","순위","順位"):L("Jouer","Play","플레이","プレイ")}</span>`}
     const w=$("#hWho img");const me=ACC.profile;if(w&&me&&myCos()&&(myCos().chara||myCos().orn)){w.outerHTML=cosAv(me.avatar,myCos(),"hw-av")}
     const ttl=$("#hWho .cos-title");if(!ttl&&myCos()&&myCos().title){const b=$("#hWho b");if(b)b.insertAdjacentHTML("afterend",cosTitle(myCos()))}};

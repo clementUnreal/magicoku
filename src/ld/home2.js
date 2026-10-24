@@ -40,7 +40,7 @@
   /* ---------- paint ---------- */
   const SUB={disc:["À ton rythme","At your own pace","나만의 속도로","自分のペースで"],rush:["Contre la montre","Against the clock","시간과의 승부","時間との勝負"],
     night:["Enquêtes nocturnes","Cases by night","한밤의 사건","夜の事件"],liar:["Démêle le vrai du faux","Sort truth from lies","진실과 거짓을 가려내요","真実と嘘を見抜こう"]};
-  const NAME={disc:["Mode<br>découverte","Discovery<br>mode","디스커버리<br>모드","ディスカバリー<br>モード"],rush:["Défi chrono","Time trial","타임 챌린지","タイムチャレンジ"],
+  const NAME={disc:["Découverte","Discovery","디스커버리","ディスカバリー"],rush:["Défi chrono","Time trial","타임 챌린지","タイムチャレンジ"],
     night:["Mode nuit","Night mode","나이트 모드","ナイトモード"],liar:["Le Menteur","The Liar","거짓말쟁이","嘘つき"]};
   const T=a=>L(a[0],a[1],a[2],a[3]);
   function paint(){
