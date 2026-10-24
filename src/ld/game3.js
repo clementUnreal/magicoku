@@ -125,6 +125,7 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
     const m=sheet("g3MenuS",`<h2>${L("Menu","Menu","메뉴","メニュー")}</h2>${stats()}<div class="g3-list">
       <button data-g="story">📖 ${L("Relire l'histoire","Read the story again","이야기 다시 읽기","物語を読み直す")}</button>
       <button data-g="sketch">✏️ ${sk?L("Revenir au plan","Back to the map","지도로 돌아가기","マップに戻る"):L("Ouvrir le brouillon","Open the scratchpad","연습장 열기","メモ帳を開く")}</button>
+      <button data-g="clear">🧹 ${L("Tout effacer sur le plateau","Clear the whole board","판 전체 지우기","盤をすべて消す")}</button>
       <button data-g="rules">📜 ${L("Règles","Rules","규칙","ルール")}</button>
       <button data-g="tuto">❓ ${L("Tutoriel","Tutorial","튜토리얼","チュートリアル")}</button>
       <button data-g="sound">${SND.on?"🔊":"🔇"} ${SND.on?L("Couper le son","Mute","소리 끄기","音を消す"):L("Activer le son","Sound on","소리 켜기","音を出す")}</button>
@@ -135,12 +136,23 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
       if(lg){$("#l"+lg.toUpperCase()).click();setTimeout(()=>{openMenu();refresh()},60);return}
       if(!g)return;close(m);
       if(g==="story")intro(true);else if(g==="sketch"){(sk?$("#vPlan"):$("#vSketch")).click()}else if(g==="rules")$("#bRules").click();else if(g==="tuto")$("#bTuto").click();
+      else if(g==="clear"){clearAll()}
       else if(g==="sound"){setSound(!SND.on)}else if(g==="full")$("#bFull").click();else if(g==="home")$("#bMenu").click()}}
   function openPause(){const m=sheet("g3PauseS",`<h2>⏸ ${L("Pause","Paused","일시 정지","一時停止")}</h2>${stats()}<p class="g3-story" style="font-size:15px">${L("Le chronomètre est arrêté.","The clock is stopped.","시계가 멈췄어요.","タイマーは止まっています。")}</p><div class="g3-list"><button data-g="go" class="pill red g3-go" style="justify-content:center">▶ ${L("Reprendre","Resume","계속하기","再開")}</button><button data-g="story">📖 ${L("Relire l'histoire","Read the story again","이야기 다시 읽기","物語を読み直す")}</button></div>`);
     m.querySelector(".mbox").addEventListener("click",e=>{const t=e.target.closest("button[data-g]");if(!t)return;close(m);if(t.dataset.g==="story")intro(true)})}
   function intro(again){if(!C)return;const m=sheet("g3IntroS",`<h2>${esc(TX(M.title))}</h2><p class="g3-story">${typeof renTxt==="function"?renTxt(TX(M.story)):TX(M.story)}</p>
       <button class="pill red g3-go" id="g3Go">${again?L("Reprendre l'enquête","Back to the case","수사 계속하기","捜査に戻る"):L("Commencer l'enquête","Start the case","수사 시작","捜査開始")} ›</button>`);
     $("#g3Go").onclick=()=>close(m)}
+  /* clear the whole board (same as a long press on the eraser), with confirmation; "Annuler" brings it back */
+  function clearAll(){if(!S||S.solved)return;const empty=!Object.keys(S.place||{}).length&&!Object.keys(S.xs||{}).length&&!Object.keys(S.notes||{}).length;
+    if(empty){toast(L("Le plateau est déjà vide.","The board is already empty.","판이 이미 비어 있어요.","盤はもう空です。"));return}
+    const m=sheet("g3ClearS",`<h2>🧹 ${L("Tout effacer ?","Clear everything?","모두 지울까요?","すべて消す？")}</h2><p class="g3-story" style="font-size:15px">${L("Les personnages, les croix et les notes seront retirés du plateau. Tu pourras revenir en arrière avec « Annuler ».","Characters, crosses and notes will be removed from the board. You can bring them back with “Undo”.","인물, ✕ 표시, 메모가 판에서 사라져요. ‘되돌리기’로 되살릴 수 있어요.","人物・✕・メモが盤から消えます。「戻す」で元に戻せます。")}</p>
+      <div class="g3-list"><button data-g="yes" class="pill red g3-go" style="justify-content:center">${L("Tout effacer","Clear everything","모두 지우기","すべて消す")}</button><button data-g="no" style="justify-content:center">${L("Garder mon plateau","Keep my board","그대로 두기","そのままにする")}</button></div>`);
+    m.querySelector(".mbox").addEventListener("click",e=>{const t=e.target.closest("button[data-g]");if(!t)return;close(m);if(t.dataset.g!=="yes")return;
+      snap();S.place={};S.notes={};S.xs={};S.auto={};save();render();toast(L("Plateau effacé. « Annuler » pour revenir.","Board cleared. “Undo” to bring it back.","판을 지웠어요. ‘되돌리기’로 복구할 수 있어요.","盤を消しました。「戻す」で元に戻せます。"))})}
+  /* first time the eraser is picked on a phone: explain the long press */
+  document.addEventListener("click",e=>{if(!on()||!e.target.closest||!e.target.closest("#tErase"))return;let seen=null;try{seen=localStorage.getItem("magicoku:eraseTip")}catch(_){}if(seen)return;
+    try{localStorage.setItem("magicoku:eraseTip","1")}catch(_){}setTimeout(()=>toast(L("Astuce : garde le doigt appuyé sur la gomme pour tout effacer d'un coup (ou ☰ › Tout effacer).","Tip: keep your finger on the eraser to clear everything at once (or ☰ › Clear the whole board).","팁: 지우개를 길게 누르면 한 번에 모두 지워져요(또는 ☰ › 판 전체 지우기).","ヒント：消しゴムを長押しすると全部消せます（または☰ › 盤をすべて消す）。")),250)},true);
   /* ---------- wiring ---------- */
   function refresh(){document.body.classList.toggle("g3",on());if(!on())return;build();const t=$("#g3T");if(t)t.innerHTML=title();
     const p=$("#g3Pause");if(p)p.setAttribute("aria-label",L("Pause","Pause","일시 정지","一時停止"));clock();tools();paintZoom();paintHead();requestAnimationFrame(sizePanel)}
