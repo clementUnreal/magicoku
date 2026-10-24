@@ -3979,7 +3979,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="e853b03126d0";
+var APP_BUILD="775a24ab42aa";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -4989,10 +4989,8 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
     const m=sheet("g3MenuS",`<h2>${L("Menu","Menu","메뉴","メニュー")}</h2>
       <p class="g3-mstat">⏱ ${fmtT(S.time||0)} · 🎯 ${S.attempts||0} · 💡 ${S.hints||0}</p>
       <div class="g3-list">
-      <button data-g="story">📖 ${L("Relire l'histoire","Read the story again","이야기 다시 읽기","物語を読み直す")}</button>
       <button data-g="rules">📜 ${L("Règles","Rules","규칙","ルール")}</button>
-      <button data-g="sketch">✏️ ${sk?L("Revenir au plan","Back to the map","지도로 돌아가기","マップに戻る"):L("Brouillon","Scratchpad","연습장","メモ帳")}</button>
-      <button data-g="clear">🧹 ${L("Tout effacer","Clear the board","전체 지우기","すべて消す")}</button></div>
+</div>
       <p class="g3-msec">${L("Réglages","Settings","설정","設定")}</p>
       <div class="g3-quick">
         <button data-g="sound"><span>${SND.on?"🔊":"🔇"}</span>${L("Son","Sound","소리","音")}</button>

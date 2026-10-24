@@ -5,19 +5,19 @@
   "icon": "☰",
   "fr": {
    "t": "Un menu de jeu plus simple",
-   "d": "Le menu ☰ pendant une enquête tient maintenant sur un écran : quatre actions principales (histoire, règles, brouillon, tout effacer), puis une rangée de réglages rapides (son, clair ou nuit, plein écran, tutoriel) et la langue."
+   "d": "Le menu ☰ pendant une enquête va à l'essentiel : les règles, une rangée de réglages rapides (son, clair ou nuit, plein écran, tutoriel), la langue et le retour à l'accueil. Pour tout effacer, garde le doigt appuyé sur la gomme."
   },
   "en": {
    "t": "A simpler game menu",
-   "d": "The ☰ menu during a case now fits on one screen: four main actions (story, rules, scratchpad, clear the board), then a row of quick settings (sound, light or night, full screen, tutorial) and the language."
+   "d": "The ☰ menu during a case now keeps only the essentials: the rules, a row of quick settings (sound, light or night, full screen, tutorial), the language and the way back home. To clear the board, press and hold the eraser."
   },
   "ko": {
    "t": "더 간단해진 게임 메뉴",
-   "d": "사건 중 ☰ 메뉴가 이제 한 화면에 들어가요. 주요 기능 네 가지(이야기, 규칙, 연습장, 전체 지우기) 아래에 빠른 설정(소리, 라이트/나이트, 전체 화면, 튜토리얼)과 언어가 있어요."
+   "d": "사건 중 ☰ 메뉴에는 이제 꼭 필요한 것만 있어요. 규칙, 빠른 설정(소리, 라이트/나이트, 전체 화면, 튜토리얼), 언어, 홈으로 가기. 판 전체를 지우려면 지우개를 길게 누르세요."
   },
   "ja": {
    "t": "シンプルになったゲームメニュー",
-   "d": "事件中の☰メニューが一画面に収まるようになりました。主な4つの操作（物語、ルール、メモ帳、すべて消す）の下に、クイック設定（音、ライト/ナイト、全画面、チュートリアル）と言語があります。"
+   "d": "事件中の☰メニューは必要なものだけになりました。ルール、クイック設定（音、ライト/ナイト、全画面、チュートリアル）、言語、ホームへ戻る。盤をすべて消すには、消しゴムを長押ししてね。"
   }
  },
  {
