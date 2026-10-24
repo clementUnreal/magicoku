@@ -70,6 +70,15 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
 .g3-row .g3-lang{display:flex;gap:4px}
 .g3-row .g3-lang button{min-width:40px;min-height:40px;border-radius:10px;border:1.5px solid #d8c08a;background:#fff;font:800 14px var(--f-simple,system-ui)!important}
 .g3-row .g3-lang button.on{background:#3a1f3d;color:#fbefc8;border-color:#3a1f3d}
+.g3-mstat{margin:-2px 0 10px;font:700 14px var(--f-simple,system-ui)!important;color:#6b5a48}
+.g3-msec{margin:14px 0 6px;font:800 12px var(--f-simple,system-ui)!important;letter-spacing:.08em;text-transform:uppercase;color:#8a6d4a}
+.g3-quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:6px}
+.g3-quick button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:58px;border-radius:12px;border:1.5px solid #d8c08a;background:#fffaf0;color:#3a1f3d;font:700 12px var(--f-simple,system-ui)!important;cursor:pointer}
+.g3-quick button span{font-size:20px;line-height:1}
+.g3-mlang{display:flex;gap:6px;justify-content:center;margin:8px 0 2px}
+.g3-mlang button{flex:1;max-width:64px;min-height:40px;border-radius:10px;border:1.5px solid #d8c08a;background:#fff;color:#3a1f3d;font:800 14px var(--f-simple,system-ui)!important}
+.g3-mlang button.on{background:#3a1f3d;color:#fbefc8;border-color:#3a1f3d}
+.g3-mhome{display:flex;width:100%;justify-content:center;margin-top:12px;min-height:48px}
 .g3-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:4px 0 10px}
 .g3-stats div{background:#fffaf0;border:1.5px solid #e2cfa4;border-radius:12px;padding:8px;text-align:center}
 .g3-stats b{display:block;font:800 18px var(--f-simple,system-ui)!important;color:#3a1f3d}
@@ -127,20 +136,26 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
   const close=m=>{m.hidden=true;try{renderTimer()}catch(_){}};
   function stats(){return `<div class="g3-stats"><div><b>${fmtT(S.time||0)}</b><small>⏱ ${L("temps","time","시간","時間")}</small></div><div><b>${S.attempts||0}</b><small>🎯 ${L("tentatives","tries","시도","挑戦")}</small></div><div><b>${S.hints||0}</b><small>💡 ${L("indices","hints","힌트","ヒント")}</small></div></div>`}
   function openMenu(){const sk=typeof SK!=="undefined"&&SK.on;
-    const m=sheet("g3MenuS",`<h2>${L("Menu","Menu","메뉴","メニュー")}</h2>${stats()}<div class="g3-list">
+    const full=$("#bFull")&&!$("#bFull").hidden,night=typeof themeNow==="function"&&themeNow()==="night";
+    const m=sheet("g3MenuS",`<h2>${L("Menu","Menu","메뉴","メニュー")}</h2>
+      <p class="g3-mstat">⏱ ${fmtT(S.time||0)} · 🎯 ${S.attempts||0} · 💡 ${S.hints||0}</p>
+      <div class="g3-list">
       <button data-g="story">📖 ${L("Relire l'histoire","Read the story again","이야기 다시 읽기","物語を読み直す")}</button>
-      <button data-g="sketch">✏️ ${sk?L("Revenir au plan","Back to the map","지도로 돌아가기","マップに戻る"):L("Ouvrir le brouillon","Open the scratchpad","연습장 열기","メモ帳を開く")}</button>
-      <button data-g="clear">🧹 ${L("Tout effacer sur le plateau","Clear the whole board","판 전체 지우기","盤をすべて消す")}</button>
       <button data-g="rules">📜 ${L("Règles","Rules","규칙","ルール")}</button>
-      <button data-g="tuto">❓ ${L("Tutoriel","Tutorial","튜토리얼","チュートリアル")}</button>
-      <button data-g="sound">${SND.on?"🔊":"🔇"} ${SND.on?L("Couper le son","Mute","소리 끄기","音を消す"):L("Activer le son","Sound on","소리 켜기","音を出す")}</button>
-      <div class="g3-row"><span>🌗 ${L("Affichage","Display","화면","表示")}</span>${typeof themeRow==="function"?themeRow():""}</div>
-      ${$("#bFull")&&!$("#bFull").hidden?`<button data-g="full">⛶ ${L("Plein écran","Full screen","전체 화면","全画面")}</button>`:""}
-      <div class="g3-row"><span>🌐 ${L("Langue","Language","언어","言語")}</span><span class="g3-lang">${["fr","en","ko","ja"].map(l=>`<button data-lang="${l}" class="${LANG===l?"on":""}">${{fr:"FR",en:"EN",ko:"한",ja:"日"}[l]}</button>`).join("")}</span></div>
-      <button data-g="home">🏠 ${L("Retour à l'accueil","Back to home","홈으로","ホームへ")}</button></div>`);
+      <button data-g="sketch">✏️ ${sk?L("Revenir au plan","Back to the map","지도로 돌아가기","マップに戻る"):L("Brouillon","Scratchpad","연습장","メモ帳")}</button>
+      <button data-g="clear">🧹 ${L("Tout effacer","Clear the board","전체 지우기","すべて消す")}</button></div>
+      <p class="g3-msec">${L("Réglages","Settings","설정","設定")}</p>
+      <div class="g3-quick">
+        <button data-g="sound"><span>${SND.on?"🔊":"🔇"}</span>${L("Son","Sound","소리","音")}</button>
+        <button data-g="theme"><span>${night?"🌙":"☀️"}</span>${night?L("Nuit","Night","나이트","ナイト"):L("Clair","Light","라이트","ライト")}</button>
+        ${full?`<button data-g="full"><span>⛶</span>${L("Plein écran","Full screen","전체 화면","全画面")}</button>`:""}
+        <button data-g="tuto"><span>❓</span>${L("Tutoriel","Tutorial","튜토리얼","チュートリアル")}</button>
+      </div>
+      <div class="g3-lang g3-mlang">${["fr","en","ko","ja"].map(l=>`<button data-lang="${l}" class="${LANG===l?"on":""}">${{fr:"FR",en:"EN",ko:"한",ja:"日"}[l]}</button>`).join("")}</div>
+      <button data-g="home" class="pill g3-mhome">🏠 ${L("Retour à l'accueil","Back to home","홈으로","ホームへ")}</button>`);
     m.onclick=e=>{const t=e.target.closest("button");if(e.target===m){close(m);return}if(!t)return;const g=t.dataset.g,lg=t.dataset.lang;
       if(lg){$("#l"+lg.toUpperCase()).click();setTimeout(()=>{openMenu();refresh()},60);return}
-      if(!g)return;close(m);
+      if(!g)return;if(g==="sound"||g==="theme"){if(g==="sound")setSound(!SND.on);else setTheme(themeNow()==="night"?"light":"night");openMenu();return}close(m);
       if(g==="story")intro(true);else if(g==="sketch"){(sk?$("#vPlan"):$("#vSketch")).click()}else if(g==="rules")$("#bRules").click();else if(g==="tuto")$("#bTuto").click();
       else if(g==="clear"){clearAll()}
       else if(g==="sound"){setSound(!SND.on)}else if(g==="full")$("#bFull").click();else if(g==="home")$("#bMenu").click()}}
