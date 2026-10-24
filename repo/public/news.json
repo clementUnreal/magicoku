@@ -5,19 +5,19 @@
   "icon": "🌊",
   "fr": {
    "t": "Le lac apparaît sur le plan",
-   "d": "Au chapitre 6, les reflets se voient enfin : quand un témoignage parle du centre du lac, un étang occupe le centre du plan ; quand il parle d'une diagonale, une rivière la traverse. C'est seulement visuel : on peut toujours se tenir sur ces cases, et les énigmes n'ont pas changé."
+   "d": "Au chapitre 6, les reflets se voient enfin : quand un témoignage parle du centre du lac, les cases du centre du plan sont des cases d'eau ; quand il parle d'une diagonale, toutes les cases de cette diagonale sont des cases d'eau. C'est seulement visuel : on peut toujours se tenir sur ces cases, et les énigmes n'ont pas changé."
   },
   "en": {
    "t": "The lake appears on the map",
-   "d": "In chapter 6, reflections are now visible: when a testimony mentions the centre of the lake, a pond fills the centre of the map; when it mentions a diagonal, a stream runs along it. It's only visual: people can still stand on those squares, and the puzzles haven't changed."
+   "d": "In chapter 6, reflections are now visible: when a testimony mentions the centre of the lake, the centre squares of the map are water squares; when it mentions a diagonal, every square on that diagonal is a water square. It's only visual: people can still stand on those squares, and the puzzles haven't changed."
   },
   "ko": {
    "t": "지도에 호수가 나타나요",
-   "d": "6장에서 이제 반사를 눈으로 볼 수 있어요. 증언에 호수 한가운데가 나오면 지도 중앙에 연못이, 대각선이 나오면 그 대각선을 따라 물길이 생겨요. 보이기만 할 뿐이라 그 칸에도 사람이 있을 수 있고, 퍼즐은 그대로예요."
+   "d": "6장에서 이제 반사를 눈으로 볼 수 있어요. 증언에 호수 한가운데가 나오면 지도 중앙의 칸들이 물 칸이 되고, 대각선이 나오면 그 대각선의 모든 칸이 물 칸이 돼요. 보이기만 할 뿐이라 그 칸에도 사람이 있을 수 있고, 퍼즐은 그대로예요."
   },
   "ja": {
    "t": "見取り図に湖が登場",
-   "d": "第6章で、鏡写しが目で見えるようになりました。証言に湖の中心が出てくると見取り図の中央に池が、対角線が出てくるとその線に沿って水路が現れます。見た目だけなので、そのマスにも人はいられますし、パズルは変わりません。"
+   "d": "第6章で、鏡写しが目で見えるようになりました。証言に湖の中心が出てくると見取り図の中央のマスが水のマスに、対角線が出てくるとその対角線上のマスがすべて水のマスになります。見た目だけなので、そのマスにも人はいられますし、パズルは変わりません。"
   }
  },
  {
