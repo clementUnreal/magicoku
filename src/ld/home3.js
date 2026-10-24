@@ -16,3 +16,7 @@
   document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&document.activeElement&&document.activeElement.id==="hWho"){e.preventDefault();open()}});
   try{renderHome()}catch(_){}
 })();
+
+/* keep the page bottom padding equal to the real navigation height (safe area included) */
+(function(){const set=()=>{const b=$("#h2Bar");if(!b)return;const h=b.getBoundingClientRect().height;if(h)document.documentElement.style.setProperty("--barh",Math.ceil(h)+"px")};
+  try{new ResizeObserver(set).observe(document.body)}catch(_){}window.addEventListener("resize",set);window.addEventListener("orientationchange",()=>setTimeout(set,300));setTimeout(set,300);setTimeout(set,1500)})();

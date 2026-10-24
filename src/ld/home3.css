@@ -115,3 +115,23 @@
 @media (max-width:430px){.h2-grid{grid-template-columns:1fr!important}.h2-card{min-height:64px!important}}
 .h2-go .h2-gi,.h2-go .h2-chev{width:24px;height:24px;display:grid;place-items:center;line-height:1}
 .h2-go .h2-gi{left:22px}.h2-go .h2-chev{right:22px}
+/* v3.4: never let a browser "auto dark" repaint the parchment */
+:root,html,body{color-scheme:dark!important;forced-color-adjust:none}
+/* the page is natively dark: tell browsers (Chrome, Samsung Internet) not to apply their own forced dark mode */
+@media (prefers-color-scheme:dark){:root{--magi-dark:1}html{background:#120d22}}
+/* bottom space = real height of the navigation bar (incl. safe area) + 16 px */
+.home-in.h2in{padding-bottom:calc(var(--barh,96px) + 16px)!important}
+/* compact header */
+.home-in.h2in{padding-top:max(4px,env(safe-area-inset-top,0px))!important}
+.home-in.h2in .home-logo{min-height:52px!important}
+.home-in.h2in .home-t{font-size:clamp(24px,7vw,30px)!important}
+.h3-acts .h2-gear,.h3-acts #hWho.h3-av{width:44px!important;height:44px!important;border-radius:12px}
+.h3-acts #hWho.h3-av,.h3-acts #hWho.h3-av img{border-radius:50%!important;width:44px!important;height:44px!important}
+.h3-acts .h2-gear svg{width:22px;height:22px}
+/* compact story card */
+.h2-body{padding:8px 14px 4px!important;gap:2px!important}
+.h2-lv{margin-top:2px!important}
+.h2-go{margin-top:6px!important}
+.h2-link{margin-top:0!important;min-height:44px!important}
+/* calmer active tab */
+.h2-bar button.on{background:rgba(214,171,79,.16)!important;color:var(--gold)!important;box-shadow:inset 0 0 0 1.5px rgba(214,171,79,.55)}

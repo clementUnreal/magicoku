@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#1a1330">
+<meta name="color-scheme" content="dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,7 +13,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preload" href="fraunces.woff" as="font" type="font/woff" crossorigin>
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;-webkit-user-select:none;user-select:none;overscroll-behavior:none}img{max-width:100%}[hidden]{display:none!important}textarea,input{-webkit-user-select:text;user-select:text}</style>
+<style>:root{color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;-webkit-user-select:none;user-select:none;overscroll-behavior:none}img{max-width:100%}[hidden]{display:none!important}textarea,input{-webkit-user-select:text;user-select:text}</style>
 </head>
 <body>
 <title>Magicoku</title>
@@ -1463,6 +1464,26 @@ body.vshake .wrap{animation:vshake .35s}
 @media (max-width:430px){.h2-grid{grid-template-columns:1fr!important}.h2-card{min-height:64px!important}}
 .h2-go .h2-gi,.h2-go .h2-chev{width:24px;height:24px;display:grid;place-items:center;line-height:1}
 .h2-go .h2-gi{left:22px}.h2-go .h2-chev{right:22px}
+/* v3.4: never let a browser "auto dark" repaint the parchment */
+:root,html,body{color-scheme:dark!important;forced-color-adjust:none}
+/* the page is natively dark: tell browsers (Chrome, Samsung Internet) not to apply their own forced dark mode */
+@media (prefers-color-scheme:dark){:root{--magi-dark:1}html{background:#120d22}}
+/* bottom space = real height of the navigation bar (incl. safe area) + 16 px */
+.home-in.h2in{padding-bottom:calc(var(--barh,96px) + 16px)!important}
+/* compact header */
+.home-in.h2in{padding-top:max(4px,env(safe-area-inset-top,0px))!important}
+.home-in.h2in .home-logo{min-height:52px!important}
+.home-in.h2in .home-t{font-size:clamp(24px,7vw,30px)!important}
+.h3-acts .h2-gear,.h3-acts #hWho.h3-av{width:44px!important;height:44px!important;border-radius:12px}
+.h3-acts #hWho.h3-av,.h3-acts #hWho.h3-av img{border-radius:50%!important;width:44px!important;height:44px!important}
+.h3-acts .h2-gear svg{width:22px;height:22px}
+/* compact story card */
+.h2-body{padding:8px 14px 4px!important;gap:2px!important}
+.h2-lv{margin-top:2px!important}
+.h2-go{margin-top:6px!important}
+.h2-link{margin-top:0!important;min-height:44px!important}
+/* calmer active tab */
+.h2-bar button.on{background:rgba(214,171,79,.16)!important;color:var(--gold)!important;box-shadow:inset 0 0 0 1.5px rgba(214,171,79,.55)}
 /* ================= one typeface for the whole game: Fraunces (soft), storybook-puzzle style ================= */
 @font-face{font-family:"Magi";src:url("fraunces.woff") format("woff");font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:"Magi";src:url("fraunces-italic.woff") format("woff");font-weight:400 900;font-style:italic;font-display:swap}
@@ -3894,7 +3915,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="9fb806230da2";
+var APP_BUILD="518bf30a7737";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -4670,6 +4691,10 @@ body.coop-on #tHint{display:none!important}
   document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&document.activeElement&&document.activeElement.id==="hWho"){e.preventDefault();open()}});
   try{renderHome()}catch(_){}
 })();
+
+/* keep the page bottom padding equal to the real navigation height (safe area included) */
+(function(){const set=()=>{const b=$("#h2Bar");if(!b)return;const h=b.getBoundingClientRect().height;if(h)document.documentElement.style.setProperty("--barh",Math.ceil(h)+"px")};
+  try{new ResizeObserver(set).observe(document.body)}catch(_){}window.addEventListener("resize",set);window.addEventListener("orientationchange",()=>setTimeout(set,300));setTimeout(set,300);setTimeout(set,1500)})();
 
 render();
 </script>
