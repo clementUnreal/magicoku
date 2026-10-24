@@ -70,6 +70,23 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
 .g3-row .g3-lang{display:flex;gap:4px}
 .g3-row .g3-lang button{min-width:40px;min-height:40px;border-radius:10px;border:1.5px solid #d8c08a;background:#fff;font:800 14px var(--f-simple,system-ui)!important}
 .g3-row .g3-lang button.on{background:#3a1f3d;color:#fbefc8;border-color:#3a1f3d}
+#g3MenuS .g3-mrow{display:flex;align-items:center;gap:12px;min-height:64px;padding:10px 14px;border-radius:16px;border:1.5px solid #e0c78f;background:linear-gradient(180deg,#fffdf6,#fbf0d6);box-shadow:0 3px 0 #e2cfa4,0 6px 14px rgba(58,31,61,.12);transition:transform .12s,box-shadow .12s}
+#g3MenuS .g3-mrow:active{transform:translateY(2px);box-shadow:0 1px 0 #e2cfa4,0 3px 8px rgba(58,31,61,.12)}
+#g3MenuS .g3-mic{flex:none;width:42px;height:42px;display:grid;place-items:center;border-radius:12px;font-size:22px;background:linear-gradient(145deg,#ffe9a8,#e8b84e);box-shadow:inset 0 -2px 0 rgba(120,70,10,.25)}
+#g3MenuS .g3-mtx{flex:1;display:flex;flex-direction:column;font:800 16px var(--f-simple,system-ui)!important;color:#3a1f3d}
+#g3MenuS .g3-mtx small{font:500 12.5px var(--f-simple,system-ui)!important;color:#7a6650;margin-top:2px}
+#g3MenuS .g3-mchev{font:700 26px/1 var(--f-simple,system-ui)!important;color:#b08a3e}
+#g3MenuS .g3-quick{gap:8px}
+#g3MenuS .g3-quick button{min-height:76px;gap:6px;border-radius:16px;border:1.5px solid #e0c78f;background:linear-gradient(180deg,#fffdf6,#fbf0d6);box-shadow:0 3px 0 #e2cfa4;font:700 12.5px var(--f-simple,system-ui)!important;transition:transform .12s,box-shadow .12s}
+#g3MenuS .g3-quick button:active{transform:translateY(2px);box-shadow:0 1px 0 #e2cfa4}
+#g3MenuS .g3-quick button span{width:36px;height:36px;display:grid;place-items:center;border-radius:50%;font-size:19px;background:#efe3c6}
+#g3MenuS .g3-quick button.q-snd span{background:#dcecff}#g3MenuS .g3-quick button.q-th span{background:#ffeec2}#g3MenuS .g3-quick button.q-full span{background:#dff3df}#g3MenuS .g3-quick button.q-tuto span{background:#ffe0e6}
+#g3MenuS .g3-quick button.on{border-color:#7a3f6a;box-shadow:0 3px 0 #5a2848,0 0 0 2px rgba(122,63,106,.18)}
+#g3MenuS .g3-mlang{gap:0;margin:10px auto 2px;padding:4px;border-radius:999px;border:1.5px solid #e0c78f;background:#fbf0d6;max-width:280px}
+#g3MenuS .g3-mlang button{max-width:none;min-height:38px;border:0;border-radius:999px;background:transparent}
+#g3MenuS .g3-mlang button.on{background:#3a1f3d;color:#fbefc8;box-shadow:0 2px 6px rgba(58,31,61,.35)}
+#g3MenuS .g3-mhome{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;margin-top:14px;border:0;border-radius:999px;background:linear-gradient(180deg,#8e2f4f,#6a1f3c);color:#fff4dc;font:800 16px var(--f-simple,system-ui)!important;box-shadow:0 4px 0 #4a1428,0 8px 18px rgba(74,20,40,.35);cursor:pointer;transition:transform .12s,box-shadow .12s}
+#g3MenuS .g3-mhome:active{transform:translateY(3px);box-shadow:0 1px 0 #4a1428,0 4px 10px rgba(74,20,40,.3)}
 .g3-mstat{margin:-2px 0 10px;font:700 14px var(--f-simple,system-ui)!important;color:#6b5a48}
 .g3-msec{margin:14px 0 6px;font:800 12px var(--f-simple,system-ui)!important;letter-spacing:.08em;text-transform:uppercase;color:#8a6d4a}
 .g3-quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:6px}
@@ -140,17 +157,17 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
     const m=sheet("g3MenuS",`<h2>${L("Menu","Menu","메뉴","メニュー")}</h2>
       <p class="g3-mstat">⏱ ${fmtT(S.time||0)} · 🎯 ${S.attempts||0} · 💡 ${S.hints||0}</p>
       <div class="g3-list">
-      <button data-g="rules">📜 ${L("Règles","Rules","규칙","ルール")}</button>
+      <button data-g="rules" class="g3-mrow"><span class="g3-mic">📜</span><span class="g3-mtx">${L("Règles du jeu","Game rules","게임 규칙","ゲームのルール")}<small>${L("Comment résoudre une enquête","How to solve a case","사건을 푸는 방법","事件の解き方")}</small></span><span class="g3-mchev">›</span></button>
 </div>
       <p class="g3-msec">${L("Réglages","Settings","설정","設定")}</p>
       <div class="g3-quick">
-        <button data-g="sound"><span>${SND.on?"🔊":"🔇"}</span>${L("Son","Sound","소리","音")}</button>
-        <button data-g="theme"><span>${night?"🌙":"☀️"}</span>${night?L("Nuit","Night","나이트","ナイト"):L("Clair","Light","라이트","ライト")}</button>
-        ${full?`<button data-g="full"><span>⛶</span>${L("Plein écran","Full screen","전체 화면","全画面")}</button>`:""}
-        <button data-g="tuto"><span>❓</span>${L("Tutoriel","Tutorial","튜토리얼","チュートリアル")}</button>
+        <button data-g="sound" class="q-snd${SND.on?" on":""}"><span>${SND.on?"🔊":"🔇"}</span>${L("Son","Sound","소리","音")}</button>
+        <button data-g="theme" class="q-th${night?" on":""}"><span>${night?"🌙":"☀️"}</span>${night?L("Nuit","Night","나이트","ナイト"):L("Clair","Light","라이트","ライト")}</button>
+        ${full?`<button data-g="full" class="q-full"><span>⛶</span>${L("Plein écran","Full screen","전체 화면","全画面")}</button>`:""}
+        <button data-g="tuto" class="q-tuto"><span>❓</span>${L("Tutoriel","Tutorial","튜토리얼","チュートリアル")}</button>
       </div>
       <div class="g3-lang g3-mlang">${["fr","en","ko","ja"].map(l=>`<button data-lang="${l}" class="${LANG===l?"on":""}">${{fr:"FR",en:"EN",ko:"한",ja:"日"}[l]}</button>`).join("")}</div>
-      <button data-g="home" class="pill g3-mhome">🏠 ${L("Retour à l'accueil","Back to home","홈으로","ホームへ")}</button>`);
+      <button data-g="home" class="g3-mhome">🏠 ${L("Retour à l'accueil","Back to home","홈으로","ホームへ")}</button>`);
     m.onclick=e=>{const t=e.target.closest("button");if(e.target===m){close(m);return}if(!t)return;const g=t.dataset.g,lg=t.dataset.lang;
       if(lg){$("#l"+lg.toUpperCase()).click();setTimeout(()=>{openMenu();refresh()},60);return}
       if(!g)return;if(g==="sound"||g==="theme"){if(g==="sound")setSound(!SND.on);else setTheme(themeNow()==="night"?"light":"night");openMenu();return}close(m);
