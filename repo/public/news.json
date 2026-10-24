@@ -5,19 +5,19 @@
   "icon": "🌙",
   "fr": {
    "t": "Mode nuit",
-   "d": "Tu peux maintenant choisir l'affichage : ☀️ Clair ou 🌙 Nuit. En mode nuit, les fiches couleur parchemin passent en sombre, tandis que le plan et les portraits gardent leurs couleurs. Le réglage se trouve dans Options et dans le menu ☰ pendant une enquête."
+   "d": "Tu peux maintenant choisir l'affichage : ☀️ Clair ou 🌙 Nuit. En mode nuit, les fiches couleur parchemin passent en sombre, tandis que le plan et les portraits gardent leurs couleurs. Le réglage se trouve dans Options et dans le menu ☰ pendant une enquête. Sur Samsung Internet avec le téléphone en mode sombre, le mode nuit est choisi d'office, car ce navigateur assombrit lui-même les sites."
   },
   "en": {
    "t": "Night mode",
-   "d": "You can now choose the display: ☀️ Light or 🌙 Night. In night mode, the parchment cards turn dark while the map and the portraits keep their colours. The setting is in Options and in the ☰ menu during a case."
+   "d": "You can now choose the display: ☀️ Light or 🌙 Night. In night mode, the parchment cards turn dark while the map and the portraits keep their colours. The setting is in Options and in the ☰ menu during a case. On Samsung Internet with the phone in dark mode, night mode is picked by default, because that browser darkens websites itself."
   },
   "ko": {
    "t": "나이트 모드",
-   "d": "이제 화면을 ☀️ 라이트 또는 🌙 나이트로 고를 수 있어요. 나이트 모드에서는 양피지색 카드가 어두워지고, 지도와 초상화는 원래 색을 유지해요. 설정은 옵션과 사건 중 ☰ 메뉴에 있어요."
+   "d": "이제 화면을 ☀️ 라이트 또는 🌙 나이트로 고를 수 있어요. 나이트 모드에서는 양피지색 카드가 어두워지고, 지도와 초상화는 원래 색을 유지해요. 설정은 옵션과 사건 중 ☰ 메뉴에 있어요. 휴대폰이 다크 모드인 상태에서 삼성 인터넷을 쓰면, 이 브라우저가 사이트를 직접 어둡게 바꾸기 때문에 나이트 모드가 기본으로 선택돼요."
   },
   "ja": {
    "t": "ナイトモード",
-   "d": "表示を☀️ライトと🌙ナイトから選べるようになりました。ナイトモードでは羊皮紙色のカードが暗くなり、見取り図や肖像の色はそのままです。設定はオプションと、事件中の☰メニューにあります。"
+   "d": "表示を☀️ライトと🌙ナイトから選べるようになりました。ナイトモードでは羊皮紙色のカードが暗くなり、見取り図や肖像の色はそのままです。設定はオプションと、事件中の☰メニューにあります。 スマホがダークモードでSamsung Internetを使っている場合は、このブラウザが自分でサイトを暗くするため、ナイトモードが最初から選ばれます。"
   }
  },
  {

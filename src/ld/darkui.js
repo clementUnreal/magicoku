@@ -14,7 +14,13 @@ html.night body{color-scheme:dark}
 .g3-theme button.on{background:#5a2848;color:#fff;border-color:#5a2848}
 .o-theme{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}`;
   document.head.appendChild(css);
-  const get=()=>{try{return localStorage.getItem(K)==="night"?"night":"light"}catch(_){return "light"}};
+  /* Samsung Internet forces its own dark mode on every site when the phone is dark, and a site cannot turn it off:
+     the parchment then turns brown. For those players the night theme is the default (dark cards stay clean),
+     and a one-time tip explains how to switch the browser's dark mode off to see the real colours. */
+  const samsungDark=()=>{try{return /SamsungBrowser/i.test(navigator.userAgent)&&matchMedia("(prefers-color-scheme: dark)").matches}catch(_){return false}};
+  const get=()=>{try{const v=localStorage.getItem(K);if(v)return v==="night"?"night":"light";return samsungDark()?"night":"light"}catch(_){return "light"}};
+  function tip(){try{if(!samsungDark()||localStorage.getItem("magicoku:samsungTip"))return;localStorage.setItem("magicoku:samsungTip","1")}catch(_){return}
+    setTimeout(()=>{try{const m=document.createElement("div");m.className="modal";m.id="samsungTip";m.innerHTML=`<div class="mbox" style="max-width:420px"><h2>🌗 ${L("Mode sombre du téléphone","Phone dark mode","휴대폰 다크 모드","スマホのダークモード")}</h2><p style="font:500 15px/1.5 var(--f-simple,system-ui)">${L("Ton navigateur Samsung assombrit les sites. Pour voir les vraies couleurs du jeu, désactive « Mode sombre » dans le menu ☰ de Samsung Internet. Sinon, le mode 🌙 Nuit du jeu est activé.","Your Samsung browser darkens websites. To see the game's real colours, turn off “Dark mode” in Samsung Internet's ☰ menu. Otherwise, the game's 🌙 Night mode is on.","삼성 인터넷이 사이트를 어둡게 바꾸고 있어요. 게임의 원래 색을 보려면 삼성 인터넷 ☰ 메뉴에서 ‘다크 모드’를 끄세요. 그렇지 않으면 게임의 🌙 나이트 모드가 켜져 있어요.","Samsung Internetがサイトを暗く表示しています。ゲーム本来の色で見るには、Samsung Internetの☰メニューで「ダークモード」をオフにしてね。そのままなら、ゲームの🌙ナイトモードが使われます。")}</p><div style="text-align:center;margin-top:12px"><button class="pill red" id="samsungTipOk">OK</button></div></div>`;document.body.appendChild(m);m.hidden=false;m.addEventListener("click",e=>{if(e.target===m||e.target.id==="samsungTipOk")m.remove()})}catch(_){}},2500)}
   function apply(){document.documentElement.classList.toggle("night",get()==="night")}
   window.themeNow=get;
   window.setTheme=t=>{try{localStorage.setItem(K,t)}catch(_){}apply();try{paint()}catch(_){}};
@@ -25,6 +31,6 @@ html.night body{color-scheme:dark}
     r.innerHTML=`<span>🌗 ${L("Affichage","Display","화면","表示")}</span>${themeRow()}`}
   document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-th]");if(!b)return;e.stopPropagation();setTheme(b.dataset.th);
     document.querySelectorAll("[data-th]").forEach(x=>x.classList.toggle("on",x.dataset.th===b.dataset.th))},true);
-  apply();
+  apply();tip();
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{paint()}catch(_){}};
 })();
