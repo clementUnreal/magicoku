@@ -11,13 +11,12 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="favicon.png">
+<link rel="preload" href="fraunces.woff" as="font" type="font/woff" crossorigin>
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;-webkit-user-select:none;user-select:none;overscroll-behavior:none}img{max-width:100%}[hidden]{display:none!important}textarea,input{-webkit-user-select:text;user-select:text}</style>
 </head>
 <body>
 <title>Magicoku</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grandstander:wght@600;800;900&family=Nunito:wght@400;600;800;900&family=Gochi+Hand&family=Oswald:wght@500;600&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Caveat:wght@500;700&display=swap">
 <style>
 /* Layout: trois colonnes comme un plateau de jeu (suspects | plan | outils) ; sur téléphone le plan passe en haut, outils et suspects dessous. Look unique, couleurs toutes explicites. */
 :root{
@@ -1409,6 +1408,15 @@ body.vshake .wrap{animation:vshake .35s}
 @media (max-height:720px){.home-in.h2in{gap:10px}.h2-art{height:60px}.h2-body{padding:8px 12px 12px}.h2-ch{font-size:13.5px}.h2-lv{margin-top:2px}.h2-go{min-height:48px;font-size:18px}.h2-link{min-height:44px;margin-top:6px}.h2-daily{min-height:64px;padding:8px 10px 8px 12px}.h2-daily .hd-rw{display:none}.h2-card{min-height:66px}.home-in.h2in .home-logo{min-height:54px}}
 .h2-card{padding-left:66px}.h2-card img{width:46px;height:46px}
 .home.h2lv #hWho.h3-av{display:none}
+/* ================= one typeface for the whole game: Fraunces (soft), storybook-puzzle style ================= */
+@font-face{font-family:"Magi";src:url("fraunces.woff") format("woff");font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Magi";src:url("fraunces-italic.woff") format("woff");font-weight:400 900;font-style:italic;font-display:swap}
+:root{--f-magi:"Magi","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP","Noto Serif KR","AppleMyungjo","Nanum Myeongjo",Georgia,serif;
+  --f-body:var(--f-magi);--f-display:var(--f-magi);--f-label:var(--f-magi);--f-title:var(--f-magi);--f-hand:var(--f-magi);--f-ui:var(--f-magi)}
+html,body,*,*::before,*::after,input,button,textarea,select{font-family:var(--f-magi)!important}
+body{font-optical-sizing:auto;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+#tUndo,#tValid,#tHint,#tX,#tErase{letter-spacing:0!important;font-size:clamp(11px,3.3vw,15px)!important}
+.h2-ct b{font-size:clamp(13px,3.8vw,15px)!important}.h2-card{padding-right:22px}
 </style>
 
 <div class="wrap">
@@ -3831,7 +3839,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="e9136bd79e2e";
+var APP_BUILD="a66995deb195";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -4596,7 +4604,7 @@ body.coop-on #tHint{display:none!important}
   function fix(){const w=$("#hWho"),home=$("#home");if(!w||!home)return;
     if(w.parentNode!==home){home.appendChild(w)}w.classList.add("h3-av");w.setAttribute("role","button");w.tabIndex=0;
     w.setAttribute("aria-label",L("Mon profil","My profile","내 프로필","プロフィール"));
-    const bar=$("#h2Bar");w.hidden=!!(bar&&getComputedStyle(bar).display==="none")}
+    const bar=$("#h2Bar"),main=$("#hMain");w.hidden=!!(bar&&getComputedStyle(bar).display==="none")||!!(main&&main.hidden)}
   const open=()=>{const b=$("#hAccount");if(b)b.click()};
   document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest("#hWho.h3-av")){e.stopPropagation();open()}},true);
   document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&document.activeElement&&document.activeElement.id==="hWho"){e.preventDefault();open()}});

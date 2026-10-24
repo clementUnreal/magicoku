@@ -1,5 +1,26 @@
 [
  {
+  "id": 50,
+  "date": "2026-10-24",
+  "icon": "🔤",
+  "fr": {
+   "t": "Une seule écriture",
+   "d": "Fini le mélange de polices : tout le jeu utilise désormais une seule typographie, aux courbes douces et un brin mystérieuses, pensée pour rester bien lisible partout."
+  },
+  "en": {
+   "t": "One single typeface",
+   "d": "No more mix of fonts: the whole game now uses a single typeface, with soft, slightly mysterious curves, designed to stay easy to read everywhere."
+  },
+  "ko": {
+   "t": "하나로 통일된 글꼴",
+   "d": "여러 글꼴이 섞여 있던 화면을 정리했어요. 이제 게임 전체가 부드럽고 조금 신비로운 하나의 글꼴을 써서 어디서나 읽기 쉬워요."
+  },
+  "ja": {
+   "t": "ひとつの書体に",
+   "d": "フォントがばらばらだった画面を整えました。ゲーム全体が、やわらかく少しミステリアスなひとつの書体になり、どこでも読みやすくなっています。"
+  }
+ },
+ {
   "id": 49,
   "date": "2026-10-24",
   "icon": "🏠",

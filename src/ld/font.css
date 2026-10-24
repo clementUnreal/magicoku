@@ -1,0 +1,9 @@
+/* ================= one typeface for the whole game: Fraunces (soft), storybook-puzzle style ================= */
+@font-face{font-family:"Magi";src:url("fraunces.woff") format("woff");font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Magi";src:url("fraunces-italic.woff") format("woff");font-weight:400 900;font-style:italic;font-display:swap}
+:root{--f-magi:"Magi","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP","Noto Serif KR","AppleMyungjo","Nanum Myeongjo",Georgia,serif;
+  --f-body:var(--f-magi);--f-display:var(--f-magi);--f-label:var(--f-magi);--f-title:var(--f-magi);--f-hand:var(--f-magi);--f-ui:var(--f-magi)}
+html,body,*,*::before,*::after,input,button,textarea,select{font-family:var(--f-magi)!important}
+body{font-optical-sizing:auto;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+#tUndo,#tValid,#tHint,#tX,#tErase{letter-spacing:0!important;font-size:clamp(11px,3.3vw,15px)!important}
+.h2-ct b{font-size:clamp(13px,3.8vw,15px)!important}.h2-card{padding-right:22px}
