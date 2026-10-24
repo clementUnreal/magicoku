@@ -67,7 +67,7 @@
   }
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{paint()}catch(e){}};
   const _nb=renderNewsBadges;renderNewsBadges=function(){_nb.apply(this,arguments);const b=$("#hNews");if(!b)return;const u=newsUnseen();
-    b.innerHTML=`<span class="h2-bell">🔔</span><span class="h2-nt">${L("Nouveautés","What's new","새로운 소식","お知らせ")}</span>${u?`<span class="nbadge">${u}</span>`:""}<span class="h2-chev">›</span>`};
+    b.innerHTML=`<span class="h2-bell"><svg class="h3-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg></span><span class="h2-nt">${L("Nouveautés","What's new","새로운 소식","お知らせ")}</span>${u?`<span class="nbadge">${u}</span>`:""}<span class="h2-chev">›</span>`};
   /* active tab + hide the bar on the full-screen level view */
   const _show=show;show=function(panel){_show.apply(this,arguments);const map={hMain:"h2Home",pRank:"hRank",pAccount:"hAccount"};
     bar.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.id===map[panel]));home.classList.toggle("h2lv",panel==="pLevels")};

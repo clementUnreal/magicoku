@@ -79,3 +79,32 @@
 .h2-link::after{content:"\00a0›"!important}
 .h2-ct small{white-space:nowrap}
 @media (max-width:380px){.h2-grid{grid-template-columns:1fr!important}.h2-card{min-height:62px!important}}
+
+/* v3.2: header in the same column, compact story footer, drawn icons, centred button labels */
+.home-in.h2in .home-logo{padding:0!important;justify-content:space-between!important;gap:10px}
+.h3-acts{display:flex;align-items:center;gap:8px;margin-left:auto}
+.h3-acts .h2-gear,.h3-acts #hWho.h3-av{position:relative!important;top:auto!important;right:auto!important;flex:0 0 auto}
+.h3-acts .h2-gear{width:46px;height:46px}
+.h3-acts #hWho.h3-av[hidden]{display:none}
+.h2-body{padding-bottom:6px!important}
+.h2-link{margin-top:2px!important;min-height:44px!important}
+.h3-ic{width:26px;height:26px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.h2-daily .hd-ic{width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;border-radius:12px;background:rgba(251,239,200,.12);color:#f6d36a;font-size:0}
+.h2-news .h2-bell{width:28px;display:grid;place-items:center;color:#7a5a1e;font-size:0}
+.h2-go{position:relative;justify-content:center}
+.h2-go .h2-gi{position:absolute;left:20px;top:50%;transform:translateY(-50%)}
+.h2-go .h2-chev{position:absolute;right:20px;top:50%;transform:translateY(-50%)}
+.h2-go #h2GoT{flex:0 1 auto!important;padding:0 44px;text-align:center}
+.h2-bar button{min-width:0}
+@media (max-width:380px){.h2-bar button span{font-size:11.5px!important;letter-spacing:-.01em}.h2-bar svg{width:24px;height:24px}}
+.home-in.h2in .home-logo{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;width:100%}
+.home-in.h2in .home-t{flex:0 1 auto;min-width:0;white-space:nowrap}
+.h2-daily .hd-rw{white-space:nowrap}
+.h2-card>.h2-chev{display:none!important}
+.h2-card{padding-right:12px!important}
+@media (max-width:420px){.h2-bar button span{font-size:12px!important;letter-spacing:-.01em}}
+@media (max-width:380px){.h2-bar button span{font-size:11.5px!important}.h3-acts{gap:6px}.h3-acts .h2-gear,.h3-acts #hWho.h3-av{width:44px!important;height:44px!important}.h3-acts #hWho.h3-av img{width:44px!important;height:44px!important}}
+.h2-daily .hd-rw{white-space:normal!important}.h2-daily .hd-rw .nw{white-space:nowrap}
+.h2-daily .hd-t{min-width:0}
+@media (max-width:380px){.h2-daily{gap:10px;padding-left:10px}.h2-daily .hd-ic{width:38px;height:38px;flex-basis:38px}.h2-daily .hd-act{min-width:70px;padding:0 12px}}
+.h2-daily .hd-rw *,.h2-ct small *{font-family:var(--f-simple)!important}

@@ -3,7 +3,12 @@
 (function(){
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{fix()}catch(_){}};
   function fix(){const w=$("#hWho"),home=$("#home");if(!w||!home)return;
-    if(w.parentNode!==home){home.appendChild(w)}w.classList.add("h3-av");w.setAttribute("role","button");w.tabIndex=0;
+    /* header: logo on the left, avatar + messages + settings grouped on the right, inside the same column */
+    const logo=document.querySelector(".home-in.h2in .home-logo");let grp=$("#h3Acts");
+    if(logo&&!grp){grp=document.createElement("div");grp.id="h3Acts";grp.className="h3-acts";logo.appendChild(grp)}
+    if(grp){[w,$("#chatBtn"),$("#hOptions")].forEach(el=>{if(el&&el.parentNode!==grp)grp.appendChild(el)})}
+    else if(w.parentNode!==home){home.appendChild(w)}
+    w.classList.add("h3-av");w.setAttribute("role","button");w.tabIndex=0;
     w.setAttribute("aria-label",L("Mon profil","My profile","내 프로필","プロフィール"));
     const bar=$("#h2Bar"),main=$("#hMain");w.hidden=!!(bar&&getComputedStyle(bar).display==="none")||!!(main&&main.hidden)}
   const open=()=>{const b=$("#hAccount");if(b)b.click()};

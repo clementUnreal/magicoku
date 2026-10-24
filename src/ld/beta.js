@@ -245,9 +245,9 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     const sec=$("#h2Sec");if(dOn&&!c&&sec){c=document.createElement("button");c.id="h2Daily";c.className="h2-daily";sec.before(c)}
     if(c){const date=parisDate();let mine=null;try{mine=JSON.parse(localStorage.getItem("magicoku:daily:"+date)||"null")}catch(_){}
       const sc=mine?fmtT(mine.t+30*mine.e+60*mine.h):"";
-      c.innerHTML=`<span class="hd-ic">🗓️</span><span class="hd-t"><b>${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")}</b>
+      c.innerHTML=`<span class="hd-ic"><svg class="h3-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h2M12 14h2M16 14h0.5M8 17.5h2M12 17.5h2"/></svg></span><span class="hd-t"><b>${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")}</b>
         <small class="hd-st ${mine?"done":"ok"}">${mine?L(`✓ Résolue · score ${sc}`,`✓ Solved · score ${sc}`,`✓ 해결 · 점수 ${sc}`,`✓ 解決・スコア ${sc}`):L("● Disponible","● Available","● 도전 가능","● 挑戦できます")}</small>
-        <small class="hd-rw">${L("Jusqu'à 40\u00a0🌙","Up to 40\u00a0🌙","최대 40\u00a0🌙","最大40\u00a0🌙")}</small></span>
+        <small class="hd-rw">${L("Récompense\u00a0: <span class=\"nw\">40\u00a0🌙 max.</span>","Reward: <span class=\"nw\">40\u00a0🌙 max.</span>","보상: <span class=\"nw\">최대 40\u00a0🌙</span>","報酬：<span class=\"nw\">最大40\u00a0🌙</span>")}</small></span>
         <span class="hd-act">${mine?L("Classement","Ranking","순위","順位"):L("Jouer","Play","플레이","プレイ")}</span>`}
     const w=$("#hWho img");const me=ACC.profile;if(w&&me&&myCos()&&(myCos().chara||myCos().orn)){w.outerHTML=cosAv(me.avatar,myCos(),"hw-av")}
     const ttl=$("#hWho .cos-title");if(!ttl&&myCos()&&myCos().title){const b=$("#hWho b");if(b)b.insertAdjacentHTML("afterend",cosTitle(myCos()))}};

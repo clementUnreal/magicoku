@@ -1427,6 +1427,35 @@ body.vshake .wrap{animation:vshake .35s}
 .h2-link::after{content:"\00a0›"!important}
 .h2-ct small{white-space:nowrap}
 @media (max-width:380px){.h2-grid{grid-template-columns:1fr!important}.h2-card{min-height:62px!important}}
+
+/* v3.2: header in the same column, compact story footer, drawn icons, centred button labels */
+.home-in.h2in .home-logo{padding:0!important;justify-content:space-between!important;gap:10px}
+.h3-acts{display:flex;align-items:center;gap:8px;margin-left:auto}
+.h3-acts .h2-gear,.h3-acts #hWho.h3-av{position:relative!important;top:auto!important;right:auto!important;flex:0 0 auto}
+.h3-acts .h2-gear{width:46px;height:46px}
+.h3-acts #hWho.h3-av[hidden]{display:none}
+.h2-body{padding-bottom:6px!important}
+.h2-link{margin-top:2px!important;min-height:44px!important}
+.h3-ic{width:26px;height:26px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.h2-daily .hd-ic{width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;border-radius:12px;background:rgba(251,239,200,.12);color:#f6d36a;font-size:0}
+.h2-news .h2-bell{width:28px;display:grid;place-items:center;color:#7a5a1e;font-size:0}
+.h2-go{position:relative;justify-content:center}
+.h2-go .h2-gi{position:absolute;left:20px;top:50%;transform:translateY(-50%)}
+.h2-go .h2-chev{position:absolute;right:20px;top:50%;transform:translateY(-50%)}
+.h2-go #h2GoT{flex:0 1 auto!important;padding:0 44px;text-align:center}
+.h2-bar button{min-width:0}
+@media (max-width:380px){.h2-bar button span{font-size:11.5px!important;letter-spacing:-.01em}.h2-bar svg{width:24px;height:24px}}
+.home-in.h2in .home-logo{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;width:100%}
+.home-in.h2in .home-t{flex:0 1 auto;min-width:0;white-space:nowrap}
+.h2-daily .hd-rw{white-space:nowrap}
+.h2-card>.h2-chev{display:none!important}
+.h2-card{padding-right:12px!important}
+@media (max-width:420px){.h2-bar button span{font-size:12px!important;letter-spacing:-.01em}}
+@media (max-width:380px){.h2-bar button span{font-size:11.5px!important}.h3-acts{gap:6px}.h3-acts .h2-gear,.h3-acts #hWho.h3-av{width:44px!important;height:44px!important}.h3-acts #hWho.h3-av img{width:44px!important;height:44px!important}}
+.h2-daily .hd-rw{white-space:normal!important}.h2-daily .hd-rw .nw{white-space:nowrap}
+.h2-daily .hd-t{min-width:0}
+@media (max-width:380px){.h2-daily{gap:10px;padding-left:10px}.h2-daily .hd-ic{width:38px;height:38px;flex-basis:38px}.h2-daily .hd-act{min-width:70px;padding:0 12px}}
+.h2-daily .hd-rw *,.h2-ct small *{font-family:var(--f-simple)!important}
 /* ================= one typeface for the whole game: Fraunces (soft), storybook-puzzle style ================= */
 @font-face{font-family:"Magi";src:url("fraunces.woff") format("woff");font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:"Magi";src:url("fraunces-italic.woff") format("woff");font-weight:400 900;font-style:italic;font-display:swap}
@@ -3491,7 +3520,7 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
   }
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{paint()}catch(e){}};
   const _nb=renderNewsBadges;renderNewsBadges=function(){_nb.apply(this,arguments);const b=$("#hNews");if(!b)return;const u=newsUnseen();
-    b.innerHTML=`<span class="h2-bell">🔔</span><span class="h2-nt">${L("Nouveautés","What's new","새로운 소식","お知らせ")}</span>${u?`<span class="nbadge">${u}</span>`:""}<span class="h2-chev">›</span>`};
+    b.innerHTML=`<span class="h2-bell"><svg class="h3-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg></span><span class="h2-nt">${L("Nouveautés","What's new","새로운 소식","お知らせ")}</span>${u?`<span class="nbadge">${u}</span>`:""}<span class="h2-chev">›</span>`};
   /* active tab + hide the bar on the full-screen level view */
   const _show=show;show=function(panel){_show.apply(this,arguments);const map={hMain:"h2Home",pRank:"hRank",pAccount:"hAccount"};
     bar.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.id===map[panel]));home.classList.toggle("h2lv",panel==="pLevels")};
@@ -3858,7 +3887,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="dc94efe02c1b";
+var APP_BUILD="8320f67ae5fc";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -4122,9 +4151,9 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     const sec=$("#h2Sec");if(dOn&&!c&&sec){c=document.createElement("button");c.id="h2Daily";c.className="h2-daily";sec.before(c)}
     if(c){const date=parisDate();let mine=null;try{mine=JSON.parse(localStorage.getItem("magicoku:daily:"+date)||"null")}catch(_){}
       const sc=mine?fmtT(mine.t+30*mine.e+60*mine.h):"";
-      c.innerHTML=`<span class="hd-ic">🗓️</span><span class="hd-t"><b>${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")}</b>
+      c.innerHTML=`<span class="hd-ic"><svg class="h3-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h2M12 14h2M16 14h0.5M8 17.5h2M12 17.5h2"/></svg></span><span class="hd-t"><b>${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")}</b>
         <small class="hd-st ${mine?"done":"ok"}">${mine?L(`✓ Résolue · score ${sc}`,`✓ Solved · score ${sc}`,`✓ 해결 · 점수 ${sc}`,`✓ 解決・スコア ${sc}`):L("● Disponible","● Available","● 도전 가능","● 挑戦できます")}</small>
-        <small class="hd-rw">${L("Jusqu'à 40\u00a0🌙","Up to 40\u00a0🌙","최대 40\u00a0🌙","最大40\u00a0🌙")}</small></span>
+        <small class="hd-rw">${L("Récompense\u00a0: <span class=\"nw\">40\u00a0🌙 max.</span>","Reward: <span class=\"nw\">40\u00a0🌙 max.</span>","보상: <span class=\"nw\">최대 40\u00a0🌙</span>","報酬：<span class=\"nw\">最大40\u00a0🌙</span>")}</small></span>
         <span class="hd-act">${mine?L("Classement","Ranking","순위","順位"):L("Jouer","Play","플레이","プレイ")}</span>`}
     const w=$("#hWho img");const me=ACC.profile;if(w&&me&&myCos()&&(myCos().chara||myCos().orn)){w.outerHTML=cosAv(me.avatar,myCos(),"hw-av")}
     const ttl=$("#hWho .cos-title");if(!ttl&&myCos()&&myCos().title){const b=$("#hWho b");if(b)b.insertAdjacentHTML("afterend",cosTitle(myCos()))}};
@@ -4621,7 +4650,12 @@ body.coop-on #tHint{display:none!important}
 (function(){
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{fix()}catch(_){}};
   function fix(){const w=$("#hWho"),home=$("#home");if(!w||!home)return;
-    if(w.parentNode!==home){home.appendChild(w)}w.classList.add("h3-av");w.setAttribute("role","button");w.tabIndex=0;
+    /* header: logo on the left, avatar + messages + settings grouped on the right, inside the same column */
+    const logo=document.querySelector(".home-in.h2in .home-logo");let grp=$("#h3Acts");
+    if(logo&&!grp){grp=document.createElement("div");grp.id="h3Acts";grp.className="h3-acts";logo.appendChild(grp)}
+    if(grp){[w,$("#chatBtn"),$("#hOptions")].forEach(el=>{if(el&&el.parentNode!==grp)grp.appendChild(el)})}
+    else if(w.parentNode!==home){home.appendChild(w)}
+    w.classList.add("h3-av");w.setAttribute("role","button");w.tabIndex=0;
     w.setAttribute("aria-label",L("Mon profil","My profile","내 프로필","プロフィール"));
     const bar=$("#h2Bar"),main=$("#hMain");w.hidden=!!(bar&&getComputedStyle(bar).display==="none")||!!(main&&main.hidden)}
   const open=()=>{const b=$("#hAccount");if(b)b.click()};
