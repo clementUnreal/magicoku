@@ -1,5 +1,26 @@
 [
  {
+  "id": 63,
+  "date": "2026-10-24",
+  "icon": "🖼️",
+  "fr": {
+   "t": "Nouvelle icône",
+   "d": "Magicoku a une nouvelle icône : une détective encapuchonnée, sa fiole et sa loupe sur le plan. Si tu as installé le jeu sur ton écran d'accueil, elle peut mettre un peu de temps à apparaître."
+  },
+  "en": {
+   "t": "New icon",
+   "d": "Magicoku has a new icon: a hooded detective with her flask and her magnifying glass over the map. If you installed the game on your home screen, it may take a little while to show up."
+  },
+  "ko": {
+   "t": "새 아이콘",
+   "d": "Magicoku에 새 아이콘이 생겼어요. 후드를 쓴 탐정이 약병을 들고 돋보기로 지도를 살피는 모습이에요. 홈 화면에 게임을 설치했다면 바뀌기까지 조금 걸릴 수 있어요."
+  },
+  "ja": {
+   "t": "新しいアイコン",
+   "d": "Magicokuのアイコンが新しくなりました。フードをかぶった探偵が、小瓶を手に虫めがねで見取り図を調べています。ホーム画面に追加している場合は、反映まで少し時間がかかることがあります。"
+  }
+ },
+ {
   "id": 62,
   "date": "2026-10-24",
   "icon": "🌙",
