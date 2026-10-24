@@ -1456,6 +1456,13 @@ body.vshake .wrap{animation:vshake .35s}
 .h2-daily .hd-t{min-width:0}
 @media (max-width:380px){.h2-daily{gap:10px;padding-left:10px}.h2-daily .hd-ic{width:38px;height:38px;flex-basis:38px}.h2-daily .hd-act{min-width:70px;padding:0 12px}}
 .h2-daily .hd-rw *,.h2-ct small *{font-family:var(--f-simple)!important}
+/* v3.3: no "N new things" bubble (the Nouveautés row + badge already say it), chevrons back on mode cards */
+.npeek{display:none!important}
+.h2-card>.h2-chev{display:block!important;position:absolute;right:14px;top:50%;bottom:auto;transform:translateY(-50%);font-size:24px;color:var(--gold)}
+.h2-card{padding-right:40px!important}
+@media (max-width:430px){.h2-grid{grid-template-columns:1fr!important}.h2-card{min-height:64px!important}}
+.h2-go .h2-gi,.h2-go .h2-chev{width:24px;height:24px;display:grid;place-items:center;line-height:1}
+.h2-go .h2-gi{left:22px}.h2-go .h2-chev{right:22px}
 /* ================= one typeface for the whole game: Fraunces (soft), storybook-puzzle style ================= */
 @font-face{font-family:"Magi";src:url("fraunces.woff") format("woff");font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:"Magi";src:url("fraunces-italic.woff") format("woff");font-weight:400 900;font-style:italic;font-display:swap}
@@ -3887,7 +3894,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="8320f67ae5fc";
+var APP_BUILD="9fb806230da2";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
