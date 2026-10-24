@@ -244,7 +244,11 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     if(!dOn){if(c)c.remove()}
     const sec=$("#h2Sec");if(dOn&&!c&&sec){c=document.createElement("button");c.id="h2Daily";c.className="h2-daily";sec.before(c)}
     if(c){const date=parisDate();let mine=null;try{mine=JSON.parse(localStorage.getItem("magicoku:daily:"+date)||"null")}catch(_){}
-      c.innerHTML=`<span class="hd-ic">🗓️</span><span class="hd-t"><b>${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")}</b><small>${mine?L(`Résolue · score ${fmtT(mine.t+30*mine.e+60*mine.h)}`,`Solved · score ${fmtT(mine.t+30*mine.e+60*mine.h)}`,`해결 · 점수 ${fmtT(mine.t+30*mine.e+60*mine.h)}`,`解決・スコア ${fmtT(mine.t+30*mine.e+60*mine.h)}`):L("Une nouvelle énigme t'attend : affronte les autres détectives !","A new puzzle awaits: take on the other detectives!","새 수수께끼가 기다려요. 다른 탐정들과 겨뤄 보세요!","新しい謎が待っている。ほかの探偵と勝負だ！")}</small></span><span class="hd-w">${BETA.w?shards(BETA.w.coins):""}</span><span class="h2-chev">›</span>`}
+      const sc=mine?fmtT(mine.t+30*mine.e+60*mine.h):"";
+      c.innerHTML=`<span class="hd-ic">🗓️</span><span class="hd-t"><b>${L("Énigme du jour","Daily puzzle","오늘의 수수께끼","今日の謎")}</b>
+        <small class="hd-st ${mine?"done":"ok"}">${mine?L(`✓ Résolue · score ${sc}`,`✓ Solved · score ${sc}`,`✓ 해결 · 점수 ${sc}`,`✓ 解決・スコア ${sc}`):L("● Disponible","● Available","● 도전 가능","● 挑戦できます")}</small>
+        <small class="hd-rw">${L("Récompense : jusqu'à 40\u00a0🌙, +100 au meilleur score","Reward: up to 40 🌙, +100 for the best score","보상: 최대 40 🌙, 최고 점수는 +100","報酬：最大40🌙、最高スコアは+100")}</small></span>
+        <span class="hd-act">${mine?L("Classement","Ranking","순위","順位"):L("Jouer","Play","플레이","プレイ")}</span>`}
     const w=$("#hWho img");const me=ACC.profile;if(w&&me&&myCos()&&(myCos().chara||myCos().orn)){w.outerHTML=cosAv(me.avatar,myCos(),"hw-av")}
     const ttl=$("#hWho .cos-title");if(!ttl&&myCos()&&myCos().title){const b=$("#hWho b");if(b)b.insertAdjacentHTML("afterend",cosTitle(myCos()))}};
   applyCos();setTimeout(()=>{loadWallet().then(()=>{try{renderHome()}catch(_){}})},1500);

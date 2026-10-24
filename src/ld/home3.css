@@ -1,0 +1,62 @@
+/* ================= home v3: compact, action first (mobile) ================= */
+:root{--f-ui:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
+.home-in.h2in{gap:12px;padding-top:max(8px,env(safe-area-inset-top,0px));padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+/* 1. compact header: logo on the left, avatar + messages + settings on the right */
+.home-in.h2in .home-logo{flex-direction:row;align-items:center;justify-content:flex-start;align-self:stretch;min-height:62px;padding:0 176px 0 2px;margin:0}
+.home-in.h2in .home-logo .moon,.home-in.h2in .home-sub{display:none}
+.home-in.h2in .home-t{font-size:clamp(26px,7.4vw,32px);line-height:1;text-align:left}
+#hWho.h3-av{position:absolute;z-index:3;top:max(14px,env(safe-area-inset-top,0px));right:max(126px,calc(env(safe-area-inset-right,0px) + 126px));margin:0;padding:0;width:46px;height:46px;cursor:pointer;border-radius:50%}
+#hWho.h3-av>span{display:none}
+#hWho.h3-av img,#hWho.h3-av .cav{width:46px!important;height:46px!important;border-radius:50%;box-shadow:0 0 0 2px var(--gold),0 4px 10px #0008}
+#hWho.h3-av .cav img{width:100%!important;height:100%!important;box-shadow:none}
+.home-who.h3-av:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.h2-gear{width:48px;height:48px}
+.h2-gear.ch-btn{right:max(72px,calc(env(safe-area-inset-right,0px) + 72px))}
+/* 2. current game: small banner, progress, one big button, one clear secondary button */
+.h2-hero{border-width:2px;box-shadow:0 10px 24px #0009}
+.h2-hero::after{display:none}
+.h2-art{aspect-ratio:auto;height:96px}
+.h2-art img{object-position:50% 58%;-webkit-mask-image:none;mask-image:none}
+.h2-body{padding:10px 14px 14px;gap:4px}
+.h2-t{font-size:clamp(17px,4.8vw,20px);gap:8px;letter-spacing:.02em}
+.h2-bk svg{width:1em;height:1em}
+.h2-ch{font:700 15px/1.25 "Cinzel",Georgia,serif}
+.h2-lv{margin-top:6px;font:700 15px/1.3 var(--f-ui);color:#3a1f3d}
+.h2-lv i{display:none}
+.h2-go{margin-top:6px;min-height:54px;font:800 19px var(--f-ui);letter-spacing:.01em;text-transform:none;box-shadow:0 4px 0 #4a0d1a,0 8px 16px #0006;border-width:2px}
+.h2-gi svg{width:24px;height:24px}
+.h2-link{margin-top:8px;width:100%;min-height:46px;border-radius:999px;border:2px solid #9a7426;background:rgba(255,255,255,.55);text-decoration:none;font:700 16px var(--f-ui);color:#3a1f3d;display:flex;align-items:center;justify-content:center}
+.h2-link:active{background:rgba(255,255,255,.85)}
+/* 3. daily puzzle: title, status, reward, one action */
+.h2-daily{min-height:72px;padding:10px 12px 10px 14px;gap:12px}
+.h2-daily .hd-ic{font-size:28px}
+.h2-daily .hd-t{gap:2px}
+.h2-daily .hd-t b{font:800 17px "Cinzel",Georgia,serif}
+.h2-daily .hd-st{font:700 13.5px var(--f-ui)}
+.h2-daily .hd-st.ok{color:#8ee39b}.h2-daily .hd-st.done{color:#f6d36a}
+.h2-daily .hd-rw{font:500 12.5px/1.3 var(--f-ui);opacity:.85}
+.h2-daily .hd-act{flex:0 0 auto;min-width:84px;min-height:44px;display:grid;place-items:center;padding:0 14px;border-radius:999px;background:#fbefc8;color:#4a0f22;font:800 15px var(--f-ui);box-shadow:0 3px 0 #9a7426}
+/* 4. other modes: compact cards, readable names, image as a thumbnail */
+.h2-sec{margin-top:4px;justify-content:flex-start;font:800 14px var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--gold-soft)}
+.h2-sec i{display:none}
+.h2-grid{gap:10px}
+.h2-card{min-height:76px;padding:10px 26px 10px 74px;justify-content:flex-start;text-align:left;border-width:1.5px;box-shadow:0 6px 14px #0007}
+.h2-card img{left:10px;top:50%;width:54px;height:54px;transform:translateY(-50%);border-radius:12px;object-position:30% 40%;-webkit-mask-image:none;mask-image:none;box-shadow:0 0 0 1.5px rgba(240,207,122,.7)}
+.h2-ct{gap:2px}
+.h2-ct b{font:700 15px/1.15 "Cinzel",Georgia,serif;text-shadow:none}
+.h2-ct b,.h2-ct small{overflow-wrap:normal;word-break:normal;hyphens:manual}
+.h2-card.c-disc .h2-ct b{white-space:normal}
+.h2-ct small{font:500 12.5px/1.25 var(--f-ui);font-style:normal;text-shadow:none;color:#eadfc8}
+.h2-card>.h2-chev{top:50%;bottom:auto;right:10px;transform:translateY(-50%)}
+.h2-news{min-height:48px;font:700 15px var(--f-ui)}
+.h2-news .h2-bell{font-size:20px}
+/* 5. bottom navigation: bigger labels, clearer selected state, safe area */
+.h2-bar{padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px));gap:2px}
+.h2-bar button{min-height:56px;gap:3px;padding:6px 2px;border-radius:14px;color:#cfc6e3;font:700 13px var(--f-ui)}
+.h2-bar button span{font-size:clamp(11.5px,3.3vw,13px)!important}
+.h2-bar svg{width:26px;height:26px;stroke-width:2}
+.h2-bar button.on{color:#2a1840;background:var(--gold)}
+.h2-bar button.on::after{display:none}
+@media (max-height:720px){.home-in.h2in{gap:10px}.h2-art{height:60px}.h2-body{padding:8px 12px 12px}.h2-ch{font-size:13.5px}.h2-lv{margin-top:2px}.h2-go{min-height:48px;font-size:18px}.h2-link{min-height:44px;margin-top:6px}.h2-daily{min-height:64px;padding:8px 10px 8px 12px}.h2-daily .hd-rw{display:none}.h2-card{min-height:66px}.home-in.h2in .home-logo{min-height:54px}}
+.h2-card{padding-left:66px}.h2-card img{width:46px;height:46px}
+.home.h2lv #hWho.h3-av{display:none}

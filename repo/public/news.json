@@ -1,5 +1,26 @@
 [
  {
+  "id": 49,
+  "date": "2026-10-24",
+  "icon": "🏠",
+  "fr": {
+   "t": "Un accueil plus clair",
+   "d": "L'écran d'accueil a été réorganisé : ta partie en cours et le bouton pour la reprendre d'abord, puis l'énigme du jour, puis les autres modes, le tout visible sans faire défiler. Touche ton portrait en haut pour ouvrir ton profil."
+  },
+  "en": {
+   "t": "A clearer home screen",
+   "d": "The home screen has been reorganised: your current game and its resume button first, then the daily puzzle, then the other modes, all visible without scrolling. Tap your portrait at the top to open your profile."
+  },
+  "ko": {
+   "t": "더 깔끔해진 첫 화면",
+   "d": "첫 화면을 새로 정리했어요. 진행 중인 게임과 이어하기 버튼이 먼저, 그다음 오늘의 수수께끼, 그리고 다른 모드가 스크롤 없이 한눈에 보여요. 위쪽 초상화를 누르면 프로필이 열려요."
+  },
+  "ja": {
+   "t": "見やすくなったホーム",
+   "d": "ホーム画面を整理しました。進行中のゲームと「つづける」ボタンが先頭、次に今日の謎、そしてほかのモード。スクロールなしで全部見えます。上の肖像をタップするとプロフィールが開きます。"
+  }
+ },
+ {
   "id": 48,
   "date": "2026-10-23",
   "icon": "👥",

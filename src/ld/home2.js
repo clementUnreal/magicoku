@@ -51,12 +51,13 @@
     const cur=current(),locked=typeof storyLocked==="function"&&storyLocked();
     if(cur){const t=tierOf(cur.i),k=DATA.filter((c,j)=>j<cur.i&&tierOf(j)===t).length+1,full=TX(CHAPTERS[t]),parts=full.split(/\s*[·・]\s*/);
       $("#h2Ch").textContent=parts.length>1?parts.slice(1).join(" · "):full;
-      $("#h2Lv").innerHTML=`<i></i><span>${TX(CH_SHORT[t])} · ${L("Niveau","Level","레벨","レベル")} ${k} / 10</span><i></i>`;
-      $("#h2GoT").textContent=locked?L("Bientôt","Soon","곧 공개","近日公開"):cur.done?L("Rejouer","Replay","다시 하기","もう一度"):cur.fresh?L("Commencer","Start","시작하기","はじめる"):L("Continuer","Continue","계속하기","つづける");
-      if(cur.done)$("#h2Lv").innerHTML=`<i></i><span>✨ ${L("Toutes les enquêtes sont résolues !","Every case is solved!","모든 사건을 해결했어요!","すべての事件を解決！")}</span><i></i>`}
+      $("#h2Lv").innerHTML=`<span>${TX(CH_SHORT[t])} · ${L(`Niveau ${k} sur 10`,`Level ${k} of 10`,`레벨 ${k} / 10`,`レベル ${k} / 10`)}</span>`;
+      let started=false;try{const st=JSON.parse(localStorage.getItem("crimes-mignons-wiz:"+DATA[cur.i].id)||"null");started=!!(st&&!st.solved&&Object.keys(st.place||{}).length)}catch(_){}
+      $("#h2GoT").textContent=locked?L("Bientôt","Soon","곧 공개","近日公開"):cur.done?L("Rejouer","Replay","다시 하기","もう一度"):started?L("Reprendre","Resume","이어서 하기","つづける"):cur.fresh?L("Commencer","Start","시작하기","はじめる"):L(`Jouer le niveau ${k}`,`Play level ${k}`,`레벨 ${k} 플레이`,`レベル${k}をプレイ`);
+      if(cur.done)$("#h2Lv").innerHTML=`<span>✨ ${L("Toutes les enquêtes sont résolues !","Every case is solved!","모든 사건을 해결했어요!","すべての事件を解決！")}</span>`}
     hero.classList.toggle("lockm",!!locked);
-    const s=$("#hStory");if(s)s.innerHTML=`${L("Choisir un niveau","Choose a level","레벨 선택","レベルを選ぶ")} <b>›</b>`;
-    sec.innerHTML=`<i></i><span>${L("Une autre façon de jouer","Other ways to play","다른 방식으로 플레이하기","ほかの遊び方")}</span><i></i>`;
+    const s=$("#hStory");if(s)s.innerHTML=`${L("Voir les niveaux","See the levels","레벨 보기","レベルを見る")}`;
+    sec.innerHTML=`<span>${L("Autres modes","Other modes","다른 모드","ほかのモード")}</span>`;
     for(const [id,k] of CARDS){const b=$("#"+id);if(!b)continue;const lk=b.classList.contains("lockm"),u=typeof UNLOCK!=="undefined"&&UNLOCK[id];
       if(MODES_OFF.includes(id)){b.style.display="none";continue}
       b.innerHTML=`${IMG[k]?`<img src="${IMG[k]}" alt="">`:""}<span class="h2-ct"><b>${T(NAME[k])}</b>${lk&&u?`<small class="lk">🔒 ${L(`Niveau ${u.lvl} de Découverte`,`Discovery level ${u.lvl}`,`디스커버리 ${u.lvl}레벨 필요`,`ディスカバリーLv.${u.lvl}で解放`)}</small>`:`<small>${T(SUB[k])}</small>`}</span><span class="h2-chev">›</span>`}
