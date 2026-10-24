@@ -1,5 +1,26 @@
 [
  {
+  "id": 57,
+  "date": "2026-10-24",
+  "icon": "🧪",
+  "fr": {
+   "t": "Des empoisonnements, plus de meurtres",
+   "d": "Dans Magicoku, plus personne ne meurt : chaque victime a été empoisonnée par une potion, et tu cherches qui a fait le coup. Les objets du méfait sont désormais des breuvages, des friandises et des parfums trafiqués, et le coupable tient une fiole à la fin de l'enquête. Les énigmes, elles, n'ont pas changé."
+  },
+  "en": {
+   "t": "Poisonings, no more murders",
+   "d": "In Magicoku, nobody dies anymore: every victim has been poisoned with a potion, and you find out who did it. The poison now hides in brews, sweets and tampered perfumes, and the culprit holds a flask at the end of the case. The puzzles themselves haven't changed."
+  },
+  "ko": {
+   "t": "살인 대신 독살 미수 사건으로",
+   "d": "이제 Magicoku에서는 아무도 죽지 않아요. 모든 피해자는 물약에 중독되었고, 누가 그랬는지 찾아내는 게임이에요. 독은 음료, 사탕, 조작된 향수 등에 숨겨져 있고, 사건이 끝나면 범인이 약병을 들고 있어요. 퍼즐 자체는 그대로예요."
+  },
+  "ja": {
+   "t": "殺人ではなく、毒の事件に",
+   "d": "Magicokuでは、もう誰も死にません。被害者はみな魔法薬で毒を盛られ、あなたは犯人を探します。毒は飲み物やお菓子、細工された香水に仕込まれ、事件の最後には犯人が小瓶を持っています。パズルそのものは変わりません。"
+  }
+ },
+ {
   "id": 56,
   "date": "2026-10-24",
   "icon": "🎨",
@@ -551,11 +572,11 @@
   "icon": "⭐",
   "fr": {
    "t": "Affaire résolue : jusqu'à 3 étoiles",
-   "d": "La fenêtre de fin d'enquête a été refaite : tampon « Coupable » sur le portrait, résumé du crime, et jusqu'à 3 étoiles à gagner (enquête résolue, sans indice, du premier coup). Elle montre aussi ta progression dans le chapitre et ta place au classement de l'enquête."
+   "d": "La fenêtre de fin d'enquête a été refaite : tampon « Coupable » sur le portrait, résumé de l'affaire, et jusqu'à 3 étoiles à gagner (enquête résolue, sans indice, du premier coup). Elle montre aussi ta progression dans le chapitre et ta place au classement de l'enquête."
   },
   "en": {
    "t": "Case closed: up to 3 stars",
-   "d": "The end-of-case window has been redesigned: a “Guilty” stamp on the portrait, a summary of the crime, and up to 3 stars to earn (case solved, no hints, first try). It also shows your progress in the chapter and your place in the case's ranking."
+   "d": "The end-of-case window has been redesigned: a “Guilty” stamp on the portrait, a summary of the case, and up to 3 stars to earn (case solved, no hints, first try). It also shows your progress in the chapter and your place in the case's ranking."
   },
   "ko": {
    "t": "사건 해결: 별 최대 3개",
@@ -887,11 +908,11 @@
   "icon": "📜",
   "fr": {
    "t": "Des règles plus claires",
-   "d": "Les règles précisent maintenant qu'une pièce peut accueillir plusieurs personnes, et que seule la pièce de la victime n'en contient qu'une autre : le meurtrier."
+   "d": "Les règles précisent maintenant qu'une pièce peut accueillir plusieurs personnes, et que seule la pièce de la victime n'en contient qu'une autre : le coupable."
   },
   "en": {
    "t": "Clearer rules",
-   "d": "The rules now explain that a room can hold several people, and that only the victim's room has exactly one other person in it: the murderer."
+   "d": "The rules now explain that a room can hold several people, and that only the victim's room has exactly one other person in it: the culprit."
   },
   "ko": {
    "t": "더 명확해진 규칙",
@@ -1080,7 +1101,7 @@
   },
   "en": {
    "t": "The case story",
-   "d": "Clue cards are replaced by a short story telling where everyone was at the time of the crime."
+   "d": "Clue cards are replaced by a short story telling where everyone was at the time of the poisoning."
   },
   "ko": {
    "t": "사건 이야기",

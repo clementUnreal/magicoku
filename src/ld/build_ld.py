@@ -98,7 +98,7 @@ head+="var ONX="+json.dumps({k:[list(v[0]),v[1],v[2],v[3]] for k,v in _ON.items(
 head+="Object.assign(ONTXT,"+json.dumps({k:[list(v[0]),v[1]] for k,v in _ON.items()},ensure_ascii=False)+");\n"
 head+="["+",".join(json.dumps(x) for x in sorted(_NW))+"].forEach(x=>WALK.add(x));\n"
 head+="const POR="+open('portraits.json').read()+";\n"
-head+=r'''const KNIFE=`<svg class="knife" viewBox="0 0 40 40"><g transform="rotate(-30 20 20)"><rect x="17" y="2" width="6" height="20" rx="2.5" fill="#dfe3ee" stroke="#2c1a33" stroke-width="1.2"/><rect x="14.5" y="21" width="11" height="3.2" rx="1.5" fill="#2c1a33"/><rect x="17.6" y="24" width="4.8" height="11" rx="2" fill="#8a5a33"/><circle cx="20" cy="8" r="2" fill="#b8283e"/></g></svg>`;
+head+=r'''const KNIFE=`<svg class="knife" viewBox="0 0 40 40"><g transform="rotate(-12 20 20)"><rect x="16.5" y="3" width="7" height="5" rx="1.5" fill="#8a5a33" stroke="#2c1a33" stroke-width="1.2"/><path d="M17.5 8h5v6.5c5 2 7.5 6 7.5 10.5 0 6.5-4.5 11-10 11s-10-4.5-10-11c0-4.5 2.5-8.5 7.5-10.5z" fill="#e8f4ff" stroke="#2c1a33" stroke-width="1.2"/><path d="M11.2 24.5c3-1.6 6-1.6 8.8 0s5.8 1.6 8.8 0c.2 5.6-3.9 9.8-8.8 9.8s-9-4.2-8.8-9.8z" fill="#5fd36a"/><circle cx="17" cy="28" r="1.4" fill="#c9ffd0"/><circle cx="22.5" cy="30.5" r="1" fill="#c9ffd0"/><circle cx="21" cy="19" r="1.1" fill="#7dff8a" opacity=".8"/></g></svg>`;
 function ava(p,o={}){const k=M.people[p][5];if(k)return `<img class="pimg" src="${POR[k]}" alt="" draggable="false" style="background:${look(p)[4]}">`+(o.angry?KNIFE:"");return face(look(p),o)+(o.angry&&false?KNIFE:"")}
 '''
 import base64 as _b64,os as _os
@@ -272,5 +272,6 @@ s=s.replace('var RENAME={};','var RENAME={};function renTxt(h){h=String(h);for(c
 # single self-hosted typeface: drop the Google Fonts links, preload ours
 import re as _re
 s=_re.sub(r'<link[^>]*fonts\.(googleapis|gstatic)\.com[^>]*>\s*','',s)
+exec(open('patch_poison.py').read())
 open('../crimes-mignons.html','w').write(s)
 print(len(s)//1024,"KB")

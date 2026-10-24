@@ -92,7 +92,7 @@ function face(look,{victim=false,angry=false}={}){
   if(["short","long","bob"].includes(style))h=`<path d="M8.6 22a11.4 11.4 0 0122.8 0c-2.5-4.2-7-6-11.4-6s-8.9 1.8-11.4 6z" fill="${hair}"/>`;
   if(style==="bun")h=`<circle cx="20" cy="8.5" r="4.6" fill="${hair}"/><path d="M8.6 22a11.4 11.4 0 0122.8 0c-2.5-4-7-5.5-11.4-5.5s-8.9 1.5-11.4 5.5z" fill="${hair}"/>`;
   if(style==="bald")h=`<path d="M8.8 24c0-3 .7-5 1.8-6M31.2 24c0-3-.7-5-1.8-6" stroke="${hair}" stroke-width="3" stroke-linecap="round" fill="none"/>`;
-  const eyes=victim?`<path d="M14.6 21.6l2.8 2.8M17.4 21.6l-2.8 2.8M22.6 21.6l2.8 2.8M25.4 21.6l-2.8 2.8" stroke="#2c1a33" stroke-width="1.4" stroke-linecap="round"/>`
+  const eyes=victim?`<path d="M14.4 22.6q1.6 1.4 3.2 0M22.4 22.6q1.6 1.4 3.2 0" stroke="#2c1a33" stroke-width="1.3" fill="none" stroke-linecap="round"/>`
     :`<circle cx="16" cy="23" r="1.5" fill="#2c1a33"/><circle cx="24" cy="23" r="1.5" fill="#2c1a33"/><circle cx="16.5" cy="22.5" r=".5" fill="#fff"/><circle cx="24.5" cy="22.5" r=".5" fill="#fff"/>`;
   const brows=angry?`<path d="M13.5 19.2l4.5 1.8M26.5 19.2l-4.5 1.8" stroke="#2c1a33" stroke-width="1.6" stroke-linecap="round"/>`:"";
   const mouth=victim?`<ellipse cx="20" cy="28.6" rx="1.6" ry="1.2" fill="#2c1a33"/>`:angry?`<path d="M17.6 29.2q2.4 -1.6 4.8 0" stroke="#2c1a33" stroke-width="1.3" fill="none" stroke-linecap="round"/>`:`<path d="M17.6 27.6q2.4 2.2 4.8 0" stroke="#2c1a33" stroke-width="1.3" fill="none" stroke-linecap="round"/>`;
@@ -100,8 +100,8 @@ function face(look,{victim=false,angry=false}={}){
   const stache=extra==="stache"?`<path d="M15.5 27.2q2.2-2.4 4.5-.6 2.3-1.8 4.5.6-2.3.4-4.5-.4-2.2.8-4.5.4z" fill="${grey?"#8f8a9a":hair}"/>`:"";
   const beard=extra==="beard"?`<path d="M10 26c1 7 5 10 10 10s9-3 10-10c-2 3-5 4-10 4s-8-1-10-4z" fill="${hair}"/>`:"";
   const glasses=extra==="glasses"?`<circle cx="16" cy="23" r="3.3" fill="none" stroke="#2c1a33" stroke-width="1"/><circle cx="24" cy="23" r="3.3" fill="none" stroke="#2c1a33" stroke-width="1"/><path d="M19.3 23h1.4" stroke="#2c1a33"/>`:"";
-  const halo=victim?`<ellipse cx="20" cy="4.6" rx="7" ry="2" fill="none" stroke="#f2c14e" stroke-width="1.6"/>`:"";
-  const knife=angry?`<g transform="rotate(-30 33 30)"><rect x="31" y="20" width="4" height="11" rx="1.5" fill="#d8dbe6" stroke="#2c1a33" stroke-width=".8"/><rect x="30" y="30.5" width="6" height="2" rx="1" fill="#2c1a33"/><rect x="31.8" y="32.5" width="2.4" height="5" rx="1" fill="#a9734c"/><circle cx="33" cy="23" r="1.2" fill="#d9334c"/></g>`:"";
+  const halo=victim?`<circle cx="31" cy="9" r="2.2" fill="#7fd98a" stroke="#2c1a33" stroke-width=".7"/><circle cx="34.5" cy="5" r="1.4" fill="#7fd98a" stroke="#2c1a33" stroke-width=".6"/><circle cx="28" cy="5" r="1" fill="#7fd98a"/>`:"";
+  const knife=angry?`<g transform="translate(29 22)"><rect x="2" y="0" width="3" height="2.4" rx=".6" fill="#8a5a33"/><path d="M2.3 2.4h2.4v2.6c2.4 1 3.6 2.8 3.6 5 0 3-2.2 5-4.8 5S-1.3 13-1.3 10c0-2.2 1.2-4 3.6-5z" fill="#5fd36a" stroke="#2c1a33" stroke-width=".7"/></g>`:"";
   return `<svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="${bg}"/>${back}<path d="M5 40c1-7 7-10 15-10s14 3 15 10z" fill="${grey?"#7b5ea7":"#ffffff"}" opacity=".85"/><circle cx="20" cy="22.5" r="11" fill="${skin}"/>${h}<ellipse cx="13.6" cy="26.4" rx="2" ry="1.3" fill="#f27c94" opacity=".55"/><ellipse cx="26.4" cy="26.4" rx="2" ry="1.3" fill="#f27c94" opacity=".55"/>${eyes}${brows}${mouth}${beard}${stache}${glasses}${halo}${knife}</svg>`;
 }
 const look=p=>M.people[p][4];
