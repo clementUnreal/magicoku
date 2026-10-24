@@ -1,5 +1,26 @@
 [
  {
+  "id": 56,
+  "date": "2026-10-24",
+  "icon": "🎨",
+  "fr": {
+   "t": "Deux personnages quittent la boutique",
+   "d": "Pochacco et le Chevalier des Ténèbres ne sont plus disponibles : ces personnages ne nous appartiennent pas, et nous préférons n'utiliser que des créations originales. Si tu les avais achetés, tes 999 🌙 te sont rendus pour chacun dès que tu ouvres la boutique. Deux décors ont aussi été retouchés."
+  },
+  "en": {
+   "t": "Two characters leave the shop",
+   "d": "Pochacco and the Knight of Darkness are no longer available: these characters don't belong to us, and we'd rather only use original creations. If you had bought them, your 999 🌙 are given back for each one as soon as you open the shop. Two map objects were also redrawn."
+  },
+  "ko": {
+   "t": "두 캐릭터가 상점에서 빠졌어요",
+   "d": "포차코와 어둠의 기사는 더 이상 구매할 수 없어요. 우리 캐릭터가 아니어서, 직접 만든 디자인만 쓰기로 했어요. 이미 샀다면 상점을 열 때 각각 999 🌙을 돌려받아요. 지도 물건 두 개도 새로 다듬었어요."
+  },
+  "ja": {
+   "t": "2体のキャラクターがショップから退場",
+   "d": "ポチャッコと闇の騎士は販売を終了しました。私たちのキャラクターではないため、オリジナルのデザインだけを使うことにしました。購入済みの場合は、ショップを開いたときにそれぞれ999🌙が返金されます。マップの小物も2つ描き直しました。"
+  }
+ },
+ {
   "id": 55,
   "date": "2026-10-24",
   "icon": "✒️",

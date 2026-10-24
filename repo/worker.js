@@ -26,7 +26,7 @@ const SHOP = {
   // music styles
   "m:box": 80, "m:lofi": 120, "m:fair": 120, "m:mystery": 150,
   // characters for the profile picture
-  "c:fox": 200, "c:cat": 200, "c:snowowl": 200, "c:toad": 250, "c:dragon": 350, "c:pochacco": 999, "c:penguin": 999, "c:darkknight": 999, "c:mandrake": 150, "c:snowman": 150, "c:gargoyle": 200, "c:owl": 200, "c:cauldron": 120, "c:statue": 250,
+  "c:fox": 200, "c:cat": 200, "c:snowowl": 200, "c:toad": 250, "c:dragon": 350, "c:penguin": 999, "c:mandrake": 150, "c:snowman": 150, "c:gargoyle": 200, "c:owl": 200, "c:cauldron": 120, "c:statue": 250,
   // ornaments around the profile picture
   "o:gold": 100, "o:flowers": 120, "o:stars": 150, "o:frost": 150, "o:flames": 200, "o:rainbow": 300,
   // titles
@@ -34,6 +34,8 @@ const SHOP = {
   // rename the suspects for yourself (personal quill, unlimited edits)
   "n:rename": 100,
 };
+// costumes withdrawn (protected characters): owners are refunded once
+const RETIRED = { "c:pochacco": 999, "c:darkknight": 999 };
 const SLOT = { x: "x", m: "m", c: "c", o: "o", t: "t" };
 const today = () => new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
 const dscore = (r) => r.t + 30 * r.e + 60 * r.h;
@@ -222,7 +224,7 @@ export class Leaderboard extends DurableObject {
       d.settled = true; await this.ctx.storage.put(k, d);
     }
   }
-  pub(w) { return { title: w.eq.t || null, orn: w.eq.o || null, chara: w.eq.c || null }; }
+  pub(w) { return { title: w.eq.t || null, orn: w.eq.o || null, chara: w.eq.c && !RETIRED[w.eq.c] ? w.eq.c : null }; }
   async daily(date) {
     await this.settle();
     const date_ = /^\d{4}-\d{2}-\d{2}$/.test(date || "") ? date : today();
@@ -281,7 +283,12 @@ export class Leaderboard extends DurableObject {
     // a wallet belongs to the devices that first used it (+ devices recovered with the code)
     if (!w.pids || !w.pids.length) { w.pids = [row.id]; await this.saveWallet(row.pseudo, w); }
     else if (!w.pids.includes(row.id)) return { status: 423, body: { error: "other device", coins: w.coins } };
-    if (await this.migrateQuill(row.pseudo, w)) await this.saveWallet(row.pseudo, w);
+    let dirty = await this.migrateQuill(row.pseudo, w);
+    for (const [id, price] of Object.entries(RETIRED)) {
+      if (w.owned.includes(id)) { w.owned = w.owned.filter((x) => x !== id); w.coins += price; (w.log = w.log || []).unshift({ at: Date.now(), n: price, why: "refund:" + id }); w.log = w.log.slice(0, 30); dirty = true; }
+      if (w.eq && w.eq.c === id) { delete w.eq.c; dirty = true; }
+    }
+    if (dirty) await this.saveWallet(row.pseudo, w);
     if (!w.names) w.names = {};
     if (body.action === "buyquill" || (body.action === "buy" && item === "n:rename")) {
       if (w.owned.includes("n:rename")) return { status: 200, body: Object.assign({}, w, { gq: this.pubQuill() }) };
