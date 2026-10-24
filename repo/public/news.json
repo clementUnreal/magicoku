@@ -1,5 +1,26 @@
 [
  {
+  "id": 58,
+  "date": "2026-10-24",
+  "icon": "💡",
+  "fr": {
+   "t": "Des indices plus utiles",
+   "d": "La première étape d'un indice ne se contente plus de nommer une personne : elle montre en jaune toutes les cases que son paragraphe autorise, et te dit quoi regarder pour les éliminer (la rangée et la colonne d'une personne déjà placée, sa position par rapport à quelqu'un, une fiole de poison, le registre…)."
+  },
+  "en": {
+   "t": "More useful hints",
+   "d": "The first step of a hint no longer just names a person: it shows in yellow every square their paragraph allows, and tells you what to look at to rule them out (the row and column of someone already placed, where they stand relative to someone, a poison flask, the register…)."
+  },
+  "ko": {
+   "t": "더 쓸모 있는 힌트",
+   "d": "힌트의 첫 단계가 이제 사람 이름만 알려 주지 않아요. 그 사람의 문단이 허용하는 칸을 모두 노란색으로 보여 주고, 칸을 지우려면 무엇을 봐야 하는지(이미 배치된 사람의 행과 열, 다른 사람과의 위치 관계, 독약 병, 기록 등) 알려 줘요."
+  },
+  "ja": {
+   "t": "もっと役に立つヒント",
+   "d": "ヒントの最初のステップは、人の名前を言うだけではなくなりました。その人の段落が許すマスをすべて黄色で示し、それを消すために何を見ればいいか（もう置いた人の行と列、ほかの人との位置関係、毒薬のびん、記録など）を教えてくれます。"
+  }
+ },
+ {
   "id": 57,
   "date": "2026-10-24",
   "icon": "🧪",

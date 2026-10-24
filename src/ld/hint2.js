@@ -67,15 +67,34 @@ function hReason(p,w){const X=hb(p),Q=w.q!=null?hb(w.q):"",f=M.people[p][1]==="f
     case "cntneed":return L(`D'après le registre, ${rname(w.Y)} accueillait exactement ${w.n} personne${w.n>1?"s":""}, et seules ${w.n>1?w.n+" personnes peuvent":"une personne peut"} encore y aller : elles doivent toutes y être.`,`According to the register, ${rname(w.Y)} held exactly ${w.n} ${w.n>1?"people":"person"}, and only that many can still go there: they must all be there.`,`기록에 따르면 ${rname(w.Y)}에는 정확히 ${w.n}명이 있었는데, 아직 그곳에 갈 수 있는 사람도 딱 그만큼이에요. 모두 그곳에 있어야 해요.`,`記録によると${rname(w.Y)}にはちょうど${w.n}人がいて、まだそこへ行ける人もちょうどその数です。全員そこにいるはずです。`);
     case "killer":return L(`Règle du meurtrier : une seule personne était seule avec la victime dans sa pièce.`,`Murderer rule: exactly one person was alone with the victim in their room.`,`범인 규칙: 피해자와 같은 방에 단둘이 있던 사람은 딱 한 명이에요.`,`犯人のルール：被害者と同じ部屋で二人きりだったのは、ちょうど一人だけです。`);}
   return ""}
+function hPlain(h){return String(h).replace(/<[^>]+>/g,"")}
+function hJoin(a,names){if(a.length<2)return a.join("");const and=names?L(" et "," and ",", ","と"):L(" et "," and ",", ","、");return a.slice(0,-1).join(LANG==="ja"?(names?"と":"、"):", ")+and+a[a.length-1]}
+function hTools(e){const line=new Set(),rel=new Set(),out=[];let only=0,poison=0,killer=0;const cnt=new Set();
+  for(const g of e.groups){const w=g.w;
+    if(w.t==="line")line.add(w.q);else if(w.t==="only")only=1;else if(w.t==="poison")poison=1;else if(w.t==="killer")killer=1;
+    else if(w.t==="cntfull"||w.t==="cntneed")cnt.add(w.Y);
+    else [w.q,w.a,w.b1,w.b2].forEach(q=>{if(q!=null&&q!==e.p)rel.add(q)})}
+  const nm=set=>hJoin([...set].map(hb),1),de=set=>vowelStart(pname([...set][0]))?"d'":"de ";
+  if(line.size)out.push(L(`la rangée et la colonne ${de(line)}${nm(line)}`,`the row and column of ${nm(line)}`,`${nm(line)}의 행과 열`,`${nm(line)}の行と列`));
+  if(rel.size)out.push(L(`sa position par rapport à ${nm(rel)}`,`where they stand relative to ${nm(rel)}`,`${nm(rel)}${particle(pname([...rel].pop()),"과","와")}의 위치 관계`,`${nm(rel)}との位置関係`));
+  if(only)out.push(L("la règle « une personne par rangée et par colonne »","the “one person per row and column” rule","‘행과 열마다 한 사람’ 규칙","「各行・各列に一人」のルール"));
+  if(poison)out.push(L("les fioles de poison","the poison flasks","독약 병","毒薬のびん"));
+  cnt.forEach(Y=>out.push(L(`le registre de ${rname(Y)}`,`the register for ${rname(Y)}`,`${rname(Y)}의 기록`,`${rname(Y)}の記録`)));
+  if(killer)out.push(L("la règle du coupable (seul avec la victime)","the culprit rule (alone with the victim)","범인 규칙(피해자와 단둘)","犯人のルール（被害者と二人きり）"));
+  return hJoin(out)}
 function hintText(e){const X=hb(e.p),n=e.U?e.U.length:0;
   if(e.kind==="wrong")return L(`Attention : ${X} n'est pas à la bonne place (case en rouge). Relis son paragraphe et cherche ce qui ne colle pas.`,`Careful: ${X} isn't in the right place (red square). Reread their paragraph and look for what doesn't fit.`,`주의: ${X}${particle(pname(e.p),"은","는")} 올바른 자리에 있지 않아요(빨간 칸). 그 문단을 다시 읽고 맞지 않는 점을 찾아보세요.`,`注意：${X}は正しい場所にいません（赤いマス）。段落を読み直して、合わないところを探しましょう。`);
   if(e.kind==="remind")return L(`Tu as déjà trouvé où va ${X} : <b>${posn(...e.cell)}</b>. Place-le pour continuer !`.replace("Place-le",M.people[e.p][1]==="f"?"Place-la":"Place-le"),`You already know where ${X} goes: <b>${posn(...e.cell)}</b>. Place them to continue!`,`${X}의 자리는 이미 알아냈어요: <b>${posn(...e.cell)}</b>. 배치하고 계속하세요!`,`${X}の場所はもうわかっています：<b>${posn(...e.cell)}</b>。置いて先に進みましょう！`);
   if(e.kind==="reveal")return L(`Ici, la déduction est très fine. Pour t'aider à avancer : ${X} était en <b>${posn(...e.cell)}</b>.`,`The deduction is very subtle here. To help you move on: ${X} was on <b>${posn(...e.cell)}</b>.`,`여기서는 추리가 아주 까다로워요. 진행을 돕기 위해 알려 드리면, ${X}${particle(pname(e.p),"은","는")} <b>${posn(...e.cell)}</b>에 있었어요.`,`ここの推理はとても難しいです。先に進めるように：${X}は<b>${posn(...e.cell)}</b>にいました。`);
   if(e.stage===1){const solo=!e.groups.length;
-    return L(`Intéresse-toi à ${X}. ${solo?"Son paragraphe, comparé aux objets du plan, suffit à trouver sa case.":"Croise son paragraphe avec les personnes déjà placées et les autres paragraphes : il ne lui reste qu'une seule case possible."}`,
-      `Focus on ${X}. ${solo?"Their paragraph, compared with the objects on the map, is enough to find their square.":"Combine their paragraph with the people already placed and the other paragraphs: only one square is left for them."}`,
-      `${X}에게 집중해 보세요. ${solo?"그 문단을 지도의 물건과 비교하기만 해도 자리를 찾을 수 있어요.":"그 문단을 이미 배치된 사람들, 다른 문단과 함께 따져 보면 가능한 칸은 하나뿐이에요."}`,
-      `${X}に注目しましょう。${solo?"その段落を見取り図の家具とくらべるだけで、マスが見つかります。":"その段落を、もう置いた人やほかの段落と合わせて考えると、残るマスはひとつだけです。"}`)}
+    if(solo)return L(`Intéresse-toi à ${X}. Son paragraphe, comparé aux objets et aux pièces du plan, ne lui laisse qu'une seule case : relis-le phrase par phrase.`,
+      `Focus on ${X}. Their paragraph, compared with the objects and rooms on the map, leaves only one square: reread it sentence by sentence.`,
+      `${X}에게 집중해 보세요. 그 문단을 지도의 물건과 방에 비교하면 가능한 칸은 하나뿐이에요. 한 문장씩 다시 읽어 보세요.`,
+      `${X}に注目しましょう。その段落を見取り図の家具や部屋とくらべると、残るマスはひとつだけ。一文ずつ読み直してみて。`);
+    return L(`Intéresse-toi à ${X} : d'après son paragraphe, ${X} peut être sur <b>${n}</b> cases (en jaune). Pour les éliminer, regarde : ${hTools(e)}. À la fin, il n'en restera qu'une.`,
+      `Focus on ${X}: from their paragraph, ${X} could be on <b>${n}</b> squares (in yellow). To rule them out, look at: ${hTools(e)}. In the end, only one will be left.`,
+      `${X}에게 집중해 보세요. 문단에 따르면 ${X}${particle(pname(e.p),"은","는")} <b>${n}</b>칸(노란색)에 있을 수 있어요. 칸을 지우려면 이것을 살펴보세요: ${hTools(e)}. 마지막에는 하나만 남아요.`,
+      `${X}に注目しましょう。段落によると、${X}がいられるのは<b>${n}</b>マス（黄色）。${hTools(e)}を使って消していきましょう。最後にはひとつだけ残ります。`)}
   if(e.stage===2){const m=e.groups.reduce((a,g)=>a+g.cells.length,0);
     return L(`D'après son paragraphe, ${X} peut être sur <b>${n}</b> cases (en jaune). Mais ${m>1?`<b>${m}</b> d'entre elles sont impossibles`:`<b>l'une</b> d'elles est impossible`} (en rouge) :`,
       `From their paragraph, ${X} could be on <b>${n}</b> squares (in yellow). But ${m>1?`<b>${m}</b> of them are impossible`:`<b>one</b> of them is impossible`} (in red):`,
@@ -98,7 +117,7 @@ function hintNew(){
   if(p==null){const q=left[0];return {kind:'remind',p:q,cell:C.solution[q]}}return {kind:"reveal",p,cell:C.solution[p]}}
 function hintCells(e){const o={cand:[],bad:[],ans:[],wrong:[]};if(!e)return o;
   if(e.kind==="wrong")o.wrong=[e.cell];else if(e.kind==="reveal"||e.kind==="remind")o.ans=[e.cell];
-  else if(e.stage===1){}else if(e.stage===2){const bad=new Set();e.groups.forEach(g=>g.cells.forEach(x=>bad.add(x+"")));o.cand=e.U.filter(x=>!bad.has(x+""));o.bad=e.U.filter(x=>bad.has(x+""))}else o.ans=[e.cell];
+  else if(e.stage===1){if(e.groups.length)o.cand=e.U.slice()}else if(e.stage===2){const bad=new Set();e.groups.forEach(g=>g.cells.forEach(x=>bad.add(x+"")));o.cand=e.U.filter(x=>!bad.has(x+""));o.bad=e.U.filter(x=>bad.has(x+""))}else o.ans=[e.cell];
   return o}
 function hintApply(){document.querySelectorAll("#marks .mk.hc").forEach(el=>el.classList.remove("hc","hc-cand","hc-bad","hc-ans","hc-wrong"));
   document.querySelectorAll('.recit p.hhl').forEach(x=>x.classList.remove('hhl'));const e=S.hview!=null&&S.hlog?S.hlog[S.hview]:null;if(!e)return;const pp_=document.querySelector(`.recit p[data-p="${e.p}"]`);if(pp_)pp_.classList.add('hhl');const o=hintCells(e);
