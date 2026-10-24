@@ -1,5 +1,26 @@
 [
  {
+  "id": 52,
+  "date": "2026-10-24",
+  "icon": "📜",
+  "fr": {
+   "t": "Règles illustrées, classement et boutique repensés",
+   "d": "Les règles tiennent désormais en 5 cartes illustrées, avec un exemple autorisé et un exemple interdit. Le classement affiche ta place en premier et explique comment il est calculé. Dans la boutique, toutes les catégories sont visibles et les boutons disent clairement « Acheter », « Équiper » ou « Équipé »."
+  },
+  "en": {
+   "t": "Illustrated rules, new ranking and shop",
+   "d": "The rules now fit in 5 illustrated cards, each with an allowed and a forbidden example. The leaderboard shows your place first and explains how it's worked out. In the shop, every category is visible and the buttons clearly say “Buy”, “Equip” or “Equipped”."
+  },
+  "ko": {
+   "t": "그림으로 보는 규칙, 새 순위표와 상점",
+   "d": "규칙을 가능한 예와 불가능한 예가 담긴 그림 카드 5장으로 정리했어요. 순위표는 내 순위를 먼저 보여 주고 계산 방법도 알려 줘요. 상점에서는 모든 카테고리가 한눈에 보이고, 버튼에 ‘구매’, ‘장착’, ‘장착 중’이 분명하게 표시돼요."
+  },
+  "ja": {
+   "t": "図解ルール、新しいランキングとショップ",
+   "d": "ルールを、OK例とNG例つきの図解カード5枚にまとめました。ランキングは自分の順位を最初に表示し、順位の決まり方も説明します。ショップではすべてのカテゴリーが見え、ボタンには「購入」「装備」「装備中」とはっきり表示されます。"
+  }
+ },
+ {
   "id": 51,
   "date": "2026-10-24",
   "icon": "📱",

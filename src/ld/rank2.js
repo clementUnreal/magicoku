@@ -24,10 +24,10 @@
     else{const a=rows[i-1],d=a.solved-me.solved;
       next=d>0?L(`Encore <b>${cases(d)}</b> pour dépasser <b>${esc(a.pseudo)}</b>`,`<b>${cases(d)}</b> more to overtake <b>${esc(a.pseudo)}</b>`,`<b>${esc(a.pseudo)}</b>님을 앞지르려면 <b>${cases(d)}</b> 더`,`<b>${esc(a.pseudo)}</b>さんを抜くまであと<b>${cases(d)}</b>`)
         :L(`À égalité avec <b>${esc(a.pseudo)}</b> : utilise moins d'indices pour passer devant`,`Tied with <b>${esc(a.pseudo)}</b>: use fewer hints to get ahead`,`<b>${esc(a.pseudo)}</b>님과 동점: 힌트를 덜 쓰면 앞설 수 있어요`,`<b>${esc(a.pseudo)}</b>さんと同点：ヒントを減らせば上に行けます`)}
-    return `<div class="rk-me"><div class="rk-mep"><small>${L("Ta place","Your place","내 순위","あなたの順位")}</small><b>${place(i+1)}</b></div><div class="rk-mei"><b>${L(`sur ${rows.length} détectives`,`out of ${rows.length} detectives`,`탐정 ${rows.length}명 중`,`探偵${rows.length}人中`)}</b><small>${next}</small></div></div>`}
+    return `<div class="rk-me2"><b>${L(`Ta place : ${place(i+1)} sur ${rows.length}`,`Your place: ${place(i+1)} of ${rows.length}`,`내 순위: ${rows.length}명 중 ${place(i+1)}`,`あなたの順位：${rows.length}人中${place(i+1)}`)}</b><small>${next}</small></div>`}
   function row(r,n){const pc=Math.max(2,Math.round(100*r.solved/tot()));
     return `<li class="rk-r${isMe(r)?" me":""}"${dp(r)}><span class="rk-n">${n}</span>${cav(r,"")}<div class="rk-b"><div class="rk-t"><b>${esc(r.pseudo)}</b><strong>${cases(r.solved)}</strong></div>${ttl(r)}
-      <div class="rk-bar"><i style="width:${pc}%"></i></div><small>⏱ ${fmt(r.time)} · 💡 ${hints(r.hints)}</small></div></li>`}
+      <small>⏱ ${fmt(r.time)} · 💡 ${hints(r.hints)}</small></div></li>`}
   /* average time per solved case (min. 5 cases to be ranked) */
   const MINC=5;
   function averages(){const rows=RANK.rows;
@@ -35,9 +35,9 @@
     const all=rows.filter(r=>r.solved>0).map(r=>Object.assign({},r,{avg:r.time/r.solved,ah:r.hints/r.solved}));
     const ok=all.filter(r=>r.solved>=MINC).sort((a,b)=>a.avg-b.avg||a.ah-b.ah),wait=all.filter(r=>r.solved<MINC).sort((a,b)=>b.solved-a.solved);
     const best=ok.length?ok[0].avg:1,line=(r,n)=>`<li class="rk-r${isMe(r)?" me":""}"${dp(r)}><span class="rk-n">${n?(["🥇","🥈","🥉"][n-1]||n):"·"}</span>${cav(r,"")}<div class="rk-b"><div class="rk-t"><b>${esc(r.pseudo)}</b><strong>⏱ ${fmt(Math.round(r.avg))}</strong></div>${ttl(r)}
-      ${n?`<div class="rk-bar"><i style="width:${Math.max(4,Math.round(100*best/r.avg))}%"></i></div>`:""}<small>${L("par enquête","per case","사건당","1件あたり")} · ${cases(r.solved)} · 💡 ${r.ah.toLocaleString(LANG==="fr"?"fr-FR":LANG==="ko"?"ko-KR":LANG==="ja"?"ja-JP":"en-GB",{minimumFractionDigits:1,maximumFractionDigits:1})} ${L("indice en moyenne","hints on average","평균 힌트","平均ヒント")}</small></div></li>`;
+      <small>${L("par enquête","per case","사건당","1件あたり")} · ${cases(r.solved)} · 💡 ${r.ah.toLocaleString(LANG==="fr"?"fr-FR":LANG==="ko"?"ko-KR":LANG==="ja"?"ja-JP":"en-GB",{minimumFractionDigits:1,maximumFractionDigits:1})} ${L("indice en moyenne","hints on average","평균 힌트","平均ヒント")}</small></div></li>`;
     const mi=ok.findIndex(isMe);
-    return `<p class="rk-note">${L(`Classement par temps moyen pour résoudre une enquête. Il faut au moins ${MINC} enquêtes résolues pour y figurer.`,`Ranked by average time to solve a case. You need at least ${MINC} solved cases to appear.`,`사건 하나를 푸는 평균 시간 순위예요. ${MINC}개 이상 해결해야 순위에 올라요.`,`1件を解く平均時間のランキング。${MINC}件以上解くと載ります。`)}</p>`+
+    return `<p class="rk-rule">${L(`<b>Moyenne</b> = temps moyen pour résoudre une enquête (au moins ${MINC} enquêtes). À égalité : le moins d'indices.`,`<b>Average</b> = mean time to solve a case (at least ${MINC} cases). If tied: fewest hints.`,`<b>평균</b> = 사건 하나를 푸는 평균 시간(최소 ${MINC}개). 동점이면 힌트가 적은 순.`,`<b>平均</b>＝事件1件を解く平均時間（${MINC}件以上）。同点ならヒントが少ない順。`)}</p>`+
       (mi>=0?`<div class="rk-me"><div class="rk-mep"><small>${L("Ta place","Your place","내 순위","あなたの順位")}</small><b>${place(mi+1)}</b></div><div class="rk-mei"><b>⏱ ${fmt(Math.round(ok[mi].avg))} ${L("par enquête","per case","사건당","1件あたり")}</b><small>${mi?L(`${fmt(Math.round(ok[mi].avg-ok[mi-1].avg))} de plus que <b>${esc(ok[mi-1].pseudo)}</b>`,`${fmt(Math.round(ok[mi].avg-ok[mi-1].avg))} slower than <b>${esc(ok[mi-1].pseudo)}</b>`,`<b>${esc(ok[mi-1].pseudo)}</b>님보다 ${fmt(Math.round(ok[mi].avg-ok[mi-1].avg))} 느려요`,`<b>${esc(ok[mi-1].pseudo)}</b>さんより${fmt(Math.round(ok[mi].avg-ok[mi-1].avg))}遅い`):L("Le détective le plus rapide ! ⚡","The fastest detective! ⚡","가장 빠른 탐정! ⚡","いちばん速い探偵！⚡")}</small></div></div>`:"")+
       (ok.length?`<ol class="rk-list">${ok.map((r,k)=>line(r,k+1)).join("")}</ol>`:`<p class="rk-msg">${L("Personne n'a encore assez d'enquêtes.","Nobody has enough cases yet.","아직 조건을 채운 사람이 없어요.","まだ条件を満たした人はいません。")}</p>`)+
       (wait.length?`<div class="ch-sub">${L(`Pas encore classés (moins de ${MINC} enquêtes)`,`Not ranked yet (fewer than ${MINC} cases)`,`아직 순위 없음(${MINC}개 미만)`,`まだ順位なし（${MINC}件未満）`)}</div><ol class="rk-list">${wait.map(r=>line(r,0)).join("")}</ol>`:"")}
@@ -45,7 +45,7 @@
     if(RANK.err&&!rows)return `<p class="rk-msg">${L("Classement indisponible pour l'instant.","Leaderboard unavailable right now.","지금은 순위를 볼 수 없어요.","いまはランキングを表示できません。")}</p>`;
     if(!rows)return `<p class="rk-msg">${L("Chargement…","Loading…","불러오는 중…","読み込み中…")}</p>`;
     if(!rows.length)return `<p class="rk-msg">${L("Aucun détective inscrit pour l'instant.","No detectives registered yet.","아직 등록된 탐정이 없어요.","まだ探偵がいません。")}</p>`+mine(rows);
-    return podium(rows)+mine(rows)+(rows.length>3?`<ol class="rk-list">${rows.slice(3).map((r,k)=>row(r,k+4)).join("")}</ol>`:"")+
+    return `<p class="rk-rule">${L("Classement : le plus d'enquêtes résolues, puis le moins d'indices, puis le temps total le plus court.","Ranking: most cases solved, then fewest hints, then shortest total time.","순위: 해결한 사건 수, 그다음 힌트 수, 그다음 총 시간.","順位：解決した事件の数、次にヒントの少なさ、次に合計時間。")}</p>`+mine(rows)+podium(rows)+(rows.length>3?`<ol class="rk-list">${rows.slice(3).map((r,k)=>row(r,k+4)).join("")}</ol>`:"")+
       `<details class="rk-how"><summary>${L("Comment le classement est-il calculé ?","How is the ranking worked out?","순위는 어떻게 정해지나요?","順位の決まり方は？")}</summary><ol>
        <li>${L("Le plus d'enquêtes résolues passe devant.","Most cases solved comes first.","해결한 사건이 많을수록 위예요.","解決した事件が多いほど上位。")}</li>
        <li>${L("À égalité : le moins d'indices utilisés.","If tied: fewest hints used.","동점이면 힌트를 적게 쓴 사람이 위예요.","同点ならヒントが少ない方が上位。")}</li>
@@ -66,8 +66,8 @@
       else if(!RK.rows)res+=`<p class="rk-msg">${L("Classement indisponible hors ligne.","Ranking unavailable offline.","오프라인에서는 순위를 볼 수 없어요.","オフラインではランキングを表示できません。")}</p>`;
       else if(!RK.rows.length)res+=`<p class="rk-msg">${L("Personne n'a encore résolu cette enquête. Sois le premier !","Nobody has solved this case yet. Be the first!","아직 아무도 이 사건을 풀지 못했어요. 첫 번째가 되어 보세요!","まだ誰も解いていません。一番乗りを目指そう！")}</p>`;
       else res+=`<ol class="rk-list lv">${RK.rows.map((r,k)=>`<li class="rk-r${isMe(r)?" me":""}"><span class="rk-n">${["🥇","🥈","🥉"][k]||k+1}</span><img src="${av(r.avatar)}" alt=""><div class="rk-b"><div class="rk-t"><b>${esc(r.pseudo)}</b><strong>⏱ ${fmtT(r.time)}</strong></div><small>💡 ${hints(r.hints)} · 🎯 ${L(`${r.attempts} ${r.attempts>1?"tentatives":"tentative"}`,`${r.attempts} ${r.attempts>1?"attempts":"attempt"}`,`${r.attempts}번 시도`,`${r.attempts}回挑戦`)}</small></div></li>`).join("")}</ol>
-        <p class="rk-note">${L("Classé par indices utilisés, puis par temps.","Ranked by hints used, then time.","힌트 사용 수, 그다음 시간 순이에요.","ヒントの数、次に時間で順位が決まります。")}</p>`}
-    return grp+`<div class="rk-lvs">${lv}</div>`+res}
+        `}
+    return `<p class="rk-rule">${L("Pour chaque enquête : le moins d'indices d'abord, puis le temps le plus court.","For each case: fewest hints first, then shortest time.","사건별: 힌트가 적은 순, 그다음 시간이 짧은 순.","事件ごと：ヒントが少ない順、次に時間が短い順。")}</p>`+grp+`<div class="rk-lvs">${lv}</div>`+res}
   function draw(){
     box.innerHTML=`<div class="rk-tabs"><button data-rktab="all" class="${RK.tab==="all"?"on":""}">🏆 ${L("Général","Overall","전체","総合")}</button><button data-rktab="avg" class="${RK.tab==="avg"?"on":""}">⏱ ${L("Moyenne","Average","평균","平均")}</button><button data-rktab="lv" class="${RK.tab==="lv"?"on":""}">🔍 ${L("Par enquête","By case","사건별","事件別")}</button></div>
       <div class="rk-body">${RK.tab==="all"?general():RK.tab==="avg"?averages():perCase()}</div>`;

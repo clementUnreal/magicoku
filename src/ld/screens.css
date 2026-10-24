@@ -1,0 +1,20 @@
+/* ================= screens v3: no back button on pages reached from the bottom bar ================= */
+#pRank [data-back],#pShop .sh-back,#pProfile>.back.top{display:none!important}
+/* shop: one compact line "Boutique + balance", all categories visible (3 per row) */
+.shop2 .sh-head{display:flex!important;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;min-height:48px}
+.shop2 .sh-title{text-align:left}
+.shop2 .sh-title h2{font-size:clamp(22px,6.4vw,26px)!important;margin:0}
+.shop2 .sh-title h2 i,.shop2 .sh-title small{display:none!important}
+.shop2 .sh-coins{min-height:44px;padding:0 14px}
+.shop2 .sh-tabs{display:grid!important;grid-template-columns:repeat(3,1fr);gap:6px;overflow:visible!important;margin:0 0 10px!important;padding:0!important;border-bottom:0!important}
+.shop2 .sh-tab{justify-content:center;min-height:44px;padding:6px 6px!important;border:1.5px solid #d6ab4f!important;border-radius:12px!important;font-size:13.5px!important;white-space:nowrap}
+.shop2 .sh-tab .sh-ti{display:inline-flex}
+.shop2 .sh-btn.buy{font-size:15px;white-space:nowrap}
+.shop2 .sh-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.shop2 .sh-it{min-width:0}
+.shop2 .sh-btn{max-width:100%;padding-left:8px!important;padding-right:8px!important}
+.shop2 .sh-btn.buy{font-size:14px!important;letter-spacing:0!important}
+.shop2 .sh-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.shop2 .sh-tab{min-width:0;font-size:13px!important;gap:4px!important;overflow:hidden}
+@media (max-width:370px){.shop2 .sh-tab .sh-ti{display:none!important}}
+@media (max-width:400px){.shop2 .sh-tab .sh-ti{display:none!important}}

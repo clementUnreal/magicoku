@@ -995,6 +995,21 @@ body.night #marks .mk.room{background:none!important}
 .rk-tabs{grid-template-columns:repeat(3,1fr)!important}.rk-tabs button{font-size:clamp(12.5px,3.6vw,15px)!important;padding:10px 4px!important}
 /* every chapter visible: the chips wrap instead of hiding off-screen */
 .rk-chips{flex-wrap:wrap;overflow:visible;row-gap:6px}
+/* v3: place first, compact podium, compact rows, one-line rules */
+.rk-rule{margin:2px 2px 10px;font:500 13.5px/1.4 var(--f-simple,system-ui)!important;color:#5a4636;text-align:left}
+.rk-rule b{color:#6b1530}
+.rk-me2{display:flex;flex-direction:column;gap:2px;margin:0 0 12px;padding:10px 14px;border-radius:12px;background:linear-gradient(#7d1e35,#5a1226);color:#fbefc8;text-align:left;border:1.5px solid #f0cf7a}
+.rk-me2 b{font-size:17px}
+.rk-me2 small{font:500 13.5px/1.35 var(--f-simple,system-ui)!important;color:#f3e3c2}
+.rk-me2 small b{font-size:inherit;color:#ffd77a}
+.rk-pod{transform:scale(.82);transform-origin:top center;margin-bottom:-34px}
+.rk-list .rk-r{padding:8px 10px;gap:10px;min-height:56px}
+.rk-list .rk-r>img,.rk-list .rk-r>.cav{width:38px!important;height:38px!important}
+.rk-list .rk-t b{font-size:15px}
+.rk-list .rk-t strong{font-size:14px}
+.rk-list .rk-r small{font:500 13px var(--f-simple,system-ui)!important}
+.rk-bar{display:none!important}
+.rk-how{display:none}
 /* ================= "Case closed" popup v2 ================= */
 #reveal .box.rv2{position:relative;width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow-y:auto;overflow-x:hidden;padding:0 18px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;
   background:radial-gradient(120% 60% at 50% 0%,#fff8e6,transparent 60%),linear-gradient(#f8eed8,#ead6ad);border:3px solid #d6ab4f;border-radius:20px;box-shadow:0 0 0 2px #5a3b12,0 0 0 7px rgba(214,171,79,.25),0 24px 60px #000c;scrollbar-width:none}
@@ -1484,6 +1499,29 @@ body.vshake .wrap{animation:vshake .35s}
 .h2-link{margin-top:0!important;min-height:44px!important}
 /* calmer active tab */
 .h2-bar button.on{background:rgba(214,171,79,.16)!important;color:var(--gold)!important;box-shadow:inset 0 0 0 1.5px rgba(214,171,79,.55)}
+#hWho.h3-av>span:not(.cav){display:none}
+#hWho.h3-av>.cav{display:block!important}
+.h2-art{height:84px}
+/* ================= screens v3: no back button on pages reached from the bottom bar ================= */
+#pRank [data-back],#pShop .sh-back,#pProfile>.back.top{display:none!important}
+/* shop: one compact line "Boutique + balance", all categories visible (3 per row) */
+.shop2 .sh-head{display:flex!important;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;min-height:48px}
+.shop2 .sh-title{text-align:left}
+.shop2 .sh-title h2{font-size:clamp(22px,6.4vw,26px)!important;margin:0}
+.shop2 .sh-title h2 i,.shop2 .sh-title small{display:none!important}
+.shop2 .sh-coins{min-height:44px;padding:0 14px}
+.shop2 .sh-tabs{display:grid!important;grid-template-columns:repeat(3,1fr);gap:6px;overflow:visible!important;margin:0 0 10px!important;padding:0!important;border-bottom:0!important}
+.shop2 .sh-tab{justify-content:center;min-height:44px;padding:6px 6px!important;border:1.5px solid #d6ab4f!important;border-radius:12px!important;font-size:13.5px!important;white-space:nowrap}
+.shop2 .sh-tab .sh-ti{display:inline-flex}
+.shop2 .sh-btn.buy{font-size:15px;white-space:nowrap}
+.shop2 .sh-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.shop2 .sh-it{min-width:0}
+.shop2 .sh-btn{max-width:100%;padding-left:8px!important;padding-right:8px!important}
+.shop2 .sh-btn.buy{font-size:14px!important;letter-spacing:0!important}
+.shop2 .sh-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.shop2 .sh-tab{min-width:0;font-size:13px!important;gap:4px!important;overflow:hidden}
+@media (max-width:370px){.shop2 .sh-tab .sh-ti{display:none!important}}
+@media (max-width:400px){.shop2 .sh-tab .sh-ti{display:none!important}}
 /* ================= one typeface for the whole game: Fraunces (soft), storybook-puzzle style ================= */
 @font-face{font-family:"Magi";src:url("fraunces.woff") format("woff");font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:"Magi";src:url("fraunces-italic.woff") format("woff");font-weight:400 900;font-style:italic;font-display:swap}
@@ -3584,10 +3622,10 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
     else{const a=rows[i-1],d=a.solved-me.solved;
       next=d>0?L(`Encore <b>${cases(d)}</b> pour dépasser <b>${esc(a.pseudo)}</b>`,`<b>${cases(d)}</b> more to overtake <b>${esc(a.pseudo)}</b>`,`<b>${esc(a.pseudo)}</b>님을 앞지르려면 <b>${cases(d)}</b> 더`,`<b>${esc(a.pseudo)}</b>さんを抜くまであと<b>${cases(d)}</b>`)
         :L(`À égalité avec <b>${esc(a.pseudo)}</b> : utilise moins d'indices pour passer devant`,`Tied with <b>${esc(a.pseudo)}</b>: use fewer hints to get ahead`,`<b>${esc(a.pseudo)}</b>님과 동점: 힌트를 덜 쓰면 앞설 수 있어요`,`<b>${esc(a.pseudo)}</b>さんと同点：ヒントを減らせば上に行けます`)}
-    return `<div class="rk-me"><div class="rk-mep"><small>${L("Ta place","Your place","내 순위","あなたの順位")}</small><b>${place(i+1)}</b></div><div class="rk-mei"><b>${L(`sur ${rows.length} détectives`,`out of ${rows.length} detectives`,`탐정 ${rows.length}명 중`,`探偵${rows.length}人中`)}</b><small>${next}</small></div></div>`}
+    return `<div class="rk-me2"><b>${L(`Ta place : ${place(i+1)} sur ${rows.length}`,`Your place: ${place(i+1)} of ${rows.length}`,`내 순위: ${rows.length}명 중 ${place(i+1)}`,`あなたの順位：${rows.length}人中${place(i+1)}`)}</b><small>${next}</small></div>`}
   function row(r,n){const pc=Math.max(2,Math.round(100*r.solved/tot()));
     return `<li class="rk-r${isMe(r)?" me":""}"${dp(r)}><span class="rk-n">${n}</span>${cav(r,"")}<div class="rk-b"><div class="rk-t"><b>${esc(r.pseudo)}</b><strong>${cases(r.solved)}</strong></div>${ttl(r)}
-      <div class="rk-bar"><i style="width:${pc}%"></i></div><small>⏱ ${fmt(r.time)} · 💡 ${hints(r.hints)}</small></div></li>`}
+      <small>⏱ ${fmt(r.time)} · 💡 ${hints(r.hints)}</small></div></li>`}
   /* average time per solved case (min. 5 cases to be ranked) */
   const MINC=5;
   function averages(){const rows=RANK.rows;
@@ -3595,9 +3633,9 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
     const all=rows.filter(r=>r.solved>0).map(r=>Object.assign({},r,{avg:r.time/r.solved,ah:r.hints/r.solved}));
     const ok=all.filter(r=>r.solved>=MINC).sort((a,b)=>a.avg-b.avg||a.ah-b.ah),wait=all.filter(r=>r.solved<MINC).sort((a,b)=>b.solved-a.solved);
     const best=ok.length?ok[0].avg:1,line=(r,n)=>`<li class="rk-r${isMe(r)?" me":""}"${dp(r)}><span class="rk-n">${n?(["🥇","🥈","🥉"][n-1]||n):"·"}</span>${cav(r,"")}<div class="rk-b"><div class="rk-t"><b>${esc(r.pseudo)}</b><strong>⏱ ${fmt(Math.round(r.avg))}</strong></div>${ttl(r)}
-      ${n?`<div class="rk-bar"><i style="width:${Math.max(4,Math.round(100*best/r.avg))}%"></i></div>`:""}<small>${L("par enquête","per case","사건당","1件あたり")} · ${cases(r.solved)} · 💡 ${r.ah.toLocaleString(LANG==="fr"?"fr-FR":LANG==="ko"?"ko-KR":LANG==="ja"?"ja-JP":"en-GB",{minimumFractionDigits:1,maximumFractionDigits:1})} ${L("indice en moyenne","hints on average","평균 힌트","平均ヒント")}</small></div></li>`;
+      <small>${L("par enquête","per case","사건당","1件あたり")} · ${cases(r.solved)} · 💡 ${r.ah.toLocaleString(LANG==="fr"?"fr-FR":LANG==="ko"?"ko-KR":LANG==="ja"?"ja-JP":"en-GB",{minimumFractionDigits:1,maximumFractionDigits:1})} ${L("indice en moyenne","hints on average","평균 힌트","平均ヒント")}</small></div></li>`;
     const mi=ok.findIndex(isMe);
-    return `<p class="rk-note">${L(`Classement par temps moyen pour résoudre une enquête. Il faut au moins ${MINC} enquêtes résolues pour y figurer.`,`Ranked by average time to solve a case. You need at least ${MINC} solved cases to appear.`,`사건 하나를 푸는 평균 시간 순위예요. ${MINC}개 이상 해결해야 순위에 올라요.`,`1件を解く平均時間のランキング。${MINC}件以上解くと載ります。`)}</p>`+
+    return `<p class="rk-rule">${L(`<b>Moyenne</b> = temps moyen pour résoudre une enquête (au moins ${MINC} enquêtes). À égalité : le moins d'indices.`,`<b>Average</b> = mean time to solve a case (at least ${MINC} cases). If tied: fewest hints.`,`<b>평균</b> = 사건 하나를 푸는 평균 시간(최소 ${MINC}개). 동점이면 힌트가 적은 순.`,`<b>平均</b>＝事件1件を解く平均時間（${MINC}件以上）。同点ならヒントが少ない順。`)}</p>`+
       (mi>=0?`<div class="rk-me"><div class="rk-mep"><small>${L("Ta place","Your place","내 순위","あなたの順位")}</small><b>${place(mi+1)}</b></div><div class="rk-mei"><b>⏱ ${fmt(Math.round(ok[mi].avg))} ${L("par enquête","per case","사건당","1件あたり")}</b><small>${mi?L(`${fmt(Math.round(ok[mi].avg-ok[mi-1].avg))} de plus que <b>${esc(ok[mi-1].pseudo)}</b>`,`${fmt(Math.round(ok[mi].avg-ok[mi-1].avg))} slower than <b>${esc(ok[mi-1].pseudo)}</b>`,`<b>${esc(ok[mi-1].pseudo)}</b>님보다 ${fmt(Math.round(ok[mi].avg-ok[mi-1].avg))} 느려요`,`<b>${esc(ok[mi-1].pseudo)}</b>さんより${fmt(Math.round(ok[mi].avg-ok[mi-1].avg))}遅い`):L("Le détective le plus rapide ! ⚡","The fastest detective! ⚡","가장 빠른 탐정! ⚡","いちばん速い探偵！⚡")}</small></div></div>`:"")+
       (ok.length?`<ol class="rk-list">${ok.map((r,k)=>line(r,k+1)).join("")}</ol>`:`<p class="rk-msg">${L("Personne n'a encore assez d'enquêtes.","Nobody has enough cases yet.","아직 조건을 채운 사람이 없어요.","まだ条件を満たした人はいません。")}</p>`)+
       (wait.length?`<div class="ch-sub">${L(`Pas encore classés (moins de ${MINC} enquêtes)`,`Not ranked yet (fewer than ${MINC} cases)`,`아직 순위 없음(${MINC}개 미만)`,`まだ順位なし（${MINC}件未満）`)}</div><ol class="rk-list">${wait.map(r=>line(r,0)).join("")}</ol>`:"")}
@@ -3605,7 +3643,7 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
     if(RANK.err&&!rows)return `<p class="rk-msg">${L("Classement indisponible pour l'instant.","Leaderboard unavailable right now.","지금은 순위를 볼 수 없어요.","いまはランキングを表示できません。")}</p>`;
     if(!rows)return `<p class="rk-msg">${L("Chargement…","Loading…","불러오는 중…","読み込み中…")}</p>`;
     if(!rows.length)return `<p class="rk-msg">${L("Aucun détective inscrit pour l'instant.","No detectives registered yet.","아직 등록된 탐정이 없어요.","まだ探偵がいません。")}</p>`+mine(rows);
-    return podium(rows)+mine(rows)+(rows.length>3?`<ol class="rk-list">${rows.slice(3).map((r,k)=>row(r,k+4)).join("")}</ol>`:"")+
+    return `<p class="rk-rule">${L("Classement : le plus d'enquêtes résolues, puis le moins d'indices, puis le temps total le plus court.","Ranking: most cases solved, then fewest hints, then shortest total time.","순위: 해결한 사건 수, 그다음 힌트 수, 그다음 총 시간.","順位：解決した事件の数、次にヒントの少なさ、次に合計時間。")}</p>`+mine(rows)+podium(rows)+(rows.length>3?`<ol class="rk-list">${rows.slice(3).map((r,k)=>row(r,k+4)).join("")}</ol>`:"")+
       `<details class="rk-how"><summary>${L("Comment le classement est-il calculé ?","How is the ranking worked out?","순위는 어떻게 정해지나요?","順位の決まり方は？")}</summary><ol>
        <li>${L("Le plus d'enquêtes résolues passe devant.","Most cases solved comes first.","해결한 사건이 많을수록 위예요.","解決した事件が多いほど上位。")}</li>
        <li>${L("À égalité : le moins d'indices utilisés.","If tied: fewest hints used.","동점이면 힌트를 적게 쓴 사람이 위예요.","同点ならヒントが少ない方が上位。")}</li>
@@ -3626,8 +3664,8 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
       else if(!RK.rows)res+=`<p class="rk-msg">${L("Classement indisponible hors ligne.","Ranking unavailable offline.","오프라인에서는 순위를 볼 수 없어요.","オフラインではランキングを表示できません。")}</p>`;
       else if(!RK.rows.length)res+=`<p class="rk-msg">${L("Personne n'a encore résolu cette enquête. Sois le premier !","Nobody has solved this case yet. Be the first!","아직 아무도 이 사건을 풀지 못했어요. 첫 번째가 되어 보세요!","まだ誰も解いていません。一番乗りを目指そう！")}</p>`;
       else res+=`<ol class="rk-list lv">${RK.rows.map((r,k)=>`<li class="rk-r${isMe(r)?" me":""}"><span class="rk-n">${["🥇","🥈","🥉"][k]||k+1}</span><img src="${av(r.avatar)}" alt=""><div class="rk-b"><div class="rk-t"><b>${esc(r.pseudo)}</b><strong>⏱ ${fmtT(r.time)}</strong></div><small>💡 ${hints(r.hints)} · 🎯 ${L(`${r.attempts} ${r.attempts>1?"tentatives":"tentative"}`,`${r.attempts} ${r.attempts>1?"attempts":"attempt"}`,`${r.attempts}번 시도`,`${r.attempts}回挑戦`)}</small></div></li>`).join("")}</ol>
-        <p class="rk-note">${L("Classé par indices utilisés, puis par temps.","Ranked by hints used, then time.","힌트 사용 수, 그다음 시간 순이에요.","ヒントの数、次に時間で順位が決まります。")}</p>`}
-    return grp+`<div class="rk-lvs">${lv}</div>`+res}
+        `}
+    return `<p class="rk-rule">${L("Pour chaque enquête : le moins d'indices d'abord, puis le temps le plus court.","For each case: fewest hints first, then shortest time.","사건별: 힌트가 적은 순, 그다음 시간이 짧은 순.","事件ごと：ヒントが少ない順、次に時間が短い順。")}</p>`+grp+`<div class="rk-lvs">${lv}</div>`+res}
   function draw(){
     box.innerHTML=`<div class="rk-tabs"><button data-rktab="all" class="${RK.tab==="all"?"on":""}">🏆 ${L("Général","Overall","전체","総合")}</button><button data-rktab="avg" class="${RK.tab==="avg"?"on":""}">⏱ ${L("Moyenne","Average","평균","平均")}</button><button data-rktab="lv" class="${RK.tab==="lv"?"on":""}">🔍 ${L("Par enquête","By case","사건별","事件別")}</button></div>
       <div class="rk-body">${RK.tab==="all"?general():RK.tab==="avg"?averages():perCase()}</div>`;
@@ -3915,7 +3953,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="518bf30a7737";
+var APP_BUILD="1b7c761bff62";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -4080,7 +4118,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
   function titlesTab(w){const me=ACC.profile||{},owned=new Set(w?w.owned:[]),eq=w?w.eq:{},cur=eq.t;
     const prev=`<div class="tt-prev"><small>${L("Aperçu du profil","Profile preview","프로필 미리보기","プロフィールのプレビュー")}</small><div class="tt-pin">${cosAv(me.avatar,myCos(),"tt-av")}<div class="tt-pid"><b>${String(me.pseudo||"").replace(/[<>&"]/g,"")}</b>${cur?titleBan(cur,"big"):`<i>${L("Aucun titre","No title","칭호 없음","称号なし")}</i>`}</div></div></div>`;
     const cards=SHOP_ITEMS.t.filter(it=>it[0]!=="t:none").map(it=>{const own=owned.has(it[0]),on=cur===it[0],poor=w&&w.coins<it[1];
-      const btn=on?`<span class="sh-btn on">✓ ${L("Équipé","Equipped","장착 중","装備中")}</span>`:own?`<button class="sh-btn eq" data-eq="${it[0]}">${L("Équiper","Equip","장착","装備")}</button>`:`<button class="sh-btn buy${poor?" poor":""}" data-buy="${it[0]}">🌙 ${it[1]}</button>`;
+      const btn=on?`<span class="sh-btn on">✓ ${L("Équipé","Equipped","장착 중","装備中")}</span>`:own?`<button class="sh-btn eq" data-eq="${it[0]}">${L("Équiper","Equip","장착","装備")}</button>`:`<button class="sh-btn buy${poor?" poor":""}" data-buy="${it[0]}">${L("Acheter","Buy","구매","購入")} · ${it[1]} 🌙</button>`;
       return `<div class="sh-it tt-it${on?" on":""}">${titleBan(it[0],"card")}${LANG!=="fr"?`<b class="tt-name">${TX(it[3])}</b>`:""}<p class="tt-d">${TX(TDESC[it[0]]||["","","",""])}</p>${btn}</div>`}).join("");
     return prev+`<div class="sh-grid tt-grid">${cards}</div>`+(cur?`<button class="tt-rm" data-eq="t:none">🗑️ ${L("Retirer mon titre","Remove my title","칭호 해제","称号を外す")}</button>`:"")}
   var PV={k:null,t:null,prev:null,on:null};
@@ -4099,7 +4137,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
       ${cat==="t"?titlesTab(w):""}<div class="sh-grid"${cat==="t"?" hidden":""}>${SHOP_ITEMS[cat].map(it=>{const isNone=it[0].endsWith(":none"),own=isNone||owned.has(it[0]),on=isNone?!eq[cat]:eq[cat]===it[0],poor=w&&w.coins<it[1];
         const qp=qPrice(),qOwn=w&&w.quill>0;
         if(cat==="n")return quillCard(it,qOwn,qp,w&&w.coins<qp);
-        const btn=on?`<span class="sh-btn on">✓ ${L("Équipé","Equipped","장착 중","装備中")}</span>`:own?`<button class="sh-btn eq" data-eq="${it[0]}">${L("Équiper","Equip","장착","装備")}</button>`:`<button class="sh-btn buy${poor?" poor":""}" data-buy="${it[0]}">🔒 ${it[1]} 🌙</button>`;
+        const btn=on?`<span class="sh-btn on">✓ ${L("Équipé","Equipped","장착 중","装備中")}</span>`:own?`<button class="sh-btn eq" data-eq="${it[0]}">${L("Équiper","Equip","장착","装備")}</button>`:`<button class="sh-btn buy${poor?" poor":""}" data-buy="${it[0]}">${L("Acheter","Buy","구매","購入")} · ${it[1]} 🌙</button>`;
         return `<div class="sh-it${on&&cat!=="n"?" on":""}"><div class="sh-pv">${preview(cat,it)}</div><b>${TX(it[3])}</b>${btn}</div>`}).join("")}</div>
       ${cat==="n"&&w&&w.quill>0?renEditor():""}<p class="sh-msg" id="shMsg"></p>
       <div class="sh-foot">✦ ${L("Gagne des éclats en résolvant des enquêtes.","Earn shards by solving cases.","사건을 해결하면 달 조각을 받아요.","事件を解くとかけらがもらえます。")} ✦ ${String(me.pseudo).toLowerCase()==="clemonchichi"?`<button class="sh-grant" id="shGrant">+500 (test)</button>`:""}</div>`}
@@ -4120,7 +4158,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
   document.addEventListener("input",e=>{if(e.target.matches&&e.target.matches("[data-rn]"))renCheck(true)});
   function qPrice(){return BETA.q&&BETA.q.price||100}
   function quillCard(it,own,price,poor){const q=BETA.q||{},by=q.by?esc(q.by):null;
-    const btn=own?`<button class="sh-btn eq" data-ren>✒️ ${L("Renommer maintenant","Rename now","지금 이름 바꾸기","今すぐ名前を変える")}</button>`:`<button class="sh-btn buy${poor?" poor":""}" data-buy="n:rename">🔒 ${price} 🌙</button>`;
+    const btn=own?`<button class="sh-btn eq" data-ren>✒️ ${L("Renommer maintenant","Rename now","지금 이름 바꾸기","今すぐ名前を変える")}</button>`:`<button class="sh-btn buy${poor?" poor":""}" data-buy="n:rename">${L("Acheter","Buy","구매","購入")} · ${price} 🌙</button>`;
     return `<div class="sh-it sh-quill"><div class="sh-pv">${preview("n",it)}</div><b>${TX(it[3])}</b>
       <p class="sh-qd">${L("Aux enchères ! Celui qui l'achète renomme les personnages <b>pour tous les joueurs</b>. Chaque achat fait monter le prix de 50 🌙.","Up for auction! Whoever buys it renames the characters <b>for every player</b>. Each purchase raises the price by 50 🌙.","경매 중! 구매한 사람이 <b>모든 플레이어</b>의 캐릭터 이름을 바꿔요. 구매할 때마다 가격이 50 🌙씩 올라요.","オークション中！買った人が<b>全プレイヤー</b>のキャラクター名を変えられます。購入のたびに価格が50🌙上がります。")}</p>
       <small class="sh-qby">${by?L(`Dernier coup de plume : <b>${by}</b>`,`Last stroke of the quill: <b>${by}</b>`,`마지막으로 이름을 바꾼 사람: <b>${by}</b>`,`最後に名前を変えた人：<b>${by}</b>`):L("Personne ne l'a encore achetée.","Nobody has bought it yet.","아직 아무도 사지 않았어요.","まだ誰も買っていません。")}</small>${btn}</div>`}
@@ -4161,8 +4199,8 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
     if(t.dataset.play){playPreview(t.dataset.play);return}
     if(t.dataset.cat){stopPreview();BETA.shopCat=t.dataset.cat;renderShop();return}
     if(t.dataset.buy==="n:rename"){const pr=qPrice();if(BETA.w&&BETA.w.coins<pr){try{play("forbid")}catch(_){}const m=$("#shMsg");if(m)m.textContent=L(`Il te manque ${pr-BETA.w.coins} 🌙 pour la plume.`,`You need ${pr-BETA.w.coins} more 🌙 for the quill.`,`깃펜을 사려면 🌙 ${pr-BETA.w.coins}개가 더 필요해요.`,`羽ペンにはあと🌙${pr-BETA.w.coins}個必要です。`);return}
-      if(t.dataset.armed){if(await shopAct({action:"buyquill"})){const ed=document.querySelector(".sh-ren");if(ed)ed.scrollIntoView({behavior:"smooth"})}}else{t.dataset.armed=1;t.classList.add("ask");t.textContent=L(`Acheter pour ${pr} 🌙 ?`,`Buy for ${pr} 🌙?`,`🌙 ${pr}개로 구매?`,`🌙${pr}で買う？`)}return}
-    if(t.dataset.buy){const it=shopItem(t.dataset.buy);if(BETA.w&&BETA.w.coins<it[1]){try{play("forbid")}catch(_){}const m=$("#shMsg");if(m)m.textContent=L(`Il te manque ${it[1]-BETA.w.coins} 🌙 pour cet objet.`,`You need ${it[1]-BETA.w.coins} more 🌙 for this item.`,`이 아이템을 사려면 🌙 ${it[1]-BETA.w.coins}개가 더 필요해요.`,`このアイテムにはあと🌙${it[1]-BETA.w.coins}個必要です。`);return}if(t.dataset.armed){shopAct({action:"buy",item:it[0]})}else{t.dataset.armed=1;t.classList.add("ask");t.textContent=L(`Acheter pour ${it[1]} 🌙 ?`,`Buy for ${it[1]} 🌙?`,`🌙 ${it[1]}개로 구매?`,`🌙${it[1]}で買う？`)}return}
+      if(t.dataset.armed){if(await shopAct({action:"buyquill"})){const ed=document.querySelector(".sh-ren");if(ed)ed.scrollIntoView({behavior:"smooth"})}}else{t.dataset.armed=1;t.classList.add("ask");t.textContent=L(`Confirmer · ${pr} 🌙 ?`,`Buy for ${pr} 🌙?`,`🌙 ${pr}개로 구매?`,`🌙${pr}で買う？`)}return}
+    if(t.dataset.buy){const it=shopItem(t.dataset.buy);if(BETA.w&&BETA.w.coins<it[1]){try{play("forbid")}catch(_){}const m=$("#shMsg");if(m)m.textContent=L(`Il te manque ${it[1]-BETA.w.coins} 🌙 pour cet objet.`,`You need ${it[1]-BETA.w.coins} more 🌙 for this item.`,`이 아이템을 사려면 🌙 ${it[1]-BETA.w.coins}개가 더 필요해요.`,`このアイテムにはあと🌙${it[1]-BETA.w.coins}個必要です。`);return}if(t.dataset.armed){shopAct({action:"buy",item:it[0]})}else{t.dataset.armed=1;t.classList.add("ask");t.textContent=L(`Confirmer · ${it[1]} 🌙 ?`,`Buy for ${it[1]} 🌙?`,`🌙 ${it[1]}개로 구매?`,`🌙${it[1]}で買う？`)}return}
     if(t.dataset.eq){shopAct({action:"equip",item:t.dataset.eq,slot:t.dataset.eq.split(":")[0]});return}
     if(t.hasAttribute("data-ren")){const ed=document.querySelector(".sh-ren");if(ed)ed.scrollIntoView({behavior:"smooth"});return}
     if(t.id==="shRenSave"){const {names,c:cl}=renCheck(true);if(cl){try{play("forbid")}catch(_){}return}if(await shopAct({action:"names",names})){const m=$("#shMsg");if(m)m.textContent=L("C'est signé ! Les nouveaux noms s'affichent chez tous les joueurs.","Signed! The new names now show for every player.","완료! 새 이름이 모든 플레이어에게 보여요.","署名完了！新しい名前が全プレイヤーに表示されます。")}return}
@@ -4695,6 +4733,58 @@ body.coop-on #tHint{display:none!important}
 /* keep the page bottom padding equal to the real navigation height (safe area included) */
 (function(){const set=()=>{const b=$("#h2Bar");if(!b)return;const h=b.getBoundingClientRect().height;if(h)document.documentElement.style.setProperty("--barh",Math.ceil(h)+"px")};
   try{new ResizeObserver(set).observe(document.body)}catch(_){}window.addEventListener("resize",set);window.addEventListener("orientationchange",()=>setTimeout(set,300));setTimeout(set,300);setTimeout(set,1500)})();
+
+/* ================= rules v3: five short illustrated rules (allowed / not allowed), full text in "details" ================= */
+(function(){
+  /* mini board: n x n, rooms = array of strings (same letter = same room), t = tokens [r,c,kind], x = crossed cells, hl = highlighted cells */
+  function mini(n,rooms,t,o){o=o||{};const S=22,W=n*S,col={A:"#e9dcbc",B:"#cfe0c4",C:"#d9cdea",D:"#f0d2c8"};let g="";
+    for(let r=0;r<n;r++)for(let c=0;c<n;c++){const k=rooms?rooms[r][c]:"A";g+=`<rect x="${c*S}" y="${r*S}" width="${S}" height="${S}" fill="${col[k]||"#e9dcbc"}" stroke="#b9a37a" stroke-width=".6"/>`}
+    (o.hl||[]).forEach(([r,c])=>{g+=`<rect x="${c*S+1.5}" y="${r*S+1.5}" width="${S-3}" height="${S-3}" rx="3" fill="rgba(63,125,58,.28)" stroke="#3f7d3a" stroke-width="1.4"/>`});
+    (o.obj||[]).forEach(([r,c,k])=>{g+=k==="chair"?`<g transform="translate(${c*S+4} ${r*S+4})"><rect x="2" y="1" width="10" height="9" rx="2" fill="#a8323e"/><rect x="0" y="7" width="14" height="6" rx="2" fill="#7d1e35"/></g>`
+      :`<g transform="translate(${c*S+3} ${r*S+2})"><rect width="16" height="18" rx="1.5" fill="#6b4a2a"/><rect x="2" y="2" width="3" height="6" fill="#c0392b"/><rect x="6" y="2" width="3" height="6" fill="#2f7d6d"/><rect x="10" y="2" width="3" height="6" fill="#d6ab4f"/><rect x="2" y="10" width="12" height="1.5" fill="#3b2418"/></g>`});
+    if(rooms){for(let r=0;r<n;r++)for(let c=0;c<n;c++){if(c<n-1&&rooms[r][c]!==rooms[r][c+1])g+=`<path d="M${(c+1)*S} ${r*S}v${S}" stroke="#3b2418" stroke-width="2.6"/>`;if(r<n-1&&rooms[r][c]!==rooms[r+1][c])g+=`<path d="M${c*S} ${(r+1)*S}h${S}" stroke="#3b2418" stroke-width="2.6"/>`}}
+    t.forEach(([r,c,k])=>{const on=(o.obj||[]).some(q=>q[0]===r&&q[1]===c),cx=c*S+(on?S*.72:S/2),cy=r*S+(on?S*.3:S/2),f=k==="v"?"#7a6a8e":k==="k"?"#a8323e":"#3a6ea8";g+=`<circle cx="${cx}" cy="${cy}" r="${S*(on?.24:.32)}" fill="${f}" stroke="#fff" stroke-width="1.6"/>`+(k==="v"?`<text x="${cx}" y="${cy+3.5}" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">✝</text>`:k==="k"?`<text x="${cx}" y="${cy+3.5}" text-anchor="middle" font-size="9" fill="#fff" font-weight="800">?</text>`:"")});
+    (o.bad||[]).forEach(([r,c])=>{g+=`<path d="M${c*S+5} ${r*S+5}l${S-10} ${S-10}M${c*S+S-5} ${r*S+5}l${-(S-10)} ${S-10}" stroke="#b8283e" stroke-width="2.6" stroke-linecap="round"/>`});
+    return `<svg class="r3-svg" viewBox="-2 -2 ${W+4} ${W+4}" width="${W+4}" height="${W+4}" aria-hidden="true"><rect x="-1" y="-1" width="${W+2}" height="${W+2}" fill="none" stroke="#3b2418" stroke-width="2.4" rx="2"/>${g}</svg>`}
+  const OK=()=>`<span class="r3-tag ok">✓ ${L("Autorisé","Allowed","가능","OK")}</span>`,NO=()=>`<span class="r3-tag no">✗ ${L("Interdit","Not allowed","불가","NG")}</span>`;
+  function cards(){const R3=["AAA","AAA","AAA"];
+    return [
+      [L("Une personne par rangée et par colonne","One person per row and per column","행과 열마다 한 명","行と列に1人ずつ"),
+       L("Jamais deux personnes sur la même ligne, ni dans la même colonne. Barre les cases qui deviennent impossibles.","Never two people on the same row or in the same column. Cross out squares that become impossible.","같은 행이나 같은 열에 두 사람이 있을 수 없어요. 불가능해진 칸에는 ✕를 표시하세요.","同じ行・同じ列に2人は入れません。ありえなくなったマスには✕をつけよう。"),
+       mini(3,R3,[[0,0,"p"],[1,2,"p"]]),mini(3,R3,[[1,0,"p"],[1,2,"p"]],{bad:[[1,2]]})],
+      [L("Où peut-on se tenir ?","Where can people stand?","어디에 설 수 있나요?","どこに立てる？"),
+       L("Sur le sol, ou assis sur un fauteuil, une malle, dans la baignoire… Jamais sur une bibliothèque, un chaudron ou un bureau : ces cases sont hachurées.","On the floor, or sitting in an armchair, on a trunk, in the bath… Never on a bookcase, a cauldron or a desk: those squares are hatched.","바닥이나 의자·트렁크·욕조 위에는 설 수 있어요. 책장·가마솥·책상 위는 안 돼요(빗금 친 칸).","床や、ひじ掛けいす・トランク・浴槽の上はOK。本棚・大釜・机の上はダメ（斜線のマス）。"),
+       mini(3,null,[[1,1,"p"]],{obj:[[1,1,"chair"]]}),mini(3,null,[[1,1,"p"]],{obj:[[1,1,"shelf"]],bad:[[1,1]]})],
+      [L("« À côté » = juste à côté, dans la même pièce","“Next to” = right beside, in the same room","‘옆’ = 바로 옆, 같은 방 안","「となり」＝すぐ横、同じ部屋の中"),
+       L("Les 4 cases qui touchent (haut, bas, gauche, droite), pas en diagonale, et sans mur entre les deux.","The 4 touching squares (up, down, left, right), not diagonal, and with no wall in between.","맞닿은 4칸(위·아래·왼쪽·오른쪽)이에요. 대각선은 아니고, 벽이 사이에 있으면 안 돼요.","接する4マス（上下左右）。ななめは×、間に壁があっても×。"),
+       mini(3,R3,[[1,1,"p"]],{hl:[[0,1],[1,0],[1,2],[2,1]]}),mini(3,["AAB","AAB","AAB"],[[1,1,"p"]],{bad:[[0,0],[1,2],[2,2]]})],
+      [L("Une pièce peut accueillir plusieurs personnes","A room can hold several people","한 방에 여러 명이 있을 수 있어요","ひとつの部屋に何人いてもOK"),
+       L("Deux, trois personnes ou plus dans la même pièce : aucun problème. Seules les rangées et les colonnes sont limitées.","Two, three or more people in the same room is fine. Only rows and columns are limited.","같은 방에 두세 명 이상 있어도 괜찮아요. 제한은 행과 열뿐이에요.","同じ部屋に2人、3人以上いても大丈夫。制限は行と列だけ。"),
+       mini(3,["AAB","AAB","CCB"],[[0,0,"p"],[1,1,"p"],[2,2,"p"]]),""],
+      [L("Le coupable est seul avec la victime","The culprit is alone with the victim","범인은 피해자와 단둘이 있어요","犯人は被害者と2人きり"),
+       L("Dans la pièce de la victime, il y a exactement une autre personne : c'est le coupable. Quand tout le monde est placé, valide et désigne-le.","In the victim's room there is exactly one other person: the culprit. Once everyone is placed, check and point them out.","피해자의 방에는 딱 한 명이 더 있어요. 그 사람이 범인! 모두 배치하면 확인을 누르고 범인을 지목하세요.","被害者の部屋には、ほかにちょうど1人。それが犯人！全員を置いたらチェックして指名しよう。"),
+       mini(3,["AAB","AAB","CCB"],[[0,0,"v"],[1,1,"k"],[2,2,"p"]]),mini(3,["AAB","AAB","CCB"],[[0,0,"v"],[1,1,"k"],[0,1,"p"]],{bad:[[0,1]]})]
+    ].map(([t,d,a,b],i)=>`<li class="r3-card"><div class="r3-txt"><b><span class="r3-n">${i+1}</span>${t}</b><p>${d}</p></div><div class="r3-ex"><figure>${a}${OK()}</figure>${b?`<figure>${b}${NO()}</figure>`:""}</div></li>`).join("")}
+  const css=document.createElement("style");css.textContent=`#rulesBody .r3{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:10px}
+.r3-card{display:flex;flex-direction:column;gap:8px;padding:10px 12px;border-radius:12px;background:rgba(255,250,236,.75);border:1.5px solid #e2cfa4;text-align:left}
+.r3-txt b{display:flex;align-items:center;gap:8px;font-size:16px;color:#3a1f3d;line-height:1.25}
+.r3-n{flex:0 0 24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#8e1f33;color:#fff;font:800 13px var(--f-simple,system-ui)!important}
+.r3-txt p{margin:4px 0 0;font:500 14.5px/1.45 var(--f-simple,system-ui)!important;color:#4a3a30}
+.r3-ex{display:flex;gap:14px;justify-content:center}
+.r3-ex figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:4px}
+.r3-svg{display:block;width:76px;height:76px}
+.r3-tag{font:800 13px var(--f-simple,system-ui)!important;padding:2px 8px;border-radius:999px}
+.r3-tag.ok{color:#2f6a2b;background:#dff0da}.r3-tag.no{color:#9b1d33;background:#f8dde1}
+#rulesBody details.r3-more{margin-top:4px;border-top:1px dashed #c9a25a;padding-top:8px}
+#rulesBody details.r3-more>summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font:700 15px var(--f-simple,system-ui)!important;color:#6b1530}`;
+  document.head.appendChild(css);
+  function paint(){const body=$("#rulesBody");if(!body)return;let list=body.querySelector(".r3"),more=body.querySelector("details.r3-more");
+    if(!list){list=document.createElement("ol");list.className="r3";body.prepend(list)}
+    if(!more){more=document.createElement("details");more.className="r3-more";more.innerHTML="<summary></summary>";list.after(more);[...body.children].forEach(ch=>{if(ch!==list&&ch!==more)more.appendChild(ch)})}
+    list.innerHTML=cards();more.querySelector("summary").textContent=L("Tous les détails et la liste des objets","All the details and the list of objects","자세한 규칙과 물건 목록","くわしいルールと物の一覧")}
+  const _rs=renderStatic;renderStatic=function(){_rs.apply(this,arguments);try{paint()}catch(e){}};
+  try{paint()}catch(e){}
+})();
 
 render();
 </script>
