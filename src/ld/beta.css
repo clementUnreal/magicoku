@@ -209,3 +209,9 @@ img.cos-ban{display:block;height:24px;width:auto;max-width:100%;object-fit:conta
 .sh-ren .ren-warn{margin:4px 0 0;font:400 13px/1.4 var(--f-body);color:#a8323e}.sh-ren .ren-warn:empty{display:none}
 .sh-ren .ren-warn b{color:#a8323e}
 #shRenSave:disabled{opacity:.5;filter:grayscale(.4);cursor:not-allowed}
+
+.sh-ren .ren-vers{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.sh-ren .ren-v{min-height:40px;padding:0 12px;border-radius:999px;border:1.5px solid #d6ab4f;background:#fff;color:#3a1f3d;font:700 13.5px var(--f-simple,system-ui)!important;cursor:pointer}
+.sh-ren .ren-v.on{background:#5a2848;border-color:#5a2848;color:#fff}
+.sh-ren .ren-v.add{border-style:dashed;background:transparent}
+.sh-ren .ren-del{align-self:center;min-height:40px;margin-top:2px;padding:0 14px;border:0;background:none;color:#a8323e;text-decoration:underline;font:600 13.5px var(--f-simple,system-ui)!important;cursor:pointer}

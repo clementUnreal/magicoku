@@ -1,5 +1,26 @@
 [
  {
+  "id": 61,
+  "date": "2026-10-24",
+  "icon": "✒️",
+  "fr": {
+   "t": "Plusieurs versions de noms",
+   "d": "Avec la plume de renommage, tu peux maintenant garder jusqu'à 5 versions de noms (Version 1, Version 2…) et passer de l'une à l'autre en un geste. Le bouton « Version originale » rend aux personnages leurs vrais noms, sans effacer tes versions."
+  },
+  "en": {
+   "t": "Several sets of names",
+   "d": "With the renaming quill, you can now keep up to 5 versions of names (Version 1, Version 2…) and switch between them in one tap. The “Original names” button gives the characters back their real names without erasing your versions."
+  },
+  "ko": {
+   "t": "이름 버전을 여러 개",
+   "d": "이름 바꾸기 깃펜으로 이제 이름 버전을 최대 5개(버전 1, 버전 2…)까지 저장하고 한 번에 바꿀 수 있어요. ‘원래 이름’ 버튼을 누르면 내 버전은 지우지 않고 캐릭터들이 원래 이름으로 돌아가요."
+  },
+  "ja": {
+   "t": "名前のバージョンを複数に",
+   "d": "名前変更の羽ペンで、名前のバージョンを最大5つ（バージョン1、バージョン2…）まで保存して、ワンタップで切り替えられるようになりました。「元の名前」ボタンを押すと、バージョンを消さずにキャラクターを本来の名前に戻せます。"
+  }
+ },
+ {
   "id": 60,
   "date": "2026-10-24",
   "icon": "🌊",

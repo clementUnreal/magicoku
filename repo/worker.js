@@ -10,7 +10,7 @@ const TWA_PACKAGE = "app.dev.workers.scorclem.magicoku.twa";
 const TWA_SHA256 = ["F8:90:E4:17:83:E3:90:6E:94:92:F8:EE:24:CE:92:91:EC:15:09:2A:50:EB:D3:0B:03:AE:D8:AF:FC:43:11:4F"];
 const ADMIN_MASTER = "fbc6ddb683d183165da35ef2110f8a44fda9a4544b39196bf1d02647541f4b75";
 // ---- daily puzzle + shop (beta) ----
-const QUILL_PRICE = 100;
+const QUILL_PRICE = 100, NSETS_MAX = 5;
 // renaming rule: markers show initials, so two characters that can meet must not share a first letter
 const VICTIMS = ["Pr Violette", "Dame Valentine", "Maître Vitriol"], SUSPECTS = ["Ambroise", "Basile", "Capucine", "Dahlia", "Elias", "Flora", "Gaspard", "Héloïse"];
 const initialOf = (n) => { const t = String(n).replace(/^(Pr|Pr\.|Sir|Maître|Dr|Dame|Professeur|Madame|Monsieur) /i, "").trim() || String(n); return [...t][0].normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase(); };
@@ -290,6 +290,7 @@ export class Leaderboard extends DurableObject {
     }
     if (dirty) await this.saveWallet(row.pseudo, w);
     if (!w.names) w.names = {};
+    if (!w.nsets) { w.nsets = Object.keys(w.names).length ? [{ t: "Version 1", names: w.names }] : []; w.nact = w.nsets.length ? 0 : -1; }
     if (body.action === "buyquill" || (body.action === "buy" && item === "n:rename")) {
       if (w.owned.includes("n:rename")) return { status: 200, body: Object.assign({}, w, { gq: this.pubQuill() }) };
       if (w.coins < QUILL_PRICE) return { status: 402, body: { error: "not enough", wallet: w, gq: this.pubQuill() } };
@@ -317,7 +318,21 @@ export class Leaderboard extends DurableObject {
       for (const [k, v] of Object.entries(body.names || {}).slice(0, 40)) { const kk = clean(k, 20), vv = clean(v, 16); if (kk && vv && vv !== kk) out[kk] = vv; }
       const clash = nameClash(out);
       if (clash) return { status: 409, body: { error: "same initial", clash, gq: this.pubQuill() } };
-      w.names = out; await this.saveWallet(row.pseudo, w);
+      // several saved versions; the active one is mirrored in w.names (-1 = original names)
+      const sets = w.nsets || (w.nsets = []);
+      let slot = Number.isInteger(body.slot) ? body.slot : (w.nact >= 0 ? w.nact : sets.length);
+      if (slot < 0 || slot > sets.length || slot >= NSETS_MAX) slot = Math.min(sets.length, NSETS_MAX - 1);
+      sets[slot] = { t: clean(body.title, 20) || (sets[slot] && sets[slot].t) || "Version " + (slot + 1), names: out };
+      w.nact = slot; w.names = out; await this.saveWallet(row.pseudo, w);
+    } else if (body.action === "nact" || body.action === "ndel") {
+      if (!w.owned.includes("n:rename")) return { status: 403, body: { error: "not owned" } };
+      const sets = w.nsets || (w.nsets = []), slot = Number(body.slot);
+      if (body.action === "ndel" && slot >= 0 && slot < sets.length) {
+        sets.splice(slot, 1); sets.forEach((x, i) => { if (/^Version \d+$/.test(x.t)) x.t = "Version " + (i + 1); });
+        if (w.nact === slot) w.nact = -1; else if (w.nact > slot) w.nact--;
+      } else if (body.action === "nact") w.nact = slot >= 0 && slot < sets.length ? slot : -1;
+      w.names = w.nact >= 0 && sets[w.nact] ? sets[w.nact].names : {};
+      await this.saveWallet(row.pseudo, w);
     } else if (body.action === "grant") {
       // admin test helper: give coins to yourself
       if (String(row.pseudo).trim().toLowerCase() !== ADMIN || !(await this.isAdmin(body.id, String(body.token || "")))) return { status: 403, body: { error: "forbidden" } };
