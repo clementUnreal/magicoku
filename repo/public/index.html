@@ -3979,7 +3979,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="20ba56101bce";
+var APP_BUILD="ee5a5c9c5874";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -4983,6 +4983,7 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
       <button data-g="rules">📜 ${L("Règles","Rules","규칙","ルール")}</button>
       <button data-g="tuto">❓ ${L("Tutoriel","Tutorial","튜토리얼","チュートリアル")}</button>
       <button data-g="sound">${SND.on?"🔊":"🔇"} ${SND.on?L("Couper le son","Mute","소리 끄기","音を消す"):L("Activer le son","Sound on","소리 켜기","音を出す")}</button>
+      <div class="g3-row"><span>🌗 ${L("Affichage","Display","화면","表示")}</span>${typeof themeRow==="function"?themeRow():""}</div>
       ${$("#bFull")&&!$("#bFull").hidden?`<button data-g="full">⛶ ${L("Plein écran","Full screen","전체 화면","全画面")}</button>`:""}
       <div class="g3-row"><span>🌐 ${L("Langue","Language","언어","言語")}</span><span class="g3-lang">${["fr","en","ko","ja"].map(l=>`<button data-lang="${l}" class="${LANG===l?"on":""}">${{fr:"FR",en:"EN",ko:"한",ja:"日"}[l]}</button>`).join("")}</span></div>
       <button data-g="home">🏠 ${L("Retour à l'accueil","Back to home","홈으로","ホームへ")}</button></div>`);
@@ -5085,6 +5086,36 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
     return out}
   function draw(){const k=kinds();if(!k.size)return;cells(k).forEach(x=>{const [r,c]=x.split(",");const el=document.querySelector(`#grid .cell[data-r="${r}"][data-c="${c}"]`);if(el&&!el.classList.contains("void"))el.classList.add("lake")})}
   const _rb=renderBoard;renderBoard=function(){const r=_rb.apply(this,arguments);try{draw()}catch(_){}return r};
+})();
+
+/* ================= night theme (menu: Mode clair / Mode nuit) =================
+   The parchment surfaces are flipped to dark with an invert + hue-rotate filter (hues kept, lightness
+   reversed); pictures inside them are flipped back so portraits, sprites and banners keep their colours. */
+(function(){
+  const K="magicoku:theme";
+  const S_=`:is(.h2-hero,.h2-news,.home-panel,.recit,.tools .tb,.mbox,#hintBox,.box.rv2,.acc-box,#g3Clock)`;
+  const R_=`img,video,canvas,.cph,.pimg,.sh-pv,.acc-ph,.polaroid .ph,.cos-por,.cos-chara,.board,.r3-fig,.g3-pan,.h2-art,.rk-av,.pf-av`;
+  const css=document.createElement("style");
+  css.textContent=`html.night ${S_}{filter:invert(.9) hue-rotate(180deg)}
+html.night ${S_} :is(${R_}):not(:is(${R_}) *){filter:invert(1) hue-rotate(180deg) brightness(1.08)}
+html.night body{color-scheme:dark}
+.g3-theme button{min-height:40px;padding:0 12px;border-radius:999px;border:1.5px solid #c9a25a;background:transparent;font:700 13.5px var(--f-simple,system-ui)!important;color:inherit;cursor:pointer}
+.g3-theme button.on{background:#5a2848;color:#fff;border-color:#5a2848}
+.o-theme{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}`;
+  document.head.appendChild(css);
+  const get=()=>{try{return localStorage.getItem(K)==="night"?"night":"light"}catch(_){return "light"}};
+  function apply(){document.documentElement.classList.toggle("night",get()==="night")}
+  window.themeNow=get;
+  window.setTheme=t=>{try{localStorage.setItem(K,t)}catch(_){}apply();try{paint()}catch(_){}};
+  window.themeRow=()=>`<span class="g3-theme">${[["light","☀️",L("Clair","Light","라이트","ライト")],["night","🌙",L("Nuit","Night","나이트","ナイト")]].map(([k,i,t])=>`<button data-th="${k}" class="${get()===k?"on":""}">${i} ${t}</button>`).join(" ")}</span>`;
+  /* home › Options: a row under the sound switch */
+  function paint(){const pan=$("#pOptions");if(!pan)return;let r=$("#oTheme");
+    if(!r){r=document.createElement("div");r.id="oTheme";r.className="o-theme";const s=$("#oSound"),row=s&&s.parentElement;if(row&&row.parentElement)row.parentElement.insertBefore(r,row.nextSibling);else pan.appendChild(r)}
+    r.innerHTML=`<span>🌗 ${L("Affichage","Display","화면","表示")}</span>${themeRow()}`}
+  document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-th]");if(!b)return;e.stopPropagation();setTheme(b.dataset.th);
+    document.querySelectorAll("[data-th]").forEach(x=>x.classList.toggle("on",x.dataset.th===b.dataset.th))},true);
+  apply();
+  const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{paint()}catch(_){}};
 })();
 
 render();

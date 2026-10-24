@@ -1,5 +1,26 @@
 [
  {
+  "id": 62,
+  "date": "2026-10-24",
+  "icon": "🌙",
+  "fr": {
+   "t": "Mode nuit",
+   "d": "Tu peux maintenant choisir l'affichage : ☀️ Clair ou 🌙 Nuit. En mode nuit, les fiches couleur parchemin passent en sombre, tandis que le plan et les portraits gardent leurs couleurs. Le réglage se trouve dans Options et dans le menu ☰ pendant une enquête."
+  },
+  "en": {
+   "t": "Night mode",
+   "d": "You can now choose the display: ☀️ Light or 🌙 Night. In night mode, the parchment cards turn dark while the map and the portraits keep their colours. The setting is in Options and in the ☰ menu during a case."
+  },
+  "ko": {
+   "t": "나이트 모드",
+   "d": "이제 화면을 ☀️ 라이트 또는 🌙 나이트로 고를 수 있어요. 나이트 모드에서는 양피지색 카드가 어두워지고, 지도와 초상화는 원래 색을 유지해요. 설정은 옵션과 사건 중 ☰ 메뉴에 있어요."
+  },
+  "ja": {
+   "t": "ナイトモード",
+   "d": "表示を☀️ライトと🌙ナイトから選べるようになりました。ナイトモードでは羊皮紙色のカードが暗くなり、見取り図や肖像の色はそのままです。設定はオプションと、事件中の☰メニューにあります。"
+  }
+ },
+ {
   "id": 61,
   "date": "2026-10-24",
   "icon": "✒️",

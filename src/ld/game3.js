@@ -134,6 +134,7 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
       <button data-g="rules">📜 ${L("Règles","Rules","규칙","ルール")}</button>
       <button data-g="tuto">❓ ${L("Tutoriel","Tutorial","튜토리얼","チュートリアル")}</button>
       <button data-g="sound">${SND.on?"🔊":"🔇"} ${SND.on?L("Couper le son","Mute","소리 끄기","音を消す"):L("Activer le son","Sound on","소리 켜기","音を出す")}</button>
+      <div class="g3-row"><span>🌗 ${L("Affichage","Display","화면","表示")}</span>${typeof themeRow==="function"?themeRow():""}</div>
       ${$("#bFull")&&!$("#bFull").hidden?`<button data-g="full">⛶ ${L("Plein écran","Full screen","전체 화면","全画面")}</button>`:""}
       <div class="g3-row"><span>🌐 ${L("Langue","Language","언어","言語")}</span><span class="g3-lang">${["fr","en","ko","ja"].map(l=>`<button data-lang="${l}" class="${LANG===l?"on":""}">${{fr:"FR",en:"EN",ko:"한",ja:"日"}[l]}</button>`).join("")}</span></div>
       <button data-g="home">🏠 ${L("Retour à l'accueil","Back to home","홈으로","ホームへ")}</button></div>`);
