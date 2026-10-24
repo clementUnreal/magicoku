@@ -3,6 +3,10 @@
 import { DurableObject } from "cloudflare:workers";
 
 const ADMIN = "clemonchichi";
+// Android app (Trusted Web Activity): package name + SHA-256 fingerprint(s) of the Play signing key.
+// Fill TWA_SHA256 with the "SHA-256 certificate fingerprint" shown in Play Console > App integrity > App signing.
+const TWA_PACKAGE = "dev.workers.scorclem.magicoku.twa";
+const TWA_SHA256 = [];
 const ADMIN_MASTER = "fbc6ddb683d183165da35ef2110f8a44fda9a4544b39196bf1d02647541f4b75";
 // ---- daily puzzle + shop (beta) ----
 const QUILL_BASE = 100, QUILL_STEP = 50;
@@ -465,12 +469,44 @@ export class Leaderboard extends DurableObject {
       meta.blocked = (meta.blocked || []).filter((x) => x !== w); if (a === "block") meta.blocked.push(w);
       await save(); return { status: 200, body: { blocked: meta.blocked } };
     }
+    if (a === "report") {
+      if (now - (meta.lastRep || 0) < 5000) return { status: 429, body: { error: "slow down" } };
+      meta.lastRep = now; await save();
+      const r = (await this.ctx.storage.get("reports")) || [];
+      r.push({ i: crypto.randomUUID().slice(0, 10), at: now, by: row.pseudo, who: clean(body.who, 20), t: String(body.text || "").slice(0, 300), mid: clean(body.mid, 16), where: clean(body.where, 24) || "global" });
+      await this.ctx.storage.put("reports", r.slice(-200));
+      return { status: 200, body: { ok: true } };
+    }
+    if (a === "reports" || a === "dismiss") {
+      if (me !== ADMIN || !(await this.isAdmin(body.id, String(body.token || "")))) return { status: 403, body: { error: "forbidden" } };
+      let r = (await this.ctx.storage.get("reports")) || [];
+      if (a === "dismiss") { r = r.filter((x) => x.i !== body.rid); await this.ctx.storage.put("reports", r); }
+      return { status: 200, body: { reports: r.slice().reverse() } };
+    }
     if (a === "delete") {
       if (me !== ADMIN || !(await this.isAdmin(body.id, String(body.token || "")))) return { status: 403, body: { error: "forbidden" } };
       const g = (await this.ctx.storage.get("c:global")) || []; await this.ctx.storage.put("c:global", g.filter((m) => m.i !== body.mid));
       return { status: 200, body: { ok: true } };
     }
     return { status: 400, body: { error: "action" } };
+  }
+  // delete a detective account and everything tied to its name (Google Play requires in-app account deletion)
+  async deleteAccount(body) {
+    const row = await this.auth(body.id, String(body.token || ""));
+    if (!row) return { status: 403, body: { error: "forbidden" } };
+    const me = String(row.pseudo).trim().toLowerCase();
+    if (String(body.confirm || "").trim().toLowerCase() !== me) return { status: 400, body: { error: "confirm" } };
+    if (me === ADMIN) return { status: 400, body: { error: "admin" } };
+    const all = await this.ctx.storage.list({ prefix: "p:" });
+    for (const [k, v] of all) if (v && v.row && String(v.row.pseudo).trim().toLowerCase() === me) await this.ctx.storage.delete(k);
+    await this.ctx.storage.delete("w:" + me); await this.ctx.storage.delete("cm:" + me);
+    const dms = await this.ctx.storage.list({ prefix: "dm:" });
+    for (const k of dms.keys()) if (k.slice(3).split("|").includes(me)) await this.ctx.storage.delete(k);
+    const g = (await this.ctx.storage.get("c:global")) || []; await this.ctx.storage.put("c:global", g.filter((m) => String(m.f).trim().toLowerCase() !== me));
+    const days = await this.ctx.storage.list({ prefix: "d:" });
+    for (const [k, d] of days) if (d && d.rows && d.rows[me]) { delete d.rows[me]; await this.ctx.storage.put(k, d); }
+    const on = (await this.ctx.storage.get("__online")) || {}; if (on[me]) { delete on[me]; await this.ctx.storage.put("__online", on); }
+    return { status: 200, body: { deleted: true } };
   }
   async submit(body) {
     const id = clean(body.id, 64), token = String(body.token || "");
@@ -531,6 +567,13 @@ export default {
     if (url.pathname === "/api/names" && request.method === "GET") return json(await env.LB.get(env.LB.idFromName("main")).names());
     if (url.pathname === "/api/daily" && request.method === "GET") return json(await env.LB.get(env.LB.idFromName("main")).daily(url.searchParams.get("date")));
     if (url.pathname === "/api/profile") { const r = await env.LB.get(env.LB.idFromName("main")).profile(clean(url.searchParams.get("pseudo"), 20)); return r ? json(r) : json({ error: "unknown" }, 404); }
+    if (url.pathname === "/.well-known/assetlinks.json") {
+      return new Response(JSON.stringify([{ relation: ["delegate_permission/common.handle_all_urls"], target: { namespace: "android_app", package_name: TWA_PACKAGE, sha256_cert_fingerprints: TWA_SHA256 } }]), { headers: { "content-type": "application/json", "access-control-allow-origin": "*" } });
+    }
+    if (url.pathname === "/api/account" && request.method === "POST") {
+      let body; try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
+      const r = await env.LB.get(env.LB.idFromName("main")).deleteAccount(body); return json(r.body, r.status);
+    }
     if (url.pathname === "/api/coop" && request.method === "POST") {
       let body; try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
       const r = await env.LB.get(env.LB.idFromName("main")).coop(body); return json(r.body, r.status);

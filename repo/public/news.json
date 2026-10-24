@@ -1,5 +1,26 @@
 [
  {
+  "id": 54,
+  "date": "2026-10-24",
+  "icon": "🛡️",
+  "fr": {
+   "t": "Signaler un message, supprimer son compte",
+   "d": "Dans la messagerie, chaque message d'un autre joueur peut être signalé (🚩) à l'administrateur. Et dans Profil › Modifier mon compte, tu peux désormais supprimer ton compte et toutes tes données. Notre politique de confidentialité est disponible sur magicoku.scorclem.workers.dev/privacy.html."
+  },
+  "en": {
+   "t": "Report a message, delete your account",
+   "d": "In the chat, any message from another player can be reported (🚩) to the admin. And in Profile › Edit my account, you can now delete your account and all your data. Our privacy policy is at magicoku.scorclem.workers.dev/privacy.html."
+  },
+  "ko": {
+   "t": "메시지 신고와 계정 삭제",
+   "d": "메신저에서 다른 플레이어의 메시지를 관리자에게 신고(🚩)할 수 있어요. 그리고 프로필 › 계정 수정에서 계정과 모든 데이터를 삭제할 수 있어요. 개인정보 처리방침은 magicoku.scorclem.workers.dev/privacy.html 에 있어요."
+  },
+  "ja": {
+   "t": "メッセージの通報とアカウント削除",
+   "d": "チャットでは、ほかのプレイヤーのメッセージを管理者に通報（🚩）できます。プロフィール › アカウント編集から、アカウントとすべてのデータを削除できるようになりました。プライバシーポリシーは magicoku.scorclem.workers.dev/privacy.html にあります。"
+  }
+ },
+ {
   "id": 53,
   "date": "2026-10-24",
   "icon": "📱",

@@ -30,7 +30,7 @@ var CHAT={view:"list",with:null,withName:null,msgs:[],sum:null,timer:null,blocke
     const title=CHAT.with?esc(CHAT.withName||CHAT.with):`🌍 ${L("Fil global","Global thread","전체 채팅","全体チャット")}`;
     const mine=me();
     const msgs=CHAT.msgs.map(m=>{const own=String(m.f).trim().toLowerCase()===mine;
-      return `<div class="ch-msg${own?" own":""}">${own?"":av(m.av,m.f)}<div class="ch-bub">${own||CHAT.with?"":`<b data-prof="${esc(m.f)}">${esc(m.f)}</b>`}<p>${esc(m.t)}</p><small>${when(m.at)}${isAdmin()&&!CHAT.with?` · <button class="ch-del" data-del="${esc(m.i)}">${L("supprimer","delete","삭제","削除")}</button>`:""}</small></div></div>`}).join("")||`<p class="rk-msg">${L("Aucun message pour l'instant. Lance la conversation !","No messages yet. Start the conversation!","아직 메시지가 없어요. 먼저 말을 걸어 보세요!","まだメッセージはありません。話しかけてみよう！")}</p>`;
+      return `<div class="ch-msg${own?" own":""}">${own?"":av(m.av,m.f)}<div class="ch-bub">${own||CHAT.with?"":`<b data-prof="${esc(m.f)}">${esc(m.f)}</b>`}<p>${esc(m.t)}</p><small>${when(m.at)}${isAdmin()&&!CHAT.with?` · <button class="ch-del" data-del="${esc(m.i)}">${L("supprimer","delete","삭제","削除")}</button>`:""}${own?"":` · <button class="ch-del ch-rep" data-rep="${esc(m.i)}">🚩 ${L("signaler","report","신고","通報")}</button>`}</small></div></div>`}).join("")||`<p class="rk-msg">${L("Aucun message pour l'instant. Lance la conversation !","No messages yet. Start the conversation!","아직 메시지가 없어요. 먼저 말을 걸어 보세요!","まだメッセージはありません。話しかけてみよう！")}</p>`;
     const blocked=CHAT.with&&CHAT.blocked.includes(CHAT.with);
     p.innerHTML=head(title,"list")+
       (CHAT.with?`<div class="ch-tools"><button class="tlink" data-prof="${esc(CHAT.withName||CHAT.with)}">👤 ${L("Voir le profil","See profile","프로필 보기","プロフィールを見る")}</button><button class="tlink" data-block="${esc(CHAT.with)}">${blocked?L("Débloquer","Unblock","차단 해제","ブロック解除"):"🚫 "+L("Bloquer","Block","차단","ブロック")}</button></div>`:`<p class="ch-rule">${L("Reste gentil et respectueux : tout le monde peut lire le fil global.","Be kind and respectful: everyone can read the global thread.","친절하고 예의 바르게! 전체 채팅은 모두가 읽을 수 있어요.","やさしく、礼儀正しく。全体チャットはみんなが読めます。")}</p>`)+
@@ -56,6 +56,8 @@ var CHAT={view:"list",with:null,withName:null,msgs:[],sum:null,timer:null,blocke
     if(!t.closest("#pChat"))return;
     if(t.dataset.chback){e.stopPropagation();if(t.dataset.chback==="list"){CHAT.view="list";render();refresh()}else show("hMain");return}
     if(t.dataset.open!=null){openConv(t.dataset.open,t.dataset.name);return}
+    if(t.dataset.rep){const m=CHAT.msgs.find(x=>x.i===t.dataset.rep);if(!m)return;const r=await api({action:"report",mid:m.i,who:m.f,text:m.t,where:CHAT.with?"dm":"global"});
+      toast(r&&r.ok?L("Merci, ce message a été signalé à l'administrateur.","Thanks, this message has been reported to the admin.","신고해 주셔서 고마워요. 관리자에게 전달했어요.","ありがとう。管理者に通報しました。"):L("Signalement impossible pour l'instant.","Couldn't report right now.","지금은 신고할 수 없어요.","今は通報できません。"));return}
     if(t.dataset.block){const r=await api({action:CHAT.blocked.includes(t.dataset.block)?"unblock":"block",who:t.dataset.block});if(r&&r.ok){CHAT.blocked=r.d.blocked;render()}return}
     if(t.dataset.del){if(!t.dataset.armed){t.dataset.armed=1;t.textContent=L("sûr ?","sure?","확실해요?","本当に？");return}await api({action:"delete",mid:t.dataset.del});loadConv();return}},true);
   document.addEventListener("submit",async e=>{if(e.target.id!=="chForm")return;e.preventDefault();const i=$("#chIn"),txt=i.value.trim();if(!txt)return;
