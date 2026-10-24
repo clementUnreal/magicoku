@@ -1,5 +1,26 @@
 [
  {
+  "id": 53,
+  "date": "2026-10-24",
+  "icon": "📱",
+  "fr": {
+   "t": "Un écran de jeu pensé pour le téléphone",
+   "d": "Sur téléphone, le plateau est désormais tout en haut, avec les outils juste dessous, la bande des suspects et un panneau de témoignages qui suit le suspect choisi. Une barre compacte affiche le chapitre, le chrono (ou le départ du train) et un bouton pause. Langue, son, règles, tutoriel et brouillon sont dans le menu ☰. Les grands plateaux se zooment."
+  },
+  "en": {
+   "t": "A game screen made for phones",
+   "d": "On phones, the board is now at the top, with the tools right below, the suspect strip and a testimony panel that follows the chosen suspect. A compact bar shows the chapter, the clock (or the train's departure) and a pause button. Language, sound, rules, tutorial and scratchpad are in the ☰ menu. Big boards can be zoomed."
+  },
+  "ko": {
+   "t": "휴대폰에 맞춘 게임 화면",
+   "d": "휴대폰에서는 이제 판이 맨 위에 있고, 바로 아래에 도구, 용의자 줄, 고른 용의자를 따라가는 증언 패널이 있어요. 작은 바에는 챕터, 시계(또는 기차 출발), 일시 정지 버튼이 보여요. 언어·소리·규칙·튜토리얼·연습장은 ☰ 메뉴에 있어요. 큰 판은 확대할 수 있어요."
+  },
+  "ja": {
+   "t": "スマホ向けのゲーム画面",
+   "d": "スマホでは盤がいちばん上に来て、すぐ下に道具、容疑者の列、選んだ容疑者を追う証言パネルが並びます。コンパクトなバーに章、タイマー（または列車の発車）、一時停止ボタン。言語・音・ルール・チュートリアル・メモ帳は☰メニューへ。大きな盤はズームできます。"
+  }
+ },
+ {
   "id": 52,
   "date": "2026-10-24",
   "icon": "📜",

@@ -5,6 +5,7 @@
   /* ---------- budgets (seconds of active play) ---------- */
   const trainBudget=()=>120+50*N;
   const trainLeft=()=>trainBudget()-(S.time||0)-30*(S.hints||0);
+  window.trainLeftSec=trainLeft;
   const frostStart=()=>90+15*N,frostEnd=()=>150+80*N;
   let order=null,orderId=null;
   function frostOrder(){if(orderId===C.id&&order)return order;const out=[];
