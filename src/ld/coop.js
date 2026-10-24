@@ -76,14 +76,14 @@ body.coop-on #tHint{display:none!important}
   async function poll(){if(!COOP.code||COOP.busy||document.hidden)return;const r=await call("state",{v:COOP.room?COOP.room.ver:-1});
     if(!r)return;if(r.status===404||r.status===403){reset(L("La salle n'existe plus.","The room no longer exists.","방이 더 이상 없어요.","ルームはもうありません。"));return}
     if(r.ok&&r.d&&!r.d.same)apply(r.d)}
-  function reset(msg){clearInterval(COOP.timer);remember(null);const wasPlay=COOP.play;COOP.room=null;COOP.play=false;COOP.on=false;COOP.lvl=null;
+  function reset(msg){clearInterval(COOP.timer);remember(null);const wasPlay=COOP.play;COOP.room=null;COOP.play=false;COOP.on=false;COOP.lvl=null;try{window.applyCos&&window.applyCos()}catch(_){}
     document.body.classList.remove("coop-on","coop-rooms","coop-objs");const b=$("#coopBar");if(b)b.hidden=true;const c=$("#coopChat");if(c)c.hidden=true;
     if(wasPlay){try{openCase(ci)}catch(_){}}if(msg)toast(msg);try{renderHome()}catch(_){}}
   /* ---------- apply the server state ---------- */
   function apply(room){COOP.room=room;COOP.on=true;
     const me=room.players.find(p=>p.pseudo.toLowerCase()===meK());if(!me){reset(L("Tu as quitté la salle.","You left the room.","방을 나왔어요.","ルームを退出しました。"));return}
     const msgs=room.msgs||[];if(msgs.length>COOP.seenMsgs){const chat=$("#coopChat");if(chat&&!chat.hidden)COOP.seenMsgs=msgs.length;else COOP.unread=msgs.filter((m,i)=>i>=COOP.seenMsgs&&m.f.toLowerCase()!==meK()).length}
-    if(room.status==="lobby"){if(COOP.play){COOP.play=false;document.body.classList.remove("coop-rooms","coop-objs");const b=$("#coopBar");if(b)b.hidden=true;$("#home").hidden=false;try{openCase(ci)}catch(_){}}
+    if(room.status==="lobby"){if(COOP.play){COOP.play=false;try{window.applyCos&&window.applyCos()}catch(_){}document.body.classList.remove("coop-rooms","coop-objs");const b=$("#coopBar");if(b)b.hidden=true;$("#home").hidden=false;try{openCase(ci)}catch(_){}}
       const ov=$("#coop");if(ov&&!ov.hidden)renderLobby();}
     else{if(!COOP.play||COOP.lvl!==room.lvl)enterGame(room);else syncBoard(room);
       if(room.status==="won"&&COOP.shownWin!==room.ver&&!COOP.shownWin){COOP.shownWin=room.ver;showWin(room)}
@@ -91,7 +91,7 @@ body.coop-on #tHint{display:none!important}
     renderBar();renderChat()}
   function enterGame(room){const i=DATA.findIndex(c=>c.id===room.lvl);if(i<0){toast("?");return}
     const order=room.order||room.players.map(p=>p.pseudo);COOP.idx=Math.max(0,order.findIndex(n=>n.toLowerCase()===meK()));COOP.order=order;COOP.lens=lensOf(COOP.idx);
-    COOP.play=true;COOP.lvl=room.lvl;$("#home").hidden=true;const ov=$("#coop");if(ov)ov.hidden=true;
+    COOP.play=true;try{window.applyCos&&window.applyCos()}catch(_){}COOP.lvl=room.lvl;$("#home").hidden=true;const ov=$("#coop");if(ov)ov.hidden=true;
     document.body.classList.add("coop-on");document.body.classList.toggle("coop-rooms",COOP.lens==="rooms");document.body.classList.toggle("coop-objs",COOP.lens==="objs");
     openCase(i);S=fresh();S.place=clone(room.place);S.xs=clone(room.xs);COOP.last=snapshot();render();
     setTimeout(()=>toast(`${LENS[COOP.lens].ic} ${T(LENS[COOP.lens].n)} : ${T(LENS[COOP.lens].d)}`),600)}

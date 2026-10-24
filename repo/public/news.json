@@ -1,5 +1,26 @@
 [
  {
+  "id": 55,
+  "date": "2026-10-24",
+  "icon": "✒️",
+  "fr": {
+   "t": "La plume de renommage devient personnelle",
+   "d": "Les noms choisis avec la plume ne s'affichent plus que chez toi : chacun peut rebaptiser les personnages à sa façon et modifier ses noms quand il veut. La plume coûte désormais 100 🌙. Ceux qui l'avaient achetée la gardent, et ceux qui l'avaient payée plus cher ont été remboursés de la différence. En multijoueur, tout le monde voit les noms d'origine."
+  },
+  "en": {
+   "t": "The renaming quill is now personal",
+   "d": "Names chosen with the quill now only show on your side: everyone can rename the characters their own way and edit their names any time. The quill now costs 100 🌙. Those who had bought it keep it, and those who paid more were refunded the difference. In multiplayer, everyone sees the original names."
+  },
+  "ko": {
+   "t": "이름 바꾸기 깃펜이 개인용이 되었어요",
+   "d": "깃펜으로 고른 이름은 이제 나에게만 보여요. 누구나 캐릭터 이름을 자기 마음대로 바꾸고 언제든지 수정할 수 있어요. 깃펜 가격은 이제 100 🌙이에요. 이미 산 사람은 그대로 가지고, 더 비싸게 산 사람은 차액을 돌려받았어요. 멀티플레이에서는 모두 원래 이름을 봐요."
+  },
+  "ja": {
+   "t": "名前変更の羽ペンが個人用に",
+   "d": "羽ペンで決めた名前は、自分にだけ表示されるようになりました。誰でもキャラクターを好きな名前に変えられ、いつでも編集できます。羽ペンは100🌙になりました。購入済みの人はそのまま使え、高く買った人には差額を返金しました。マルチプレイでは全員が元の名前を見ます。"
+  }
+ },
+ {
   "id": 54,
   "date": "2026-10-24",
   "icon": "🛡️",
