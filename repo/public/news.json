@@ -4,20 +4,20 @@
   "date": "2026-10-24",
   "icon": "🧪",
   "fr": {
-   "t": "Des empoisonnements, plus de meurtres",
-   "d": "Dans Magicoku, plus personne ne meurt : chaque victime a été empoisonnée par une potion, et tu cherches qui a fait le coup. Les objets du méfait sont désormais des breuvages, des friandises et des parfums trafiqués, et le coupable tient une fiole à la fin de l'enquête. Les énigmes, elles, n'ont pas changé."
+   "t": "Les victimes sont désormais empoisonnées",
+   "d": "Dans Magicoku, chaque victime a désormais été empoisonnée par une potion, et tu cherches qui a fait le coup. Le poison se cache dans des breuvages, des friandises et des parfums trafiqués, et le coupable tient une fiole à la fin de l'enquête. Les énigmes, elles, n'ont pas changé."
   },
   "en": {
-   "t": "Poisonings, no more murders",
-   "d": "In Magicoku, nobody dies anymore: every victim has been poisoned with a potion, and you find out who did it. The poison now hides in brews, sweets and tampered perfumes, and the culprit holds a flask at the end of the case. The puzzles themselves haven't changed."
+   "t": "Victims are now poisoned",
+   "d": "In Magicoku, every victim has now been poisoned with a potion, and you find out who did it. The poison hides in brews, sweets and tampered perfumes, and the culprit holds a flask at the end of the case. The puzzles themselves haven't changed."
   },
   "ko": {
-   "t": "살인 대신 독살 미수 사건으로",
-   "d": "이제 Magicoku에서는 아무도 죽지 않아요. 모든 피해자는 물약에 중독되었고, 누가 그랬는지 찾아내는 게임이에요. 독은 음료, 사탕, 조작된 향수 등에 숨겨져 있고, 사건이 끝나면 범인이 약병을 들고 있어요. 퍼즐 자체는 그대로예요."
+   "t": "이제 피해자는 독에 중독돼요",
+   "d": "이제 Magicoku의 모든 피해자는 물약에 중독되었고, 누가 그랬는지 찾아내는 게임이에요. 독은 음료, 사탕, 조작된 향수 등에 숨겨져 있고, 사건이 끝나면 범인이 약병을 들고 있어요. 퍼즐 자체는 그대로예요."
   },
   "ja": {
-   "t": "殺人ではなく、毒の事件に",
-   "d": "Magicokuでは、もう誰も死にません。被害者はみな魔法薬で毒を盛られ、あなたは犯人を探します。毒は飲み物やお菓子、細工された香水に仕込まれ、事件の最後には犯人が小瓶を持っています。パズルそのものは変わりません。"
+   "t": "被害者は毒を盛られることに",
+   "d": "Magicokuの被害者は、みな魔法薬で毒を盛られるようになりました。あなたは犯人を探します。毒は飲み物やお菓子、細工された香水に仕込まれ、事件の最後には犯人が小瓶を持っています。パズルそのものは変わりません。"
   }
  },
  {
