@@ -1,5 +1,26 @@
 [
  {
+  "id": 59,
+  "date": "2026-10-24",
+  "icon": "📜",
+  "fr": {
+   "t": "Le témoignage suit ton personnage",
+   "d": "Sur téléphone, quand tu touches un personnage, la zone des témoignages défile maintenant toujours jusqu'à son paragraphe. Avec certains personnages (ceux qui ont un indice « au milieu » ou « en reflet »), elle restait bloquée en haut : c'est corrigé."
+  },
+  "en": {
+   "t": "The testimony follows your character",
+   "d": "On phones, when you tap a character, the testimony area now always scrolls to their paragraph. With some characters (those with a “halfway” or “reflection” clue) it stayed stuck at the top: that's fixed."
+  },
+  "ko": {
+   "t": "증언이 고른 캐릭터를 따라가요",
+   "d": "휴대폰에서 캐릭터를 누르면 이제 증언 영역이 항상 그 사람의 문단으로 스크롤돼요. 일부 캐릭터(‘한가운데’나 ‘반사’ 단서가 있는 경우)는 맨 위에 멈춰 있었는데, 고쳤어요."
+  },
+  "ja": {
+   "t": "証言が選んだキャラクターについてくる",
+   "d": "スマホでキャラクターをタップすると、証言エリアが必ずその人の段落までスクロールするようになりました。一部のキャラクター（「真ん中」や「鏡写し」の手がかりを持つ人）では一番上で止まっていましたが、修正しました。"
+  }
+ },
+ {
   "id": 58,
   "date": "2026-10-24",
   "icon": "💡",

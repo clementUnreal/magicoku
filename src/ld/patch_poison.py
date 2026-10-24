@@ -113,3 +113,6 @@ _R("meurtrier", "coupable")
 _R("Meurtrier", "Coupable", 0)
 _R("murderer", "culprit")
 _R("Murderer", "Culprit", 0)
+
+# ---------- robustness (applied here, after i18n): a clue type without text must not break render ----------
+_R('clueText(S.sel,x).replace', 'String(clueText(S.sel,x)||"").replace')

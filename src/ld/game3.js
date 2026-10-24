@@ -115,7 +115,12 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
     const used=(bar?bar.offsetHeight:52)+pan.offsetHeight+tl.offsetHeight+ch.offsetHeight+(hd?hd.offsetHeight:40)+44;
     const h=Math.max(170,window.innerHeight-used);document.documentElement.style.setProperty("--g3ph",h+"px")}
   /* follow the selected suspect in the panel */
-  function follow(){if(!on()||!S||S.sel==null)return;const r=document.querySelector(".recit"),p=r&&r.querySelector(`p[data-p="${S.sel}"]`);if(r&&p)r.scrollTop=Math.max(0,p.offsetTop-8)}
+  let fSel=null,fT=0;
+  function fTarget(r,p){return Math.max(0,Math.min(r.scrollHeight-r.clientHeight,p.getBoundingClientRect().top-r.getBoundingClientRect().top+r.scrollTop-8))}
+  function follow(){if(!on()||!S||S.sel==null){fSel=null;return}if(S.sel===fSel)return;fSel=S.sel;const sel=S.sel;clearTimeout(fT);
+    const go=smooth=>{const r=document.querySelector(".recit"),p=r&&r.querySelector(`p[data-p="${sel}"]`);if(!r||!p||S.sel!==sel)return;const t=fTarget(r,p);
+      if(smooth)r.scrollTo({top:t,behavior:"smooth"});else if(Math.abs(r.scrollTop-t)>4){r.style.scrollBehavior="auto";r.scrollTop=t;r.style.scrollBehavior=""}};
+    requestAnimationFrame(()=>go(true));fT=setTimeout(()=>go(false),450)}
   /* ---------- sheets ---------- */
   function sheet(id,html){let m=$("#"+id);if(!m){m=document.createElement("div");m.id=id;m.className="modal g3-sheet";document.body.appendChild(m);m.addEventListener("click",e=>{if(e.target===m)close(m)})}
     m.innerHTML=`<div class="mbox"><button class="mclose" aria-label="✕">✕</button>${html}</div>`;m.querySelector(".mclose").onclick=()=>close(m);m.hidden=false;return m}

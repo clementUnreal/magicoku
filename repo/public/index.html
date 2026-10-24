@@ -1956,7 +1956,7 @@ function renderTools(){
   let t;
   if(tool==="x")t=L("Outil X : touche une case pour la barrer, ou glisse le doigt pour en barrer plusieurs.","X tool: tap a square to cross it out, or drag to cross out several.","X 도구: 칸을 탭하면 X 표시, 드래그하면 여러 칸에 표시됩니다.","✕ツール：マスをタップで✕、ドラッグでまとめて✕をつけられます。");
   else if(tool==="erase")t=L("Gomme : touche une case pour l'effacer.","Eraser: tap a square to clear it.","지우개: 칸을 탭하면 지워집니다.","消しゴム：マスをタップすると消えます。");
-  else if(S.sel!=null)t=L(`<b>${pname(S.sel)}</b> · ${(C.clues[S.sel]||[]).map(x=>clueText(S.sel,x).replace(/^<b>[^<]*<\/b>/,fem(S.sel,'Il','Elle'))).join(' ')}<br>Touche une case pour écrire une note, ou <b>maintiens appuyé</b> pour la placer.`,`<b>${pname(S.sel)}</b> · ${(C.clues[S.sel]||[]).map(x=>clueText(S.sel,x).replace(/^<b>[^<]*<\/b>/,fem(S.sel,'He','She'))).join(' ')}<br>Tap a square to write a note, or <b>press and hold</b> to place them.`,`<b>${pname(S.sel)}</b><br>칸을 탭하면 메모, <b>길게 누르면</b> 배치됩니다.`,`<b>${pname(S.sel)}</b><br>マスをタップでメモ、<b>長押し</b>で配置します。`);
+  else if(S.sel!=null)t=L(`<b>${pname(S.sel)}</b> · ${(C.clues[S.sel]||[]).map(x=>String(clueText(S.sel,x)||"").replace(/^<b>[^<]*<\/b>/,fem(S.sel,'Il','Elle'))).join(' ')}<br>Touche une case pour écrire une note, ou <b>maintiens appuyé</b> pour la placer.`,`<b>${pname(S.sel)}</b> · ${(C.clues[S.sel]||[]).map(x=>String(clueText(S.sel,x)||"").replace(/^<b>[^<]*<\/b>/,fem(S.sel,'He','She'))).join(' ')}<br>Tap a square to write a note, or <b>press and hold</b> to place them.`,`<b>${pname(S.sel)}</b><br>칸을 탭하면 메모, <b>길게 누르면</b> 배치됩니다.`,`<b>${pname(S.sel)}</b><br>マスをタップでメモ、<b>長押し</b>で配置します。`);
   else t=L("Choisis un suspect, ou un outil.","Pick a suspect, or a tool.","용의자나 도구를 고르세요.","容疑者か道具を選んでください。");
   $("#status").innerHTML=t;
 }
@@ -3973,7 +3973,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="92d7abc16e56";
+var APP_BUILD="16e960218e2a";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -4952,7 +4952,12 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
     const used=(bar?bar.offsetHeight:52)+pan.offsetHeight+tl.offsetHeight+ch.offsetHeight+(hd?hd.offsetHeight:40)+44;
     const h=Math.max(170,window.innerHeight-used);document.documentElement.style.setProperty("--g3ph",h+"px")}
   /* follow the selected suspect in the panel */
-  function follow(){if(!on()||!S||S.sel==null)return;const r=document.querySelector(".recit"),p=r&&r.querySelector(`p[data-p="${S.sel}"]`);if(r&&p)r.scrollTop=Math.max(0,p.offsetTop-8)}
+  let fSel=null,fT=0;
+  function fTarget(r,p){return Math.max(0,Math.min(r.scrollHeight-r.clientHeight,p.getBoundingClientRect().top-r.getBoundingClientRect().top+r.scrollTop-8))}
+  function follow(){if(!on()||!S||S.sel==null){fSel=null;return}if(S.sel===fSel)return;fSel=S.sel;const sel=S.sel;clearTimeout(fT);
+    const go=smooth=>{const r=document.querySelector(".recit"),p=r&&r.querySelector(`p[data-p="${sel}"]`);if(!r||!p||S.sel!==sel)return;const t=fTarget(r,p);
+      if(smooth)r.scrollTo({top:t,behavior:"smooth"});else if(Math.abs(r.scrollTop-t)>4){r.style.scrollBehavior="auto";r.scrollTop=t;r.style.scrollBehavior=""}};
+    requestAnimationFrame(()=>go(true));fT=setTimeout(()=>go(false),450)}
   /* ---------- sheets ---------- */
   function sheet(id,html){let m=$("#"+id);if(!m){m=document.createElement("div");m.id=id;m.className="modal g3-sheet";document.body.appendChild(m);m.addEventListener("click",e=>{if(e.target===m)close(m)})}
     m.innerHTML=`<div class="mbox"><button class="mclose" aria-label="✕">✕</button>${html}</div>`;m.querySelector(".mclose").onclick=()=>close(m);m.hidden=false;return m}
