@@ -7,11 +7,18 @@ function newsTxt(n){return n[LANG]||n.en||n.fr}
 function renderNewsBadges(){const u=newsUnseen();
   const hb=$("#hNews");if(hb){hb.innerHTML=`✨ ${L("Nouveautés","What's new","새로운 소식","お知らせ")}${u?`<span class="nbadge">${u}</span>`:""}`;hb.hidden=!NEWS.length}
   const gb=$("#bNews");if(gb){gb.innerHTML=`✨${u?`<span class="ndot"></span>`:""}`;gb.title=L("Nouveautés","What's new","새로운 소식","お知らせ");gb.hidden=!NEWS.length}}
-function openNews(){const s=newsSeen()||0;const loc=LANG==="fr"?"fr-FR":LANG==="ko"?"ko-KR":LANG==="ja"?"ja-JP":"en-GB";
+var NEWS_TAB=null;
+function openNews(tab){const s=tab?(openNews._keep||0):(openNews._keep=newsSeen()||0);const loc=LANG==="fr"?"fr-FR":LANG==="ko"?"ko-KR":LANG==="ja"?"ja-JP":"en-GB";
+  const isFix=n=>n.k==="fix",un=f=>NEWS.filter(n=>n.id>s&&f(n)).length,uNew=un(n=>!isFix(n)),uFix=un(isFix);
+  NEWS_TAB=tab||(uNew||!uFix?"new":"fix");
   $("#mNewsT").textContent="✨ "+L("Nouveautés","What's new","새로운 소식","お知らせ");
-  $("#newsBody").innerHTML=NEWS.slice().sort((a,b)=>b.id-a.id).map(n=>{const t=newsTxt(n);let d="";try{d=new Date(n.date+"T12:00:00").toLocaleDateString(loc,{day:"numeric",month:"long"})}catch(e){}
-    return `<article class="news${n.id>s?" fresh":""}"><div class="nic">${n.icon||"✨"}</div><div><h3>${t.t}${n.id>s?`<span class="ntag">${L("Nouveau","New","NEW","NEW")}</span>`:""}</h3><p>${t.d}</p><small>${d}</small></div></article>`}).join("");
-  openModal("#mNews");try{localStorage.setItem(NEWS_KEY,String(newsMax()))}catch(e){}renderNewsBadges()}
+  const tabs=`<div class="ntabs"><button data-ntab="new" class="${NEWS_TAB==="new"?"on":""}">✨ ${L("Nouveautés","New features","새 기능","新機能")}${uNew?`<span class="nbadge">${uNew}</span>`:""}</button><button data-ntab="fix" class="${NEWS_TAB==="fix"?"on":""}">🛠️ ${L("Corrections de bugs","Bug fixes","버그 수정","不具合の修正")}${uFix?`<span class="nbadge">${uFix}</span>`:""}</button></div>`;
+  const list=NEWS.filter(n=>NEWS_TAB==="fix"?isFix(n):!isFix(n)).sort((a,b)=>b.id-a.id);
+  $("#newsBody").innerHTML=tabs+(list.length?list.map(n=>{const t=newsTxt(n);let d="";try{d=new Date(n.date+"T12:00:00").toLocaleDateString(loc,{day:"numeric",month:"long"})}catch(e){}
+    return `<article class="news${n.id>s?" fresh":""}"><div class="nic">${n.icon||"✨"}</div><div><h3>${t.t}${n.id>s?`<span class="ntag">${L("Nouveau","New","NEW","NEW")}</span>`:""}</h3><p>${t.d}</p><small>${d}</small></div></article>`}).join(""):`<p class="rk-msg">${L("Rien pour l'instant.","Nothing yet.","아직 없어요.","まだありません。")}</p>`);
+  const m=$("#mNews");if(m.hidden)openModal("#mNews");
+  if(!openNews._t){openNews._t=1;$("#newsBody").addEventListener("click",e=>{const b=e.target.closest("[data-ntab]");if(!b)return;e.stopPropagation();NEWS_TAB=b.dataset.ntab;openNews(NEWS_TAB);try{play("select")}catch(_){}})}
+  setTimeout(()=>{try{localStorage.setItem(NEWS_KEY,String(newsMax()))}catch(e){}renderNewsBadges()},0)}
 function newsPeek(){const u=newsUnseen();if(!u)return;const el=document.createElement("button");el.className="npeek";
   el.innerHTML=`✨ <b>${u}</b> ${L(u>1?"nouveautés dans le jeu !":"nouveauté dans le jeu !",u>1?"new things in the game!":"new thing in the game!","가지 새로운 소식!","件のお知らせ！")}`;
   if(LANG==="ko")el.innerHTML=`✨ 새로운 소식 <b>${u}</b>개!`;

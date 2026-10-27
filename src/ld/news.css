@@ -14,3 +14,8 @@
   border:2px solid var(--gold,#d6ab4f);background:linear-gradient(#2c1d4a,#1a1330);color:#ffe6a6;font:700 15px var(--f-title);padding:10px 18px;border-radius:999px;box-shadow:0 8px 24px #000a,0 0 18px rgba(214,171,79,.35);cursor:pointer;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
 .npeek.on{transform:translate(-50%,0)}
 @keyframes nbump{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+
+.ntabs{display:flex;gap:6px;margin:0 0 10px;padding:4px;border-radius:999px;background:rgba(201,162,90,.18);position:sticky;top:0;z-index:2}
+.ntabs button{flex:1;min-height:42px;border:0;border-radius:999px;background:transparent;color:#5a3a4a;font:800 13.5px var(--f-simple,system-ui)!important;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.ntabs button.on{background:#3a1f3d;color:#fbefc8;box-shadow:0 2px 6px rgba(58,31,61,.3)}
+.ntabs .nbadge{position:static;margin:0}
