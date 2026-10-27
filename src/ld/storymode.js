@@ -8,7 +8,8 @@ function isTester(){try{const p=ACC&&ACC.profile&&ACC.profile.pseudo;return !!(p
 function discIdx(){return DATA.map((c,i)=>i).filter(i=>!/^s\d+n\d+$/.test(DATA[i].id))}
 function discDone(){return discIdx().filter(i=>lvlSolved(i)).length}
 function nextDisc(){const d=discIdx();return d.find(i=>unlocked(i)&&!lvlSolved(i))??d[0]}
-function storyLocked(){if(isTester())return false;const d=discIdx();if(discDone()>=d.length)return false;return !DATA.some((c,i)=>/^s\d+n\d+$/.test(c.id)&&lvlSolved(i))}
+function storyStarted(){try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^crimes-mignons-wiz:s\d+n\d+$/.test(k)){const v=JSON.parse(localStorage.getItem(k)||"null");if(v&&((v.time||0)>0||Object.keys(v.place||{}).length))return true}}}catch(_){}return false}
+function storyLocked(){if(isTester())return false;const d=discIdx();if(discDone()>=d.length)return false;if(storyStarted())return false;return !DATA.some((c,i)=>/^s\d+n\d+$/.test(c.id)&&lvlSolved(i))}
 function storyLockMsg(){const n=discDone(),t=discIdx().length;return L(`Le mode histoire s'ouvre quand tu as résolu les ${t} enquêtes du mode Découverte (${n}/${t}).`,`Story mode opens once you've solved the ${t} Discovery cases (${n}/${t}).`,`디스커버리 모드의 사건 ${t}개를 모두 풀면 스토리 모드가 열려요 (${n}/${t}).`,`ディスカバリーモードの事件${t}件をすべて解くと、ストーリーモードが開きます（${n}/${t}）。`)}
 (function(){
   const FIRST_STORY=DATA.findIndex(c=>/^s\d+n\d+$/.test(c.id));

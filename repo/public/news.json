@@ -26,19 +26,19 @@
   "icon": "🧭",
   "fr": {
    "t": "On commence par la Découverte",
-   "d": "Les nouveaux détectives commencent par les 30 enquêtes du mode Découverte, pour apprendre les règles en douceur. Le mode histoire s'ouvre une fois la Découverte terminée. Si tu avais déjà commencé le mode histoire, rien ne change pour toi."
+   "d": "Les nouveaux détectives commencent par les 30 enquêtes du mode Découverte, pour apprendre les règles en douceur. Le mode histoire s'ouvre une fois la Découverte terminée. Si tu avais déjà commencé le mode histoire (même une enquête en cours), rien ne change pour toi."
   },
   "en": {
    "t": "Starting with Discovery",
-   "d": "New detectives start with the 30 Discovery cases, to learn the rules gently. Story mode opens once Discovery is complete. If you had already started story mode, nothing changes for you."
+   "d": "New detectives start with the 30 Discovery cases, to learn the rules gently. Story mode opens once Discovery is complete. If you had already started story mode (even a case in progress), nothing changes for you."
   },
   "ko": {
    "t": "디스커버리부터 시작해요",
-   "d": "새로운 탐정은 규칙을 천천히 익힐 수 있도록 디스커버리 모드의 사건 30개부터 시작해요. 디스커버리를 끝내면 스토리 모드가 열려요. 이미 스토리 모드를 시작했다면 달라지는 건 없어요."
+   "d": "새로운 탐정은 규칙을 천천히 익힐 수 있도록 디스커버리 모드의 사건 30개부터 시작해요. 디스커버리를 끝내면 스토리 모드가 열려요. 이미 스토리 모드를 시작했다면(진행 중인 사건 하나라도) 달라지는 건 없어요."
   },
   "ja": {
    "t": "まずはディスカバリーから",
-   "d": "新しい探偵は、ルールをゆっくり覚えられるよう、ディスカバリーモードの事件30件から始めます。ディスカバリーを終えるとストーリーモードが開きます。すでにストーリーモードを始めていた人は、何も変わりません。"
+   "d": "新しい探偵は、ルールをゆっくり覚えられるよう、ディスカバリーモードの事件30件から始めます。ディスカバリーを終えるとストーリーモードが開きます。すでにストーリーモードを始めていた人（途中の事件があるだけでも）は、何も変わりません。"
   }
  },
  {
