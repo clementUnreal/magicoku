@@ -26,7 +26,7 @@
     const p=acc();let r;
     try{
       if(G.mode==="link"&&p){r=await call({action:"link",credential:cred,id:p.pid,token:p.ptok});
-        if(r.ok){G.linked=true;G.msg="";try{play("win")}catch(_){}toast(L("Compte lié à Google ! Tu pourras le retrouver sur n'importe quel appareil.","Account linked to Google! You can find it back on any device.","구글 계정과 연결했어요! 어느 기기에서든 되찾을 수 있어요.","Googleアカウントと連携しました！どの端末でも取り戻せます。"));paint();return}
+        if(r.ok){G.linked=true;G.msg="";try{play("win")}catch(_){}toast(L("Compte lié à Google ! Tu pourras le retrouver sur n'importe quel appareil.","Account linked to Google! You can find it back on any device.","구글 계정과 연결했어요! 어느 기기에서든 되찾을 수 있어요.","Googleアカウントと連携しました！どの端末でも取り戻せます。"));paint();if(G.done){const d=G.done;G.done=null;d("linked")}return}
         if(r.status===409){G.msg=L(`Ce compte Google est déjà lié au détective « ${r.d.pseudo} ».`,`This Google account is already linked to the detective “${r.d.pseudo}”.`,`이 구글 계정은 이미 탐정 ‘${r.d.pseudo}’에 연결되어 있어요.`,`このGoogleアカウントはすでに探偵「${r.d.pseudo}」と連携しています。`);G.other=r.d.pseudo;G.pending=cred;paint();return}}
       else{const nid=rid();r=await call({action:"login",credential:cred,newId:nid});
         if(r.ok){const {pid,ptok}=await adopt(r.d);await saveProfile();try{play("win")}catch(_){}G.linked=true;G.msg="";
@@ -38,7 +38,7 @@
   function button(el){if(!G.ready||!window.google||!google.accounts||!google.accounts.id)return;
     if(!G.inited){google.accounts.id.initialize({client_id:CID,callback:onCred,ux_mode:"popup",auto_select:false,cancel_on_tap_outside:true});G.inited=true}
     el.innerHTML="";google.accounts.id.renderButton(el,{theme:"outline",size:"large",shape:"pill",text:G.mode==="link"?"continue_with":"signin_with",locale:{fr:"fr",en:"en",ko:"ko",ja:"ja"}[LANG]||"fr",width:260})}
-  function paint(){const pan=$("#pAccount");if(!pan||pan.hidden)return;let box=$("#accG");
+  function paint(){{const om=document.getElementById("onbGMsg");if(om)om.innerHTML=G.msg||""}const pan=$("#pAccount");if(!pan||pan.hidden)return;let box=$("#accG");
     if(!box){box=document.createElement("div");box.id="accG";box.className="acc-g"}{const lg=$("#legacy"),del=$("#accDel");if(lg&&lg.parentNode===pan){if(lg.nextElementSibling!==box)lg.after(box)}else if(del&&del.parentNode===pan){if(del.previousElementSibling!==box)pan.insertBefore(box,del)}else if(box.parentNode!==pan)pan.appendChild(box)}
     const p=acc();loadGIS();
     if(p&&G.linked==null&&!G.loading)status();
@@ -54,5 +54,6 @@
     if(t.id==="gUnlink"){const p=acc();if(!p)return;if(!t.dataset.armed){t.dataset.armed=1;t.textContent=L("Vraiment délier ?","Really unlink?","정말 해제할까요?","本当に解除する？");return}
       try{const r=await call({action:"unlink",id:p.pid,token:p.ptok});if(r.ok)G.linked=false}catch(_){}paint();return}
     if(t.id==="gUseOther"&&G.pending){G.mode="login";const c=G.pending;G.pending=null;G.other=null;await onCred({credential:c})}},true);
+  window.GG={render(el,mode,done){G.mode=mode;G.done=done||null;G.msg="";loadGIS();const go=()=>{if(G.ready)button(el);else setTimeout(go,300)};go()},msg:()=>G.msg};
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{paint()}catch(_){}};
 })();

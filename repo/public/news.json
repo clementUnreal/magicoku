@@ -1,5 +1,26 @@
 [
  {
+  "id": 70,
+  "date": "2026-10-27",
+  "icon": "🪪",
+  "fr": {
+   "t": "Ton détective dès le premier lancement",
+   "d": "Les nouveaux joueurs créent maintenant leur détective (nom et portrait) dès l'ouverture du jeu, puis peuvent le lier à leur compte Google pour ne jamais perdre leur progression. Chaque nom de détective est unique : si un nom est déjà pris, le jeu le signale."
+  },
+  "en": {
+   "t": "Your detective from the very first launch",
+   "d": "New players now create their detective (name and portrait) as soon as they open the game, then can link it to their Google account so they never lose their progress. Every detective name is unique: if a name is already taken, the game tells you."
+  },
+  "ko": {
+   "t": "처음 실행할 때부터 나만의 탐정",
+   "d": "이제 새로운 플레이어는 게임을 열자마자 탐정(이름과 초상화)을 만들고, 구글 계정과 연결해 진행 상황을 잃지 않을 수 있어요. 탐정 이름은 모두 달라야 해서, 이미 쓰는 이름이면 알려 줘요."
+  },
+  "ja": {
+   "t": "最初の起動から自分の探偵を",
+   "d": "新しいプレイヤーは、ゲームを開いてすぐに探偵（名前と肖像）を作り、Googleアカウントと連携して進行状況を失わないようにできるようになりました。探偵ネームは重複できません。すでに使われている名前ならお知らせします。"
+  }
+ },
+ {
   "id": 69,
   "date": "2026-10-27",
   "icon": "🎓",

@@ -536,6 +536,13 @@ export class Leaderboard extends DurableObject {
     return { status: 400, body: { error: "action" } };
   }
   // delete a detective account and everything tied to its name (Google Play requires in-app account deletion)
+  // is this detective name already used by someone?
+  async nameTaken(pseudo) {
+    const want = clean(pseudo, 20).trim().toLowerCase(); if (!want) return false;
+    const all = await this.ctx.storage.list({ prefix: "p:" });
+    for (const v of all.values()) if (v && v.row && String(v.row.pseudo).trim().toLowerCase() === want) return true;
+    return !!(await this.ctx.storage.get("w:" + want));
+  }
   // link a Google account to a detective name, or find one's detective back on a new device
   async google(body, sub) {
     const action = String(body.action || "");
@@ -645,6 +652,10 @@ export default {
     if (url.pathname === "/api/profile") { const r = await env.LB.get(env.LB.idFromName("main")).profile(clean(url.searchParams.get("pseudo"), 20)); return r ? json(r) : json({ error: "unknown" }, 404); }
     if (url.pathname === "/.well-known/assetlinks.json") {
       return new Response(JSON.stringify([{ relation: ["delegate_permission/common.handle_all_urls"], target: { namespace: "android_app", package_name: TWA_PACKAGE, sha256_cert_fingerprints: TWA_SHA256 } }]), { headers: { "content-type": "application/json", "access-control-allow-origin": "*" } });
+    }
+    if (url.pathname === "/api/namecheck" && request.method === "GET") {
+      const taken = await env.LB.get(env.LB.idFromName("main")).nameTaken(url.searchParams.get("pseudo") || "");
+      return json({ taken });
     }
     if (url.pathname === "/api/google" && request.method === "POST") {
       let body; try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
