@@ -3979,7 +3979,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="b4697065bba9";
+var APP_BUILD="4a95e512ff79";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -4851,8 +4851,8 @@ body.coop-on #tHint{display:none!important}
 /* ================= game screen v3 (phones): compact top bar, board first, tools, suspect strip, testimony panel =================
    Loop without big scrolling: read a testimony -> pick a suspect -> act on the board -> next testimony. Desktop is untouched. */
 (function(){
-  const mq=matchMedia("(max-width:760px)");
-  const on=()=>mq.matches&&$("#home").hidden;
+  const mq=matchMedia("(max-width:760px)"),mqL=matchMedia("(orientation:landscape) and (max-height:540px) and (max-width:1200px)");
+  const on=()=>(mq.matches||mqL.matches)&&$("#home").hidden,land=()=>mqL.matches&&$("#home").hidden;
   const esc=s=>String(s==null?"":s).replace(/[<>&"]/g,"");
   const I={menu:'<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',pause:'<svg viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></svg>',
     cross:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',erase:'<svg viewBox="0 0 24 24"><path d="M4 16l8-8 6 6-6 6H8z"/><path d="M8 20h12"/></svg>',
@@ -4863,6 +4863,25 @@ body.coop-on #tHint{display:none!important}
   const css=document.createElement("style");css.textContent=`
 body.g3 .wrap>header,body.g3 #story,body.g3 .views,body.g3 .mbar.mb-train{display:none!important}
 body.g3 .wrap{padding-top:0!important}
+/* ---------- phone held sideways: testimonies on the left, board in the middle, tools on the right ---------- */
+body.g3.g3l{overflow:hidden;height:100dvh}
+body.g3.g3l .wrap{max-width:none!important;width:100%!important;height:100dvh;margin:0!important;display:flex!important;flex-direction:column;box-sizing:border-box;padding:0 max(10px,env(safe-area-inset-right,0px)) 6px max(10px,env(safe-area-inset-left,0px))!important;overflow:hidden}
+body.g3.g3l #g3Bar{position:static;margin:0 calc(-1*max(10px,env(safe-area-inset-left,0px))) 6px;padding:4px max(10px,env(safe-area-inset-left,0px));min-height:0}
+body.g3.g3l #g3Bar>button{width:40px;height:40px}
+body.g3.g3l .game{display:grid!important;grid-template-columns:minmax(0,1fr) var(--g3bs,300px) 70px;grid-template-rows:minmax(0,1fr);gap:8px!important;flex:1;min-height:0}
+body.g3.g3l .game>*{width:auto;min-height:0}
+body.g3.g3l .suspects{grid-column:1;grid-row:1;order:0;display:flex!important;flex-direction:column;overflow:hidden;margin:0!important}
+body.g3.g3l #cards{display:flex!important;flex-direction:column;flex:1;min-height:0}
+body.g3.g3l .recit{max-height:none!important;flex:1;min-height:0}
+body.g3.g3l #g3Exp,body.g3.g3l #g3Zoom{display:none!important}
+body.g3.g3l #g3PanelHead{min-height:0;margin:0 0 4px}
+body.g3.g3l #hintBox{flex:none;max-height:42%;overflow:auto;margin:0 0 6px}
+body.g3.g3l .game>.center{grid-column:2;grid-row:1;order:0;width:var(--g3bs,300px)!important;height:var(--g3bs,300px);align-self:start}
+body.g3.g3l .g3-pan{overflow:hidden!important;width:100%;height:100%}
+body.g3.g3l .g3-pan #board{width:100%!important}
+body.g3.g3l .tools{grid-column:3;grid-row:1;order:0;grid-template-columns:1fr!important;grid-template-rows:repeat(5,minmax(0,1fr));height:var(--g3bs,300px);align-self:start;margin:0!important}
+body.g3.g3l .tools .tb{min-height:0!important}
+body.g3.g3l .tools .tb .g3-lb{font-size:11px!important}
 #g3Bar{display:none}
 body.g3 #g3Bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:8px;margin:0 -12px 8px;padding:max(6px,env(safe-area-inset-top,0px)) 12px 6px;background:linear-gradient(#21163a,#1a1230);border-bottom:1.5px solid rgba(214,171,79,.45);box-shadow:0 6px 14px rgba(0,0,0,.35)}
 #g3Bar button{flex:0 0 44px;width:44px;height:44px;border-radius:12px;border:1.5px solid rgba(214,171,79,.7);background:rgba(255,255,255,.05);color:var(--gold);display:grid;place-items:center;cursor:pointer;padding:0}
@@ -4986,7 +5005,8 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
     lab(H,L("Indice","Hint","힌트","ヒント"),train?"−30 s":daily?"+1 min":"");
     const n=S?Object.keys(S.place||{}).length:0,P=M?M.people.length:0;lab(V,L("Valider","Check","확인","チェック"),n<P?`${n}/${P}`:"");V.classList.toggle("g3-off",n<P);if(n<P&&!S.solved){V.disabled=false;V.setAttribute("aria-disabled","true")}else V.removeAttribute("aria-disabled")}
   /* panel height: board + tools + strip + panel fit in one screen when possible */
-  function sizePanel(){if(!on())return;const bar=$("#g3Bar"),pan=document.querySelector(".g3-pan"),tl=document.querySelector(".tools"),ch=document.querySelector(".chips"),hd=$("#g3PanelHead");if(!pan||!tl||!ch)return;
+  function sizePanel(){if(!on())return;
+    if(land()){const ce=document.querySelector(".center"),top=ce?ce.getBoundingClientRect().top+window.scrollY:60,avail=window.innerHeight-top-8,maxW=window.innerWidth*.56;document.documentElement.style.setProperty("--g3bs",Math.max(220,Math.min(avail,maxW))+"px");return}const bar=$("#g3Bar"),pan=document.querySelector(".g3-pan"),tl=document.querySelector(".tools"),ch=document.querySelector(".chips"),hd=$("#g3PanelHead");if(!pan||!tl||!ch)return;
     const used=(bar?bar.offsetHeight:52)+pan.offsetHeight+tl.offsetHeight+ch.offsetHeight+(hd?hd.offsetHeight:40)+44;
     const h=Math.max(170,window.innerHeight-used);document.documentElement.style.setProperty("--g3ph",h+"px")}
   /* follow the selected suspect in the panel */
@@ -5039,14 +5059,18 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
   document.addEventListener("click",e=>{if(!on()||!e.target.closest||!e.target.closest("#tErase"))return;let seen=null;try{seen=localStorage.getItem("magicoku:eraseTip")}catch(_){}if(seen)return;
     try{localStorage.setItem("magicoku:eraseTip","1")}catch(_){}setTimeout(()=>toast(L("Astuce : garde le doigt appuyé sur la gomme pour tout effacer d'un coup (ou ☰ › Tout effacer).","Tip: keep your finger on the eraser to clear everything at once (or ☰ › Clear the whole board).","팁: 지우개를 길게 누르면 한 번에 모두 지워져요(또는 ☰ › 판 전체 지우기).","ヒント：消しゴムを長押しすると全部消せます（または☰ › 盤をすべて消す）。")),250)},true);
   /* ---------- wiring ---------- */
-  function refresh(){document.body.classList.toggle("g3",on());if(!on())return;build();const t=$("#g3T");if(t)t.innerHTML=title();
+  function refresh(){document.body.classList.toggle("g3",on());document.body.classList.toggle("g3l",on()&&land());if(!on()){placeHint();return}placeHint();build();const t=$("#g3T");if(t)t.innerHTML=title();
     const p=$("#g3Pause");if(p)p.setAttribute("aria-label",L("Pause","Pause","일시 정지","一時停止"));clock();tools();paintZoom();paintHead();requestAnimationFrame(sizePanel)}
-  const _r=render;render=function(){const r=_r.apply(this,arguments);try{if(on()){tools();follow()}}catch(_){}return r};
+  /* landscape: the hint box sits above the testimonies (left column), not above the board */
+  function placeHint(){const hb=$("#hintBox"),sus=document.querySelector(".suspects"),bd=$("#board");if(!hb||!sus||!bd)return;
+    if(document.body.classList.contains("g3l")){if(hb.parentNode!==sus)sus.insertBefore(hb,sus.firstChild)}else if(hb.parentNode===sus)bd.parentNode.insertBefore(hb,bd)}
+  const _r=render;render=function(){const r=_r.apply(this,arguments);try{if(on()){tools();follow();placeHint()}}catch(_){}return r};
+  if(typeof renderHintBox==="function"){const _hb=renderHintBox;renderHintBox=function(){const r=_hb.apply(this,arguments);try{placeHint()}catch(_){}return r}}
   const _rs=renderStatic;renderStatic=function(){const r=_rs.apply(this,arguments);try{refresh()}catch(_){}return r};
   const _oc=openCase;openCase=function(i){const r=_oc.apply(this,arguments);document.body.classList.remove("g3-full","g3-zoom");
     try{refresh();if(on()&&S&&!S.solved&&(S.time||0)<3&&!(typeof COOP!=="undefined"&&COOP.play)&&!(typeof RUSH!=="undefined"&&RUSH.on)){const t0=Date.now(),id=C.id;const wait=()=>{if(!on()||C.id!==id)return;const mi=$("#mechIntro");if((mi&&!mi.hidden)||!$("#tuto").hidden){if(Date.now()-t0<120000)setTimeout(wait,400);return}intro(false)};setTimeout(wait,700)}}catch(_){}return r};
   setInterval(()=>{if(on())clock()},1000);
-  mq.addEventListener?mq.addEventListener("change",refresh):mq.addListener(refresh);
+  [mq,mqL].forEach(q=>q.addEventListener?q.addEventListener("change",refresh):q.addListener(refresh));
   window.addEventListener("resize",()=>{clearTimeout(sizePanel.t);sizePanel.t=setTimeout(sizePanel,120)});
   new MutationObserver(()=>{try{refresh()}catch(_){}}).observe($("#home"),{attributes:true,attributeFilter:["hidden"]});
   try{refresh()}catch(_){}
