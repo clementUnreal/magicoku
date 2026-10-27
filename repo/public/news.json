@@ -1,5 +1,26 @@
 [
  {
+  "id": 72,
+  "date": "2026-10-27",
+  "icon": "🛠️",
+  "fr": {
+   "t": "Niveaux experts corrigés",
+   "d": "Dans les niveaux experts ★ des 10 chapitres, deux pièces portaient le même nom (par exemple deux « Pharmacie »), ce qui rendait certains témoignages ambigus. La deuxième s'appelle maintenant « l'Annexe » (par exemple « l'Annexe de la Pharmacie ») et a un sol un peu plus sombre."
+  },
+  "en": {
+   "t": "Expert levels fixed",
+   "d": "In the ★ expert levels of all 10 chapters, two rooms had the same name (for example two “Pharmacy”), which made some testimonies ambiguous. The second one is now called the “Annex” (for example “the Pharmacy Annex”) and has a slightly darker floor."
+  },
+  "ko": {
+   "t": "전문가 레벨 수정",
+   "d": "10개 챕터의 ★ 전문가 레벨에서 두 방의 이름이 같아(예: ‘약국’ 두 개) 일부 증언이 모호했어요. 두 번째 방은 이제 ‘별관’(예: ‘약국 별관’)으로 부르고, 바닥 색도 조금 더 어두워요."
+  },
+  "ja": {
+   "t": "エキスパートレベルを修正",
+   "d": "全10章の★エキスパートレベルで、2つの部屋が同じ名前（例：「薬局」が2つ）になっていて、一部の証言があいまいでした。2つ目の部屋は「別館」（例：「薬局別館」）という名前になり、床の色も少し暗くなりました。"
+  }
+ },
+ {
   "id": 71,
   "date": "2026-10-27",
   "icon": "🧭",

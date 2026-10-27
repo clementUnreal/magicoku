@@ -12,6 +12,18 @@ def build(lid,d,c,k):
     env=ENVS[c];rng=random.Random(lid);n=len(d["rooms"])
     v=MG.VICT[(c+k)%3];people=[v]+MG.SUS[:n-1]
     R=ROOMS[env];rooms={kk:list(R[t][:4]) for kk,t in d["types"].items()};floors={kk:list(R[t][4:6]) for kk,t in d["types"].items()}
+    # big levels can use the same room type twice: the second one becomes its "annex", with its own name and a shifted floor colour
+    seen={}
+    for kk in sorted(d["types"]):
+        t=d["types"][kk]
+        if t in seen:
+            fr,en,ko,ja=rooms[kk]
+            de=("du "+fr[3:]) if fr.startswith("le ") else ("des "+fr[4:]) if fr.startswith("les ") else ("de "+fr)
+            rooms[kk]=["l'Annexe "+de,en+" Annex" if not en.lower().startswith("the ") else "the "+en[4:]+" Annex",ko+" 별관",ja+"別館"]
+            def sh(h,f=.86):
+                n=int(h[1:],16);r,g,b=n>>16,n>>8&255,n&255;return "#%02x%02x%02x"%(min(255,int(r*f)),min(255,int(g*f)),min(255,int(b*f)))
+            floors[kk]=[sh(x) for x in floors[kk]]
+        seen[t]=kk
     rugs=[]
     for kk in sorted(d["types"]):
         cells=[(r,cc) for r in range(n) for cc in range(n) if d["rooms"][r][cc]==kk]
