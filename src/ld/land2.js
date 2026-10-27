@@ -49,3 +49,17 @@ ${P} .lvfoot button{min-height:40px!important;font-size:15px!important}
 #liSheet .li-go{min-height:46px!important;font-size:17px!important}
 #liSheet .li-x{z-index:2}
 }`;document.head.appendChild(st)})();
+/* in-game menu, sideways: two columns so everything (home button included) is visible without scrolling */
+(function(){const P="html body #g3MenuS";const st=document.createElement("style");st.textContent=`@media (orientation:landscape) and (max-height:520px){
+${P} .mbox{width:min(760px,96vw)!important;max-width:none!important;max-height:calc(100dvh - 12px)!important;overflow:auto!important;display:grid!important;grid-template-columns:1fr 1.15fr;column-gap:16px;align-content:start;padding:10px 14px 12px!important}
+${P} .mbox>*{grid-column:1;margin-top:0!important}
+${P} .mbox>h2{margin:0 0 2px!important;font-size:20px!important}
+${P} .g3-mstat{margin:0 0 6px!important}
+${P} .g3-list{margin-bottom:8px!important}
+${P} .g3-msec,${P} .g3-quick{grid-column:2!important}
+${P} .g3-msec{grid-row:1!important;margin:4px 0 4px!important;align-self:end}
+${P} .g3-quick{grid-row:2/span 4!important;grid-template-columns:repeat(3,1fr)!important;align-self:start}
+${P} .g3-quick button{min-height:54px!important}
+${P} .g3-lang{margin:0 0 8px!important}
+${P} .g3-mhome{min-height:44px!important;margin:0!important}
+}`;document.head.appendChild(st)})();
