@@ -375,6 +375,9 @@ export class Leaderboard extends DurableObject {
     if (!w.pids || !w.pids.length) { w.pids = [row.id]; await this.saveWallet(row.pseudo, w); }
     else if (!w.pids.includes(row.id)) return { status: 423, body: { error: "other device", coins: w.coins } };
     let dirty = await this.migrateQuill(row.pseudo, w);
+    // exclusive gifts (never sold): given once, equipped the first time
+    const EXCL = { "pochacco": ["c:whitecat"] }, ex = EXCL[String(row.pseudo).trim().toLowerCase()] || [];
+    for (const it of ex) if (!w.owned.includes(it)) { w.owned.push(it); if (it.startsWith("c:")) w.eq.c = it; dirty = true; }
     for (const [id, price] of Object.entries(RETIRED)) {
       if (w.owned.includes(id)) { w.owned = w.owned.filter((x) => x !== id); w.coins += price; (w.log = w.log || []).unshift({ at: Date.now(), n: price, why: "refund:" + id }); w.log = w.log.slice(0, 30); dirty = true; }
       if (w.eq && w.eq.c === id) { delete w.eq.c; dirty = true; }
