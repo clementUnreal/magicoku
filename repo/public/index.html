@@ -3207,7 +3207,12 @@ var LVMODE="disc";
 /* story mode temporarily closed while it is being reworked — open only for the testers below */
 var STORY_TESTERS=["clemonchichi"]; /* testers: everything unlocked (admin codes stay with ADMIN_NAME) */
 function isTester(){try{const p=ACC&&ACC.profile&&ACC.profile.pseudo;return !!(p&&STORY_TESTERS.includes(String(p).trim().toLowerCase()))}catch(e){return false}}
-function storyLocked(){return false} /* story mode is open to everyone (levels unlock one by one) */
+/* story mode opens once every Discovery case is solved (players who already solved a story case keep it open) */
+function discIdx(){return DATA.map((c,i)=>i).filter(i=>!/^s\d+n\d+$/.test(DATA[i].id))}
+function discDone(){return discIdx().filter(i=>lvlSolved(i)).length}
+function nextDisc(){const d=discIdx();return d.find(i=>unlocked(i)&&!lvlSolved(i))??d[0]}
+function storyLocked(){if(isTester())return false;const d=discIdx();if(discDone()>=d.length)return false;return !DATA.some((c,i)=>/^s\d+n\d+$/.test(c.id)&&lvlSolved(i))}
+function storyLockMsg(){const n=discDone(),t=discIdx().length;return L(`Le mode histoire s'ouvre quand tu as résolu les ${t} enquêtes du mode Découverte (${n}/${t}).`,`Story mode opens once you've solved the ${t} Discovery cases (${n}/${t}).`,`디스커버리 모드의 사건 ${t}개를 모두 풀면 스토리 모드가 열려요 (${n}/${t}).`,`ディスカバリーモードの事件${t}件をすべて解くと、ストーリーモードが開きます（${n}/${t}）。`)}
 (function(){
   const FIRST_STORY=DATA.findIndex(c=>/^s\d+n\d+$/.test(c.id));
   const isStory=i=>FIRST_STORY>=0&&i>=FIRST_STORY;
@@ -3216,7 +3221,7 @@ function storyLocked(){return false} /* story mode is open to everyone (levels u
   const hp=$("#hPlay");
   if(hp&&!$("#hStory")){const b=document.createElement("button");b.className="hb big storyb";b.id="hStory";hp.after(b)}
   function labels(){const b=$("#hStory");if(b){b.classList.toggle("lockm",storyLocked());
-      if(storyLocked())b.innerHTML=`🔒 ${L("Mode histoire","Story mode","스토리 모드","ストーリーモード")}<small>${L("Bientôt disponible","Coming soon","곧 공개돼요","近日公開")}</small>`;
+      if(storyLocked())b.innerHTML=`🔒 ${L("Mode histoire","Story mode","스토리 모드","ストーリーモード")}<small>${L("Après le mode Découverte","After Discovery mode","디스커버리 모드 이후","ディスカバリーモードのあとで")} (${discDone()}/${discIdx().length})</small>`;
       else b.textContent="📖 "+L("Mode histoire","Story mode","스토리 모드","ストーリーモード")}
     const p=$("#hPlay");if(p)p.textContent="🧭 "+L("Mode découverte","Discovery mode","디스커버리 모드","ディスカバリーモード")}
   /* levels panel: only show the chapters of the current mode */
@@ -3224,7 +3229,7 @@ function storyLocked(){return false} /* story mode is open to everyone (levels u
     const h=$("#pLevelsT");if(h)h.textContent=LVMODE==="story"?"📖 "+L("Mode histoire","Story mode","스토리 모드","ストーリーモード"):"🧭 "+L("Mode découverte","Discovery mode","디스커버리 모드","ディスカバリーモード")}
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);labels();filterTiers()};
   window.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#hPlay,#hStory");if(!t)return;
-    if(t.id==="hStory"&&storyLocked()){e.stopPropagation();try{play("forbid")}catch(_){}toast(L("Le mode histoire arrive bientôt : nous le peaufinons encore.","Story mode is coming soon: we're still polishing it.","스토리 모드는 곧 공개돼요. 아직 다듬는 중이에요.","ストーリーモードは近日公開。いま仕上げているところです。"));return}
+    if(t.id==="hStory"&&storyLocked()){e.stopPropagation();try{play("forbid")}catch(_){}toast("🔒 "+storyLockMsg());LVMODE="disc";show("pLevels");return}
     LVMODE=t.id==="hStory"?"story":"disc";if(t.id==="hStory"){e.stopPropagation();show("pLevels");try{play("page")}catch(_){}}},true);
   /* opening a level sets the mode, so "back" returns to the right list */
   const _oc=openCase;openCase=function(i){if(typeof i==="number"&&i>=0&&i<DATA.length&&!(typeof RUSH!=="undefined"&&RUSH.on)&&!(typeof NIGHT!=="undefined"&&NIGHT.on)&&!(typeof LIAR!=="undefined"&&LIAR.on))LVMODE=isStory(i)?"story":"disc";return _oc.apply(this,arguments)};
@@ -3637,7 +3642,11 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
       let started=false;try{const st=JSON.parse(localStorage.getItem("crimes-mignons-wiz:"+DATA[cur.i].id)||"null");started=!!(st&&!st.solved&&Object.keys(st.place||{}).length)}catch(_){}
       $("#h2GoT").textContent=locked?L("Bientôt","Soon","곧 공개","近日公開"):cur.done?L("Rejouer","Replay","다시 하기","もう一度"):started?L("Reprendre","Resume","이어서 하기","つづける"):cur.fresh?L("Commencer","Start","시작하기","はじめる"):L(`Jouer le niveau ${k}`,`Play level ${k}`,`레벨 ${k} 플레이`,`レベル${k}をプレイ`);
       if(cur.done)$("#h2Lv").innerHTML=`<span>✨ ${L("Toutes les enquêtes sont résolues !","Every case is solved!","모든 사건을 해결했어요!","すべての事件を解決！")}</span>`}
-    hero.classList.toggle("lockm",!!locked);
+    if(locked){const n=discDone(),tt=discIdx().length;$("#h2T").textContent=L("Mode Découverte","Discovery mode","디스커버리 모드","ディスカバリーモード");
+      $("#h2Ch").textContent=L("Commence par le mode Découverte","Start with Discovery mode","디스커버리 모드부터 시작해요","まずはディスカバリーモードから");
+      $("#h2Lv").innerHTML=`<span>🔒 ${L(`Histoire débloquée après ${tt} enquêtes Découverte`,`Story unlocks after ${tt} Discovery cases`,`디스커버리 사건 ${tt}개 후 스토리 해금`,`ディスカバリー${tt}件で解放`)} · ${n}/${tt}</span>`;
+      $("#h2GoT").textContent=n?L("Continuer la Découverte","Continue Discovery","디스커버리 계속하기","ディスカバリーをつづける"):L("Commencer la Découverte","Start Discovery","디스커버리 시작","ディスカバリーをはじめる")}
+    hero.classList.toggle("lockm",false);
     const s=$("#hStory");if(s)s.innerHTML=`${L("Voir les niveaux","See the levels","레벨 보기","レベルを見る")}`;
     sec.innerHTML=`<span>${L("Autres modes","Other modes","다른 모드","ほかのモード")}</span>`;
     for(const [id,k] of CARDS){const b=$("#"+id);if(!b)continue;const lk=b.classList.contains("lockm"),u=typeof UNLOCK!=="undefined"&&UNLOCK[id];
@@ -3655,7 +3664,8 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
     bar.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.id===map[panel]));home.classList.toggle("h2lv",panel==="pLevels")};
   document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#h2Go,#h2Home");if(!t)return;
     if(t.id==="h2Home"){show("hMain");try{play("page")}catch(_){}return}
-    if(typeof storyLocked==="function"&&storyLocked()){$("#hStory")&&$("#hStory").click();return}
+    if(typeof storyLocked==="function"&&storyLocked()){const i=nextDisc();lastSel=i;try{LVMODE="disc"}catch(_){}try{play("select")}catch(_){}home.hidden=true;openCase(i);
+      let seen=null;try{seen=localStorage.getItem("magicoku:tuto")}catch(_){}if(!seen)setTimeout(()=>tuto(0),400);return}
     const c=current();if(c)go(c.i)});
   try{renderHome();renderNewsBadges()}catch(e){}
 })();
@@ -4022,7 +4032,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="21627f1a3efa";
+var APP_BUILD="4c536f618fde";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;

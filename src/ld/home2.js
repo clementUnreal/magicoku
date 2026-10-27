@@ -55,7 +55,11 @@
       let started=false;try{const st=JSON.parse(localStorage.getItem("crimes-mignons-wiz:"+DATA[cur.i].id)||"null");started=!!(st&&!st.solved&&Object.keys(st.place||{}).length)}catch(_){}
       $("#h2GoT").textContent=locked?L("Bientôt","Soon","곧 공개","近日公開"):cur.done?L("Rejouer","Replay","다시 하기","もう一度"):started?L("Reprendre","Resume","이어서 하기","つづける"):cur.fresh?L("Commencer","Start","시작하기","はじめる"):L(`Jouer le niveau ${k}`,`Play level ${k}`,`레벨 ${k} 플레이`,`レベル${k}をプレイ`);
       if(cur.done)$("#h2Lv").innerHTML=`<span>✨ ${L("Toutes les enquêtes sont résolues !","Every case is solved!","모든 사건을 해결했어요!","すべての事件を解決！")}</span>`}
-    hero.classList.toggle("lockm",!!locked);
+    if(locked){const n=discDone(),tt=discIdx().length;$("#h2T").textContent=L("Mode Découverte","Discovery mode","디스커버리 모드","ディスカバリーモード");
+      $("#h2Ch").textContent=L("Commence par le mode Découverte","Start with Discovery mode","디스커버리 모드부터 시작해요","まずはディスカバリーモードから");
+      $("#h2Lv").innerHTML=`<span>🔒 ${L(`Histoire débloquée après ${tt} enquêtes Découverte`,`Story unlocks after ${tt} Discovery cases`,`디스커버리 사건 ${tt}개 후 스토리 해금`,`ディスカバリー${tt}件で解放`)} · ${n}/${tt}</span>`;
+      $("#h2GoT").textContent=n?L("Continuer la Découverte","Continue Discovery","디스커버리 계속하기","ディスカバリーをつづける"):L("Commencer la Découverte","Start Discovery","디스커버리 시작","ディスカバリーをはじめる")}
+    hero.classList.toggle("lockm",false);
     const s=$("#hStory");if(s)s.innerHTML=`${L("Voir les niveaux","See the levels","레벨 보기","レベルを見る")}`;
     sec.innerHTML=`<span>${L("Autres modes","Other modes","다른 모드","ほかのモード")}</span>`;
     for(const [id,k] of CARDS){const b=$("#"+id);if(!b)continue;const lk=b.classList.contains("lockm"),u=typeof UNLOCK!=="undefined"&&UNLOCK[id];
@@ -73,7 +77,8 @@
     bar.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.id===map[panel]));home.classList.toggle("h2lv",panel==="pLevels")};
   document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#h2Go,#h2Home");if(!t)return;
     if(t.id==="h2Home"){show("hMain");try{play("page")}catch(_){}return}
-    if(typeof storyLocked==="function"&&storyLocked()){$("#hStory")&&$("#hStory").click();return}
+    if(typeof storyLocked==="function"&&storyLocked()){const i=nextDisc();lastSel=i;try{LVMODE="disc"}catch(_){}try{play("select")}catch(_){}home.hidden=true;openCase(i);
+      let seen=null;try{seen=localStorage.getItem("magicoku:tuto")}catch(_){}if(!seen)setTimeout(()=>tuto(0),400);return}
     const c=current();if(c)go(c.i)});
   try{renderHome();renderNewsBadges()}catch(e){}
 })();
