@@ -188,6 +188,29 @@ export class Leaderboard extends DurableObject {
     if (!v || !v.tok || v.tok !== (await sha(token)) || String(v.row && v.row.pseudo).trim().toLowerCase() !== ADMIN) return false;
     return (await this.admins()).includes(v.row.id);
   }
+  // admin: everything the server knows about one detective's records, compared with the other players
+  async inspect(id, token, pseudo) {
+    if (!(await this.isAdmin(id, token))) return { status: 403, body: { error: "forbidden" } };
+    const pk = String(pseudo || "").trim().toLowerCase(); if (!pk) return { status: 400, body: { error: "pseudo" } };
+    const all = await this.ctx.storage.list({ prefix: "p:" }), mine = [], others = {};
+    for (const v of all.values()) {
+      if (!v || !v.row) continue;
+      const me = String(v.row.pseudo || "").trim().toLowerCase() === pk;
+      if (me) mine.push({ id: v.row.id, at: v.at || null, prog: v.prog || {}, first: v.first || {} });
+      else for (const [k, x] of Object.entries(v.prog || {})) if (x && x.t > 0) (others[k] = others[k] || []).push(x.t + 60 * (x.h || 0));
+    }
+    const best = {};
+    for (const r of mine) for (const [k, x] of Object.entries(r.prog)) {
+      const s = x.t + 60 * (x.h || 0), b = best[k];
+      if (!b || s < b.s) best[k] = { k, t: x.t, h: x.h || 0, a: x.a || 1, s, first: r.first[k] || null };
+    }
+    const levels = Object.values(best).map((b) => {
+      const o = (others[b.k] || []).slice().sort((x, y) => x - y);
+      return Object.assign(b, { n: o.length, med: o.length ? o[Math.floor(o.length / 2)] : null, min: o.length ? o[0] : null });
+    }).sort((x, y) => (x.first || 0) - (y.first || 0) || x.k.localeCompare(y.k));
+    const w = await this.ctx.storage.get("w:" + pk);
+    return { status: 200, body: { pseudo, rows: mine.map((r) => ({ id: r.id, at: r.at, n: Object.keys(r.prog).length })), levels, log: (w && w.log) || [] } };
+  }
   async codes(id, token) {
     if (!(await this.isAdmin(id, token))) return { status: 403, body: { error: "forbidden" } };
     const all = await this.ctx.storage.list({ prefix: "p:" }), by = new Map();
@@ -638,7 +661,10 @@ export class Leaderboard extends DurableObject {
         await this.saveWallet(row.pseudo, w);
       }
     } catch {}
-    await this.ctx.storage.put(key, { tok, row, prog, at: Date.now() });
+    // first time each level reached the server (admin inspection of suspicious records)
+    const first = Object.assign({}, (prev && prev.first) || {}), now0 = Date.now();
+    for (const k of Object.keys(prog)) if (!first[k] && !(prev && prev.prog && prev.prog[k])) first[k] = now0;
+    await this.ctx.storage.put(key, { tok, row, prog, at: now0, first });
     // any progress sync (even from an old version of the game) counts as "playing right now"
     try {
       const on = (await this.ctx.storage.get("__online")) || {}, pk = row.pseudo.trim().toLowerCase(), now = Date.now();
@@ -709,6 +735,11 @@ export default {
       try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
       const lb = env.LB.get(env.LB.idFromName("main"));
       const r = url.pathname === "/api/daily" ? await lb.dailySubmit(body) : await lb.shop(body);
+      return json(r.body, r.status);
+    }
+    if (url.pathname === "/api/admin/inspect" && request.method === "POST") {
+      let body; try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
+      const r = await env.LB.get(env.LB.idFromName("main")).inspect(String(body.id || ""), String(body.token || ""), body.pseudo);
       return json(r.body, r.status);
     }
     if (url.pathname === "/api/restore" || url.pathname === "/api/admin/codes") {
