@@ -11,6 +11,17 @@ const TWA_SHA256 = ["A9:0C:B7:D5:5A:D7:97:D7:7B:AD:A9:85:31:F8:C7:F3:AF:6C:84:EC
 const ADMIN_MASTER = "fbc6ddb683d183165da35ef2110f8a44fda9a4544b39196bf1d02647541f4b75";
 // ---- daily puzzle + shop (beta) ----
 const QUILL_PRICE = 100, NSETS_MAX = 5;
+// "Sign in with Google" (Google Identity Services): only the opaque Google account id (sub) is kept, never the email or name
+const GOOGLE_CLIENT_ID = "69203150966-curs9gdnm7bjvv0sbtg0lo6mtdn0cumf.apps.googleusercontent.com";
+async function googleSub(credential) {
+  const t = String(credential || ""); if (t.length < 20 || t.length > 4096) return null;
+  try {
+    const r = await fetch("https://oauth2.googleapis.com/tokeninfo?id_token=" + encodeURIComponent(t));
+    if (!r.ok) return null; const d = await r.json();
+    if (d.aud !== GOOGLE_CLIENT_ID || !["accounts.google.com", "https://accounts.google.com"].includes(d.iss) || !(Number(d.exp) * 1000 > Date.now()) || !/^\d{5,40}$/.test(String(d.sub || ""))) return null;
+    return String(d.sub);
+  } catch { return null; }
+}
 // renaming rule: markers show initials, so two characters that can meet must not share a first letter
 const VICTIMS = ["Pr Violette", "Dame Valentine", "Maître Vitriol"], SUSPECTS = ["Ambroise", "Basile", "Capucine", "Dahlia", "Elias", "Flora", "Gaspard", "Héloïse"];
 const initialOf = (n) => { const t = String(n).replace(/^(Pr|Pr\.|Sir|Maître|Dr|Dame|Professeur|Madame|Monsieur) /i, "").trim() || String(n); return [...t][0].normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase(); };
@@ -525,6 +536,36 @@ export class Leaderboard extends DurableObject {
     return { status: 400, body: { error: "action" } };
   }
   // delete a detective account and everything tied to its name (Google Play requires in-app account deletion)
+  // link a Google account to a detective name, or find one's detective back on a new device
+  async google(body, sub) {
+    const action = String(body.action || "");
+    if (action === "login") {
+      if (!sub) return { status: 401, body: { error: "google" } };
+      const me = await this.ctx.storage.get("g:" + sub); if (!me) return { status: 404, body: { error: "not linked" } };
+      const progress = await this.progress(me), all = await this.ctx.storage.list({ prefix: "p:" });
+      let best = null;
+      for (const v of all.values()) if (v && v.row && String(v.row.pseudo).trim().toLowerCase() === me && (!best || v.row.solved > best.solved)) best = v.row;
+      if (!best) return { status: 404, body: { error: "unknown" } };
+      const nid = clean(body.newId, 64);
+      if (/^[\w-]{8,64}$/.test(nid)) { const w = await this.wallet(me); if (w.pids && w.pids.length && !w.pids.includes(nid)) { w.pids.push(nid); await this.saveWallet(me, w); } }
+      if (me === ADMIN && /^[\w-]{8,64}$/.test(nid)) { const a = await this.admins(); if (!a.includes(nid)) { a.push(nid); await this.ctx.storage.put("__admins", a); } }
+      return { status: 200, body: { pseudo: best.pseudo, avatar: best.avatar, progress } };
+    }
+    const row = await this.auth(body.id, String(body.token || ""));
+    if (!row) return { status: 403, body: { error: "forbidden" } };
+    const me = String(row.pseudo).trim().toLowerCase(), cur = await this.ctx.storage.get("gp:" + me);
+    if (action === "status") return { status: 200, body: { linked: !!cur } };
+    if (action === "unlink") { if (cur) { await this.ctx.storage.delete("g:" + cur); await this.ctx.storage.delete("gp:" + me); } return { status: 200, body: { linked: false } }; }
+    if (action === "link") {
+      if (!sub) return { status: 401, body: { error: "google" } };
+      const owner = await this.ctx.storage.get("g:" + sub);
+      if (owner && owner !== me) return { status: 409, body: { error: "taken", pseudo: owner } };
+      if (cur && cur !== sub) await this.ctx.storage.delete("g:" + cur);
+      await this.ctx.storage.put("g:" + sub, me); await this.ctx.storage.put("gp:" + me, sub);
+      return { status: 200, body: { linked: true } };
+    }
+    return { status: 400, body: { error: "bad action" } };
+  }
   async deleteAccount(body) {
     const row = await this.auth(body.id, String(body.token || ""));
     if (!row) return { status: 403, body: { error: "forbidden" } };
@@ -534,6 +575,7 @@ export class Leaderboard extends DurableObject {
     const all = await this.ctx.storage.list({ prefix: "p:" });
     for (const [k, v] of all) if (v && v.row && String(v.row.pseudo).trim().toLowerCase() === me) await this.ctx.storage.delete(k);
     await this.ctx.storage.delete("w:" + me); await this.ctx.storage.delete("cm:" + me);
+    { const gs = await this.ctx.storage.get("gp:" + me); if (gs) await this.ctx.storage.delete("g:" + gs); await this.ctx.storage.delete("gp:" + me); }
     const dms = await this.ctx.storage.list({ prefix: "dm:" });
     for (const k of dms.keys()) if (k.slice(3).split("|").includes(me)) await this.ctx.storage.delete(k);
     const g = (await this.ctx.storage.get("c:global")) || []; await this.ctx.storage.put("c:global", g.filter((m) => String(m.f).trim().toLowerCase() !== me));
@@ -603,6 +645,12 @@ export default {
     if (url.pathname === "/api/profile") { const r = await env.LB.get(env.LB.idFromName("main")).profile(clean(url.searchParams.get("pseudo"), 20)); return r ? json(r) : json({ error: "unknown" }, 404); }
     if (url.pathname === "/.well-known/assetlinks.json") {
       return new Response(JSON.stringify([{ relation: ["delegate_permission/common.handle_all_urls"], target: { namespace: "android_app", package_name: TWA_PACKAGE, sha256_cert_fingerprints: TWA_SHA256 } }]), { headers: { "content-type": "application/json", "access-control-allow-origin": "*" } });
+    }
+    if (url.pathname === "/api/google" && request.method === "POST") {
+      let body; try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
+      const sub = body.credential ? await googleSub(body.credential) : null;
+      if (body.credential && !sub) return json({ error: "google" }, 401);
+      const r = await env.LB.get(env.LB.idFromName("main")).google(body, sub); return json(r.body, r.status);
     }
     if (url.pathname === "/api/account" && request.method === "POST") {
       let body; try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }

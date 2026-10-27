@@ -1,5 +1,26 @@
 [
  {
+  "id": 66,
+  "date": "2026-10-27",
+  "icon": "🔐",
+  "fr": {
+   "t": "Ne perds plus jamais ta progression",
+   "d": "Dans Profil › Modifier mon compte, lie ton détective à ton compte Google. Sur un nouveau téléphone ou un autre navigateur, il suffit ensuite d'appuyer sur « Se connecter avec Google » pour retrouver ta progression, tes éclats de lune et tes objets. Nous ne gardons ni ton e-mail ni ton nom."
+  },
+  "en": {
+   "t": "Never lose your progress again",
+   "d": "In Profile › Edit my account, link your detective to your Google account. On a new phone or another browser, just tap “Sign in with Google” to get your progress, moon shards and items back. We don't keep your email or your name."
+  },
+  "ko": {
+   "t": "이제 진행 상황을 잃지 마세요",
+   "d": "프로필 › 계정 수정에서 탐정을 구글 계정과 연결하세요. 새 휴대폰이나 다른 브라우저에서 ‘Google로 로그인’만 누르면 진행 상황, 달 조각, 아이템을 되찾을 수 있어요. 이메일이나 이름은 저장하지 않아요."
+  },
+  "ja": {
+   "t": "もう進行状況を失わない",
+   "d": "プロフィール › アカウント編集で、探偵をGoogleアカウントと連携しよう。新しいスマホや別のブラウザでも「Googleでログイン」を押すだけで、進行状況・月のかけら・アイテムを取り戻せます。メールアドレスや名前は保存しません。"
+  }
+ },
+ {
   "id": 65,
   "date": "2026-10-27",
   "icon": "📱",

@@ -15,7 +15,7 @@
   /* ---------- delete my account ---------- */
   function paintDel(){const pan=$("#pAccount");if(!pan)return;let d=$("#accDel");
     if(!acc()){if(d)d.remove();return}
-    if(!d){d=document.createElement("div");d.id="accDel";d.className="acc-del";const back=pan.querySelector("[data-back]");pan.insertBefore(d,back||null)}
+    if(!d){d=document.createElement("div");d.id="accDel";d.className="acc-del"}if(pan.lastElementChild!==d)pan.appendChild(d);
     d.innerHTML=`<button id="accDelBtn">🗑️ ${L("Supprimer mon compte","Delete my account","계정 삭제","アカウントを削除")}</button>`}
   function openDel(){const p=acc();if(!p)return;let m=$("#accDelM");if(!m){m=document.createElement("div");m.id="accDelM";m.className="modal g3-sheet";document.body.appendChild(m);m.addEventListener("click",e=>{if(e.target===m)m.hidden=true})}
     m.innerHTML=`<div class="mbox"><button class="mclose" aria-label="✕">✕</button><h2>🗑️ ${L("Supprimer mon compte ?","Delete my account?","계정을 삭제할까요?","アカウントを削除しますか？")}</h2>
