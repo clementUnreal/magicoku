@@ -17,7 +17,7 @@ function syncRank(){const p=ACC.profile;if(!p||!p.pseudo)return;
   if(!p.pid||!p.ptok){p.pid=rid();p.ptok=rid();try{localStorage.setItem(LKEY,JSON.stringify(p))}catch(e){}}
   const send=()=>fetch("/api/leaderboard",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:p.pid,token:p.ptok,pseudo:p.pseudo,avatar:p.avatar||"",progress:p.progress||{}})});
   /* 403 = this id belongs to another key (account recovered twice, storage wiped…): start a fresh line instead of never saving again */
-  send().then(r=>{if(r&&r.status===403){p.pid=rid();p.ptok=rid();try{localStorage.setItem(LKEY,JSON.stringify(p))}catch(e){}return send()}}).catch(()=>{})}
+  send().then(r=>{if(r&&r.status===403){p.pid=rid();p.ptok=rid();try{localStorage.setItem(LKEY,JSON.stringify(p))}catch(e){}return send()}return r}).then(r=>r&&r.ok?r.json():null).then(d=>{if(d&&d.pseudo&&d.pseudo!==p.pseudo&&ACC.profile===p){p.pseudo=d.pseudo;try{localStorage.setItem(LKEY,JSON.stringify(p))}catch(e){}try{renderHome()}catch(e){}}}).catch(()=>{})}
 async function saveProfile(){
   syncRank();
   try{localStorage.setItem(LKEY,JSON.stringify(ACC.profile))}catch(e){}
@@ -85,7 +85,7 @@ function renderHome(){
   $("#accNote").textContent=ACC.mode==="cloud"?L("Ton compte est lié à ton identité Claude : ta progression te suit sur tous tes appareils.","Your account is linked to your Claude sign-in: your progress follows you on all your devices.")
     :(typeof window.claude==="undefined"?L("Ton compte et ta progression sont enregistrés sur cet appareil.","Your account and progress are saved on this device."):L("Compte enregistré sur cet appareil. Ouvre le jeu connecté à Claude pour le retrouver partout.","Account saved on this device. Open the game signed in to Claude to have it everywhere."));
   $("#accNameL").textContent=L("Ton nom de détective","Your detective name");$("#accName").placeholder=L("Ex. : Inspectrice Lune","E.g. Inspector Moon");
-  if(document.activeElement!==$("#accName"))$("#accName").value=nameDraft!=null?nameDraft:(p&&p.pseudo||"");
+  if(p&&p.pseudo)nameDraft=null;$("#accName").readOnly=!!(p&&p.pseudo);$("#accName").classList.toggle("locked",!!(p&&p.pseudo));if(document.activeElement!==$("#accName"))$("#accName").value=nameDraft!=null?nameDraft:(p&&p.pseudo||"");
   if(avSel==null)avSel=p&&p.avatar||AVS[0];
   $("#accAvL").textContent=L("Ton portrait","Your portrait");
   $("#avs").innerHTML=AVS.map(k=>`<button class="av" data-av="${k}" aria-pressed="${k===avSel}"><img src="${POR[k]}" alt=""></button>`).join("");
@@ -120,7 +120,7 @@ document.addEventListener("click",async e=>{const t=e.target.closest("button");i
     if(x.id&&/^[\w-]{8,64}$/.test(x.id)){ACC.profile.pid=x.id;ACC.profile.ptok=rid()}
     avSel=ACC.profile.avatar;nameDraft=null;await saveProfile();play("win");toast(L(`Progression récupérée : ${n} enquêtes débloquées !`,`Progress recovered: ${n} cases unlocked!`));renderHome()}
   else if(t.id==="accSave"){const n=$("#accName").value.trim();if(!n){toast(L("Choisis un nom de détective.","Pick a detective name."));$("#accName").focus();return}
-    const isNew=!(ACC.profile&&ACC.profile.pseudo);ACC.profile=Object.assign(ACC.profile||{progress:{},games:0,created:Date.now()},{pseudo:n,avatar:avSel});
+    const isNew=!(ACC.profile&&ACC.profile.pseudo);ACC.profile=Object.assign(ACC.profile||{progress:{},games:0,created:Date.now()},{pseudo:(ACC.profile&&ACC.profile.pseudo)||n,avatar:avSel});
     nameDraft=null;await saveProfile();play("win");toast(isNew?L(`Bienvenue, ${n} !`,`Welcome, ${n}!`):L("Compte enregistré.","Account saved."));renderHome()}
   else if(t.id==="bMenu"){$("#home").hidden=false;show("hMain")}
 });

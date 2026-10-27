@@ -45,3 +45,9 @@
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{paintDel();paintReps()}catch(_){}};
   try{paintDel()}catch(_){}
 })();
+
+/* the detective name is permanent once the account exists (wallet, Google link, chat and rankings are keyed on it) */
+(function(){const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{const p=ACC.profile,inp=$("#accName");if(!inp)return;let n=$("#accNameLock");
+  if(p&&p.pseudo){if(!n){n=document.createElement("small");n.id="accNameLock";n.className="acc-lock";inp.after(n)}n.textContent="🔒 "+L("Ton nom de détective est définitif : il ne peut plus être changé.","Your detective name is permanent: it can no longer be changed.","탐정 이름은 고정이에요. 더 이상 바꿀 수 없어요.","探偵ネームは確定です。もう変更できません。")}
+  else if(n)n.remove()}catch(_){}}
+  const st=document.createElement("style");st.textContent="#accName.locked{opacity:.75;background:#efe6d2;cursor:not-allowed}.acc-lock{display:block;margin:4px 2px 0;font:600 12.5px var(--f-simple,system-ui);color:#6b4a3a}";document.head.appendChild(st)})();

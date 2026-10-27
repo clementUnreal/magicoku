@@ -2293,7 +2293,7 @@ function syncRank(){const p=ACC.profile;if(!p||!p.pseudo)return;
   if(!p.pid||!p.ptok){p.pid=rid();p.ptok=rid();try{localStorage.setItem(LKEY,JSON.stringify(p))}catch(e){}}
   const send=()=>fetch("/api/leaderboard",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:p.pid,token:p.ptok,pseudo:p.pseudo,avatar:p.avatar||"",progress:p.progress||{}})});
   /* 403 = this id belongs to another key (account recovered twice, storage wiped…): start a fresh line instead of never saving again */
-  send().then(r=>{if(r&&r.status===403){p.pid=rid();p.ptok=rid();try{localStorage.setItem(LKEY,JSON.stringify(p))}catch(e){}return send()}}).catch(()=>{})}
+  send().then(r=>{if(r&&r.status===403){p.pid=rid();p.ptok=rid();try{localStorage.setItem(LKEY,JSON.stringify(p))}catch(e){}return send()}return r}).then(r=>r&&r.ok?r.json():null).then(d=>{if(d&&d.pseudo&&d.pseudo!==p.pseudo&&ACC.profile===p){p.pseudo=d.pseudo;try{localStorage.setItem(LKEY,JSON.stringify(p))}catch(e){}try{renderHome()}catch(e){}}}).catch(()=>{})}
 async function saveProfile(){
   syncRank();
   try{localStorage.setItem(LKEY,JSON.stringify(ACC.profile))}catch(e){}
@@ -2361,7 +2361,7 @@ function renderHome(){
   $("#accNote").textContent=ACC.mode==="cloud"?L("Ton compte est lié à ton identité Claude : ta progression te suit sur tous tes appareils.","Your account is linked to your Claude sign-in: your progress follows you on all your devices.","계정이 Claude 로그인과 연결되어 있어요. 어느 기기에서든 진행 상황이 이어집니다.","アカウントはClaudeのログインと連携しています。どの端末でも進行状況が引き継がれます。")
     :(typeof window.claude==="undefined"?L("Ton compte et ta progression sont enregistrés sur cet appareil.","Your account and progress are saved on this device.","계정과 진행 상황은 이 기기에 저장됩니다.","アカウントと進行状況はこの端末に保存されます。"):L("Compte enregistré sur cet appareil. Ouvre le jeu connecté à Claude pour le retrouver partout.","Account saved on this device. Open the game signed in to Claude to have it everywhere.","계정이 이 기기에 저장되었어요. Claude에 로그인한 상태로 게임을 열면 어디서든 이어서 할 수 있어요.","アカウントをこの端末に保存しました。Claudeにログインした状態で開けば、どこでも続きを遊べます。"));
   $("#accNameL").textContent=L("Ton nom de détective","Your detective name","탐정 이름","探偵ネーム");$("#accName").placeholder=L("Ex. : Inspectrice Lune","E.g. Inspector Moon","예: 달빛 탐정","例：月の探偵");
-  if(document.activeElement!==$("#accName"))$("#accName").value=nameDraft!=null?nameDraft:(p&&p.pseudo||"");
+  if(p&&p.pseudo)nameDraft=null;$("#accName").readOnly=!!(p&&p.pseudo);$("#accName").classList.toggle("locked",!!(p&&p.pseudo));if(document.activeElement!==$("#accName"))$("#accName").value=nameDraft!=null?nameDraft:(p&&p.pseudo||"");
   if(avSel==null)avSel=p&&p.avatar||AVS[0];
   $("#accAvL").textContent=L("Ton portrait","Your portrait","내 초상화","わたしの肖像");
   $("#avs").innerHTML=AVS.map(k=>`<button class="av" data-av="${k}" aria-pressed="${k===avSel}"><img src="${POR[k]}" alt=""></button>`).join("");
@@ -2396,7 +2396,7 @@ document.addEventListener("click",async e=>{const t=e.target.closest("button");i
     if(x.id&&/^[\w-]{8,64}$/.test(x.id)){ACC.profile.pid=x.id;ACC.profile.ptok=rid()}
     avSel=ACC.profile.avatar;nameDraft=null;await saveProfile();play("win");toast(L(`Progression récupérée : ${n} enquêtes débloquées !`,`Progress recovered: ${n} cases unlocked!`,`진행 상황을 되찾았어요: 사건 ${n}개가 열렸어요!`,`進行状況を取り戻しました：${n}件の事件が解放されました！`));renderHome()}
   else if(t.id==="accSave"){const n=$("#accName").value.trim();if(!n){toast(L("Choisis un nom de détective.","Pick a detective name.","탐정 이름을 정하세요.","探偵ネームを決めてください。"));$("#accName").focus();return}
-    const isNew=!(ACC.profile&&ACC.profile.pseudo);ACC.profile=Object.assign(ACC.profile||{progress:{},games:0,created:Date.now()},{pseudo:n,avatar:avSel});
+    const isNew=!(ACC.profile&&ACC.profile.pseudo);ACC.profile=Object.assign(ACC.profile||{progress:{},games:0,created:Date.now()},{pseudo:(ACC.profile&&ACC.profile.pseudo)||n,avatar:avSel});
     nameDraft=null;await saveProfile();play("win");toast(isNew?L(`Bienvenue, ${n} !`,`Welcome, ${n}!`,`환영해요, ${n}!`,`ようこそ、${n}！`):L("Compte enregistré.","Account saved.","계정을 저장했어요.","アカウントを保存しました。"));renderHome()}
   else if(t.id==="bMenu"){$("#home").hidden=false;show("hMain")}
 });
@@ -4045,7 +4045,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="a4dcde87936f";
+var APP_BUILD="13bf797a2975";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -5188,6 +5188,12 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{paintDel();paintReps()}catch(_){}};
   try{paintDel()}catch(_){}
 })();
+
+/* the detective name is permanent once the account exists (wallet, Google link, chat and rankings are keyed on it) */
+(function(){const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{const p=ACC.profile,inp=$("#accName");if(!inp)return;let n=$("#accNameLock");
+  if(p&&p.pseudo){if(!n){n=document.createElement("small");n.id="accNameLock";n.className="acc-lock";inp.after(n)}n.textContent="🔒 "+L("Ton nom de détective est définitif : il ne peut plus être changé.","Your detective name is permanent: it can no longer be changed.","탐정 이름은 고정이에요. 더 이상 바꿀 수 없어요.","探偵ネームは確定です。もう変更できません。")}
+  else if(n)n.remove()}catch(_){}}
+  const st=document.createElement("style");st.textContent="#accName.locked{opacity:.75;background:#efe6d2;cursor:not-allowed}.acc-lock{display:block;margin:4px 2px 0;font:600 12.5px var(--f-simple,system-ui);color:#6b4a3a}";document.head.appendChild(st)})();
 
 /* ================= the lake: mirror clues (chapter 6) shown as water squares on the map =================
    Purely visual (people can still stand there, the puzzle is unchanged):

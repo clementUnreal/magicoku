@@ -1,5 +1,26 @@
 [
  {
+  "id": 75,
+  "date": "2026-10-27",
+  "icon": "🔒",
+  "fr": {
+   "t": "Un nom de détective définitif",
+   "d": "Ton nom de détective ne peut plus être changé une fois ton compte créé. Il est lié à tes éclats de lune, à ton compte Google, à tes messages et aux classements. Tu peux toujours changer de portrait."
+  },
+  "en": {
+   "t": "A permanent detective name",
+   "d": "Your detective name can no longer be changed once your account is created. It is linked to your moon shards, your Google account, your messages and the rankings. You can still change your portrait."
+  },
+  "ko": {
+   "t": "바꿀 수 없는 탐정 이름",
+   "d": "계정을 만든 뒤에는 탐정 이름을 더 이상 바꿀 수 없어요. 이름이 달 조각, 구글 계정, 메시지, 순위와 연결되어 있기 때문이에요. 초상화는 여전히 바꿀 수 있어요."
+  },
+  "ja": {
+   "t": "探偵ネームは確定に",
+   "d": "アカウント作成後は、探偵ネームを変更できなくなりました。月のかけら、Googleアカウント、メッセージ、ランキングと結びついているためです。似顔絵はこれまでどおり変更できます。"
+  }
+ },
+ {
   "id": 74,
   "date": "2026-10-27",
   "icon": "📏",

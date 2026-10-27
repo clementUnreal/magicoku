@@ -597,6 +597,8 @@ export class Leaderboard extends DurableObject {
     const key = "p:" + id, prev = await this.ctx.storage.get(key), tok = await sha(token);
     if (prev && prev.tok && prev.tok !== tok) return { status: 403, body: { error: "forbidden" } };
     const row = { id, pseudo: clean(body.pseudo, 20) || "Détective", avatar: clean(body.avatar, 20), ...summarize(body.progress) };
+    // the detective name is permanent: wallet, Google link, chat and rankings are keyed on it
+    if (prev && prev.row && prev.row.pseudo) row.pseudo = prev.row.pseudo;
     const prog = sanitizeProgress(body.progress);
     // moon shards: +10 for every level solved for the first time from now on (per detective name)
     let earned = 0;
@@ -622,7 +624,7 @@ export class Leaderboard extends DurableObject {
       const on = (await this.ctx.storage.get("__online")) || {}, pk = row.pseudo.trim().toLowerCase(), now = Date.now();
       on[pk] = { at: now, p: 1 }; await this.ctx.storage.put("__online", on);
     } catch {}
-    return { status: 200, body: { ok: true, earned } };
+    return { status: 200, body: { ok: true, earned, pseudo: row.pseudo } };
   }
 }
 
