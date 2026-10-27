@@ -3,7 +3,7 @@
   const home=$("#home");if(!home)return;
   function page(){let p=$("#pRulesP");if(!p){p=document.createElement("div");p.id="pRulesP";p.className="home-panel rp-page";p.hidden=true;
       const nav=$("#hMain");(nav&&nav.parentNode||home).insertBefore(p,nav?nav.nextSibling:null);
-      p.addEventListener("click",e=>{const b=e.target.closest("[data-rp]");if(!b)return;if(b.dataset.rp==="more"){openModal("#mRules");const d=document.querySelector("#rulesBody details.r3-more");if(d)d.open=true}})}return p}
+      p.addEventListener("click",e=>{const b=e.target.closest("[data-rp]");if(!b)return;if(b.dataset.rp==="more")details();else if(b.dataset.rp==="back"){render();try{$("#home").scrollTop=0}catch(_){}}})}return p}
   /* short wording for the page; the drawings come from the rules sheet (#rulesBody) */
   const R=[
     [["Une personne par rangée et par colonne","One person per row and per column","행과 열마다 한 명","行と列に1人ずつ"],["Même à travers les murs : la rangée traverse toute la grille.","Even through walls: a row runs across the whole grid.","벽이 있어도 마찬가지: 행은 그리드 전체로 이어져요.","壁があっても同じ：行はグリッド全体につながります。"],[1,3]],
@@ -11,6 +11,12 @@
     [["« À côté » = les 4 cases qui touchent","“Next to” = the 4 touching squares","‘옆’ = 맞닿은 4칸","「となり」＝接する4マス"],["En haut, en bas, à gauche, à droite. Pas en diagonale, pas derrière un mur.","Up, down, left, right. Not diagonally, not behind a wall.","위, 아래, 왼쪽, 오른쪽. 대각선이나 벽 너머는 아니에요.","上下左右。ななめや壁の向こうはダメ。"],[1,2]],
     [["Plusieurs personnes par pièce : permis","Several people in a room: fine","한 방에 여러 명: 가능","1つの部屋に何人でもOK"],["Seules les rangées et les colonnes sont limitées.","Only rows and columns are limited.","제한은 행과 열뿐이에요.","制限は行と列だけ。"],[0]],
     [["Pièce de la victime : exactement 2 personnes","Victim's room: exactly 2 people","피해자의 방: 정확히 두 사람","被害者の部屋：ちょうど2人"],["La victime et une seule autre personne : c'est le coupable.","The victim and one other person: that's the culprit.","피해자와 다른 한 사람: 그 사람이 범인이에요.","被害者ともう1人：その人が犯人。"],[0,1]]];
+  /* full details shown on the page itself (no popup) */
+  function details(){const p=page(),d=document.querySelector("#rulesBody details.r3-more");const body=d?[...d.children].filter(x=>x.tagName!=="SUMMARY").map(x=>x.outerHTML).join(""):"";
+    p.innerHTML=`<button class="rp-back" data-rp="back">← ${L("Retour aux règles","Back to the rules","규칙으로 돌아가기","ルールに戻る")}</button>
+      <h2 class="rp-t">📖 ${L("Tous les détails","All the details","자세한 규칙","くわしいルール")}</h2><div class="rp-det" id="rulesDet">${body}</div>
+      <button class="rp-back" data-rp="back">← ${L("Retour aux règles","Back to the rules","규칙으로 돌아가기","ルールに戻る")}</button>`;
+    try{$("#home").scrollTop=0;p.scrollIntoView({block:"start"})}catch(_){}}
   function render(){const p=page(),cards=[...document.querySelectorAll("#rulesBody .r3 .r3-card")];
     p.innerHTML=`<h2 class="rp-t">📜 ${L("Les règles","The rules","규칙","ルール")}</h2>
       <ol class="rp-list">${R.map(([t,d,fx],i)=>{const figs=cards[i]?[...cards[i].querySelectorAll(".r3-ex figure")]:[];
@@ -52,6 +58,10 @@
 #pRulesP .rp-list{display:grid!important;grid-template-columns:1fr 1fr!important;gap:5px!important}#pRulesP .rp-c{padding:4px 6px!important}
 #pRulesP .rp-tx b{font-size:12px!important}#pRulesP .rp-tx p{font-size:11px!important}#pRulesP .rp-fx .r3-svg{width:34px!important;height:34px!important}
 #pRulesP .rp-end{margin-top:5px!important;padding:5px 8px!important;font-size:11.5px!important}#pRulesP .rp-more{min-height:32px!important;margin:0 auto!important;font-size:12.5px!important}}
+#pRulesP .rp-back{display:inline-flex!important;align-items:center!important;min-height:44px!important;padding:0 14px!important;margin:0 0 6px!important;border:1.5px solid #c9a25a!important;border-radius:999px!important;background:#fffaf0!important;color:#6b1530!important;font:700 14px var(--f-simple,system-ui)!important;cursor:pointer!important}
+#pRulesP .rp-det{text-align:left!important;font:500 14px/1.5 var(--f-simple,system-ui)!important;color:#3a1f3d!important;overflow-x:hidden!important}
+#pRulesP .rp-det img,#pRulesP .rp-det svg{max-width:100%!important;height:auto}
+#pRulesP .rp-det .rules{display:block!important}#pRulesP .rp-det h3{margin:12px 0 4px!important;font-size:15px!important;color:#8e1f33!important}#pRulesP .rp-det ul,#pRulesP .rp-det ol{padding-left:18px!important}
 `;
   document.head.appendChild(st);
 })();
