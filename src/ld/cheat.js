@@ -2,6 +2,10 @@
 var CHEATERS=["mazvil"];
 (function(){
   const isC=n=>CHEATERS.includes(String(n||"").trim().toLowerCase());
+  /* the list is managed by the admin on the server */
+  function redo(){document.querySelectorAll("[data-ch]").forEach(r=>{delete r.dataset.ch;r.classList.remove("cheat");const t=r.querySelector(".cheat-t");if(t)t.remove()});try{deco()}catch(_){}}
+  window.loadCheaters=()=>fetch("/api/cheaters",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(d=>{if(Array.isArray(d)){CHEATERS=d;redo()}}).catch(()=>{});
+  loadCheaters();
   const SEL=".rv-rk li,.li-rk li,ol.lr li,.rk-list li,.rk-r,.rk-pc,.dl-list li,.lr-list li";
   function deco(){document.querySelectorAll(SEL).forEach(row=>{if(row.dataset.ch)return;const b=row.querySelector("b");if(!b||!isC(b.textContent))return;row.dataset.ch="1";row.classList.add("cheat");
       const t=document.createElement("em");t.className="cheat-t";t.textContent="("+L("tricheur","cheater","부정행위","不正")+")";b.after(t);

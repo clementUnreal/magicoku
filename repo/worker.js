@@ -5,7 +5,8 @@ import { DurableObject } from "cloudflare:workers";
 const ADMIN = "clemonchichi";
 // detectives caught cheating (admitted using an AI): their scores stay visible but struck through, ranked last, excluded from pars
 const CHEATERS = ["mazvil"];
-const isCheat = (p) => CHEATERS.includes(String(p || "").trim().toLowerCase());
+let CHEAT_SET = new Set(CHEATERS);
+const isCheat = (p) => CHEAT_SET.has(String(p || "").trim().toLowerCase());
 // Android app (Trusted Web Activity): package name + SHA-256 fingerprint(s) of the Play signing key.
 // Fill TWA_SHA256 with the "SHA-256 certificate fingerprint" shown in Play Console > App integrity > App signing.
 const TWA_PACKAGE = "app.dev.workers.scorclem.magicoku.twa";
@@ -132,6 +133,7 @@ export class Leaderboard extends DurableObject {
     } catch {}
   }
   async list() {
+    await this.loadCheat();
     await this.importLegacy();
     const all = await this.ctx.storage.list({ prefix: "p:" });
     const cmp = (a, b) => b.solved - a.solved || a.hints - b.hints || a.time - b.time;
@@ -144,6 +146,7 @@ export class Leaderboard extends DurableObject {
   }
   // per-level "par" = median of every player's best score (seconds + 60 per hint); used for the moons (1-3 per level)
   async pars() {
+    await this.loadCheat();
     if (this._pars && Date.now() - this._pars.at < 600000) return this._pars.body;
     const by = {}, all = await this.ctx.storage.list({ prefix: "p:" });
     for (const v of all.values()) if (!(v && v.row && isCheat(v.row.pseudo))) for (const [k, x] of Object.entries((v && v.prog) || {})) if (x && x.t > 0) (by[k] = by[k] || []).push(x.t + 60 * (x.h || 0));
@@ -152,6 +155,7 @@ export class Leaderboard extends DurableObject {
     this._pars = { at: Date.now(), body }; return body;
   }
   async level(lid) {
+    await this.loadCheat();
     const all = await this.ctx.storage.list({ prefix: "p:" });
     const rows = [];
     for (const v of all.values()) {
@@ -211,6 +215,23 @@ export class Leaderboard extends DurableObject {
     if (!v || !v.tok || v.tok !== (await sha(token)) || String(v.row && v.row.pseudo).trim().toLowerCase() !== ADMIN) return false;
     return (await this.admins()).includes(v.row.id);
   }
+  // cheaters list (admin-managed, stored) — loaded before any ranking is built
+  async loadCheat() {
+    let c = await this.ctx.storage.get("__cheat");
+    if (!c) { c = CHEATERS.slice(); await this.ctx.storage.put("__cheat", c); }
+    CHEAT_SET = new Set(c); return c;
+  }
+  async cheatAdmin(id, token, action, pseudo) {
+    if (!(await this.isAdmin(id, token))) return { status: 403, body: { error: "forbidden" } };
+    const pk = String(pseudo || "").trim().toLowerCase(); if (!pk || pk === ADMIN) return { status: 400, body: { error: "pseudo" } };
+    const c = await this.loadCheat(), no = (await this.ctx.storage.get("__cheatNo")) || {};
+    if (action === "mark") { if (!c.includes(pk)) c.push(pk); delete no[pk]; }
+    else if (action === "unmark") { const i = c.indexOf(pk); if (i >= 0) c.splice(i, 1); no[pk] = 9999; }
+    else if (action === "dismiss") { no[pk] = Math.max(0, Math.min(9999, Math.round(Number(this._lastSus && this._lastSus[pk]) || 0))); }
+    else return { status: 400, body: { error: "action" } };
+    await this.ctx.storage.put("__cheat", c); await this.ctx.storage.put("__cheatNo", no); CHEAT_SET = new Set(c);
+    return { status: 200, body: { cheat: c, no } };
+  }
   // admin: everything the server knows about one detective's records, compared with the other players
   async inspect(id, token, pseudo) {
     if (!(await this.isAdmin(id, token))) return { status: 403, body: { error: "forbidden" } };
@@ -246,6 +267,8 @@ export class Leaderboard extends DurableObject {
     }
     const out = [];
     for (const [k, r] of by) out.push({ ...r, code: await this.codeFor(k) });
+    await this.loadCheat(); const no = (await this.ctx.storage.get("__cheatNo")) || {}; this._lastSus = {};
+    for (const r of out) { const k = String(r.pseudo).trim().toLowerCase(); this._lastSus[k] = r.sus || 0; if (CHEAT_SET.has(k)) r.cheat = 1; r.alert = !r.cheat && (r.sus || 0) > (no[k] || 0) ? 1 : 0; }
     out.sort((a, b) => (b.sus || 0) - (a.sus || 0) || b.solved - a.solved || a.pseudo.localeCompare(b.pseudo));
     return { status: 200, body: out };
   }
@@ -760,6 +783,13 @@ export default {
       try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
       const lb = env.LB.get(env.LB.idFromName("main"));
       const r = url.pathname === "/api/daily" ? await lb.dailySubmit(body) : await lb.shop(body);
+      return json(r.body, r.status);
+    }
+    if (url.pathname === "/api/cheaters") { const lb = env.LB.get(env.LB.idFromName("main")); return json(await lb.loadCheat()); }
+    if (url.pathname === "/api/admin/cheat" && request.method === "POST") {
+      let body; try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
+      const lb = env.LB.get(env.LB.idFromName("main")); await lb.codes(String(body.id || ""), String(body.token || ""));
+      const r = await lb.cheatAdmin(String(body.id || ""), String(body.token || ""), String(body.action || ""), body.pseudo);
       return json(r.body, r.status);
     }
     if (url.pathname === "/api/admin/inspect" && request.method === "POST") {

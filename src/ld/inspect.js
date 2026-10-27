@@ -33,7 +33,7 @@
       <div class="ai-tw"><table><thead><tr><th>Niveau</th><th>Temps</th><th>💡</th><th>🎯</th><th>Médiane</th><th>%</th><th>Arrivé</th></tr></thead><tbody>${rows}</tbody></table></div></div>`}
   /* a 🔍 button on each player of the admin codes list */
   function deco(){if(!isAdm())return;document.querySelectorAll("#admCodes .admrow").forEach(r=>{if(r.querySelector(".ai-go"))return;const n=r.querySelector("b");if(!n)return;
-      const sus=+(r.dataset.sus||0);const b=document.createElement("button");b.className="ai-go"+(sus?" sus":"");b.textContent=sus?"🤖 "+sus:"🔍";b.title="Inspecter";b.onclick=e=>{e.stopPropagation();inspect(n.textContent)};r.appendChild(b)})}
+      const sus=+(r.dataset.sus||0);const b=document.createElement("button");b.className="ai-go"+(sus?" sus":"");b.textContent=sus?"🤖 "+sus:"🔍";b.title="Inspecter";b.onclick=e=>{e.stopPropagation();window.admInspect(n.textContent)};r.appendChild(b)})}
   try{let q=0;new MutationObserver(()=>{if(q)return;q=1;requestAnimationFrame(()=>{q=0;try{deco()}catch(_){}})}).observe(document.body,{childList:true,subtree:true})}catch(_){}
   window.admInspect=inspect;
   const st=document.createElement("style");st.textContent=`#admInsp{position:fixed;inset:0;z-index:99;background:rgba(20,10,30,.6);display:flex;align-items:center;justify-content:center;padding:10px}
@@ -50,4 +50,32 @@
 .ai-box tr.bad{background:rgba(184,40,62,.14)}.ai-box tr.warn{background:rgba(214,171,79,.18)}
 .ai-go.sus{background:#b8283e;color:#fff;border-color:#8e1f33;font-weight:800}.ai-box tr.ai-why td{white-space:normal;font-size:11.5px}
 .ai-go{margin-left:6px;min-width:36px;min-height:36px;border:1px solid #c9a25a;border-radius:8px;background:#fffaf0;cursor:pointer}`;document.head.appendChild(st);
+})();
+
+/* admin alert: suspect detectives, the admin decides */
+(function(){
+  const esc=s=>String(s==null?"":s).replace(/[<>&"]/g,"");
+  let list=null,busy=false;
+  async function load(){const p=ACC.profile;if(!(typeof isAdminUser==="function"&&isAdminUser())||!p||!p.pid)return;
+    try{const r=await fetch("/api/admin/codes",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:p.pid,token:p.ptok})});list=r.ok?await r.json():null}catch(_){list=null}paint()}
+  async function act(action,pseudo){const p=ACC.profile;busy=true;paint();
+    try{await fetch("/api/admin/cheat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:p.pid,token:p.ptok,action,pseudo})})}catch(_){}
+    busy=false;try{loadCheaters()}catch(_){}await load();toast(action==="mark"?`${pseudo} est marqué tricheur.`:action==="unmark"?`${pseudo} n'est plus marqué tricheur.`:`Alerte ignorée pour ${pseudo}.`)}
+  window.admCheat=act;
+  function paint(){const host=$("#hMain")||$("#home");let b=$("#admAlert");const sus=(list||[]).filter(x=>x.alert);
+    if(!sus.length||!(typeof isAdminUser==="function"&&isAdminUser())){if(b)b.remove();return}
+    if(!b){b=document.createElement("div");b.id="admAlert";const hero=$("#h2Hero");if(hero)hero.before(b);else host.prepend(b);
+      b.addEventListener("click",e=>{const t=e.target.closest("[data-aa]");if(!t||busy)return;e.stopPropagation();const [a,n]=[t.dataset.aa,t.dataset.n];if(a==="see")admInspect(n);else act(a,n)})}
+    b.innerHTML=`<h3>🚨 Joueur${sus.length>1?"s":""} suspect${sus.length>1?"s":""} (visible par toi seul)</h3>`+sus.map(x=>`<div class="aa-r"><b>${esc(x.pseudo)}</b><span>🤖 ${x.sus} partie${x.sus>1?"s":""} jouée${x.sus>1?"s":""} comme une IA</span>
+      <div class="aa-b"><button data-aa="see" data-n="${esc(x.pseudo)}">🔍 Voir</button><button class="red" data-aa="mark" data-n="${esc(x.pseudo)}">Marquer tricheur</button><button data-aa="dismiss" data-n="${esc(x.pseudo)}">Ignorer</button></div></div>`).join("")}
+  const _rh=renderHome;let last=0;renderHome=function(){_rh.apply(this,arguments);try{const adm=typeof isAdminUser==="function"&&isAdminUser();if(adm&&Date.now()-last>60000){last=Date.now();load()}else paint()}catch(_){}};
+  /* inspector: mark / unmark button */
+  const _ins=window.admInspect;window.admInspect=async function(n){await _ins(n);const box=document.querySelector("#admInsp .ai-box");if(!box)return;const isC=(typeof CHEATERS!=="undefined"&&CHEATERS.includes(String(n).trim().toLowerCase()));
+    const d=document.createElement("div");d.className="aa-b";d.innerHTML=isC?`<button data-x2="unmark">Retirer « tricheur »</button>`:`<button class="red" data-x2="mark">Marquer tricheur</button>`;
+    box.querySelector("h2").after(d);d.onclick=e=>{const t=e.target.closest("[data-x2]");if(!t)return;act(t.dataset.x2,n);$("#admInsp").remove()}};
+  const st=document.createElement("style");st.textContent=`#admAlert{margin:0 0 12px;padding:12px 14px;border-radius:16px;background:#fff1f1;border:2px solid #b8283e;color:#3a1f3d;text-align:left;box-shadow:0 6px 18px #0004}
+#admAlert h3{margin:0 0 8px;font-size:16px;color:#8e1f33}
+.aa-r{padding:8px 0;border-top:1px solid #f0c9cf}.aa-r b{font-size:15px}.aa-r span{display:block;font:500 12.5px var(--f-simple,system-ui);color:#6b4a3a;margin:2px 0 6px}
+.aa-b{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}.aa-b button{min-height:38px;padding:0 12px;border-radius:999px;border:1.5px solid #c9a25a;background:#fffaf0;font:700 13px var(--f-simple,system-ui);color:#3a1f3d;cursor:pointer}
+.aa-b button.red{background:#b8283e;border-color:#8e1f33;color:#fff}`;document.head.appendChild(st);
 })();
