@@ -1,5 +1,26 @@
 [
  {
+  "id": 67,
+  "date": "2026-10-27",
+  "icon": "📱",
+  "fr": {
+   "t": "Tout l'écran, même à côté de la caméra",
+   "d": "Dans l'appli Android, si ton téléphone laisse une bande vide à côté de l'appareil photo quand tu le tiens à l'horizontale, le jeu t'explique maintenant comment l'enlever : Paramètres › encoche › Magicoku › Plein écran."
+  },
+  "en": {
+   "t": "The whole screen, even next to the camera",
+   "d": "In the Android app, if your phone leaves an empty band next to the camera when you hold it sideways, the game now explains how to remove it: Settings › cutout › Magicoku › Full screen."
+  },
+  "ko": {
+   "t": "카메라 옆까지 화면 전체를",
+   "d": "안드로이드 앱에서 휴대폰을 가로로 들었을 때 카메라 옆에 빈 띠가 남으면, 이제 게임이 없애는 방법을 알려 줘요: 설정 › 카메라 컷아웃 › Magicoku › 전체 화면."
+  },
+  "ja": {
+   "t": "カメラの横まで画面いっぱいに",
+   "d": "Androidアプリで、スマホを横にしたときカメラの横に空白の帯が残る場合、その消し方をゲームが案内するようになりました：設定 › カメラ切り欠き › Magicoku › 全画面。"
+  }
+ },
+ {
   "id": 66,
   "date": "2026-10-27",
   "icon": "🔐",
