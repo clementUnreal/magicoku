@@ -60,10 +60,6 @@
       $("#h2Lv").innerHTML=`<span>🔒 ${L(`Histoire débloquée après ${tt} enquêtes Découverte`,`Story unlocks after ${tt} Discovery cases`,`디스커버리 사건 ${tt}개 후 스토리 해금`,`ディスカバリー${tt}件で解放`)} · ${n}/${tt}</span>`;
       $("#h2GoT").textContent=n?L("Continuer la Découverte","Continue Discovery","디스커버리 계속하기","ディスカバリーをつづける"):L("Commencer la Découverte","Start Discovery","디스커버리 시작","ディスカバリーをはじめる")}
     hero.classList.toggle("lockm",false);
-    /* banner = a real board of the chapter being played (pre-rendered from the game, repo/public/hero/) */
-    try{const m=cur&&!locked&&/^s(\d+)n\d+$/.exec(DATA[cur.i].id),key=m?"ch"+m[1]:"disc",art=hero.querySelector(".h2-art");
-      if(art&&art.dataset.k!==key){art.dataset.k=key;const fb=IMG.forest||"";art.innerHTML=`<img class="real" src="hero/${key}.webp" alt="">`;
-        const im=art.firstChild;im.onerror=()=>{im.onerror=null;im.classList.remove("real");if(fb)im.src=fb;else im.remove()}}}catch(_){}
     const s=$("#hStory");if(s)s.innerHTML=`${L("Voir les niveaux","See the levels","레벨 보기","レベルを見る")}`;
     sec.innerHTML=`<span>${L("Autres modes","Other modes","다른 모드","ほかのモード")}</span>`;
     for(const [id,k] of CARDS){const b=$("#"+id);if(!b)continue;const lk=b.classList.contains("lockm"),u=typeof UNLOCK!=="undefined"&&UNLOCK[id];
