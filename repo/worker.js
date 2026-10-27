@@ -62,12 +62,30 @@ async function sha(s) {
   const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(s)));
   return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join("");
 }
+// how much a recorded game looks like an AI agent driving the browser: [score, reasons]
+function botFlags(tel, t) {
+  if (!tel) return [0, []];
+  const r = []; let sc = 0;
+  const add = (w, why) => { sc += w; r.push(why); };
+  if (tel.wd) add(3, "navigateur piloté par un programme");
+  if (tel.ut > 0) add(3, tel.ut + " clic(s) simulé(s)");
+  if (tel.d === "m" && tel.n >= 6 && tel.tp >= 80) add(2, tel.tp + " % de clics sans bouger la souris");
+  if (tel.d === "m" && tel.n >= 6 && tel.cc >= 60) add(1, tel.cc + " % de clics pile au centre");
+  if (tel.rs > 0) add(1, "la page a rétréci pendant la partie (panneau latéral ?)");
+  if (tel.np >= 5 && tel.cv >= 0 && tel.cv < 25) add(1, "placements à rythme mécanique");
+  if (tel.x === 0 && tel.u === 0 && tel.np >= 5) add(0.5, "aucune croix ni correction");
+  if (tel.f >= 0 && tel.f < 6 && tel.np >= 5) add(1, "premier placement en " + tel.f + " s");
+  if (tel.hs > 60 && t && tel.hs > 2 * t) add(1, Math.round(tel.hs / 60) + " min passées hors du jeu");
+  return [sc, r];
+}
 function sanitizeProgress(progress) {
   const out = {};
   for (const [k, v] of Object.entries(progress || {}).slice(0, 200)) {
     if (!/^[a-z0-9]{1,12}$/.test(k) || !v || !v.solved) continue;
     out[k] = { t: Math.max(0, Math.min(86400, Math.round(Number(v.time) || 0))), h: Math.max(0, Math.min(999, Number(v.hints) || 0)),
       a: Math.max(1, Math.min(999, Number(v.attempts) || 1)) };
+    const tl = v.tel && typeof v.tel === "object" ? v.tel : null;
+    if (tl) { const o = {}; for (const f of ["n","tp","cc","ut","wd","rs","x","u","np","cv","f","wall","hid","hs"]) o[f] = Math.max(-1, Math.min(100000, Math.round(Number(tl[f]) || 0))); o.d = tl.d === "m" ? "m" : "t"; out[k].tel = o; }
   }
   return out;
 }
@@ -207,7 +225,7 @@ export class Leaderboard extends DurableObject {
     const best = {};
     for (const r of mine) for (const [k, x] of Object.entries(r.prog)) {
       const s = x.t + 60 * (x.h || 0), b = best[k];
-      if (!b || s < b.s) best[k] = { k, t: x.t, h: x.h || 0, a: x.a || 1, s, first: r.first[k] || null };
+      if (!b || s < b.s) { const [bs, br] = botFlags(x.tel, x.t); best[k] = { k, t: x.t, h: x.h || 0, a: x.a || 1, s, first: r.first[k] || null, tel: x.tel || null, bot: bs, why: br }; }
     }
     const levels = Object.values(best).map((b) => {
       const o = (others[b.k] || []).slice().sort((x, y) => x - y);
@@ -222,11 +240,13 @@ export class Leaderboard extends DurableObject {
     for (const v of all.values()) {
       if (!v || !v.row || !v.row.pseudo) continue;
       const k = String(v.row.pseudo).trim().toLowerCase(), cur = by.get(k);
-      if (!cur || v.row.solved > cur.solved) by.set(k, { pseudo: v.row.pseudo, avatar: v.row.avatar, solved: v.row.solved });
+      const sus = Object.values(v.prog || {}).filter((x) => botFlags(x && x.tel, x && x.t)[0] >= 2).length;
+      if (!cur || v.row.solved > cur.solved) by.set(k, { pseudo: v.row.pseudo, avatar: v.row.avatar, solved: v.row.solved, sus: Math.max(sus, (cur && cur.sus) || 0) });
+      else if (sus > (cur.sus || 0)) cur.sus = sus;
     }
     const out = [];
     for (const [k, r] of by) out.push({ ...r, code: await this.codeFor(k) });
-    out.sort((a, b) => b.solved - a.solved || a.pseudo.localeCompare(b.pseudo));
+    out.sort((a, b) => (b.sus || 0) - (a.sus || 0) || b.solved - a.solved || a.pseudo.localeCompare(b.pseudo));
     return { status: 200, body: out };
   }
   async restore(body) {

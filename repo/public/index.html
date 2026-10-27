@@ -3333,7 +3333,7 @@ function isAdminUser(){const p=ACC&&ACC.profile;return !!(p&&p.pseudo&&String(p.
     const f=(b.querySelector("#admQ")||{}).value||"";
     const rows=(codes||[]).filter(x=>!f||String(x.pseudo).toLowerCase().includes(f.toLowerCase()));
     b.innerHTML=`<p><b>🔑 ${L("Codes de récupération (visible par toi seul)","Recovery codes (only you can see this)","복구 코드 (나만 볼 수 있어요)","復元コード（あなただけに表示）")}</b><br>${L("Donne son code à un joueur qui a perdu sa progression : il l'entre avec son nom dans « Récupérer ma progression ».","Give a player who lost their progress their code: they enter it with their name in “Recover my progress”.","진행 상황을 잃은 플레이어에게 코드를 알려 주세요. ‘진행 상황 되찾기’에서 이름과 함께 입력하면 돼요.","進行状況をなくしたプレイヤーにコードを教えてあげて。「進行状況を取り戻す」で名前と一緒に入力します。")}</p>
-      ${codes?`<input id="admQ" class="lgq" placeholder="${L("Chercher un joueur…","Search a player…","플레이어 검색…","プレイヤーを検索…")}" value="${esc(f)}"><div class="admlist">${rows.map(x=>`<div class="admrow"><img src="${POR[x.avatar]||POR[AVS[0]]}" alt=""><span><b>${esc(x.pseudo)}</b><small>${x.solved} ${L(x.solved>1?"enquêtes":"enquête","cases","개 사건","件")}</small></span><code>${x.code}</code></div>`).join("")}</div>`
+      ${codes?`<input id="admQ" class="lgq" placeholder="${L("Chercher un joueur…","Search a player…","플레이어 검색…","プレイヤーを検索…")}" value="${esc(f)}"><div class="admlist">${rows.map(x=>`<div class="admrow" data-sus="${x.sus||0}"><img src="${POR[x.avatar]||POR[AVS[0]]}" alt=""><span><b>${esc(x.pseudo)}</b><small>${x.solved} ${L(x.solved>1?"enquêtes":"enquête","cases","개 사건","件")}</small></span><code>${x.code}</code></div>`).join("")}</div>`
         :`<button class="hb small" id="admShow">${L("Afficher les codes","Show the codes","코드 보기","コードを表示")}</button>${codesErr?`<small class="lgmsg">${codesErr}</small>`:""}`}`;
     if(f){const q=b.querySelector("#admQ");q.focus();q.setSelectionRange(f.length,f.length)}}
   document.addEventListener("input",e=>{if(e.target.id==="admQ")adminBox()});
@@ -4093,7 +4093,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="a53d30b835ef";
+var APP_BUILD="ae2547eaa3d9";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -6087,18 +6087,20 @@ ${P} .g3-mhome{min-height:44px!important;margin:0!important}
     if(ratio!=null&&ratio<.5)flags.push(`📉 en général <b>${Math.round(ratio*100)} %</b> du temps médian des autres`);
     if(n>=10&&nohint===n&&first===n)flags.push(`🎯 jamais un indice ni une erreur sur <b>${n}</b> niveaux`);
     if(burst>=5)flags.push(`📦 jusqu'à <b>${burst}</b> niveaux arrivés sur le serveur dans la même minute (peut aussi venir d'une synchronisation après un jeu hors ligne)`);
+    const bots=L_.filter(x=>x.bot>=2),nTel=L_.filter(x=>x.tel).length;
+    if(bots.length)flags.unshift(`🤖 <b>${bots.length}</b> partie${bots.length>1?"s":""} jouée${bots.length>1?"s":""} comme une IA qui pilote le navigateur`);
     const rows=L_.map(x=>{const r=x.med?x.s/x.med:null,cls=r!=null&&r<=.25?"bad":r!=null&&r<=.5?"warn":"";
-      return `<tr class="${cls}"><td>${esc(title(x.k))}<small>${esc(x.k)}</small></td><td>${fmt(x.t)}</td><td>${x.h}</td><td>${x.a}</td><td>${x.med?fmt(x.med):"—"}<small>${x.n} j.</small></td><td>${r!=null?Math.round(r*100)+" %":"—"}</td><td>${when(x.first)}</td></tr>`}).join("");
+      return `<tr class="${cls}"><td>${esc(title(x.k))}<small>${esc(x.k)}</small></td><td>${fmt(x.t)}</td><td>${x.h}</td><td>${x.a}</td><td>${x.med?fmt(x.med):"—"}<small>${x.n} j.</small></td><td>${r!=null?Math.round(r*100)+" %":"—"}</td><td>${when(x.first)}</td></tr>${x.why&&x.why.length?`<tr class="${x.bot>=2?"bad":"warn"} ai-why"><td colspan="7">🤖 ${x.why.map(esc).join(" · ")}${x.tel?` <small>(${x.tel.d==="m"?"souris":"tactile"}, ${x.tel.n} clics, ${x.tel.x} croix, temps réel ${fmt(x.tel.wall)})</small>`:""}</td></tr>`:""}`}).join("");
     const lg=(d.log||[]).filter(x=>x.why==="levels").slice(0,12).map(x=>`<li>${when(x.at)} · +${x.n} éclats (${Math.round(x.n/10)} niveau${x.n>10?"x":""})</li>`).join("");
     m.innerHTML=`<div class="ai-box"><button class="ai-x" data-x>✕</button><h2>🔍 ${esc(d.pseudo)}</h2>
       <div class="ai-sum"><span><b>${n}</b> niveaux</span><span><b>${fmt(avg)}</b> en moyenne</span><span><b>${nohint}</b> sans indice</span><span><b>${first}</b> du 1er coup</span><span><b>${d.rows.length}</b> appareil${d.rows.length>1?"s":""}</span></div>
       <div class="ai-flags">${flags.length?flags.map(f=>`<p>${f}</p>`).join(""):"<p>✅ Rien d'anormal dans les temps enregistrés.</p>"}</div>
-      <p class="ai-note">Score = temps actif + 1 min par indice, comparé aux autres joueurs du même niveau. Les dates d'arrivée ne sont enregistrées que depuis le 27 octobre.</p>
+      <p class="ai-note">Score = temps actif + 1 min par indice, comparé aux autres joueurs du même niveau. Les dates d'arrivée et la façon de jouer (🤖) ne sont enregistrées que depuis le 27 octobre : ${nTel} partie${nTel>1?"s":""} analysée${nTel>1?"s":""}.</p>
       ${lg?`<h3>Éclats gagnés en résolvant (derniers envois)</h3><ul class="ai-log">${lg}</ul>`:""}
       <div class="ai-tw"><table><thead><tr><th>Niveau</th><th>Temps</th><th>💡</th><th>🎯</th><th>Médiane</th><th>%</th><th>Arrivé</th></tr></thead><tbody>${rows}</tbody></table></div></div>`}
   /* a 🔍 button on each player of the admin codes list */
   function deco(){if(!isAdm())return;document.querySelectorAll("#admCodes .admrow").forEach(r=>{if(r.querySelector(".ai-go"))return;const n=r.querySelector("b");if(!n)return;
-      const b=document.createElement("button");b.className="ai-go";b.textContent="🔍";b.title="Inspecter";b.onclick=e=>{e.stopPropagation();inspect(n.textContent)};r.appendChild(b)})}
+      const sus=+(r.dataset.sus||0);const b=document.createElement("button");b.className="ai-go"+(sus?" sus":"");b.textContent=sus?"🤖 "+sus:"🔍";b.title="Inspecter";b.onclick=e=>{e.stopPropagation();inspect(n.textContent)};r.appendChild(b)})}
   try{let q=0;new MutationObserver(()=>{if(q)return;q=1;requestAnimationFrame(()=>{q=0;try{deco()}catch(_){}})}).observe(document.body,{childList:true,subtree:true})}catch(_){}
   window.admInspect=inspect;
   const st=document.createElement("style");st.textContent=`#admInsp{position:fixed;inset:0;z-index:99;background:rgba(20,10,30,.6);display:flex;align-items:center;justify-content:center;padding:10px}
@@ -6113,6 +6115,7 @@ ${P} .g3-mhome{min-height:44px!important;margin:0!important}
 .ai-box th,.ai-box td{padding:4px 6px;border-bottom:1px solid #ead9b3;text-align:left;white-space:nowrap}
 .ai-box td small{display:block;color:#8a7060;font-size:10px}
 .ai-box tr.bad{background:rgba(184,40,62,.14)}.ai-box tr.warn{background:rgba(214,171,79,.18)}
+.ai-go.sus{background:#b8283e;color:#fff;border-color:#8e1f33;font-weight:800}.ai-box tr.ai-why td{white-space:normal;font-size:11.5px}
 .ai-go{margin-left:6px;min-width:36px;min-height:36px;border:1px solid #c9a25a;border-radius:8px;background:#fffaf0;cursor:pointer}`;document.head.appendChild(st);
 })();
 /* ================= detectives caught cheating: scores struck through + "(tricheur)" in every ranking ================= */
@@ -6127,6 +6130,35 @@ var CHEATERS=["mazvil"];
   const st=document.createElement("style");st.textContent=`.cheat{opacity:.62;filter:grayscale(.6)}
 .cheat>b,.cheat .rk-t b,.cheat .s,.cheat .rk-s,.cheat .rk-ps,.cheat small,.cheat strong{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:#b8283e}
 .cheat .rk-t b{overflow:visible!important;text-overflow:clip!important;flex:none!important}.cheat .rk-t{flex-wrap:wrap}.cheat-t{margin:0 4px;font:italic 700 11.5px var(--f-simple,system-ui)!important;color:#b8283e!important;white-space:nowrap;text-decoration:none!important}`;document.head.appendChild(st);
+})();
+/* ================= anti-bot check: how a case was played (silent; read by the admin inspector) =================
+   An AI agent driving the browser clicks without moving the mouse (no move, or one single jump to the target), often right in the middle of the target,
+   never crosses out nor corrects, keeps a mechanical rhythm, and its side panel shrinks the page. */
+(function(){
+  let T=null,lastMove=0,moves=0,lastW=innerWidth,lastH=innerHeight;
+  const inGame=()=>{const h=$("#home");return !!(h&&h.hidden&&S&&!S.solved)};
+  function fresh(){T={t0:Date.now(),n:0,mouse:0,tele:0,cen:0,ut:0,rs:0,u:0,pl:[],hid:0,hs:0,hAt:0}}
+  const _oc=openCase;openCase=function(){const r=_oc.apply(this,arguments);fresh();return r};
+  document.addEventListener("pointermove",e=>{if(e.pointerType==="mouse"){lastMove=performance.now();moves++}},{passive:true,capture:true});
+  document.addEventListener("pointerdown",e=>{if(!T||!inGame())return;const tg=e.target.closest&&e.target.closest("#marks .mk,#plan,.card,.tb,.recit .kw,.recit .sn");if(!tg)return;
+    T.n++;if(!e.isTrusted)T.ut++;
+    if(e.pointerType==="mouse"){T.mouse++;if(moves<3)T.tele++;moves=0;
+      const r=tg.getBoundingClientRect();if(r.width>8&&r.height>8){const dx=Math.abs(e.clientX-(r.left+r.width/2))/r.width,dy=Math.abs(e.clientY-(r.top+r.height/2))/r.height;if(dx<.04&&dy<.04)T.cen++}}
+    if(tg.id==="tUndo"||tg.id==="tErase")T.u++},{capture:true});
+  addEventListener("resize",()=>{if(T&&inGame()&&Math.abs(innerWidth-lastW)>=80&&Math.abs(innerHeight-lastH)<40)T.rs++;lastW=innerWidth;lastH=innerHeight});
+  document.addEventListener("visibilitychange",()=>{if(!T||!inGame())return;if(document.hidden){T.hid++;T.hAt=Date.now()}else if(T.hAt){T.hs+=Date.now()-T.hAt;T.hAt=0}});
+  const _pp=placePerson;placePerson=function(){const r=_pp.apply(this,arguments);if(T&&inGame())T.pl.push(Date.now());return r};
+  window.botSummary=function(){if(!T)return null;const pl=T.pl,iv=[];for(let i=1;i<pl.length;i++)iv.push(pl[i]-pl[i-1]);
+    const mean=iv.length?iv.reduce((a,b)=>a+b,0)/iv.length:0,sd=iv.length?Math.sqrt(iv.reduce((a,b)=>a+(b-mean)**2,0)/iv.length):0;
+    return {d:T.mouse>T.n/2?"m":"t",n:T.n,tp:T.mouse?Math.round(100*T.tele/T.mouse):0,cc:T.mouse?Math.round(100*T.cen/T.mouse):0,ut:T.ut,wd:navigator.webdriver?1:0,rs:T.rs,
+      x:Object.keys((S&&S.xs)||{}).length,u:T.u,np:pl.length,cv:mean?Math.round(100*sd/mean):-1,f:pl.length?Math.round((pl[0]-T.t0)/1000):-1,
+      wall:Math.round((Date.now()-T.t0)/1000),hid:T.hid,hs:Math.round(T.hs/1000)}};
+  /* attach the summary to the recorded result (first solve only: a replay records nothing) */
+  const _rw=recordWin;recordWin=function(){const tel=!(S&&S.replay)?botSummary():null;const xs=tel?tel.x:0;const out=_rw.apply(this,arguments);
+    try{const pr=ACC.profile&&ACC.profile.progress&&ACC.profile.progress[C.id];if(tel&&pr&&out&&out.improved){pr.tel=tel;try{localStorage.setItem(LKEY,JSON.stringify(ACC.profile))}catch(_){}syncRank()}}catch(_){}return out};
+  /* crosses are removed from S at the end of some cases: count them as they are placed */
+  const _r=render;render=function(){const out=_r.apply(this,arguments);try{if(T&&inGame()){const n=Object.keys(S.xs||{}).length;T.xmax=Math.max(T.xmax||0,n)}}catch(_){}return out};
+  const _bs=window.botSummary;window.botSummary=function(){const s=_bs();if(s&&T)s.x=Math.max(s.x,T.xmax||0);return s};
 })();
 
 render();

@@ -20,18 +20,20 @@
     if(ratio!=null&&ratio<.5)flags.push(`📉 en général <b>${Math.round(ratio*100)} %</b> du temps médian des autres`);
     if(n>=10&&nohint===n&&first===n)flags.push(`🎯 jamais un indice ni une erreur sur <b>${n}</b> niveaux`);
     if(burst>=5)flags.push(`📦 jusqu'à <b>${burst}</b> niveaux arrivés sur le serveur dans la même minute (peut aussi venir d'une synchronisation après un jeu hors ligne)`);
+    const bots=L_.filter(x=>x.bot>=2),nTel=L_.filter(x=>x.tel).length;
+    if(bots.length)flags.unshift(`🤖 <b>${bots.length}</b> partie${bots.length>1?"s":""} jouée${bots.length>1?"s":""} comme une IA qui pilote le navigateur`);
     const rows=L_.map(x=>{const r=x.med?x.s/x.med:null,cls=r!=null&&r<=.25?"bad":r!=null&&r<=.5?"warn":"";
-      return `<tr class="${cls}"><td>${esc(title(x.k))}<small>${esc(x.k)}</small></td><td>${fmt(x.t)}</td><td>${x.h}</td><td>${x.a}</td><td>${x.med?fmt(x.med):"—"}<small>${x.n} j.</small></td><td>${r!=null?Math.round(r*100)+" %":"—"}</td><td>${when(x.first)}</td></tr>`}).join("");
+      return `<tr class="${cls}"><td>${esc(title(x.k))}<small>${esc(x.k)}</small></td><td>${fmt(x.t)}</td><td>${x.h}</td><td>${x.a}</td><td>${x.med?fmt(x.med):"—"}<small>${x.n} j.</small></td><td>${r!=null?Math.round(r*100)+" %":"—"}</td><td>${when(x.first)}</td></tr>${x.why&&x.why.length?`<tr class="${x.bot>=2?"bad":"warn"} ai-why"><td colspan="7">🤖 ${x.why.map(esc).join(" · ")}${x.tel?` <small>(${x.tel.d==="m"?"souris":"tactile"}, ${x.tel.n} clics, ${x.tel.x} croix, temps réel ${fmt(x.tel.wall)})</small>`:""}</td></tr>`:""}`}).join("");
     const lg=(d.log||[]).filter(x=>x.why==="levels").slice(0,12).map(x=>`<li>${when(x.at)} · +${x.n} éclats (${Math.round(x.n/10)} niveau${x.n>10?"x":""})</li>`).join("");
     m.innerHTML=`<div class="ai-box"><button class="ai-x" data-x>✕</button><h2>🔍 ${esc(d.pseudo)}</h2>
       <div class="ai-sum"><span><b>${n}</b> niveaux</span><span><b>${fmt(avg)}</b> en moyenne</span><span><b>${nohint}</b> sans indice</span><span><b>${first}</b> du 1er coup</span><span><b>${d.rows.length}</b> appareil${d.rows.length>1?"s":""}</span></div>
       <div class="ai-flags">${flags.length?flags.map(f=>`<p>${f}</p>`).join(""):"<p>✅ Rien d'anormal dans les temps enregistrés.</p>"}</div>
-      <p class="ai-note">Score = temps actif + 1 min par indice, comparé aux autres joueurs du même niveau. Les dates d'arrivée ne sont enregistrées que depuis le 27 octobre.</p>
+      <p class="ai-note">Score = temps actif + 1 min par indice, comparé aux autres joueurs du même niveau. Les dates d'arrivée et la façon de jouer (🤖) ne sont enregistrées que depuis le 27 octobre : ${nTel} partie${nTel>1?"s":""} analysée${nTel>1?"s":""}.</p>
       ${lg?`<h3>Éclats gagnés en résolvant (derniers envois)</h3><ul class="ai-log">${lg}</ul>`:""}
       <div class="ai-tw"><table><thead><tr><th>Niveau</th><th>Temps</th><th>💡</th><th>🎯</th><th>Médiane</th><th>%</th><th>Arrivé</th></tr></thead><tbody>${rows}</tbody></table></div></div>`}
   /* a 🔍 button on each player of the admin codes list */
   function deco(){if(!isAdm())return;document.querySelectorAll("#admCodes .admrow").forEach(r=>{if(r.querySelector(".ai-go"))return;const n=r.querySelector("b");if(!n)return;
-      const b=document.createElement("button");b.className="ai-go";b.textContent="🔍";b.title="Inspecter";b.onclick=e=>{e.stopPropagation();inspect(n.textContent)};r.appendChild(b)})}
+      const sus=+(r.dataset.sus||0);const b=document.createElement("button");b.className="ai-go"+(sus?" sus":"");b.textContent=sus?"🤖 "+sus:"🔍";b.title="Inspecter";b.onclick=e=>{e.stopPropagation();inspect(n.textContent)};r.appendChild(b)})}
   try{let q=0;new MutationObserver(()=>{if(q)return;q=1;requestAnimationFrame(()=>{q=0;try{deco()}catch(_){}})}).observe(document.body,{childList:true,subtree:true})}catch(_){}
   window.admInspect=inspect;
   const st=document.createElement("style");st.textContent=`#admInsp{position:fixed;inset:0;z-index:99;background:rgba(20,10,30,.6);display:flex;align-items:center;justify-content:center;padding:10px}
@@ -46,5 +48,6 @@
 .ai-box th,.ai-box td{padding:4px 6px;border-bottom:1px solid #ead9b3;text-align:left;white-space:nowrap}
 .ai-box td small{display:block;color:#8a7060;font-size:10px}
 .ai-box tr.bad{background:rgba(184,40,62,.14)}.ai-box tr.warn{background:rgba(214,171,79,.18)}
+.ai-go.sus{background:#b8283e;color:#fff;border-color:#8e1f33;font-weight:800}.ai-box tr.ai-why td{white-space:normal;font-size:11.5px}
 .ai-go{margin-left:6px;min-width:36px;min-height:36px;border:1px solid #c9a25a;border-radius:8px;background:#fffaf0;cursor:pointer}`;document.head.appendChild(st);
 })();
