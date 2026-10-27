@@ -1,5 +1,26 @@
 [
  {
+  "id": 69,
+  "date": "2026-10-27",
+  "icon": "🎓",
+  "fr": {
+   "t": "Un tutoriel où l'on joue vraiment",
+   "d": "Le tutoriel te guide maintenant geste par geste dans ta première enquête : choisir une personne, garder le doigt appuyé pour la placer, barrer une case, puis placer quelqu'un tout seul. Chaque étape attend que tu fasses le geste. Tu peux le revoir à tout moment dans le menu ☰ › Tutoriel."
+  },
+  "en": {
+   "t": "A tutorial where you really play",
+   "d": "The tutorial now guides you gesture by gesture through your first case: pick a person, press and hold to place them, cross out a square, then place someone on your own. Each step waits for you to do the gesture. You can replay it anytime from the ☰ menu › Tutorial."
+  },
+  "ko": {
+   "t": "직접 해 보는 튜토리얼",
+   "d": "이제 튜토리얼이 첫 사건에서 동작 하나하나를 안내해요. 인물 고르기, 길게 눌러 배치하기, 칸 지우기, 그리고 혼자서 배치해 보기. 각 단계는 직접 해 볼 때까지 기다려요. ☰ 메뉴 › 튜토리얼에서 언제든 다시 볼 수 있어요."
+  },
+  "ja": {
+   "t": "実際に遊んで覚えるチュートリアル",
+   "d": "チュートリアルが、最初の事件で操作をひとつずつ案内するようになりました。人物を選ぶ、長押しで配置する、マスに×をつける、そして自分で配置してみる。各ステップは、実際に操作するまで待ってくれます。☰メニュー › チュートリアルからいつでも見直せます。"
+  }
+ },
+ {
   "id": 68,
   "date": "2026-10-27",
   "icon": "🍎",
