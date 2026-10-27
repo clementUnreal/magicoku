@@ -184,13 +184,14 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
         <button data-g="sound" class="q-snd${SND.on?" on":""}"><span>${SND.on?"🔊":"🔇"}</span>${L("Son","Sound","소리","音")}</button>
         <button data-g="theme" class="q-th${night?" on":""}"><span>${night?"🌙":"☀️"}</span>${night?L("Nuit","Night","나이트","ナイト"):L("Clair","Light","라이트","ライト")}</button>
         ${full?`<button data-g="full" class="q-full"><span>⛶</span>${L("Plein écran","Full screen","전체 화면","全画面")}</button>`:""}
+        ${typeof orientTile==="function"?orientTile():""}
         <button data-g="tuto" class="q-tuto"><span>❓</span>${L("Tutoriel","Tutorial","튜토리얼","チュートリアル")}</button>
       </div>
       <div class="g3-lang g3-mlang">${["fr","en","ko","ja"].map(l=>`<button data-lang="${l}" class="${LANG===l?"on":""}">${{fr:"FR",en:"EN",ko:"한",ja:"日"}[l]}</button>`).join("")}</div>
       <button data-g="home" class="g3-mhome">🏠 ${L("Retour à l'accueil","Back to home","홈으로","ホームへ")}</button>`);
     m.onclick=e=>{const t=e.target.closest("button");if(e.target===m){close(m);return}if(!t)return;const g=t.dataset.g,lg=t.dataset.lang;
       if(lg){$("#l"+lg.toUpperCase()).click();setTimeout(()=>{openMenu();refresh()},60);return}
-      if(!g)return;if(g==="sound"||g==="theme"){if(g==="sound")setSound(!SND.on);else setTheme(themeNow()==="night"?"light":"night");openMenu();return}close(m);
+      if(!g)return;if(g==="orient"){if(typeof toggleOrient==="function")toggleOrient().then(()=>openMenu());return}if(g==="sound"||g==="theme"){if(g==="sound")setSound(!SND.on);else setTheme(themeNow()==="night"?"light":"night");openMenu();return}close(m);
       if(g==="story")intro(true);else if(g==="sketch"){(sk?$("#vPlan"):$("#vSketch")).click()}else if(g==="rules")$("#bRules").click();else if(g==="tuto")$("#bTuto").click();
       else if(g==="clear"){clearAll()}
       else if(g==="sound"){setSound(!SND.on)}else if(g==="full")$("#bFull").click();else if(g==="home")$("#bMenu").click()}}
