@@ -12,13 +12,17 @@
 .h2-bar img.nb-ic{width:30px;height:30px;object-fit:contain;display:block;filter:drop-shadow(0 1px 1px #0008)}
 .h2-bar button:not(.on) img.nb-ic{opacity:.82}
 .sp-tile img.sp-q{width:62%!important;height:62%!important}
+.h2-art img.sb{object-position:50% 50%!important}
 .shop2 .sh-tab .sh-ti img{width:20px;height:20px;object-fit:contain}`;
   document.head.appendChild(st);
   /* bottom bar */
   const NAV={h2Home:"home",hRank:"trophy",h2Shop:"bag",hRules:"book",hAccount:"hood"};
   function bar(){for(const [id,k] of Object.entries(NAV)){const b=document.getElementById(id);if(!b||!b.closest("#h2Bar"))continue;
       const sv=b.querySelector("svg");if(sv){const i=document.createElement("img");i.className="nb-ic";i.alt="";i.src=IC2[k];sv.replaceWith(i)}}}
-  const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{bar()}catch(_){}};
+  /* story banner on the home hero (the Discovery picture stays while the story is locked) */
+  function hero(){const im=document.querySelector("#h2Hero .h2-art img");if(!im||!IC2.storybanner)return;const locked=typeof storyLocked==="function"&&storyLocked();
+    const want=locked?(typeof IMG!=="undefined"&&IMG.forest||im.src):IC2.storybanner;if(im.getAttribute("src")!==want)im.setAttribute("src",want);im.classList.toggle("sb",!locked)}
+  const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{bar();hero()}catch(_){}};
   /* shop: the renaming quill and the tab icons */
   const TAB={x:null,m:IC2.violin,o:IC2.frame,n:IC2.quillblue};
   function shop(){const p=document.getElementById("pShop");if(!p)return;
