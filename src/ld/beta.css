@@ -215,3 +215,46 @@ img.cos-ban{display:block;height:24px;width:auto;max-width:100%;object-fit:conta
 .sh-ren .ren-v.on{background:#5a2848;border-color:#5a2848;color:#fff}
 .sh-ren .ren-v.add{border-style:dashed;background:transparent}
 .sh-ren .ren-del{align-self:center;min-height:40px;margin-top:2px;padding:0 14px;border:0;background:none;color:#a8323e;text-decoration:underline;font:600 13.5px var(--f-simple,system-ui)!important;cursor:pointer}
+
+/* ===== shop redesign: apothecary shelf, dark (Oct 2026) ===== */
+
+.shop2{background:linear-gradient(#2a1534,#1c0d24)!important;border-color:#b8913a!important;color:#fbefc8}
+.shop2 h2,.shop2 .sh-sub,.shop2 .sh-title small{color:#f6dc97!important}
+.shop2 .sh-sub i{background:linear-gradient(90deg,transparent,#d6ab4f)!important}
+.shop2 .sh-tabs{border-bottom:0!important;gap:6px!important;margin:0!important;padding:2px 0 4px!important;flex-wrap:wrap!important;justify-content:center}
+.shop2 .sh-tab{border:1.5px solid #6b4a7a!important;border-radius:999px!important;padding:7px 12px!important;background:#3a2046!important;color:#e9d9f2!important}
+.shop2 .sh-tab.on{background:linear-gradient(#f6d77c,#d9a636)!important;color:#2a1534!important;border-color:#f6d77c!important}
+.shop2 .sh-grid{gap:14px 10px!important}
+.shop2 .sh-it{background:transparent!important;border:0!important;box-shadow:none!important;padding:0 0 6px!important}
+.shop2 .sh-it::before,.shop2 .sh-it::after{display:none!important}
+.sp-tile{width:100%!important;aspect-ratio:1.2!important;border-radius:16px 16px 4px 4px!important;
+  background:radial-gradient(circle at 50% 55%,rgba(255,200,110,.35),transparent 60%),linear-gradient(#3b2148,#2a1534)!important;box-shadow:inset 0 0 0 1px #5a3a6a!important;position:relative}
+.sp-tile::after{content:"";position:absolute;left:-4px;right:-4px;bottom:-8px;height:12px;border-radius:3px;background:linear-gradient(#a5713f,#6b431f);box-shadow:0 4px 6px rgba(0,0,0,.5)}
+.sp-tile img{width:70%!important;height:70%!important;filter:drop-shadow(0 8px 5px rgba(0,0,0,.55))!important}
+.sp-tile img.sp-big{width:84%!important;height:84%!important}
+.shop2 .sh-it b{color:#fbefc8!important;font-size:15px!important;margin-top:12px}
+.shop2 .sh-it.on .sp-tile{box-shadow:inset 0 0 0 2px #f6d77c,0 0 18px rgba(246,215,124,.45)!important}
+.sh-btn.buy{background:linear-gradient(#f6d77c,#d9a636)!important;color:#2a1534!important;border:0!important;box-shadow:0 3px 0 #8a5d10!important;font-size:16px!important}
+.sh-btn.eq{background:transparent!important;color:#f6dc97!important;border:1.5px solid #d6ab4f!important;box-shadow:none!important;border-radius:999px!important}
+.sh-btn.on{background:transparent!important;color:#9fe3a6!important;border:1.5px solid #6cc276!important;border-radius:999px!important}
+.shop2 .sh-foot{background:#3a2046!important;color:#e9d9f2!important}
+.shop2 .sh-head .sh-coins{background:#3a2046!important}
+.shop2 .sh-pv{width:100%!important;display:block!important;height:auto!important}.shop2 .sp-tile{display:grid!important;place-items:center!important;box-sizing:border-box;max-width:none!important}.shop2 .sp-tile .cav.sp-av{width:58%!important;height:auto!important;aspect-ratio:1}
+.shop2 .sh-title h2,.shop2 .sh-head h2{color:#f6dc97!important}
+html.night .home-panel.shop2,html.night .shop2{filter:none!important}
+html.night .shop2 :is(.sh-pv,img){filter:none!important}
+.shop2 .tt-d,.shop2 .sh-qd,.shop2 .sh-it p{color:#d9c8e6!important}
+.shop2 .tt-it{background:#331b3f!important;border:1px solid #5a3a6a!important;border-radius:14px!important;padding:10px 8px!important}
+.shop2 .tt-it.on{border-color:#f6d77c!important;box-shadow:0 0 14px rgba(246,215,124,.35)!important}
+.shop2 .tt-name{color:#fbefc8!important}
+.shop2 .tt-rm{color:#f6dc97!important;background:transparent!important;border-color:#6b4a7a!important}
+.shop2 .sh-quill{background:#331b3f!important;border:1px solid #5a3a6a!important;border-radius:16px!important;padding:12px!important}
+.shop2 .sh-ren{background:#331b3f!important;color:#fbefc8!important;border-color:#5a3a6a!important}
+.shop2 .sh-ren p,.shop2 .sh-ren label span{color:#e9d9f2!important}
+.shop2 .sh-ren input{background:#fffaf0!important;color:#2a1534!important}
+.shop2 .ren-v{background:#3a2046!important;color:#e9d9f2!important;border-color:#6b4a7a!important}.shop2 .ren-v.on{background:#f6d77c!important;color:#2a1534!important}
+.shop2 .sh-msg{color:#ffb3c0!important}
+.shop2 .sh-back{color:#f6dc97!important;border-color:#d6ab4f!important;background:transparent!important}
+.shop2 .mu-play{box-shadow:0 0 0 2px #2a1534!important}
+.shop2 .rk-msg{color:#e9d9f2!important}
+.shop2 .sh-quill .sp-tile{aspect-ratio:2.2!important}.shop2 .sh-quill .sp-tile img,.shop2 .sh-quill .sp-e{width:auto!important;height:78%!important;font-size:64px!important}
