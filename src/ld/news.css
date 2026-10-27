@@ -19,3 +19,7 @@
 .ntabs button{flex:1;min-height:42px;border:0;border-radius:999px;background:transparent;color:#5a3a4a;font:800 13.5px var(--f-simple,system-ui)!important;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
 .ntabs button.on{background:#3a1f3d;color:#fbefc8;box-shadow:0 2px 6px rgba(58,31,61,.3)}
 .ntabs .nbadge{position:static;margin:0}
+#newsBody{overflow-x:hidden!important;touch-action:pan-y}
+#newsBody article.news{max-width:100%;box-sizing:border-box}
+#newsBody article.news{display:grid!important;grid-template-columns:34px minmax(0,1fr)!important;gap:10px!important}#newsBody article.news>div{min-width:0}#newsBody article.news>.nic{width:34px;min-width:0}
+#newsBody article.news :is(h3,p){overflow-wrap:anywhere}
