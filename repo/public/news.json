@@ -1,5 +1,26 @@
 [
  {
+  "id": 68,
+  "date": "2026-10-27",
+  "icon": "🍎",
+  "fr": {
+   "t": "Plein écran sur iPhone",
+   "d": "Sur iPhone, Safari ne laisse pas les sites passer en plein écran. Le bouton « Plein écran » explique maintenant comment ajouter Magicoku à l'écran d'accueil pour jouer sans les barres de Safari. Depuis l'icône, l'option disparaît : le jeu est déjà en plein écran."
+  },
+  "en": {
+   "t": "Full screen on iPhone",
+   "d": "On iPhone, Safari doesn't let websites go full screen. The “Full screen” button now explains how to add Magicoku to your home screen to play without Safari's bars. From the icon, the option disappears: the game is already full screen."
+  },
+  "ko": {
+   "t": "아이폰에서 전체 화면",
+   "d": "아이폰 사파리에서는 사이트가 전체 화면으로 바뀔 수 없어요. 이제 ‘전체 화면’ 버튼을 누르면 Magicoku를 홈 화면에 추가해 사파리 막대 없이 플레이하는 방법을 알려 줘요. 아이콘으로 열면 이미 전체 화면이라 이 옵션은 보이지 않아요."
+  },
+  "ja": {
+   "t": "iPhoneで全画面",
+   "d": "iPhoneのSafariでは、サイトを全画面にできません。「全画面」ボタンを押すと、Magicokuをホーム画面に追加してSafariのバーなしで遊ぶ方法を案内するようになりました。アイコンから開くとすでに全画面なので、この項目は表示されません。"
+  }
+ },
+ {
   "id": 67,
   "date": "2026-10-27",
   "icon": "📱",
