@@ -311,6 +311,17 @@ export class Leaderboard extends DurableObject {
     if (dirty) await this.saveWallet(row.pseudo, w);
     if (!w.names) w.names = {};
     if (!w.nsets) { w.nsets = Object.keys(w.names).length ? [{ t: "Version 1", names: w.names }] : []; w.nact = w.nsets.length ? 0 : -1; }
+    // one-time gifts (e.g. thanks to the testers), claimed from a message on the home screen
+    if (body.action === "gift") {
+      const GIFTS = { thanks1: 300 }, g = String(body.gift || "");
+      if (!(g in GIFTS)) return { status: 400, body: { error: "unknown gift" } };
+      w.gifts = w.gifts || [];
+      if (w.gifts.includes(g)) return { status: 200, body: Object.assign({}, w, { already: true }) };
+      w.gifts.push(g); w.coins += GIFTS[g];
+      (w.log = w.log || []).unshift({ at: Date.now(), n: GIFTS[g], why: "gift:" + g }); w.log = w.log.slice(0, 30);
+      await this.saveWallet(row.pseudo, w);
+      return { status: 200, body: Object.assign({}, w, { got: GIFTS[g] }) };
+    }
     if (body.action === "buyquill" || (body.action === "buy" && item === "n:rename")) {
       if (w.owned.includes("n:rename")) return { status: 200, body: Object.assign({}, w, { gq: this.pubQuill() }) };
       if (w.coins < QUILL_PRICE) return { status: 402, body: { error: "not enough", wallet: w, gq: this.pubQuill() } };

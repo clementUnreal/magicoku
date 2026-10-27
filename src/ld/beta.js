@@ -29,6 +29,7 @@ const SHARD="🌙",shards=n=>`<b class="shards">${n} ${SHARD}</b>`;
   async function api(path,body){const r=await fetch(path,body?{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}:{cache:"no-store"});let d=null;try{d=await r.json()}catch(_){}return {ok:r.ok,status:r.status,d}}
   /* ---------- wallet + cosmetics ---------- */
   async function loadWallet(){const p=acc();if(!p||!shopOn())return;const r=await api("/api/shop",{id:p.pid,token:p.ptok,action:"get"}).catch(()=>null);if(r&&r.ok&&r.d&&r.d.eq){BETA.lock=false;BETA.w=r.d;applyCos();try{localStorage.setItem("magicoku:wallet",JSON.stringify(r.d))}catch(_){}}else if(r&&r.status===423){BETA.lock=true;BETA.w=null;try{localStorage.removeItem("magicoku:wallet")}catch(_){}applyCos()}}
+  window.loadWallet=loadWallet;
   try{BETA.w=JSON.parse(localStorage.getItem("magicoku:wallet")||"null")}catch(_){}
   /* ---------- renaming quill: personal names, seen only by their owner (shared auction until v99) ---------- */
   try{localStorage.removeItem("magicoku:quill")}catch(_){}
