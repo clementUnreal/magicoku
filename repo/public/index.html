@@ -1537,6 +1537,44 @@ html,body,*,*::before,*::after,input,button,textarea,select{font-family:var(--f-
 body{font-optical-sizing:auto;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 #tUndo,#tValid,#tHint,#tX,#tErase{letter-spacing:0!important;font-size:clamp(11px,3.3vw,15px)!important}
 .h2-ct b{font-size:clamp(13px,3.8vw,15px)!important}.h2-card{padding-right:22px}
+/* ================= phone held sideways (short landscape): navigation rail on the left, content in two columns ================= */
+@media (orientation:landscape) and (max-height:540px){
+  body:not(.g3){--rail:calc(78px + env(safe-area-inset-left,0px))}
+  /* bottom bar -> vertical rail */
+  body:not(.g3) #h2Bar.h2-bar{left:0!important;right:auto!important;top:0!important;bottom:0!important;transform:none!important;width:var(--rail)!important;max-width:none!important;height:auto!important;margin:0!important;
+    padding:max(8px,env(safe-area-inset-top,0px)) 6px max(8px,env(safe-area-inset-bottom,0px)) calc(6px + env(safe-area-inset-left,0px))!important;
+    display:flex!important;flex-direction:column;justify-content:center;gap:4px;border-radius:0 18px 18px 0!important;border-left:0!important}
+  body:not(.g3) #h2Bar.h2-bar>button{width:100%!important;min-height:0!important;height:auto!important;flex:0 1 64px;padding:6px 2px!important}
+  body:not(.g3) #h2Bar.h2-bar>button span{font-size:11px!important}
+  /* content area next to the rail */
+  body:not(.g3) .home-in{margin:0 0 0 var(--rail)!important;max-width:none!important;width:calc(100% - var(--rail))!important;box-sizing:border-box;padding:10px max(16px,env(safe-area-inset-right,0px)) 16px 18px!important;min-height:100dvh}
+  body:not(.g3) .home-logo{max-width:none!important;margin:0 0 8px!important}
+  /* home: story card on the left, the rest on the right */
+  body:not(.g3) #hMain.home-nav:not([hidden]){display:grid!important;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);grid-auto-rows:min-content;column-gap:14px;row-gap:10px;align-items:start;max-width:none!important;padding-bottom:12px!important}
+  body:not(.g3) #hMain>#h2Hero{grid-column:1;grid-row:1 / span 5;margin:0!important}
+  body:not(.g3) #hMain>:not(#h2Hero){grid-column:2;margin:0!important}
+  body:not(.g3) #hMain .h2-art{height:clamp(70px,24vh,120px)!important}
+  /* every other screen uses the full width next to the rail */
+  body:not(.g3) #home .home-in>.home-panel,body:not(.g3) #home .home-in>.home-panel.beta-panel{max-width:none!important;width:100%!important;margin-left:0!important;margin-right:0!important;box-sizing:border-box}
+
+  /* level picker: chapters in a column on the left, levels on the right */
+  #lvView{padding:6px max(12px,env(safe-area-inset-right,0px)) 8px max(12px,env(safe-area-inset-left,0px))!important;gap:6px!important}
+  #lvView .lvtop h1{font-size:18px!important;line-height:1.2}
+  #lvView .lvtop h1 img,#lvView .lvtop h1 .ico{height:22px!important;width:auto}
+  #lvView .lvbody{flex-direction:row!important;gap:10px!important}
+  #lvView .lvside{flex-direction:column!important;width:230px!important;flex:0 0 230px!important;overflow-x:hidden!important;overflow-y:auto!important;padding:6px!important}
+  #lvView .lvside .lvch{flex:none!important;width:100%!important;min-height:48px;padding:4px 8px!important}
+  #lvView .lvside .lvch .ci{width:32px!important;height:32px!important}
+  #lvView .lvside .lvch .ci img{max-height:32px!important}
+  #lvView .lvside .lvch .ct{white-space:normal!important;font-size:13px!important;line-height:1.2}
+  #lvView .lvmain{padding:10px 12px!important;gap:8px!important}
+  #lvView .lvhead{gap:6px!important}
+  #lvView .lvhead h2{font-size:20px!important;margin:0!important}
+  #lvView .lvhead p{font-size:13px!important;margin:2px 0 0!important}
+  #lvView .lvgrid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))!important;gap:10px!important}
+  #lvView .lvfoot{gap:10px!important}
+  #lvView .lvfoot button{min-height:44px!important;padding-top:0!important;padding-bottom:0!important;font-size:16px!important}
+}
 </style>
 
 <div class="wrap">
@@ -3979,7 +4017,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="714484fdeba2";
+var APP_BUILD="99a4fd6d718c";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -5178,18 +5216,6 @@ html.night body{color-scheme:dark}
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{paint()}catch(_){}};
 })();
 
-/* ================= phone held sideways outside a case: the portrait-sized screens are scaled down to fit =================
-   (the case screen itself has its own 3-column layout: body.g3l) */
-(function(){
-  const css=document.createElement("style");
-  css.textContent=`@media (orientation:landscape) and (max-height:540px){
-  body:not(.g3l){zoom:var(--lz,.62)}
-}`;
-  document.head.appendChild(css);
-  const mq=matchMedia("(orientation:landscape) and (max-height:540px)");
-  function fit(){if(!mq.matches)return;const h=window.innerHeight;document.documentElement.style.setProperty("--lz",Math.max(.5,Math.min(.75,h/660)).toFixed(3))}
-  fit();window.addEventListener("resize",fit);
-})();
 
 /* ================= "Sign in with Google": link your detective to Google, find it back on any device ================= */
 (function(){

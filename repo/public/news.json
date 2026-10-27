@@ -26,19 +26,19 @@
   "icon": "📱",
   "fr": {
    "t": "Jouer avec le téléphone à l'horizontale",
-   "d": "Tourne ton téléphone : les témoignages s'affichent à gauche, le plan au milieu et les outils à droite, le tout sur un seul écran. Tu peux lire et placer les suspects sans faire défiler la page. Les autres écrans (accueil, choix des niveaux, boutique…) se réduisent pour tenir en entier."
+   "d": "Tourne ton téléphone : en enquête, les témoignages s'affichent à gauche, le plan au milieu et les outils à droite, le tout sur un seul écran. Ailleurs, le menu passe sur le côté gauche, l'accueil s'organise en deux colonnes et le choix des niveaux montre les chapitres à gauche et les niveaux à droite."
   },
   "en": {
    "t": "Play with your phone sideways",
-   "d": "Turn your phone: the testimonies show on the left, the map in the middle and the tools on the right, all on one screen. You can read and place suspects without scrolling. The other screens (home, level select, shop…) shrink to fit entirely."
+   "d": "Turn your phone: during a case, the testimonies show on the left, the map in the middle and the tools on the right, all on one screen. Elsewhere, the menu moves to the left side, the home screen uses two columns, and level select shows chapters on the left and levels on the right."
   },
   "ko": {
    "t": "휴대폰을 가로로 들고 플레이",
-   "d": "휴대폰을 돌려 보세요. 증언은 왼쪽, 지도는 가운데, 도구는 오른쪽에 한 화면으로 보여요. 스크롤하지 않고도 읽으면서 용의자를 배치할 수 있어요. 다른 화면(홈, 레벨 선택, 상점 등)은 한 화면에 들어가도록 작아져요."
+   "d": "휴대폰을 돌려 보세요. 사건 중에는 증언이 왼쪽, 지도가 가운데, 도구가 오른쪽에 한 화면으로 보여요. 다른 화면에서는 메뉴가 왼쪽으로 옮겨 가고, 홈은 두 칸으로 나뉘며, 레벨 선택에서는 챕터가 왼쪽, 레벨이 오른쪽에 보여요."
   },
   "ja": {
    "t": "スマホを横にしてプレイ",
-   "d": "スマホを横にすると、証言が左、見取り図が真ん中、道具が右に、ひとつの画面に並びます。スクロールせずに読みながら容疑者を置けます。 ほかの画面（ホーム、レベル選択、ショップなど）は全体が収まるように縮小されます。"
+   "d": "スマホを横にすると、事件中は証言が左、見取り図が真ん中、道具が右に、ひとつの画面に並びます。ほかの画面ではメニューが左側に移り、ホームは2列に、レベル選択は章が左・レベルが右に表示されます。"
   }
  },
  {

@@ -35,15 +35,3 @@ html.night body{color-scheme:dark}
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{paint()}catch(_){}};
 })();
 
-/* ================= phone held sideways outside a case: the portrait-sized screens are scaled down to fit =================
-   (the case screen itself has its own 3-column layout: body.g3l) */
-(function(){
-  const css=document.createElement("style");
-  css.textContent=`@media (orientation:landscape) and (max-height:540px){
-  body:not(.g3l){zoom:var(--lz,.62)}
-}`;
-  document.head.appendChild(css);
-  const mq=matchMedia("(orientation:landscape) and (max-height:540px)");
-  function fit(){if(!mq.matches)return;const h=window.innerHeight;document.documentElement.style.setProperty("--lz",Math.max(.5,Math.min(.75,h/660)).toFixed(3))}
-  fit();window.addEventListener("resize",fit);
-})();
