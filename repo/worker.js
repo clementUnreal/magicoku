@@ -6,8 +6,8 @@ const ADMIN = "clemonchichi";
 // Android app (Trusted Web Activity): package name + SHA-256 fingerprint(s) of the Play signing key.
 // Fill TWA_SHA256 with the "SHA-256 certificate fingerprint" shown in Play Console > App integrity > App signing.
 const TWA_PACKAGE = "app.dev.workers.scorclem.magicoku.twa";
-// upload key (PWABuilder signing.keystore); add the Play App Signing key once the app is in Play Console
-const TWA_SHA256 = ["F8:90:E4:17:83:E3:90:6E:94:92:F8:EE:24:CE:92:91:EC:15:09:2A:50:EB:D3:0B:03:AE:D8:AF:FC:43:11:4F"];
+// Play App Signing key (Play Console > App integrity) + upload key (PWABuilder signing.keystore)
+const TWA_SHA256 = ["A9:0C:B7:D5:5A:D7:97:D7:7B:AD:A9:85:31:F8:C7:F3:AF:6C:84:EC:B1:E0:B8:26:B1:43:4E:76:3D:8D:D3:1E", "F8:90:E4:17:83:E3:90:6E:94:92:F8:EE:24:CE:92:91:EC:15:09:2A:50:EB:D3:0B:03:AE:D8:AF:FC:43:11:4F"];
 const ADMIN_MASTER = "fbc6ddb683d183165da35ef2110f8a44fda9a4544b39196bf1d02647541f4b75";
 // ---- daily puzzle + shop (beta) ----
 const QUILL_PRICE = 100, NSETS_MAX = 5;
