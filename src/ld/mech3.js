@@ -1,10 +1,10 @@
 
 /* ================= Story mode: chapter mechanic introduction ================= */
 var MECH_INFO={
- dist:["🐾",["Les empreintes","Footprints","발자국","足跡"],["Dans la forêt, les empreintes trahissent les suspects. « À 3 pas de Basile » veut dire qu'il faut exactement 3 déplacements d'une case (haut, bas, gauche ou droite) pour aller de l'un à l'autre. Les diagonales ne comptent pas, mais on compte même à travers les murs.",
-   "In the forest, footprints give the suspects away. “3 steps from Basile” means it takes exactly 3 one-square moves (up, down, left or right) to go from one to the other. Diagonals don't count, but you count even through walls.",
-   "숲에서는 발자국이 용의자를 드러내요. ‘바질에게서 3걸음’은 한 칸씩(위, 아래, 왼쪽, 오른쪽) 정확히 3번 움직여야 서로에게 닿는다는 뜻이에요. 대각선은 세지 않지만, 벽을 지나도 세요.",
-   "森では足跡が容疑者の居場所を教えてくれる。「バジルから3歩」とは、上下左右に1マスずつ、ちょうど3回動くと相手に届くということ。ななめは数えないけれど、壁ごしでも数えます。"]],
+ dist:["🐾",["Les empreintes","Footprints","발자국","足跡"],["Dans la forêt, les empreintes trahissent les suspects. « À 3 pas de Basile » veut dire que le chemin le plus court entre les deux fait exactement 3 pas, une case à la fois (haut, bas, gauche ou droite). On compte toujours au plus court : jamais de détour ni de zigzag. Les diagonales ne comptent pas, et les murs n'arrêtent pas : on compte à travers.",
+   "In the forest, footprints give the suspects away. “3 steps from Basile” means the shortest path between them is exactly 3 steps, one square at a time (up, down, left or right). Always count the shortest way: never a detour or a zigzag. Diagonals don't count, and walls don't stop you: count straight through them.",
+   "숲에서는 발자국이 용의자를 드러내요. ‘바질에게서 3걸음’은 두 사람 사이의 가장 짧은 길이 한 칸씩(위, 아래, 왼쪽, 오른쪽) 정확히 3걸음이라는 뜻이에요. 항상 가장 짧은 길로 세요. 돌아가거나 지그재그로 가지 않아요. 대각선은 세지 않고, 벽이 있어도 그대로 지나가며 세요.",
+   "森では足跡が容疑者の居場所を教えてくれる。「バジルから3歩」とは、2人のあいだのいちばん短い道のりが、上下左右に1マスずつでちょうど3歩ということ。いつもいちばん短い道のりで数えます。回り道やジグザグはなし。ななめは数えず、壁があってもそのまま通りぬけて数えます。"]],
  train:["🚂",["Le train n'attend pas","The train won't wait","기차는 기다려 주지 않아요","汽車は待ってくれない"],["Le Brumeval Express va partir ! Résous l'enquête avant la fin du compte à rebours, sinon tu rates le train et tu dois tout recommencer. Chaque indice coûte 30 secondes. Le compte à rebours s'arrête quand tu quittes le jeu.",
    "The Brumeval Express is about to leave! Solve the case before the countdown ends, or you'll miss the train and have to start again. Each hint costs 30 seconds. The countdown stops when you leave the game.",
    "브뤼므발 특급이 곧 출발해요! 카운트다운이 끝나기 전에 사건을 해결하지 못하면 기차를 놓치고 처음부터 다시 해야 해요. 힌트 하나에 30초가 줄어요. 게임을 나가 있는 동안에는 카운트다운이 멈춰요.",

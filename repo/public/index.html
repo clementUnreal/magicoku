@@ -3856,7 +3856,7 @@ var MREL={dist:1,knight:1,mirc:1,mird:1,mira:1};
   function reminder(){const m=mechOf(),set=new Set();if(!m)return "";
     const cl=Object.values(C.clues||{}).flat();cl.forEach(x=>set.add(x[0]));if(hasPoison())set.add("poison");
     const out=[];
-    if(set.has("dist"))out.push(L("Un <b>pas</b> = une case vers le haut, le bas, la gauche ou la droite (jamais en diagonale), même à travers les murs.","One <b>step</b> = one square up, down, left or right (never diagonally), even through walls.","<b>한 걸음</b> = 위, 아래, 왼쪽, 오른쪽으로 한 칸(대각선은 안 돼요). 벽을 지나도 세어요.","<b>1歩</b>＝上下左右に1マス（ななめは不可）。壁ごしでも数えます。"));
+    if(set.has("dist"))out.push(L("Un <b>pas</b> = une case vers le haut, le bas, la gauche ou la droite (jamais en diagonale), même à travers les murs. On compte toujours le <b>chemin le plus court</b> : jamais de détour ni de zigzag.","One <b>step</b> = one square up, down, left or right (never diagonally), even through walls. Always count the <b>shortest path</b>: never a detour or a zigzag.","<b>한 걸음</b> = 위, 아래, 왼쪽, 오른쪽으로 한 칸(대각선은 안 돼요). 벽을 지나도 세어요. 항상 <b>가장 짧은 길</b>로 세요. 돌아가거나 지그재그로 가지 않아요.","<b>1歩</b>＝上下左右に1マス（ななめは不可）。壁ごしでも数えます。いつも<b>いちばん短い道のり</b>で数えます。回り道やジグザグはなし。"));
     if(set.has("knight"))out.push(L("Un <b>crochet de balai</b> = 2 cases tout droit puis 1 sur le côté, comme le cavalier aux échecs.","A <b>broom hook</b> = 2 squares straight then 1 to the side, like a knight in chess.","<b>빗자루 꺾기</b> = 직진 2칸 후 옆으로 1칸, 체스의 나이트처럼 움직여요.","<b>ほうきターン</b>＝まっすぐ2マス進んで横に1マス。チェスのナイトと同じです。"));
     if(set.has("mirc")||set.has("mird")||set.has("mira")||set.has("mid"))out.push(L("Un <b>reflet</b> se trouve à la même distance de l'autre côté du centre ou de la diagonale.","A <b>reflection</b> sits the same distance away on the other side of the centre or of the diagonal.","<b>반사된 자리</b>는 중심이나 대각선 반대편, 같은 거리에 있어요.","<b>鏡写し</b>の位置は、中心や対角線の反対側、同じ距離のところです。"));
     if(set.has("poison"))out.push(L("☠️ Personne ne peut se tenir sur une <b>fiole de poison</b> ni sur les 8 cases autour (diagonales comprises).","☠️ Nobody can stand on a <b>poison flask</b> or on the 8 squares around it (diagonals included).","☠️ <b>독약 병</b> 위나 그 주변 8칸(대각선 포함)에는 아무도 있을 수 없어요.","☠️ <b>毒薬のびん</b>の上と、そのまわり8マス（ななめも含む）には誰もいられません。"));
@@ -3956,10 +3956,10 @@ var MREL={dist:1,knight:1,mirc:1,mird:1,mira:1};
 
 /* ================= Story mode: chapter mechanic introduction ================= */
 var MECH_INFO={
- dist:["🐾",["Les empreintes","Footprints","발자국","足跡"],["Dans la forêt, les empreintes trahissent les suspects. « À 3 pas de Basile » veut dire qu'il faut exactement 3 déplacements d'une case (haut, bas, gauche ou droite) pour aller de l'un à l'autre. Les diagonales ne comptent pas, mais on compte même à travers les murs.",
-   "In the forest, footprints give the suspects away. “3 steps from Basile” means it takes exactly 3 one-square moves (up, down, left or right) to go from one to the other. Diagonals don't count, but you count even through walls.",
-   "숲에서는 발자국이 용의자를 드러내요. ‘바질에게서 3걸음’은 한 칸씩(위, 아래, 왼쪽, 오른쪽) 정확히 3번 움직여야 서로에게 닿는다는 뜻이에요. 대각선은 세지 않지만, 벽을 지나도 세요.",
-   "森では足跡が容疑者の居場所を教えてくれる。「バジルから3歩」とは、上下左右に1マスずつ、ちょうど3回動くと相手に届くということ。ななめは数えないけれど、壁ごしでも数えます。"]],
+ dist:["🐾",["Les empreintes","Footprints","발자국","足跡"],["Dans la forêt, les empreintes trahissent les suspects. « À 3 pas de Basile » veut dire que le chemin le plus court entre les deux fait exactement 3 pas, une case à la fois (haut, bas, gauche ou droite). On compte toujours au plus court : jamais de détour ni de zigzag. Les diagonales ne comptent pas, et les murs n'arrêtent pas : on compte à travers.",
+   "In the forest, footprints give the suspects away. “3 steps from Basile” means the shortest path between them is exactly 3 steps, one square at a time (up, down, left or right). Always count the shortest way: never a detour or a zigzag. Diagonals don't count, and walls don't stop you: count straight through them.",
+   "숲에서는 발자국이 용의자를 드러내요. ‘바질에게서 3걸음’은 두 사람 사이의 가장 짧은 길이 한 칸씩(위, 아래, 왼쪽, 오른쪽) 정확히 3걸음이라는 뜻이에요. 항상 가장 짧은 길로 세요. 돌아가거나 지그재그로 가지 않아요. 대각선은 세지 않고, 벽이 있어도 그대로 지나가며 세요.",
+   "森では足跡が容疑者の居場所を教えてくれる。「バジルから3歩」とは、2人のあいだのいちばん短い道のりが、上下左右に1マスずつでちょうど3歩ということ。いつもいちばん短い道のりで数えます。回り道やジグザグはなし。ななめは数えず、壁があってもそのまま通りぬけて数えます。"]],
  train:["🚂",["Le train n'attend pas","The train won't wait","기차는 기다려 주지 않아요","汽車は待ってくれない"],["Le Brumeval Express va partir ! Résous l'enquête avant la fin du compte à rebours, sinon tu rates le train et tu dois tout recommencer. Chaque indice coûte 30 secondes. Le compte à rebours s'arrête quand tu quittes le jeu.",
    "The Brumeval Express is about to leave! Solve the case before the countdown ends, or you'll miss the train and have to start again. Each hint costs 30 seconds. The countdown stops when you leave the game.",
    "브뤼므발 특급이 곧 출발해요! 카운트다운이 끝나기 전에 사건을 해결하지 못하면 기차를 놓치고 처음부터 다시 해야 해요. 힌트 하나에 30초가 줄어요. 게임을 나가 있는 동안에는 카운트다운이 멈춰요.",
@@ -4051,7 +4051,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="bfdef17ffe95";
+var APP_BUILD="2ec7096c6933";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
