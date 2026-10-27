@@ -138,3 +138,5 @@
 #hWho.h3-av>span:not(.cav){display:none}
 #hWho.h3-av>.cav{display:block!important}
 .h2-art{height:84px}
+
+.h2-art img.real{object-position:50% 50%}
