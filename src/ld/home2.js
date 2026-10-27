@@ -33,7 +33,7 @@
   nav.classList.add("h2");document.querySelector(".home-in").classList.add("h2in");
   /* ---------- story progress ---------- */
   const SIDX=DATA.map((c,i)=>/^s\d+n\d+$/.test(c.id)&&!c.expert?i:-1).filter(i=>i>=0);
-  function current(){if(!SIDX.length)return null;const nx=SIDX.find(i=>unlocked(i)&&!lvlSolved(i));
+  function current(){if(!SIDX.length)return null;const nx=typeof nextOpen==="function"?nextOpen(SIDX):SIDX.find(i=>unlocked(i)&&!lvlSolved(i));
     if(nx!=null)return {i:nx,done:false,fresh:!SIDX.some(lvlSolved)};return {i:SIDX[SIDX.length-1],done:SIDX.every(lvlSolved)}}
   function go(i){lastSel=i;try{LVMODE="story"}catch(_){}try{play("select")}catch(_){}home.hidden=true;openCase(i);
     let seen=null;try{seen=localStorage.getItem("magicoku:tuto")}catch(_){}if(!seen)setTimeout(()=>tuto(0),400)}
@@ -57,7 +57,7 @@
       if(cur.done)$("#h2Lv").innerHTML=`<span>✨ ${L("Toutes les enquêtes sont résolues !","Every case is solved!","모든 사건을 해결했어요!","すべての事件を解決！")}</span>`}
     if(locked){const n=discDone(),tt=discIdx().length;$("#h2T").textContent=L("Mode Découverte","Discovery mode","디스커버리 모드","ディスカバリーモード");
       $("#h2Ch").textContent=L("Commence par le mode Découverte","Start with Discovery mode","디스커버리 모드부터 시작해요","まずはディスカバリーモードから");
-      $("#h2Lv").innerHTML=`<span>🔒 ${L(`Histoire débloquée après ${tt} enquêtes Découverte`,`Story unlocks after ${tt} Discovery cases`,`디스커버리 사건 ${tt}개 후 스토리 해금`,`ディスカバリー${tt}件で解放`)} · ${n}/${tt}</span>`;
+      $("#h2Lv").innerHTML=typeof discChDone==="function"?`<span style="white-space:normal">🔒 ${L("Histoire : valide les 3 chapitres","Story: clear the 3 chapters","스토리: 3개 장을 통과하세요","ストーリー：3つの章をクリア")} (${discChDone()}/3)</span>`:`<span>🔒 ${n}/${tt}</span>`;
       $("#h2GoT").textContent=n?L("Continuer la Découverte","Continue Discovery","디스커버리 계속하기","ディスカバリーをつづける"):L("Commencer la Découverte","Start Discovery","디스커버리 시작","ディスカバリーをはじめる")}
     hero.classList.toggle("lockm",false);
     const s=$("#hStory");if(s)s.innerHTML=`${L("Voir les niveaux","See the levels","레벨 보기","レベルを見る")}`;

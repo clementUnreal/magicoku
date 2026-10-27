@@ -1,5 +1,26 @@
 [
  {
+  "id": 76,
+  "date": "2026-10-27",
+  "icon": "🌕",
+  "fr": {
+   "t": "Les lunes : fini d'être bloqué",
+   "d": "Chaque enquête rapporte de 1 à 3 lunes selon ton temps (un indice compte pour une minute). Avec 18 lunes sur 30 dans un chapitre, le chapitre suivant s'ouvre, même s'il te reste des enquêtes. Et si un niveau te résiste, tu peux passer au suivant : il suffit d'avoir résolu l'un des deux niveaux précédents."
+  },
+  "en": {
+   "t": "Moons: no more getting stuck",
+   "d": "Every case earns 1 to 3 moons depending on your time (a hint counts as one minute). With 18 moons out of 30 in a chapter, the next chapter opens, even if some cases are left. And if a level resists you, you can move on: you only need to have solved one of the two previous levels."
+  },
+  "ko": {
+   "t": "달: 이제 막히지 않아요",
+   "d": "사건마다 걸린 시간에 따라 달을 1~3개 받아요(힌트 하나는 1분으로 계산해요). 한 장에서 달 30개 중 18개를 모으면 남은 사건이 있어도 다음 장이 열려요. 어려운 레벨이 있으면 건너뛸 수 있어요. 바로 앞의 두 레벨 중 하나만 해결하면 돼요."
+  },
+  "ja": {
+   "t": "月の登場：もう行き詰まらない",
+   "d": "事件ごとに、かかった時間に応じて月を1〜3個もらえます（ヒント1回は1分として数えます）。章で月30個のうち18個集めると、残りの事件があっても次の章が開きます。解けないレベルがあれば先に進めます。直前の2つのレベルのどちらかを解いていればOKです。"
+  }
+ },
+ {
   "id": 75,
   "date": "2026-10-27",
   "icon": "🔒",

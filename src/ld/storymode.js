@@ -19,7 +19,7 @@ function storyLockMsg(){const n=discDone(),t=discIdx().length;return L(`Le mode 
   const hp=$("#hPlay");
   if(hp&&!$("#hStory")){const b=document.createElement("button");b.className="hb big storyb";b.id="hStory";hp.after(b)}
   function labels(){const b=$("#hStory");if(b){b.classList.toggle("lockm",storyLocked());
-      if(storyLocked())b.innerHTML=`🔒 ${L("Mode histoire","Story mode","스토리 모드","ストーリーモード")}<small>${L("Après le mode Découverte","After Discovery mode","디스커버리 모드 이후","ディスカバリーモードのあとで")} (${discDone()}/${discIdx().length})</small>`;
+      if(storyLocked())b.innerHTML=`🔒 ${L("Mode histoire","Story mode","스토리 모드","ストーリーモード")}<small>${L("Après le mode Découverte","After Discovery mode","디스커버리 모드 이후","ディスカバリーモードのあとで")} (${typeof discChDone==="function"?discChDone()+"/3":discDone()+"/"+discIdx().length})</small>`;
       else b.textContent="📖 "+L("Mode histoire","Story mode","스토리 모드","ストーリーモード")}
     const p=$("#hPlay");if(p)p.textContent="🧭 "+L("Mode découverte","Discovery mode","디스커버리 모드","ディスカバリーモード")}
   /* levels panel: only show the chapters of the current mode */

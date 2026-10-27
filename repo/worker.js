@@ -120,6 +120,15 @@ export class Leaderboard extends DurableObject {
     for (const r of top) { const w = await this.ctx.storage.get("w:" + String(r.pseudo || "").trim().toLowerCase()); if (w) r.cos = this.pub(w); }
     return top;
   }
+  // per-level "par" = median of every player's best score (seconds + 60 per hint); used for the moons (1-3 per level)
+  async pars() {
+    if (this._pars && Date.now() - this._pars.at < 600000) return this._pars.body;
+    const by = {}, all = await this.ctx.storage.list({ prefix: "p:" });
+    for (const v of all.values()) for (const [k, x] of Object.entries((v && v.prog) || {})) if (x && x.t > 0) (by[k] = by[k] || []).push(x.t + 60 * (x.h || 0));
+    const body = {};
+    for (const [k, arr] of Object.entries(by)) if (arr.length >= 5) { arr.sort((a, b) => a - b); body[k] = arr[Math.floor(arr.length / 2)]; }
+    this._pars = { at: Date.now(), body }; return body;
+  }
   async level(lid) {
     const all = await this.ctx.storage.list({ prefix: "p:" });
     const rows = [];
@@ -642,6 +651,7 @@ export default {
       }
       return json({ error: "method" }, 405);
     }
+    if (url.pathname === "/api/pars") return json(await env.LB.get(env.LB.idFromName("main")).pars());
     if (url.pathname === "/api/level") {
       const lid = url.searchParams.get("id") || "";
       if (!/^[a-z0-9]{1,12}$/.test(lid)) return json({ error: "bad level" }, 400);
