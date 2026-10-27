@@ -3979,7 +3979,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="ef5a7b4e51fa";
+var APP_BUILD="714484fdeba2";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -5176,6 +5176,19 @@ html.night body{color-scheme:dark}
     document.querySelectorAll("[data-th]").forEach(x=>x.classList.toggle("on",x.dataset.th===b.dataset.th))},true);
   apply();tip();
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{paint()}catch(_){}};
+})();
+
+/* ================= phone held sideways outside a case: the portrait-sized screens are scaled down to fit =================
+   (the case screen itself has its own 3-column layout: body.g3l) */
+(function(){
+  const css=document.createElement("style");
+  css.textContent=`@media (orientation:landscape) and (max-height:540px){
+  body:not(.g3l){zoom:var(--lz,.62)}
+}`;
+  document.head.appendChild(css);
+  const mq=matchMedia("(orientation:landscape) and (max-height:540px)");
+  function fit(){if(!mq.matches)return;const h=window.innerHeight;document.documentElement.style.setProperty("--lz",Math.max(.5,Math.min(.75,h/660)).toFixed(3))}
+  fit();window.addEventListener("resize",fit);
 })();
 
 /* ================= "Sign in with Google": link your detective to Google, find it back on any device ================= */
