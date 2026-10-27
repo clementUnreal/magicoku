@@ -1,5 +1,26 @@
 [
  {
+  "id": 74,
+  "date": "2026-10-27",
+  "icon": "📏",
+  "fr": {
+   "t": "Règles plus claires",
+   "d": "Les règles et le tutoriel le précisent maintenant : une rangée et une colonne traversent toute la grille. Les murs ne les arrêtent pas, donc tu peux barrer jusqu'au bord, même de l'autre côté d'un mur."
+  },
+  "en": {
+   "t": "Clearer rules",
+   "d": "The rules and the tutorial now make it explicit: a row and a column run across the whole grid. Walls don't stop them, so you can cross out all the way to the edge, even past a wall."
+  },
+  "ko": {
+   "t": "더 명확해진 규칙",
+   "d": "이제 규칙과 튜토리얼에서 분명히 알려 줘요. 행과 열은 그리드 전체로 이어지고 벽에서 끊기지 않아요. 그러니 벽 너머까지 끝까지 ✕를 표시할 수 있어요."
+  },
+  "ja": {
+   "t": "ルールがわかりやすく",
+   "d": "ルールとチュートリアルで、はっきり説明するようになりました。行と列はグリッド全体につながっていて、壁で途切れません。だから壁の向こうまで、端まで✕をつけられます。"
+  }
+ },
+ {
   "id": 73,
   "date": "2026-10-27",
   "icon": "🗂️",

@@ -4045,7 +4045,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="9074d8ddc6f8";
+var APP_BUILD="a4dcde87936f";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -4856,8 +4856,8 @@ body.coop-on #tHint{display:none!important}
   function cards(){const R5=["AAAB","AAAB","AAAB","CCCB"];
     return [
       [L("Une personne par rangée et par colonne","One person per row and per column","행과 열마다 한 명","行と列に1人ずつ"),
-       L("Jamais deux personnes sur la même ligne, ni dans la même colonne. Barre les cases qui deviennent impossibles.","Never two people on the same row or in the same column. Cross out squares that become impossible.","같은 행이나 같은 열에 두 사람이 있을 수 없어요. 불가능해진 칸에는 ✕를 표시하세요.","同じ行・同じ列に2人は入れません。ありえなくなったマスには✕をつけよう。"),
-       fig(mini(3,{three:1,tok:[[0,0,"s"],[1,2,"s"]]}),1,A())+fig(mini(3,{three:1,tok:[[1,0,"s"],[1,2,"s"]],bad:[[1,2]]}),0,L("Même rangée","Same row","같은 행","同じ行"))+fig(mini(3,{three:1,tok:[[0,1,"s"],[2,1,"s"]],bad:[[2,1]]}),0,L("Même colonne","Same column","같은 열","同じ列"))],
+       L("Jamais deux personnes sur la même rangée, ni dans la même colonne. La rangée et la colonne traversent <strong>toute la grille</strong> : les murs et les pièces ne les arrêtent pas. Barre les cases qui deviennent impossibles.","Never two people on the same row or in the same column. Rows and columns run across <strong>the whole grid</strong>: walls and rooms don't stop them. Cross out squares that become impossible.","같은 행이나 같은 열에 두 사람이 있을 수 없어요. 행과 열은 <strong>그리드 전체</strong>로 이어져요. 벽이나 방이 있어도 끊기지 않아요. 불가능해진 칸에는 ✕를 표시하세요.","同じ行・同じ列に2人は入れません。行と列は<strong>グリッド全体</strong>につながっています。壁や部屋で途切れることはありません。ありえなくなったマスには✕をつけよう。"),
+       fig(mini(3,{three:1,tok:[[0,0,"s"],[1,2,"s"]]}),1,A())+fig(mini(3,{three:1,tok:[[1,0,"s"],[1,2,"s"]],bad:[[1,2]]}),0,L("Même rangée","Same row","같은 행","同じ行"))+fig(mini(3,{three:1,tok:[[0,1,"s"],[2,1,"s"]],bad:[[2,1]]}),0,L("Même colonne","Same column","같은 열","同じ列"))+fig(mini(3,{three:1,rooms:["AAB","AAB","AAB"],tok:[[1,0,"s"],[1,2,"s"]],bad:[[1,2]]}),0,L("Même à travers un mur","Even through a wall","벽 너머도 마찬가지","壁をはさんでも同じ"))],
       [L("Où peut-on se tenir ?","Where can people stand?","어디에 설 수 있나요?","どこに立てる？"),
        L("Sur le sol, ou sur un fauteuil, une malle, dans la baignoire… Jamais sur une bibliothèque, un chaudron ou un bureau : ces cases sont hachurées.","On the floor, or in an armchair, on a trunk, in the bath… Never on a bookcase, a cauldron or a desk: those squares are hatched.","바닥이나 의자·트렁크·욕조 위에는 설 수 있어요. 책장·가마솥·책상 위는 안 돼요(빗금 친 칸).","床や、ひじ掛けいす・トランク・浴槽の上はOK。本棚・大釜・机の上はダメ（斜線のマス）。"),
        fig(mini(1,{obj:[[0,0,"chair"]],tok:[[0,0,"s"]],px:84}),1,L("Fauteuil : autorisé","Armchair: allowed","의자: 가능","いす：OK"))+fig(mini(1,{obj:[[0,0,"shelf"]],tok:[[0,0,"s"]],bad:[[0,0]],px:84}),0,L("Bibliothèque : interdit","Bookcase: not allowed","책장: 불가","本棚：NG"))],
@@ -5482,7 +5482,7 @@ html.night body{color-scheme:dark}
     s.push({title:L("Garde le doigt appuyé !","Press and hold!","꾹 누르세요!","長押ししよう！"),text:()=>holdText(a.p,a.cell)+demo,
       cell:a.cell,hold:a.p,allow:e=>onCell(e,a.cell),ready:()=>placedAt(a.p,a.cell),waitTxt:L("Garde le doigt appuyé sur la case qui brille…","Hold your finger on the glowing square…","빛나는 칸을 꾹 누르세요…","光るマスを長押し…")});
     s.push({title:()=>L(`Bravo, ${pname(a.p)} est ${fem(a.p)?"placée":"placé"} !`,`Well done, ${pname(a.p)} is placed!`,`잘했어요, ${pname(a.p)}${particle(pname(a.p),"이","가")} 배치됐어요!`,`すごい！${pname(a.p)}を配置できました！`),
-      text:L("Règle d'or : il n'y a qu'<b>une personne par rangée et par colonne</b>. Donc maintenant, plus personne d'autre ne peut être dans sa <b>rangée</b> ni dans sa <b>colonne</b>. On va apprendre à barrer ces cases pour s'en souvenir.","Golden rule: there's only <b>one person per row and per column</b>. So now nobody else can be in their <b>row</b> or their <b>column</b>. Let's learn to cross those squares out so you remember.","황금 규칙: <b>행과 열마다 한 사람</b>만 있을 수 있어요. 그러니 이제 그 사람의 <b>행</b>과 <b>열</b>에는 다른 사람이 있을 수 없어요. 기억하기 쉽게 그 칸들을 지우는 법을 배워 봐요.","大切なルール：<b>各行・各列に一人だけ</b>。だから、もうその人の<b>行</b>と<b>列</b>には、ほかの誰もいられません。忘れないように、そのマスに×をつける方法を覚えよう。"),
+      text:L("Règle d'or : il n'y a qu'<b>une personne par rangée et par colonne</b>. Donc maintenant, plus personne d'autre ne peut être dans sa <b>rangée</b> ni dans sa <b>colonne</b>, d'un bout à l'autre de la grille, même de l'autre côté d'un mur. On va apprendre à barrer ces cases pour s'en souvenir.","Golden rule: there's only <b>one person per row and per column</b>. So now nobody else can be in their <b>row</b> or their <b>column</b>, from one edge of the grid to the other, even past a wall. Let's learn to cross those squares out so you remember.","황금 규칙: <b>행과 열마다 한 사람</b>만 있을 수 있어요. 그러니 이제 그 사람의 <b>행</b>과 <b>열</b>에는 다른 사람이 있을 수 없어요. 벽 너머까지 그리드 끝에서 끝까지예요. 기억하기 쉽게 그 칸들을 지우는 법을 배워 봐요.","大切なルール：<b>各行・各列に一人だけ</b>。だから、もうその人の<b>行</b>と<b>列</b>には、ほかの誰もいられません。壁の向こうも含めて、グリッドの端から端までです。忘れないように、そのマスに×をつける方法を覚えよう。"),
       btn:L("Suivant","Next","다음","次へ")});
     s.push({title:L("Barrer une case","Cross out a square","칸 지우기","マスに×をつける"),
       text:L("Quand tu es sûr que personne ne peut être sur une case, tu peux la barrer d'une croix.<br><b>Touche le bouton « Barrer » ✕</b> (il clignote).","When you're sure nobody can be on a square, you can cross it out.<br><b>Tap the “Cross out” ✕ button</b> (it's flashing).","어떤 칸에 아무도 있을 수 없다고 확신하면 ×로 지울 수 있어요.<br><b>‘지우기’ ✕ 버튼을 누르세요</b>(깜빡이고 있어요).","そのマスに誰もいられないと確信したら、×をつけられます。<br><b>「×」ボタンをタップ</b>しよう（点滅しています）。"),
