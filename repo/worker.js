@@ -3,6 +3,9 @@
 import { DurableObject } from "cloudflare:workers";
 
 const ADMIN = "clemonchichi";
+// detectives caught cheating (admitted using an AI): their scores stay visible but struck through, ranked last, excluded from pars
+const CHEATERS = ["mazvil"];
+const isCheat = (p) => CHEATERS.includes(String(p || "").trim().toLowerCase());
 // Android app (Trusted Web Activity): package name + SHA-256 fingerprint(s) of the Play signing key.
 // Fill TWA_SHA256 with the "SHA-256 certificate fingerprint" shown in Play Console > App integrity > App signing.
 const TWA_PACKAGE = "app.dev.workers.scorclem.magicoku.twa";
@@ -115,7 +118,8 @@ export class Leaderboard extends DurableObject {
     const all = await this.ctx.storage.list({ prefix: "p:" });
     const cmp = (a, b) => b.solved - a.solved || a.hints - b.hints || a.time - b.time;
     const rows = dedupe([...all.values()].map((v) => v.row).filter(Boolean), cmp);
-    rows.sort(cmp);
+    rows.forEach((r) => { if (isCheat(r.pseudo)) r.cheat = 1; });
+    rows.sort((a, b) => (a.cheat || 0) - (b.cheat || 0) || cmp(a, b));
     const top = rows.slice(0, 100);
     for (const r of top) { const w = await this.ctx.storage.get("w:" + String(r.pseudo || "").trim().toLowerCase()); if (w) r.cos = this.pub(w); }
     return top;
@@ -124,7 +128,7 @@ export class Leaderboard extends DurableObject {
   async pars() {
     if (this._pars && Date.now() - this._pars.at < 600000) return this._pars.body;
     const by = {}, all = await this.ctx.storage.list({ prefix: "p:" });
-    for (const v of all.values()) for (const [k, x] of Object.entries((v && v.prog) || {})) if (x && x.t > 0) (by[k] = by[k] || []).push(x.t + 60 * (x.h || 0));
+    for (const v of all.values()) if (!(v && v.row && isCheat(v.row.pseudo))) for (const [k, x] of Object.entries((v && v.prog) || {})) if (x && x.t > 0) (by[k] = by[k] || []).push(x.t + 60 * (x.h || 0));
     const body = {};
     for (const [k, arr] of Object.entries(by)) if (arr.length >= 5) { arr.sort((a, b) => a - b); body[k] = arr[Math.floor(arr.length / 2)]; }
     this._pars = { at: Date.now(), body }; return body;
@@ -138,7 +142,8 @@ export class Leaderboard extends DurableObject {
     }
     const cmp = (a, b) => a.hints - b.hints || a.time - b.time || a.attempts - b.attempts;
     const out = dedupe(rows, cmp);
-    out.sort(cmp);
+    out.forEach((r) => { if (isCheat(r.pseudo)) r.cheat = 1; });
+    out.sort((a, b) => (a.cheat || 0) - (b.cheat || 0) || cmp(a, b));
     return out.slice(0, 100);
   }
   // Best known result per level for a detective name (case-insensitive), across all their rows.
