@@ -5,19 +5,19 @@
   "icon": "🚨",
   "fr": {
    "t": "Tricheur détecté",
-   "d": "Le détective Mazvil a avoué avoir utilisé une intelligence artificielle pour résoudre les enquêtes. Ses scores restent visibles mais sont barrés avec la mention « (tricheur) », et il est classé en dernier. Les classements sont donc corrigés : tout le monde remonte d'une place. Merci de jouer à la loyale, c'est tout le plaisir du jeu !"
+   "d": "Nos vérifications ont repéré des temps impossibles chez le détective Mazvil : des enquêtes résolues avec l'aide d'une intelligence artificielle. Ses scores ont été censurés : ils sont barrés avec la mention « (tricheur) » et il est classé en dernier. Tout le monde remonte donc d'une place. Les scores sont désormais surveillés : jouez à la loyale !"
   },
   "en": {
    "t": "Cheater detected",
-   "d": "The detective Mazvil admitted using an artificial intelligence to solve the cases. His scores stay visible but are struck through with “(cheater)”, and he is ranked last. The rankings are corrected: everyone moves up one place. Please play fair, that's the whole fun of the game!"
+   "d": "Our checks spotted impossible times from the detective Mazvil: cases solved with the help of an artificial intelligence. His scores have been censored: they are struck through with “(cheater)” and he is ranked last. Everyone moves up one place. Scores are now being watched: play fair!"
   },
   "ko": {
    "t": "부정행위 적발",
-   "d": "탐정 Mazvil이 인공지능을 사용해 사건을 풀었다고 인정했어요. 그의 점수는 그대로 보이지만 「(부정행위)」 표시와 함께 줄이 그어지고, 순위는 맨 마지막이에요. 그래서 순위가 바로잡혀 모두 한 칸씩 올라가요. 공정하게 플레이해 주세요. 그게 이 게임의 진짜 재미예요!"
+   "d": "검사 결과 탐정 Mazvil에게서 불가능한 기록이 발견됐어요. 인공지능의 도움으로 사건을 푼 거예요. 그의 점수는 제재되어 「(부정행위)」 표시와 함께 줄이 그어지고, 순위는 맨 마지막이에요. 그래서 모두 한 칸씩 올라가요. 이제 점수를 지켜보고 있어요. 공정하게 플레이하세요!"
   },
   "ja": {
    "t": "不正を発見",
-   "d": "探偵Mazvilが、人工知能を使って事件を解いたことを認めました。スコアは表示されたままですが「（不正）」と書かれて取り消し線が引かれ、順位は最下位になります。ランキングは修正され、みんな1つ順位が上がります。フェアに遊ぼう、それがこのゲームの本当の楽しさです！"
+   "d": "チェックの結果、探偵Mazvilにありえない記録が見つかりました。人工知能の助けで事件を解いていたのです。スコアは処分され、「（不正）」と書かれて取り消し線が引かれ、順位は最下位になります。みんな1つ順位が上がります。スコアは今後も監視されます。フェアに遊ぼう！"
   }
  },
  {
