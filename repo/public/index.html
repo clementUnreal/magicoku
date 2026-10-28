@@ -4098,7 +4098,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="f663807cfff7";
+var APP_BUILD="b9f912d7d95a";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -5970,12 +5970,14 @@ ${P} .g3-mhome{min-height:44px!important;margin:0!important}
   /* ornaments: a painted ring around the portrait instead of emoji corners */
   const ring=(cls,img,pad)=>`.cav.${cls}{overflow:visible!important}.cav.${cls} img{box-shadow:none!important}
 .cav.${cls}::before{content:none!important}
+.cav.${cls} img{border-color:transparent!important;outline:0!important}
 .cav.${cls}::after{content:""!important;position:absolute!important;inset:${pad}!important;left:${pad}!important;top:${pad}!important;right:${pad}!important;bottom:${pad}!important;width:auto!important;height:auto!important;background:url(${img}) center/contain no-repeat!important;animation:none!important;transform:none!important;pointer-events:none;z-index:2}`;
   const st=document.createElement("style");
   st.textContent=ring("orn-gold",IC2.frame,"-17%")+ring("orn-flowers",IC2.wreath,"-20%")+ring("orn-stars",IC2.starring,"-20%")+`
 .h2-bar img.nb-ic{width:30px;height:30px;object-fit:contain;display:block;filter:drop-shadow(0 1px 1px #0008)}
 .h2-bar button:not(.on) img.nb-ic{opacity:.82}
 .sp-tile img.sp-q{width:62%!important;height:62%!important}
+.sp-tile .cav.sp-av>img{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;position:absolute!important;top:0!important;left:0!important;margin:0!important;border-radius:50%!important;object-fit:cover!important}
 .h2-art img.sb{object-position:50% 50%!important}
 .shop2 .sh-tab .sh-ti img{width:20px;height:20px;object-fit:contain}`;
   document.head.appendChild(st);
