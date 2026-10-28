@@ -140,10 +140,15 @@ export class Leaderboard extends DurableObject {
     // fair speed: for each level, the player's score (time + 1 min per hint) divided by the median of all players on that level;
     // spd = median of those ratios over the player's levels (1 = typical, 0.5 = twice as fast). nc = levels compared.
     const par = await this.pars();
+    const pv = Object.values(par), meanPar = pv.length ? pv.reduce((x, y) => x + y, 0) / pv.length : 0;
     for (const v of all.values()) {
       if (!v || !v.row) continue;
       const rs = Object.entries(v.prog || {}).filter(([k, x]) => x && x.t > 0 && par[k] > 0).map(([k, x]) => (x.t + 60 * (x.h || 0)) / par[k]).sort((a, b) => a - b);
-      v.row.nc = rs.length; v.row.spd = rs.length ? Math.round(1000 * rs[Math.floor(rs.length / 2)]) / 1000 : null;
+      // few cases = less reliable: pulled toward the usual speed (as if 5 typical cases were added)
+      const raw = rs.length ? rs[Math.floor(rs.length / 2)] : null, K = 5;
+      v.row.nc = rs.length; v.row.spd = raw == null ? null : Math.round(1000 * (rs.length * raw + K) / (rs.length + K)) / 1000;
+      // the same speed expressed as a time on a typical case of the game (average of every level's median)
+      v.row.eqt = v.row.spd == null ? null : Math.round(v.row.spd * meanPar);
     }
     const rows = dedupe([...all.values()].map((v) => v.row).filter(Boolean), cmp);
     rows.forEach((r) => { if (isCheat(r.pseudo)) r.cheat = 1; });
