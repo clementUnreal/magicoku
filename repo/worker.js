@@ -137,6 +137,14 @@ export class Leaderboard extends DurableObject {
     await this.importLegacy();
     const all = await this.ctx.storage.list({ prefix: "p:" });
     const cmp = (a, b) => b.solved - a.solved || a.hints - b.hints || a.time - b.time;
+    // fair speed: for each level, the player's score (time + 1 min per hint) divided by the median of all players on that level;
+    // spd = median of those ratios over the player's levels (1 = typical, 0.5 = twice as fast). nc = levels compared.
+    const par = await this.pars();
+    for (const v of all.values()) {
+      if (!v || !v.row) continue;
+      const rs = Object.entries(v.prog || {}).filter(([k, x]) => x && x.t > 0 && par[k] > 0).map(([k, x]) => (x.t + 60 * (x.h || 0)) / par[k]).sort((a, b) => a - b);
+      v.row.nc = rs.length; v.row.spd = rs.length ? Math.round(1000 * rs[Math.floor(rs.length / 2)]) / 1000 : null;
+    }
     const rows = dedupe([...all.values()].map((v) => v.row).filter(Boolean), cmp);
     rows.forEach((r) => { if (isCheat(r.pseudo)) r.cheat = 1; });
     rows.sort((a, b) => (a.cheat || 0) - (b.cheat || 0) || cmp(a, b));
