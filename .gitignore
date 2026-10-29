@@ -5,3 +5,4 @@ src/story/*.log
 src/ld/lv_old/
 src/story/gx*.log
 /*.png
+__pycache__/
