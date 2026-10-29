@@ -21,9 +21,10 @@ html body.g3:not(.g3l) #cards .recit{flex:1 1 auto!important;min-height:80px!imp
 @keyframes rbub{from{opacity:0;transform:translate(-50%,-80%)}}
 #board .plan .notes{inset:auto auto 4% 4%!important;max-width:92%;align-content:flex-end;overflow:hidden}
 #board .plan .notes span{font-size:clamp(8px,calc(93.6cqw * 22 / var(--wn)),16px)!important;-webkit-text-stroke:2.5px #fff!important}
-#marks .mk.obj .xm{transform:scale(.55);transform-origin:100% 0%;opacity:.88}
+#marks .mk.obj .xm{transform:scale(.6);transform-origin:100% 0%;opacity:.5}
 #marks .mk.obj .xm svg{opacity:.9}
-html body.g3 #tHint.nohint small{display:none!important}`;document.head.appendChild(st);
+html body.g3 #tHint.nohint small{display:none!important}
+html body[class*="xs-"] #marks .xm::after{content:""!important;font-size:0!important;text-shadow:none!important;color:transparent!important}`;document.head.appendChild(st);
   /* every room gets its own colour: a light tint on its floor and the same colour on its name tag */
   const PAL=["#ffd27a","#9fd3ff","#ffa8c5","#b8f0a0","#d6b8ff","#ffb37a","#8ff0e0","#f5f09a","#c8c8ff","#ffc2a8","#a8ffcf","#e0b8a0"];
   function tint(){const plan=$("#plan"),g=$("#grid");if(!plan||!g||!C)return;let t=plan.querySelector(".rtint");if(t)t.remove();
