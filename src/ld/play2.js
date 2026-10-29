@@ -5,9 +5,9 @@
 html body.g3:not(.g3l){height:100dvh;overflow:hidden!important}
 html:has(body.g3:not(.g3l)){overflow:hidden!important;height:100%}
 html body.g3:not(.g3l) .wrap{padding-bottom:0!important}
-html body.g3:not(.g3l) .wrap{height:100dvh!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;box-sizing:border-box}
+html body.g3:not(.g3l) .wrap{height:100dvh!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;overflow:clip!important;box-sizing:border-box}
 html body.g3:not(.g3l) #g3Bar{flex:none}
-html body.g3:not(.g3l) .game{flex:1 1 auto!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important}
+html body.g3:not(.g3l) .game{flex:1 1 auto!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;overflow:clip!important}
 html body.g3:not(.g3l) .game>.center,html body.g3:not(.g3l) .game>.tools{flex:none!important}
 html body.g3:not(.g3l) .game>.suspects{flex:1 1 auto!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;margin-bottom:0!important}
 html body.g3:not(.g3l) #cards{flex:1 1 auto!important;min-height:0!important;display:flex!important;flex-direction:column!important}
@@ -46,6 +46,10 @@ html body[class*="xs-"] #marks .xm::after{content:""!important;font-size:0!impor
     clearTimeout(bubT);bubT=setTimeout(()=>{const x=document.getElementById("rbub");if(x)x.remove()},1600)},true);
   /* the testimonies never jump: whatever is redrawn (placing, selecting, tapping a word), the text keeps its scroll position */
   let keepY=0;
+  /* the frame around the map can never be scrolled away (some old code calls scrollIntoView on the map) */
+  document.addEventListener("scroll",e=>{const t=e.target;if(!document.body.classList.contains("g3")||document.body.classList.contains("g3l"))return;
+    if(t===document||t===document.documentElement||t===document.body){if(scrollY)scrollTo(0,0);return}
+    if(t&&t.classList&&(t.classList.contains("wrap")||t.classList.contains("game")||t.classList.contains("suspects")||t.classList.contains("center"))&&t.scrollTop)t.scrollTop=0},true);
   /* only the player moves the text: a scroll that the player didn't start is undone */
   let userOn=false;
   const inRecit=e=>!!(e.target&&e.target.closest&&e.target.closest(".recit"));

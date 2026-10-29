@@ -136,7 +136,7 @@ hint=function(){
   S.hlog=S.hlog||[];S.hlog.push(e);S.hview=S.hlog.length-1;S.hints=(S.hints||0)+1;save();
   renderHintBox();hintApply();try{play("hint")}catch(_){}
   if(typeof renderTimer==="function")renderTimer();
-  const box=$("#hintBox");if(box&&matchMedia("(max-width:980px)").matches){const r=box.getBoundingClientRect();if(r.top>innerHeight-80||r.bottom<0)box.scrollIntoView({behavior:"smooth",block:"nearest"})}
+  const box=$("#hintBox");if(box&&!document.body.classList.contains("g3")&&matchMedia("(max-width:980px)").matches){const r=box.getBoundingClientRect();if(r.top>innerHeight-80||r.bottom<0)box.scrollIntoView({behavior:"smooth",block:"nearest"})}
 };
 (function(){const _rm=renderMarks;renderMarks=function(){_rm.apply(this,arguments);hintApply()};
   const _r=render;render=function(){_r.apply(this,arguments);renderHintBox();hintApply()};

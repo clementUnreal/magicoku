@@ -100,7 +100,7 @@ function tuto(i){tStep=i;const steps=TUTO[LANG],st=steps[i];if(!st){endTuto();re
       if(x+bw>innerWidth-12){x=Math.max(12,Math.min(innerWidth-bw-12,r.left));y=r.bottom+14;if(y+200>innerHeight)y=Math.max(12,r.top-214)}
       box.style.cssText=`left:${x}px;top:${Math.min(y,innerHeight-230)}px;width:${bw}px`}
     else{hole.hidden=true;const bw=Math.min(380,innerWidth-24);box.style.cssText=`left:${(innerWidth-bw)/2}px;top:${innerHeight/2-120}px;width:${bw}px`}};
-  if(el){const r=el.getBoundingClientRect();if(r.top<0||r.bottom>innerHeight)el.scrollIntoView({block:r.height>innerHeight*.7?"start":"center"});setTimeout(place,350)}else place();
+  if(el){const r=el.getBoundingClientRect();if((r.top<0||r.bottom>innerHeight)&&!document.body.classList.contains("g3"))el.scrollIntoView({block:r.height>innerHeight*.7?"start":"center"});setTimeout(place,350)}else place();
   play("page");
 }
 function endTuto(){$("#tuto").hidden=true;try{localStorage.setItem("magicoku:tuto","done")}catch(e){}}

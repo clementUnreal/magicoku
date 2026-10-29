@@ -2309,7 +2309,7 @@ function tuto(i){tStep=i;const steps=TUTO[LANG],st=steps[i];if(!st){endTuto();re
       if(x+bw>innerWidth-12){x=Math.max(12,Math.min(innerWidth-bw-12,r.left));y=r.bottom+14;if(y+200>innerHeight)y=Math.max(12,r.top-214)}
       box.style.cssText=`left:${x}px;top:${Math.min(y,innerHeight-230)}px;width:${bw}px`}
     else{hole.hidden=true;const bw=Math.min(380,innerWidth-24);box.style.cssText=`left:${(innerWidth-bw)/2}px;top:${innerHeight/2-120}px;width:${bw}px`}};
-  if(el){const r=el.getBoundingClientRect();if(r.top<0||r.bottom>innerHeight)el.scrollIntoView({block:r.height>innerHeight*.7?"start":"center"});setTimeout(place,350)}else place();
+  if(el){const r=el.getBoundingClientRect();if((r.top<0||r.bottom>innerHeight)&&!document.body.classList.contains("g3"))el.scrollIntoView({block:r.height>innerHeight*.7?"start":"center"});setTimeout(place,350)}else place();
   play("page");
 }
 function endTuto(){$("#tuto").hidden=true;try{localStorage.setItem("magicoku:tuto","done")}catch(e){}}
@@ -2641,7 +2641,7 @@ function renderCards(){
   $("#cards").innerHTML=`<div class="chips">${order.map(p=>`<button class="card chip2${p===0?" victim":""}${S.place[p]?" placed":""}" aria-pressed="${S.sel===p}" data-p="${p}" aria-label="${pname(p)}, ${prole(p)}"><span class="cph">${ava(p,{victim:p===0})}</span><span class="cnm">${pname(p).replace(/^(Pr|Sir|Maître|Dame|Dr) /,"").replace(/ (교수|부인|선생)$/,"").replace(/(教授|夫人|先生)$/,"")}</span>${p===0?`<span class="cvt">${L("victime","victim","피해자","被害者")}</span>`:""}</button>`).join("")}</div>
     <article class="recit">${storyHTML()}</article>`;
   $("#cards").querySelectorAll(".chip2").forEach(el=>el.onclick=()=>{const p=+el.dataset.p;S.sel=S.sel===p?null:p;if(S.sel!=null)tool=null;save();render();
-    if(S.sel!=null&&matchMedia("(max-width:980px)").matches)$("#board").scrollIntoView({behavior:"smooth",block:"start"})});
+    if(S.sel!=null&&!document.body.classList.contains("g3")&&matchMedia("(max-width:980px)").matches)$("#board").scrollIntoView({behavior:"smooth",block:"start"})});
   document.querySelectorAll(".recit p[data-p]").forEach(el=>el.classList.toggle("hl",S.sel!=null&&+el.dataset.p===S.sel));
 }
 /* no more "choose a suspect or a tool" line */
@@ -2958,7 +2958,7 @@ hint=function(){
   S.hlog=S.hlog||[];S.hlog.push(e);S.hview=S.hlog.length-1;S.hints=(S.hints||0)+1;save();
   renderHintBox();hintApply();try{play("hint")}catch(_){}
   if(typeof renderTimer==="function")renderTimer();
-  const box=$("#hintBox");if(box&&matchMedia("(max-width:980px)").matches){const r=box.getBoundingClientRect();if(r.top>innerHeight-80||r.bottom<0)box.scrollIntoView({behavior:"smooth",block:"nearest"})}
+  const box=$("#hintBox");if(box&&!document.body.classList.contains("g3")&&matchMedia("(max-width:980px)").matches){const r=box.getBoundingClientRect();if(r.top>innerHeight-80||r.bottom<0)box.scrollIntoView({behavior:"smooth",block:"nearest"})}
 };
 (function(){const _rm=renderMarks;renderMarks=function(){_rm.apply(this,arguments);hintApply()};
   const _r=render;render=function(){_r.apply(this,arguments);renderHintBox();hintApply()};
@@ -4100,7 +4100,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="318c3140c9dc";
+var APP_BUILD="c4dafc84d06a";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -6350,9 +6350,9 @@ body.g3 .hw-bats{display:none}`;document.head.appendChild(st);
 html body.g3:not(.g3l){height:100dvh;overflow:hidden!important}
 html:has(body.g3:not(.g3l)){overflow:hidden!important;height:100%}
 html body.g3:not(.g3l) .wrap{padding-bottom:0!important}
-html body.g3:not(.g3l) .wrap{height:100dvh!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;box-sizing:border-box}
+html body.g3:not(.g3l) .wrap{height:100dvh!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;overflow:clip!important;box-sizing:border-box}
 html body.g3:not(.g3l) #g3Bar{flex:none}
-html body.g3:not(.g3l) .game{flex:1 1 auto!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important}
+html body.g3:not(.g3l) .game{flex:1 1 auto!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;overflow:clip!important}
 html body.g3:not(.g3l) .game>.center,html body.g3:not(.g3l) .game>.tools{flex:none!important}
 html body.g3:not(.g3l) .game>.suspects{flex:1 1 auto!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;margin-bottom:0!important}
 html body.g3:not(.g3l) #cards{flex:1 1 auto!important;min-height:0!important;display:flex!important;flex-direction:column!important}
@@ -6391,6 +6391,10 @@ html body[class*="xs-"] #marks .xm::after{content:""!important;font-size:0!impor
     clearTimeout(bubT);bubT=setTimeout(()=>{const x=document.getElementById("rbub");if(x)x.remove()},1600)},true);
   /* the testimonies never jump: whatever is redrawn (placing, selecting, tapping a word), the text keeps its scroll position */
   let keepY=0;
+  /* the frame around the map can never be scrolled away (some old code calls scrollIntoView on the map) */
+  document.addEventListener("scroll",e=>{const t=e.target;if(!document.body.classList.contains("g3")||document.body.classList.contains("g3l"))return;
+    if(t===document||t===document.documentElement||t===document.body){if(scrollY)scrollTo(0,0);return}
+    if(t&&t.classList&&(t.classList.contains("wrap")||t.classList.contains("game")||t.classList.contains("suspects")||t.classList.contains("center"))&&t.scrollTop)t.scrollTop=0},true);
   /* only the player moves the text: a scroll that the player didn't start is undone */
   let userOn=false;
   const inRecit=e=>!!(e.target&&e.target.closest&&e.target.closest(".recit"));

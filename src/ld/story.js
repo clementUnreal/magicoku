@@ -77,7 +77,7 @@ function renderCards(){
   $("#cards").innerHTML=`<div class="chips">${order.map(p=>`<button class="card chip2${p===0?" victim":""}${S.place[p]?" placed":""}" aria-pressed="${S.sel===p}" data-p="${p}" aria-label="${pname(p)}, ${prole(p)}"><span class="cph">${ava(p,{victim:p===0})}</span><span class="cnm">${pname(p).replace(/^(Pr|Sir|Maître|Dame|Dr) /,"")}</span>${p===0?`<span class="cvt">${L("victime","victim")}</span>`:""}</button>`).join("")}</div>
     <article class="recit">${storyHTML()}</article>`;
   $("#cards").querySelectorAll(".chip2").forEach(el=>el.onclick=()=>{const p=+el.dataset.p;S.sel=S.sel===p?null:p;if(S.sel!=null)tool=null;save();render();
-    if(S.sel!=null&&matchMedia("(max-width:980px)").matches)$("#board").scrollIntoView({behavior:"smooth",block:"start"})});
+    if(S.sel!=null&&!document.body.classList.contains("g3")&&matchMedia("(max-width:980px)").matches)$("#board").scrollIntoView({behavior:"smooth",block:"start"})});
   document.querySelectorAll(".recit p[data-p]").forEach(el=>el.classList.toggle("hl",S.sel!=null&&+el.dataset.p===S.sel));
 }
 /* no more "choose a suspect or a tool" line */
