@@ -32,14 +32,12 @@
   const PUMP=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 48"><g><path d="M30 10q2-8 7-9l1 2q-4 2-5 8z" fill="#3b5a1a"/><ellipse cx="30" cy="30" rx="22" ry="17" fill="#e8741c"/><path d="M22 14q-6 16 0 33M38 14q6 16 0 33M30 13v34" stroke="#b24a0c" stroke-width="1.5" fill="none" opacity=".7"/><path d="M19 25l5-5 5 5zM31 25l5-5 5 5zM18 33q12 9 24 0l-3 4-3-2-3 3-3-3-3 3-3-2z" fill="#ffd27a"/></g>
 <g transform="translate(52 14) scale(.72)"><path d="M30 10q2-8 7-9l1 2q-4 2-5 8z" fill="#3b5a1a"/><ellipse cx="30" cy="30" rx="22" ry="17" fill="#f08a24"/><path d="M22 14q-6 16 0 33M38 14q6 16 0 33M30 13v34" stroke="#b24a0c" stroke-width="1.5" fill="none" opacity=".7"/><path d="M20 27q3-4 6 0zM34 27q3-4 6 0zM20 34q10 6 20 0q-10 3-20 0z" fill="#ffd27a"/></g>
 <g transform="translate(86 22) scale(.55)"><path d="M30 10q2-8 7-9l1 2q-4 2-5 8z" fill="#3b5a1a"/><ellipse cx="30" cy="30" rx="22" ry="17" fill="#e8741c"/><path d="M22 14q-6 16 0 33M38 14q6 16 0 33" stroke="#b24a0c" stroke-width="1.5" fill="none" opacity=".7"/></g></svg>`;
+  const I2=typeof IC2!=="undefined"?IC2:{},IMG_BG=I2.hwbg,IMG_GH=I2.hwghost,IMG_PK=I2.hwpumpkin;
   const st=document.createElement("style");st.id="hwThemeCss";
   st.textContent=`
 html.hw-theme{--hw-o:#f08a24;--hw-o2:#ffb347;--hw-p:#2a1238;--hw-g:#9be36a}
 /* night sky with a big moon, a warm glow on the horizon */
-html.hw-theme body,html.hw-theme #home{background:radial-gradient(circle at 82% 11%,#fff4d6 0 38px,rgba(255,226,160,.55) 40px,rgba(255,180,90,.18) 70px,transparent 130px),
- radial-gradient(1px 1px at 12% 18%,#fff9 50%,transparent 51%),radial-gradient(1.5px 1.5px at 30% 7%,#fffa 50%,transparent 51%),radial-gradient(1px 1px at 55% 22%,#fff8 50%,transparent 51%),radial-gradient(1.4px 1.4px at 66% 4%,#fff9 50%,transparent 51%),radial-gradient(1px 1px at 8% 40%,#fff7 50%,transparent 51%),radial-gradient(1.2px 1.2px at 92% 34%,#fff8 50%,transparent 51%),
- linear-gradient(#07040d 0%,#170a24 38%,#2c1036 70%,#4a1d1a 92%,#6b2a10 100%)!important;background-attachment:fixed!important}
-html.hw-theme #home::before{content:"";position:fixed;left:0;right:0;bottom:58px;height:min(44vw,210px);background:${svg(SKY)} center bottom/cover no-repeat;pointer-events:none;z-index:0;opacity:.95}
+html.hw-theme body,html.hw-theme #home{background:${IMG_BG?`url(${IMG_BG}) center calc(100% - 58px)/cover no-repeat,`:""}#2f1535!important;background-attachment:fixed!important}
 html.hw-theme #home::after{content:"";position:fixed;left:-30%;right:-30%;bottom:0;height:42vh;pointer-events:none;z-index:0;
  background:radial-gradient(ellipse 40% 30% at 30% 85%,rgba(190,170,230,.22),transparent 70%),radial-gradient(ellipse 45% 25% at 75% 92%,rgba(190,170,230,.18),transparent 70%);animation:hwFog 26s ease-in-out infinite alternate}
 @keyframes hwFog{from{transform:translateX(-6%)}to{transform:translateX(6%)}}
@@ -54,7 +52,7 @@ body.g3 .hw-web{display:none}
 /* drifting ghosts */
 .hw-ghosts{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 body:has(#home[hidden]) .hw-ghosts,body:has(#home[hidden]) .hw-web,body:has(#home[hidden]) .hw-garl{display:none}
-.hw-ghosts i{position:absolute;width:34px;height:40px;background:${svg(GHOST)} center/contain no-repeat;opacity:.0;animation:hwGhost 18s ease-in-out infinite}
+.hw-ghosts i{position:absolute;width:56px;height:56px;background:${IMG_GH?`url(${IMG_GH})`:svg(GHOST)} center/contain no-repeat;filter:drop-shadow(0 0 10px rgba(220,200,255,.45));opacity:.0;animation:hwGhost 18s ease-in-out infinite}
 @keyframes hwGhost{0%{opacity:0;transform:translate(0,0) rotate(-6deg)}15%{opacity:.55}50%{transform:translate(22vw,-10vh) rotate(6deg);opacity:.45}85%{opacity:.5}100%{opacity:0;transform:translate(40vw,-22vh) rotate(-4deg)}}
 body.g3 .hw-ghosts{display:none}
 /* logo */
@@ -85,7 +83,7 @@ html.hw-theme .hw-garl{position:absolute;left:-12px;right:-12px;top:-18px;height
 html:not(.hw-theme) .hw-garl{display:none}
 html.hw-theme .home-in{padding-top:28px!important}
 /* jack-o'-lanterns sitting on the main card */
-html.hw-theme .h2-hero::before{content:"";position:absolute;right:8px;bottom:6px;width:84px;height:34px;background:${svg(PUMP)} 0 0/contain no-repeat;z-index:4;pointer-events:none;filter:drop-shadow(0 0 8px rgba(255,140,40,.6))}
+html.hw-theme .h2-hero::before{content:"";position:absolute;right:6px;bottom:4px;width:78px;height:44px;background:${IMG_PK?`url(${IMG_PK}) right bottom/44px no-repeat,url(${IMG_PK}) left 6px bottom/30px no-repeat`:svg(PUMP)+" 0 0/contain no-repeat"};z-index:4;pointer-events:none;filter:drop-shadow(0 0 8px rgba(255,140,40,.6))}
 /* the main picture at night */
 html.hw-theme .h2-art{position:relative}
 html.hw-theme .h2-art::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(40,10,70,.45),rgba(240,120,30,.25));mix-blend-mode:multiply;pointer-events:none}
@@ -95,8 +93,11 @@ html.hw-theme .h2-daily{border-color:#e0802c!important;box-shadow:0 0 16px rgba(
 html.hw-theme body.g3 #board::before{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 3px #e0802c,inset 0 0 26px rgba(240,138,36,.55);pointer-events:none;z-index:8}
 html.hw-theme body.g3 #g3PanelHead b{color:#ffb347!important}
 html.hw-theme body.g3 #board::after{content:"";position:absolute;right:0;top:0;width:46px;height:46px;background:${svg(WEB.replace(/#fff/g,"#5a2a10"))} 0 0/contain no-repeat;transform:scaleX(-1);pointer-events:none;opacity:.6;z-index:9}
+
+html.hw-theme .home-t::after,html.hw-theme .home-logo h1::after{content:""!important;display:inline-block;width:1.05em;height:1.05em;margin-left:.25em;vertical-align:-.12em;background:${IMG_PK?`url(${IMG_PK})`:"none"} center/contain no-repeat}
 `;
   document.head.appendChild(st);
+  const s2=document.createElement("style");s2.textContent=`.hw-ci.hw-pk-img{width:48px;height:48px;flex:0 0 48px;font-size:0;background:${IMG_PK?`url(${IMG_PK})`:"none"} center/contain no-repeat}`;document.head.appendChild(s2);
   const hin=document.querySelector(".home-in")||document.body,ga=document.createElement("div");ga.className="hw-garl";hin.prepend(ga);
   const web=document.createElement("div");web.innerHTML=`<div class="hw-web l"></div><div class="hw-web r"></div>`;[...web.children].reverse().forEach(e=>hin.prepend(e));
   const gh=document.createElement("div");gh.className="hw-ghosts";(document.getElementById("home")||document.body).prepend(gh);gh.innerHTML=[["6%","62%",0],["58%","74%",7],["30%","48%",12]].map(([l,t,d])=>`<i style="left:${l};top:${t};animation-delay:-${d}s"></i>`).join("");
