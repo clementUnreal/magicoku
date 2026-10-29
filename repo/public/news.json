@@ -1,5 +1,26 @@
 [
  {
+  "id": 79,
+  "date": "2026-10-29",
+  "icon": "♾️",
+  "fr": {
+   "t": "Nouveau : le mode infini",
+   "d": "Les enquêtes s'enchaînent sans fin et deviennent de plus en plus difficiles : grilles plus grandes, empreintes, registre, reflets, poisons, obscurité… Tu as 3 vies : une erreur à la validation ou un indice en coûte une, et tu en regagnes une tous les 10 niveaux. Un classement « Le plus loin » et +20 éclats de lune à chaque nouveau palier de 5 niveaux de ton record. Sur l'accueil, dans « Autres modes » !"
+  },
+  "en": {
+   "t": "New: endless mode",
+   "d": "Cases follow one another endlessly and get harder and harder: bigger grids, footprints, register, reflections, poisons, darkness… You have 3 lives: a wrong check or a hint costs one, and you get one back every 10 levels. A “Furthest” ranking and +20 moon shards each time your best passes a new 5-level milestone. On the home screen, under “Other modes”!"
+  },
+  "ko": {
+   "t": "새 모드: 무한 모드",
+   "d": "사건이 끝없이 이어지고 점점 어려워져요. 더 큰 그리드, 발자국, 출입 기록, 반사, 독약, 어둠… 생명은 3개예요. 확인 실수나 힌트 하나에 생명 하나가 줄고, 10레벨마다 하나를 되찾아요. ‘가장 멀리’ 순위가 있고, 내 기록이 5레벨 구간을 새로 넘을 때마다 달 조각 +20. 홈 화면의 ‘다른 모드’에서!"
+  },
+  "ja": {
+   "t": "新モード：エンドレスモード",
+   "d": "事件が次々と続き、どんどん難しくなります。大きなグリッド、足跡、記録、鏡写し、毒薬、暗闇…ライフは3つ。チェックのミスやヒントで1つ減り、10レベルごとに1つ回復します。「最も遠くまで」ランキングと、自己ベストが5レベルの節目を超えるたびに月のかけら+20。ホーム画面の「ほかのモード」から！"
+  }
+ },
+ {
   "id": 78,
   "date": "2026-10-29",
   "icon": "🎃",

@@ -82,7 +82,7 @@ function botFlags(tel, t) {
 function sanitizeProgress(progress) {
   const out = {};
   for (const [k, v] of Object.entries(progress || {}).slice(0, 200)) {
-    if (!/^[a-z0-9]{1,12}$/.test(k) || !v || !v.solved) continue;
+    if (!/^[a-z0-9]{1,12}$/.test(k) || /^i\d+$/.test(k) || !v || !v.solved) continue;  // endless-mode levels have their own ranking
     out[k] = { t: Math.max(0, Math.min(86400, Math.round(Number(v.time) || 0))), h: Math.max(0, Math.min(999, Number(v.hints) || 0)),
       a: Math.max(1, Math.min(999, Number(v.attempts) || 1)) };
     const tl = v.tel && typeof v.tel === "object" ? v.tel : null;
@@ -361,6 +361,38 @@ export class Leaderboard extends DurableObject {
     await this.saveWallet(row.pseudo, w);
     const rows = Object.values(d.rows).sort(dcmp);
     return { status: 200, body: { earned, coins: w.coins, rank: rows.findIndex((x) => x === r || x.pseudo === r.pseudo) + 1, of: rows.length } };
+  }
+  // ---- endless mode: a run goes on until the 3 lives are lost; ranking = furthest level cleared, then total time ----
+  async infList() {
+    await this.loadCheat();
+    const all = await this.ctx.storage.list({ prefix: "inf:" }), rows = [];
+    for (const v of all.values()) if (v && v.best && v.best.n > 0) rows.push({ pseudo: v.pseudo, avatar: v.avatar, n: v.best.n, t: v.best.t, at: v.best.at, cheat: isCheat(v.pseudo) ? 1 : 0 });
+    rows.sort((a, b) => a.cheat - b.cheat || b.n - a.n || a.t - b.t || a.at - b.at);
+    const top = rows.slice(0, 100);
+    for (const r of top) { const w = await this.ctx.storage.get("w:" + String(r.pseudo || "").trim().toLowerCase()); if (w) r.cos = this.pub(w); }
+    return { rows: top, of: rows.length };
+  }
+  async infSubmit(body) {
+    const row = await this.auth(body.id, String(body.token || ""));
+    if (!row) return { status: 403, body: { error: "forbidden" } };
+    const rid = String(body.rid || ""), n = Math.floor(Number(body.n) || 0), t = Math.max(0, Math.min(10 ** 7, Math.round(Number(body.t) || 0)));
+    if (!/^[\w-]{6,40}$/.test(rid) || n < 1 || n > 5000) return { status: 400, body: { error: "bad run" } };
+    const me = String(row.pseudo).trim().toLowerCase(), key = "inf:" + me;
+    const d = (await this.ctx.storage.get(key)) || { pseudo: row.pseudo, avatar: row.avatar, best: null, run: null, ms: 0 };
+    d.pseudo = row.pseudo; d.avatar = row.avatar;
+    // a run only moves forward (levels cleared offline are sent together later), each level takes some time, and a new run starts at the beginning
+    const run = d.run && d.run.rid === rid ? d.run : null;
+    if (run ? (n <= run.n || t < run.t + 3 * (n - run.n)) : (n > 3 || t < 3 * n)) return { status: 409, body: { error: "out of order", best: d.best } };
+    d.run = { rid, n, t };
+    if (!d.best || n > d.best.n || (n === d.best.n && t < d.best.t)) d.best = { n, t, at: Date.now() };
+    // moon shards: +20 every time the personal record passes a new multiple of 5
+    let earned = 0; const ms = Math.floor(d.best.n / 5) * 5;
+    if (ms > (d.ms || 0)) { earned = 20 * (ms - (d.ms || 0)) / 5; d.ms = ms; }
+    await this.ctx.storage.put(key, d);
+    const w = await this.wallet(row.pseudo);
+    if (earned) { w.coins += earned; (w.log = w.log || []).unshift({ at: Date.now(), n: earned, why: "inf:" + ms }); w.log = w.log.slice(0, 30); await this.saveWallet(row.pseudo, w); }
+    const l = await this.infList(), rank = l.rows.findIndex((r) => String(r.pseudo).trim().toLowerCase() === me) + 1;
+    return { status: 200, body: { best: d.best, earned, coins: w.coins, rank: rank || null, of: l.of } };
   }
   // the renaming quill was a shared auction until v99; it is now a personal item (names seen only by their owner)
   async quill() { return (await this.ctx.storage.get("__quill")) || { names: {}, n: 0, by: null, at: 0 }; }
@@ -688,7 +720,7 @@ export class Leaderboard extends DurableObject {
     if (me === ADMIN) return { status: 400, body: { error: "admin" } };
     const all = await this.ctx.storage.list({ prefix: "p:" });
     for (const [k, v] of all) if (v && v.row && String(v.row.pseudo).trim().toLowerCase() === me) await this.ctx.storage.delete(k);
-    await this.ctx.storage.delete("w:" + me); await this.ctx.storage.delete("cm:" + me);
+    await this.ctx.storage.delete("w:" + me); await this.ctx.storage.delete("cm:" + me); await this.ctx.storage.delete("inf:" + me);
     { const gs = await this.ctx.storage.get("gp:" + me); if (gs) await this.ctx.storage.delete("g:" + gs); await this.ctx.storage.delete("gp:" + me); }
     const dms = await this.ctx.storage.list({ prefix: "dm:" });
     for (const k of dms.keys()) if (k.slice(3).split("|").includes(me)) await this.ctx.storage.delete(k);
@@ -800,6 +832,13 @@ export default {
       const lb = env.LB.get(env.LB.idFromName("main"));
       const r = url.pathname === "/api/daily" ? await lb.dailySubmit(body) : await lb.shop(body);
       return json(r.body, r.status);
+    }
+    if (url.pathname === "/api/inf") {
+      const lb = env.LB.get(env.LB.idFromName("main"));
+      if (request.method === "GET") return json(await lb.infList());
+      if (request.method !== "POST") return json({ error: "method" }, 405);
+      let body; try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
+      const r = await lb.infSubmit(body); return json(r.body, r.status);
     }
     if (url.pathname === "/api/cheaters") { const lb = env.LB.get(env.LB.idFromName("main")); return json(await lb.loadCheat()); }
     if (url.pathname === "/api/admin/cheat" && request.method === "POST") {
