@@ -87,7 +87,7 @@ function renderBoard(){
   let labels="";
   rooms.forEach(k=>{const L=labelRun[k];let best=[],cur=[];L.cs.forEach(c=>{if(doorTop.has(L.r+","+c)){cur=[]}else{cur.push(c);if(cur.length>best.length)best=cur.slice()}});if(!best.length)best=L.cs;
     const cx=(Math.min(...best)+Math.max(...best)+1)/2;
-    labels+=`<span class="rlabel" data-room="${k}" style="left:${PP(cx/N)};top:${PP(L.r/N)}">${rname(k).replace(/^(le |la |les |l'|the )/i,"")}</span>`});
+    labels+=`<span class="rlabel" data-room="${k}" style="left:${PP(cx/N)};top:${PP(L.r/N)};max-width:calc(${PP(best.length/N)} - 4px)" title="${rname(k)}">${rname(k).replace(/^(le |la |les |l'|the )/i,"")}</span>`});
   let edge="";
   for(let c=0;c<N;c++)edge+=`<span class="edge top" style="left:${PP((c+.5)/N)}">${c+1}</span>`;
   for(let r=0;r<N;r++)edge+=`<span class="edge side" style="top:${PP((r+.5)/N)}">${ROWS[r]}</span>`;

@@ -16,7 +16,7 @@ function kwApply(){document.querySelectorAll("#marks .mk.kwhl").forEach(e=>e.cla
     KWSEL=KWSEL&&KWSEL[0]===key[0]&&String(KWSEL[1])===String(key[1])&&!sn?null:key;
     try{play("select")}catch(e){}
     if(sn){save();render()}else kwApply();
-    if(KWSEL&&matchMedia("(max-width:980px)").matches){const pl=$("#plan");if(pl){const r=pl.getBoundingClientRect();if(r.bottom<60||r.top>innerHeight-120)pl.scrollIntoView({behavior:"smooth",block:"center"})}}
+    if(KWSEL&&!document.body.classList.contains("g3")&&matchMedia("(max-width:980px)").matches){const pl=$("#plan");if(pl){const r=pl.getBoundingClientRect();if(r.bottom<60||r.top>innerHeight-120)pl.scrollIntoView({behavior:"smooth",block:"center"})}}
     return true}
   document.addEventListener("click",e=>{if(act(e.target)){e.stopPropagation()}},true);
   document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&act(e.target))e.preventDefault()});

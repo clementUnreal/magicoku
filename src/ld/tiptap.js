@@ -1,6 +1,6 @@
 /* ================= one-time notice everyone must read: tapping words in the testimonies ================= */
 (function(){
-  const K="magicoku:tipTapWords";
+  const K="magicoku:tipTapWords2";
   const seen=()=>{try{return localStorage.getItem(K)==="1"}catch(_){return true}};
   function show(){if(seen()||$("#tipTap"))return;
     if(document.querySelector("#coach:not([hidden]),.coach-on,#onb:not([hidden])"))return;
@@ -13,6 +13,7 @@
       <ul>
         <li><span class="tt-p">${L("Un personnage","A character","인물","人物")}</span> → ${L("il est <b>sélectionné</b> : touche ensuite une case pour le placer.","they are <b>selected</b>: then tap a square to place them.","그 인물이 <b>선택돼요</b>. 그다음 칸을 눌러 배치하세요.","その人が<b>選択</b>されます。次にマスをタップして置こう。")}</li>
         <li><span class="tt-o">${L("Un objet, une pièce, une rangée","An object, a room, a row","물건, 방, 행","物・部屋・行")}</span> → ${L("ses cases <b>s'allument sur le plan</b>. Touche encore pour éteindre.","its squares <b>light up on the map</b>. Tap again to turn them off.","해당 칸이 <b>지도에서 빛나요</b>. 다시 누르면 꺼져요.","そのマスが<b>マップで光ります</b>。もう一度タップで消えます。")}</li>
+        <li>❌ ${L("Une croix posée sur un objet est dessinée en petit dans le coin, mais si tu ne retrouves plus un objet, <b>touche son nom dans le texte</b> : toutes ses cases s'allument, même sous les croix.","A cross on an object is drawn small in the corner, but if you lose track of an object, <b>tap its name in the text</b>: all its squares light up, even under crosses.","물건 위의 X는 모서리에 작게 그려져요. 물건이 안 보이면 <b>글에서 그 이름을 누르세요</b>. X 아래에 있어도 모든 칸이 빛나요.","物の上の✕は角に小さく描かれます。物が見えなくなったら、<b>文中の名前をタップ</b>しよう。✕の下でも全部のマスが光ります。")}</li>
       </ul>
       <button class="tt-go">${L("J'ai compris","Got it","알겠어요","わかった")}</button></div>`;
     document.body.appendChild(m);

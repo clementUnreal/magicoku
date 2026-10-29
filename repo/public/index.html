@@ -1957,7 +1957,7 @@ function renderBoard(){
   let labels="";
   rooms.forEach(k=>{const L=labelRun[k];let best=[],cur=[];L.cs.forEach(c=>{if(doorTop.has(L.r+","+c)){cur=[]}else{cur.push(c);if(cur.length>best.length)best=cur.slice()}});if(!best.length)best=L.cs;
     const cx=(Math.min(...best)+Math.max(...best)+1)/2;
-    labels+=`<span class="rlabel" data-room="${k}" style="left:${PP(cx/N)};top:${PP(L.r/N)}">${rname(k).replace(/^(le |la |les |l'|the )/i,"")}</span>`});
+    labels+=`<span class="rlabel" data-room="${k}" style="left:${PP(cx/N)};top:${PP(L.r/N)};max-width:calc(${PP(best.length/N)} - 4px)" title="${rname(k)}">${rname(k).replace(/^(le |la |les |l'|the )/i,"")}</span>`});
   let edge="";
   for(let c=0;c<N;c++)edge+=`<span class="edge top" style="left:${PP((c+.5)/N)}">${c+1}</span>`;
   for(let r=0;r<N;r++)edge+=`<span class="edge side" style="top:${PP((r+.5)/N)}">${ROWS[r]}</span>`;
@@ -2774,7 +2774,7 @@ function kwApply(){document.querySelectorAll("#marks .mk.kwhl").forEach(e=>e.cla
     KWSEL=KWSEL&&KWSEL[0]===key[0]&&String(KWSEL[1])===String(key[1])&&!sn?null:key;
     try{play("select")}catch(e){}
     if(sn){save();render()}else kwApply();
-    if(KWSEL&&matchMedia("(max-width:980px)").matches){const pl=$("#plan");if(pl){const r=pl.getBoundingClientRect();if(r.bottom<60||r.top>innerHeight-120)pl.scrollIntoView({behavior:"smooth",block:"center"})}}
+    if(KWSEL&&!document.body.classList.contains("g3")&&matchMedia("(max-width:980px)").matches){const pl=$("#plan");if(pl){const r=pl.getBoundingClientRect();if(r.bottom<60||r.top>innerHeight-120)pl.scrollIntoView({behavior:"smooth",block:"center"})}}
     return true}
   document.addEventListener("click",e=>{if(act(e.target)){e.stopPropagation()}},true);
   document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&act(e.target))e.preventDefault()});
@@ -3254,7 +3254,7 @@ var UNLOCK={hRush:{lvl:10,name:["le Défi chrono","the Time trial","타임 챌�
 
 /* chapter III: no hints */
 (function(){
-  const noHint=()=>!(typeof RUSH!=="undefined"&&RUSH.on)&&!(typeof NIGHT!=="undefined"&&NIGHT.on)&&tierOf(ci)===2;
+  const noHint=()=>!(typeof RUSH!=="undefined"&&RUSH.on)&&!(typeof NIGHT!=="undefined"&&NIGHT.on)&&!(typeof HW!=="undefined"&&HW.on)&&!(typeof DAILY!=="undefined"&&DAILY.on)&&!(typeof LIAR!=="undefined"&&LIAR.on)&&tierOf(ci)===2;
   function paintHint(){const b=$("#tHint");if(!b)return;const off=noHint();b.classList.toggle("nohint",off);b.disabled=off;
     if(off)b.innerHTML=`<span>🚫 ${L("Pas d'indice","No hints","힌트 없음","ヒントなし")}</span><small>${L("Chapitre III : à toi de jouer !","Chapter III: you're on your own!","3장: 혼자 힘으로!","第三章：自分の力で！")}</small>`;
     else if(b.querySelector("small"))b.innerHTML=`<span data-t="hint">${TX(TXT.hint)}</span>`}
@@ -4100,7 +4100,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="c4dc8798c6ab";
+var APP_BUILD="baeebd22e940";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
@@ -6069,7 +6069,7 @@ ${P} .g3-mhome{min-height:44px!important;margin:0!important}
 })();
 /* ================= one-time notice everyone must read: tapping words in the testimonies ================= */
 (function(){
-  const K="magicoku:tipTapWords";
+  const K="magicoku:tipTapWords2";
   const seen=()=>{try{return localStorage.getItem(K)==="1"}catch(_){return true}};
   function show(){if(seen()||$("#tipTap"))return;
     if(document.querySelector("#coach:not([hidden]),.coach-on,#onb:not([hidden])"))return;
@@ -6082,6 +6082,7 @@ ${P} .g3-mhome{min-height:44px!important;margin:0!important}
       <ul>
         <li><span class="tt-p">${L("Un personnage","A character","인물","人物")}</span> → ${L("il est <b>sélectionné</b> : touche ensuite une case pour le placer.","they are <b>selected</b>: then tap a square to place them.","그 인물이 <b>선택돼요</b>. 그다음 칸을 눌러 배치하세요.","その人が<b>選択</b>されます。次にマスをタップして置こう。")}</li>
         <li><span class="tt-o">${L("Un objet, une pièce, une rangée","An object, a room, a row","물건, 방, 행","物・部屋・行")}</span> → ${L("ses cases <b>s'allument sur le plan</b>. Touche encore pour éteindre.","its squares <b>light up on the map</b>. Tap again to turn them off.","해당 칸이 <b>지도에서 빛나요</b>. 다시 누르면 꺼져요.","そのマスが<b>マップで光ります</b>。もう一度タップで消えます。")}</li>
+        <li>❌ ${L("Une croix posée sur un objet est dessinée en petit dans le coin, mais si tu ne retrouves plus un objet, <b>touche son nom dans le texte</b> : toutes ses cases s'allument, même sous les croix.","A cross on an object is drawn small in the corner, but if you lose track of an object, <b>tap its name in the text</b>: all its squares light up, even under crosses.","물건 위의 X는 모서리에 작게 그려져요. 물건이 안 보이면 <b>글에서 그 이름을 누르세요</b>. X 아래에 있어도 모든 칸이 빛나요.","物の上の✕は角に小さく描かれます。物が見えなくなったら、<b>文中の名前をタップ</b>しよう。✕の下でも全部のマスが光ります。")}</li>
       </ul>
       <button class="tt-go">${L("J'ai compris","Got it","알겠어요","わかった")}</button></div>`;
     document.body.appendChild(m);
@@ -6341,6 +6342,30 @@ body.g3 .hw-bats{display:none}`;document.head.appendChild(st);
   /* a few bats flying over the menus */
   const bats=document.createElement("div");bats.className="hw-bats";bats.innerHTML=[["8%",28,0],["22%",36,9],["14%",44,19],["70%",40,5],["82%",52,14]].map(([t,d,dl])=>`<span style="top:${t};animation-duration:${d}s;animation-delay:-${dl}s">🦇</span>`).join("");document.body.appendChild(bats);
   try{renderHome()}catch(_){}
+})();
+/* ================= play screen, phone held upright: the map stays locked at the top, only the testimonies scroll =================
+   + room names never wider than their room, notes kept inside their square, markers made small on squares with an object */
+(function(){
+  const st=document.createElement("style");st.textContent=`
+html body.g3:not(.g3l){height:100dvh;overflow:hidden!important}
+html:has(body.g3:not(.g3l)){overflow:hidden!important;height:100%}
+html body.g3:not(.g3l) .wrap{padding-bottom:0!important}
+html body.g3:not(.g3l) .wrap{height:100dvh!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;box-sizing:border-box}
+html body.g3:not(.g3l) #g3Bar{flex:none}
+html body.g3:not(.g3l) .game{flex:1 1 auto!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important}
+html body.g3:not(.g3l) .game>.center,html body.g3:not(.g3l) .game>.tools{flex:none!important}
+html body.g3:not(.g3l) .game>.suspects{flex:1 1 auto!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;margin-bottom:0!important}
+html body.g3:not(.g3l) #cards{flex:1 1 auto!important;min-height:0!important;display:flex!important;flex-direction:column!important}
+html body.g3:not(.g3l) #cards .chips{flex:none!important}
+html body.g3:not(.g3l) #cards .recit{flex:1 1 auto!important;min-height:80px!important;max-height:none!important;overflow-y:auto!important;overscroll-behavior:contain}
+#board .rlabel{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-sizing:border-box}
+#board .plan .notes{inset:auto auto 4% 4%!important;max-width:92%;align-content:flex-end;overflow:hidden}
+#board .plan .notes span{font-size:clamp(8px,calc(93.6cqw * 22 / var(--wn)),16px)!important;-webkit-text-stroke:2.5px #fff!important}
+#marks .mk.obj .xm{transform:scale(.55);transform-origin:100% 0%;opacity:.88}
+#marks .mk.obj .xm svg{opacity:.9}
+html body.g3 #tHint.nohint small{display:none!important}`;document.head.appendChild(st);
+  /* mark squares holding an object, so their cross / star is drawn small in the corner and the object stays visible */
+  const _rm=renderMarks;renderMarks=function(){const r=_rm.apply(this,arguments);try{document.querySelectorAll("#marks .mk").forEach(el=>{const rr=+el.dataset.r,cc=+el.dataset.c;el.classList.toggle("obj",!!(OBJ&&OBJ[rr]&&OBJ[rr][cc]&&OBJ[rr][cc]!=="void"))})}catch(_){}return r};
 })();
 
 render();

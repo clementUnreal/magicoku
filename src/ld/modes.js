@@ -21,7 +21,7 @@ var UNLOCK={hRush:{lvl:10,name:["le Défi chrono","the Time trial","타임 챌�
 
 /* chapter III: no hints */
 (function(){
-  const noHint=()=>!(typeof RUSH!=="undefined"&&RUSH.on)&&!(typeof NIGHT!=="undefined"&&NIGHT.on)&&tierOf(ci)===2;
+  const noHint=()=>!(typeof RUSH!=="undefined"&&RUSH.on)&&!(typeof NIGHT!=="undefined"&&NIGHT.on)&&!(typeof HW!=="undefined"&&HW.on)&&!(typeof DAILY!=="undefined"&&DAILY.on)&&!(typeof LIAR!=="undefined"&&LIAR.on)&&tierOf(ci)===2;
   function paintHint(){const b=$("#tHint");if(!b)return;const off=noHint();b.classList.toggle("nohint",off);b.disabled=off;
     if(off)b.innerHTML=`<span>🚫 ${L("Pas d'indice","No hints","힌트 없음","ヒントなし")}</span><small>${L("Chapitre III : à toi de jouer !","Chapter III: you're on your own!","3장: 혼자 힘으로!","第三章：自分の力で！")}</small>`;
     else if(b.querySelector("small"))b.innerHTML=`<span data-t="hint">${TX(TXT.hint)}</span>`}
