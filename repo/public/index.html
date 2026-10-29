@@ -2146,7 +2146,7 @@ function showReveal(){
   const hn=S.hints?`<br><small>(${L(`${S.hints} ${S.hints>1?"indices utilisés":"indice utilisé"}`,`${S.hints} ${S.hints>1?"hints used":"hint used"}`,`힌트 ${S.hints}개 사용`,`ヒント${S.hints}回使用`)})</small>`:"";
   $("#reveal").innerHTML=`<div class="box" role="dialog" aria-modal="true" aria-labelledby="rv"><div class="eyebrow">${L("Affaire résolue !","Case closed!","사건 해결!","事件解決！")}</div>
     <div class="big">${ava(K,{angry:true})}</div><h2 id="rv">${L(`C'est ${pname(K)} !`,`It's ${pname(K)}!`,`범인은 ${pname(K)}!`,`犯人は${pname(K)}だ！`)}</h2>
-    <p>${LANG==="ko"?`${prole(K)} ${pp(pname(K),"은","는")} ${rm}에서 ${pp(pname(0),"과","와")} 단둘이 있었다. 독이 숨겨져 있던 것은 ${pp(TX(M.weapon),"이었다","였다")}.`:LANG==="ja"?`${prole(K)}の${pname(K)}は、${rm}で${pname(0)}と二人きりだった。毒が仕込まれていたのは${TX(M.weapon)}だった。`:LANG==="en"?`The ${prole(K)} was alone with ${pname(0)} in ${rm}. ${pname(0)} was poisoned ${M.weapon[1]}.`:`${fem(K,"Le","La")} ${prole(K)} était ${fem(K,"seul","seule")} avec ${pname(0)} dans ${rm}. ${pname(0)} a été ${fem(0,"empoisonné","empoisonnée")} ${M.weapon[0]}.`}${hn}</p>
+    <p>${LANG==="ko"?`${prole(K)} ${pp(pname(K),"은","는")} ${rm}에서 ${pp(pname(0),"과","와")} 단둘이 있었다. 독이 숨겨져 있던 것은 ${pp(TX(M.weapon),"이었다","였다")}.`:LANG==="ja"?`${prole(K)}の${pname(K)}は、${rm}で${pname(0)}と二人きりだった。毒が仕込まれていたのは${TX(M.weapon)}だった。`:LANG==="en"?`The ${prole(K)} was alone with ${pname(0)} in ${rm}. ${pname(0)} was poisoned ${M.weapon[1]}.`:`${(r=>/^[aeiouyhàâéèêëîïôûœ]/i.test(r)?"L'"+r:fem(K,"Le","La")+" "+r)(prole(K))} était ${fem(K,"seul","seule")} avec ${pname(0)} dans ${rm}. ${pname(0)} a été ${fem(0,"empoisonné","empoisonnée")} ${M.weapon[0]}.`}${hn}</p>
     <div class="acts"><button class="pill" id="rvClose">${L("Admirer ma grille","Admire my grid","내 격자 감상하기","自分のグリッドを眺める")}</button>${ci<DATA.length-1?`<button class="pill red" id="rvNext">${L("Enquête suivante","Next case","다음 사건","次の事件")}</button>`:""}</div></div>`;
   $("#reveal").hidden=false;$("#rvClose").focus();
   $("#rvClose").onclick=()=>$("#reveal").hidden=true;
@@ -4100,7 +4100,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="61e44f081a08";
+var APP_BUILD="83a2142d4939";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;

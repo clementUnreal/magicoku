@@ -119,3 +119,6 @@ _R('clueText(S.sel,x).replace', 'String(clueText(S.sel,x)||"").replace')
 
 # ---------- Halloween event: the ghost may float over furniture (only while the ghost is the selected person) ----------
 _R('const blocked=(r,c)=>OBJ[r][c]&&!WALK.has(OBJ[r][c]);', 'var blocked=(r,c)=>OBJ[r][c]&&!WALK.has(OBJ[r][c])&&!(typeof HW!=="undefined"&&HW.on&&C&&C.ghost!=null&&S&&S.sel===C.ghost&&OBJ[r][c]!=="void"&&OBJ[r][c]!=="poison");')
+
+# ---------- French elision on the reveal: "L'élève de 1re année était seul…" (not "Le élève") ----------
+_R('${fem(K,"Le","La")} ${prole(K)} était', '${(r=>/^[aeiouyhàâéèêëîïôûœ]/i.test(r)?"L\'"+r:fem(K,"Le","La")+" "+r)(prole(K))} était')
