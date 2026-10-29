@@ -60,6 +60,11 @@ html body[class*="xs-"] #marks .xm::after{content:""!important;font-size:0!impor
   function hold(fn){return function(){const y=keepY;const out=fn.apply(this,arguments);
     const fix=()=>{const r=document.querySelector(".recit");if(r&&Math.abs(r.scrollTop-y)>1){r.style.scrollBehavior="auto";r.scrollTop=y;r.style.scrollBehavior=""}};fix();requestAnimationFrame(fix);return out}}
   render=hold(render);renderCards=hold(renderCards);
+  /* …except one thing: tapping a portrait in the characters strip brings that person's testimony into view */
+  document.addEventListener("click",e=>{if(!document.body.classList.contains("g3"))return;const c=e.target.closest&&e.target.closest(".card[data-p]");if(!c||c.closest(".recit"))return;const p=+c.dataset.p;
+    requestAnimationFrame(()=>{if(!S||S.sel!==p)return;const r=document.querySelector(".recit"),q=r&&r.querySelector(`p[data-p="${p}"]`);if(!q)return;
+      const t=Math.max(0,Math.min(r.scrollHeight-r.clientHeight,q.getBoundingClientRect().top-r.getBoundingClientRect().top+r.scrollTop-8));
+      userOn=true;keepY=t;r.scrollTo({top:t,behavior:"smooth"})})});
   const _ocx=openCase;openCase=function(){const out=_ocx.apply(this,arguments);keepY=0;const r=document.querySelector(".recit");if(r)r.scrollTop=0;return out};
   /* a highlighted word switches off as soon as you tap anything else */
   document.addEventListener("pointerdown",e=>{if(typeof KWSEL==="undefined"||!KWSEL)return;if(e.target.closest&&e.target.closest(".recit .kw,.recit .sn"))return;KWSEL=null;try{kwApply()}catch(_){}},true);
