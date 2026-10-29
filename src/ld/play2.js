@@ -43,6 +43,19 @@ html body.g3 #tHint.nohint small{display:none!important}`;document.head.appendCh
     const bd=($("#board")||plan).getBoundingClientRect(),bw=b.offsetWidth,bh=b.offsetHeight;
     b.style.left=Math.max(bd.left+bw/2+4,Math.min(bd.right-bw/2-4,e.clientX))+"px";b.style.top=Math.max(bd.top+bh+6,e.clientY-10)+"px";
     clearTimeout(bubT);bubT=setTimeout(()=>{const x=document.getElementById("rbub");if(x)x.remove()},1600)},true);
+  /* the testimonies never jump: whatever is redrawn (placing, selecting, tapping a word), the text keeps its scroll position */
+  let keepY=0;
+  /* only the player moves the text: a scroll that the player didn't start is undone */
+  let userOn=false;
+  const inRecit=e=>!!(e.target&&e.target.closest&&e.target.closest(".recit"));
+  ["touchstart","pointerdown","wheel"].forEach(t=>document.addEventListener(t,e=>{userOn=inRecit(e)},{capture:true,passive:true}));
+  document.addEventListener("keydown",()=>{userOn=true},true);
+  document.addEventListener("scroll",e=>{const r=e.target;if(!(r&&r.classList&&r.classList.contains("recit")))return;
+    if(userOn||!document.body.classList.contains("g3"))keepY=r.scrollTop;else if(Math.abs(r.scrollTop-keepY)>1){r.style.scrollBehavior="auto";r.scrollTop=keepY;r.style.scrollBehavior=""}},true);
+  function hold(fn){return function(){const y=keepY;const out=fn.apply(this,arguments);
+    const fix=()=>{const r=document.querySelector(".recit");if(r&&Math.abs(r.scrollTop-y)>1){r.style.scrollBehavior="auto";r.scrollTop=y;r.style.scrollBehavior=""}};fix();requestAnimationFrame(fix);return out}}
+  render=hold(render);renderCards=hold(renderCards);
+  const _ocx=openCase;openCase=function(){const out=_ocx.apply(this,arguments);keepY=0;const r=document.querySelector(".recit");if(r)r.scrollTop=0;return out};
   /* a highlighted word switches off as soon as you tap anything else */
   document.addEventListener("pointerdown",e=>{if(typeof KWSEL==="undefined"||!KWSEL)return;if(e.target.closest&&e.target.closest(".recit .kw,.recit .sn"))return;KWSEL=null;try{kwApply()}catch(_){}},true);
   /* mark squares holding an object, so their cross / star is drawn small in the corner and the object stays visible */

@@ -216,7 +216,7 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
   /* landscape: the hint box sits above the testimonies (left column), not above the board */
   function placeHint(){const hb=$("#hintBox"),sus=document.querySelector(".suspects"),bd=$("#board");if(!hb||!sus||!bd)return;
     if(document.body.classList.contains("g3l")){if(hb.parentNode!==sus)sus.insertBefore(hb,sus.firstChild)}else if(hb.parentNode===sus)bd.parentNode.insertBefore(hb,bd)}
-  const _r=render;render=function(){const r=_r.apply(this,arguments);try{if(on()){tools();follow();placeHint()}}catch(_){}return r};
+  const _r=render;render=function(){const r=_r.apply(this,arguments);try{if(on()){tools();placeHint()}}catch(_){}return r};
   if(typeof renderHintBox==="function"){const _hb=renderHintBox;renderHintBox=function(){const r=_hb.apply(this,arguments);try{placeHint()}catch(_){}return r}}
   const _rs=renderStatic;renderStatic=function(){const r=_rs.apply(this,arguments);try{refresh()}catch(_){}return r};
   const _oc=openCase;openCase=function(i){const r=_oc.apply(this,arguments);document.body.classList.remove("g3-full","g3-zoom");
