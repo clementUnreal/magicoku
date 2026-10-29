@@ -1,5 +1,26 @@
 [
  {
+  "id": 78,
+  "date": "2026-10-29",
+  "icon": "🎃",
+  "fr": {
+   "t": "Événement Halloween : la nuit des fantômes",
+   "d": "10 enquêtes expert, une dans chaque lieu de Brumelune. Dans chacune, un suspect erre en fantôme : il flotte au-dessus des meubles, traverse les murs et ne compte pas dans les pièces. +50 éclats de lune par enquête résolue. Disponible jusqu'au dimanche 9 novembre, sur l'accueil !"
+  },
+  "en": {
+   "t": "Halloween event: Night of the Ghosts",
+   "d": "10 expert cases, one in each place of Brumelune. In each one, a suspect roams as a ghost: it floats over furniture, goes through walls and doesn't count in rooms. +50 moon shards per solved case. Available until Sunday 9 November, on the home screen!"
+  },
+  "ko": {
+   "t": "할로윈 이벤트: 유령의 밤",
+   "d": "브뤼믈륀의 각 장소마다 하나씩, 전문가 사건 10개. 사건마다 용의자 한 명이 유령이 되어 떠돌아요. 가구 위를 떠다니고, 벽을 통과하며, 방 인원에 포함되지 않아요. 사건을 풀 때마다 달 조각 +50. 11월 9일(일)까지 홈 화면에서!"
+  },
+  "ja": {
+   "t": "ハロウィンイベント：幽霊の夜",
+   "d": "ブリュムリュヌの各所に1件ずつ、エキスパート事件10件。どの事件でも容疑者の一人が幽霊になってさまよいます。家具の上を漂い、壁をすり抜け、部屋の人数には数えません。解決するたびに月のかけら+50。11月9日（日）までホーム画面で！"
+  }
+ },
+ {
   "id": 77,
   "date": "2026-10-27",
   "icon": "🚨",

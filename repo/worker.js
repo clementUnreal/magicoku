@@ -718,7 +718,7 @@ export class Leaderboard extends DurableObject {
         w.done = [...done]; w.base = Date.now();
       }
       const done = new Set(w.done || []);
-      for (const k of Object.keys(prog)) if (!done.has(k)) { done.add(k); earned += 10; }
+      for (const k of Object.keys(prog)) if (!done.has(k)) { done.add(k); earned += /^hw\d+$/.test(k) ? 50 : 10; }  // Halloween event levels: 50
       if (earned || !w.base0) {
         w.done = [...done]; w.base0 = true; w.coins += earned;
         if (earned) { (w.log = w.log || []).unshift({ at: Date.now(), n: earned, why: "levels" }); w.log = w.log.slice(0, 30); }
