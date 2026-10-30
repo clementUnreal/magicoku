@@ -141,12 +141,32 @@ export class Leaderboard extends DurableObject {
     // spd = median of those ratios over the player's levels (1 = typical, 0.5 = twice as fast). nc = levels compared.
     const par = await this.pars();
     const pv = Object.values(par), meanPar = pv.length ? pv.reduce((x, y) => x + y, 0) / pv.length : 0;
+    // fair speed without selection bias: the hardest cases are only reached by the best detectives, so a plain median per case
+    // would make those cases look "easy" and punish whoever goes far. Instead, log(time) = player skill + case difficulty,
+    // both estimated together (alternating medians), so each case's difficulty is corrected for who actually played it.
+    const med = (a) => { const b = a.slice().sort((x, y) => x - y), n = b.length; return n ? (n % 2 ? b[(n - 1) / 2] : (b[n / 2 - 1] + b[n / 2]) / 2) : 0; };
+    const obs = [];
     for (const v of all.values()) {
       if (!v || !v.row) continue;
-      const rs = Object.entries(v.prog || {}).filter(([k, x]) => x && x.t > 0 && par[k] > 0).map(([k, x]) => (x.t + 60 * (x.h || 0)) / par[k]).sort((a, b) => a - b);
+      const pk = String(v.row.pseudo || "").trim().toLowerCase();
+      for (const [k, x] of Object.entries(v.prog || {})) if (x && x.t > 0) obs.push({ v, pk, k, y: Math.log(x.t + 60 * (x.h || 0)), cheat: isCheat(v.row.pseudo) });
+    }
+    const fit = obs.filter((o) => !o.cheat), sk = new Map(), dif = new Map();
+    for (let it = 0; it < 12; it++) {
+      const byL = new Map(); for (const o of fit) (byL.get(o.k) || byL.set(o.k, []).get(o.k)).push(o.y - (sk.get(o.pk) || 0));
+      for (const [k, a] of byL) if (a.length >= 2) dif.set(k, med(a));   // a case played by one detective only tells nothing
+      const byP = new Map(); for (const o of fit) if (dif.has(o.k)) (byP.get(o.pk) || byP.set(o.pk, []).get(o.pk)).push(o.y - dif.get(o.k));
+      for (const [k, a] of byP) sk.set(k, med(a));
+      const ref = med([...byP].filter(([, a]) => a.length >= 5).map(([k]) => sk.get(k)));   // 0 = a typical regular detective
+      for (const k of sk.keys()) sk.set(k, sk.get(k) - ref);
+    }
+    const byRow = new Map();
+    for (const o of obs) if (dif.has(o.k)) (byRow.get(o.v) || byRow.set(o.v, []).get(o.v)).push(o.y - dif.get(o.k));
+    for (const v of all.values()) {
+      if (!v || !v.row) continue;
+      const rs = byRow.get(v) || [], K = 5;
       // few cases = less reliable: pulled toward the usual speed (as if 5 typical cases were added)
-      const raw = rs.length ? rs[Math.floor(rs.length / 2)] : null, K = 5;
-      v.row.nc = rs.length; v.row.spd = raw == null ? null : Math.round(1000 * (rs.length * raw + K) / (rs.length + K)) / 1000;
+      v.row.nc = rs.length; v.row.spd = rs.length ? Math.round(1000 * Math.exp(med(rs) * rs.length / (rs.length + K))) / 1000 : null;
       // the same speed expressed as a time on a typical case of the game (average of every level's median)
       v.row.eqt = v.row.spd == null ? null : Math.round(v.row.spd * meanPar);
     }
