@@ -455,7 +455,7 @@ export class Leaderboard extends DurableObject {
     if (!w.nsets) { w.nsets = Object.keys(w.names).length ? [{ t: "Version 1", names: w.names }] : []; w.nact = w.nsets.length ? 0 : -1; }
     // one-time gifts (e.g. thanks to the testers), claimed from a message on the home screen
     if (body.action === "gift") {
-      const GIFTS = { thanks1: 300 }, g = String(body.gift || "");
+      const GIFTS = { thanks1: 300, tester1: 200 }, g = String(body.gift || "");
       if (!(g in GIFTS)) return { status: 400, body: { error: "unknown gift" } };
       w.gifts = w.gifts || [];
       if (w.gifts.includes(g)) return { status: 200, body: Object.assign({}, w, { already: true }) };
