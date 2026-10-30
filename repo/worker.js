@@ -39,16 +39,19 @@ const SHOP = {
   // cross styles
   "x:star": 60, "x:moon": 60, "x:heart": 60, "x:skull": 90, "x:paw": 90, "x:spark": 120,
   // music styles
-  "m:box": 80, "m:lofi": 120, "m:fair": 120, "m:mystery": 150,
+  "m:box": 80, "m:lofi": 120, "m:fair": 120, "m:mystery": 150, "m:harp": 150, "m:tavern": 150, "m:macabre": 200,
   // characters for the profile picture
   "c:fox": 200, "c:cat": 200, "c:snowowl": 200, "c:toad": 250, "c:dragon": 350, "c:penguin": 999, "c:mandrake": 150, "c:snowman": 150, "c:gargoyle": 200, "c:owl": 200, "c:cauldron": 120, "c:statue": 250,
   // ornaments around the profile picture
   "o:gold": 100, "o:flowers": 120, "o:stars": 150, "o:frost": 150, "o:flames": 200, "o:rainbow": 300,
+  "o:hallo": 150, "o:vines": 180, "o:crystal": 250, "o:aurora": 350, "o:royal": 500,
   // titles
   "t:apprenti": 40, "t:limier": 80, "t:plume": 80, "t:lune": 150, "t:maitre": 250, "t:legende": 500,
   // rename the suspects for yourself (personal quill, unlimited edits)
   "n:rename": 100,
 };
+// limited items: on sale only until this time (UTC); owners keep them
+const LIMITED = { "o:hallo": Date.UTC(2026, 9, 31, 22, 59) };
 // costumes withdrawn (protected characters): owners are refunded once
 const RETIRED = { "c:pochacco": 999, "c:darkknight": 999 };
 const SLOT = { x: "x", m: "m", c: "c", o: "o", t: "t" };
@@ -472,6 +475,7 @@ export class Leaderboard extends DurableObject {
     if (body.action === "buy") {
       if (!(item in SHOP)) return { status: 400, body: { error: "unknown item" } };
       if (w.owned.includes(item)) return { status: 200, body: w };
+      if (LIMITED[item] && Date.now() > LIMITED[item]) return { status: 410, body: { error: "no longer on sale", wallet: w } };
       if (w.coins < SHOP[item]) return { status: 402, body: { error: "not enough", wallet: w } };
       w.coins -= SHOP[item]; w.owned.push(item);
       const sl = SLOT[item.split(":")[0]]; if (sl) w.eq[sl] = item;

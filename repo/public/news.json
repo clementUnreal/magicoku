@@ -1,5 +1,26 @@
 [
  {
+  "id": 80,
+  "date": "2026-10-30",
+  "icon": "🛍️",
+  "fr": {
+   "t": "Nouveautés dans la boutique",
+   "d": "5 nouveaux ornements (Lierre enchanté, Cristaux d'améthyste, Aurore boréale, Couronne royale…) et 3 nouvelles musiques (Harpe des fées, Taverne de Givrelune, Danse macabre). Édition limitée : l'ornement « Nuit d'Halloween », avec son fantôme et sa citrouille, n'est en vente que jusqu'au samedi 31 octobre à minuit !"
+  },
+  "en": {
+   "t": "New in the shop",
+   "d": "5 new ornaments (Enchanted ivy, Amethyst crystals, Northern lights, Royal crown…) and 3 new music styles (Fairy harp, Frostmoon tavern, Danse macabre). Limited edition: the “Halloween night” ornament, with its ghost and pumpkin, is only on sale until Saturday 31 October at midnight!"
+  },
+  "ko": {
+   "t": "상점 신상품",
+   "d": "새 장식 5종(마법의 담쟁이, 자수정 크리스털, 오로라, 왕관…)과 새 음악 3곡(요정의 하프, 기브를륀 선술집, 해골의 춤). 한정판: 유령과 호박이 있는 ‘할로윈의 밤’ 장식은 10월 31일(토) 자정까지만 판매해요!"
+  },
+  "ja": {
+   "t": "ショップに新アイテム",
+   "d": "新しい飾り5種（魔法のツタ、アメジストの結晶、オーロラ、王冠…）と新曲3曲（妖精のハープ、ジヴルリュヌの酒場、死の舞踏）。限定：幽霊とカボチャの飾り「ハロウィンの夜」は10月31日（土）の深夜0時まで！"
+  }
+ },
+ {
   "id": 79,
   "date": "2026-10-29",
   "icon": "♾️",
