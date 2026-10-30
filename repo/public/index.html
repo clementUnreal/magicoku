@@ -2508,6 +2508,14 @@ function setMusic(on){MUS.on=on;try{localStorage.setItem("magicoku:music",on?"on
 document.addEventListener("click",e=>{const t=e.target.closest("button");if(t&&t.id==="oMusic")setMusic(!MUS.on)});
 (function(){const _r=renderHome;renderHome=function(){_r();const b=$("#oMusic");if(b){b.setAttribute("aria-pressed",MUS.on);$("#oMusicL").textContent=L("Musique du menu","Menu music","메뉴 음악","メニューの音楽")}}})();
 renderHome();
+/* the app goes to the background (home button, other app, screen off): silence everything at once, and bring the music back on return */
+(function(){
+  const off=()=>{try{stopMusic()}catch(_){}try{if(SND.ctx&&SND.ctx.state==="running")SND.ctx.suspend()}catch(_){}};
+  const on=()=>{if(document.hidden)return;try{if(SND.ctx&&SND.on&&SND.ctx.state==="suspended")SND.ctx.resume()}catch(_){}try{if(!$("#home").hidden)startMusic()}catch(_){}};
+  document.addEventListener("visibilitychange",()=>{document.hidden?off():on()});
+  addEventListener("pagehide",off);addEventListener("freeze",off,{capture:true});addEventListener("blur",()=>{if(document.hidden)off()});
+  addEventListener("pageshow",on);
+})();
 
 /* ================= TIMER + ATTEMPTS + LEVEL COMPARISON ================= */
 const fmtT=s=>{s=Math.max(0,Math.round(s||0));return s>=3600?Math.floor(s/3600)+":"+String(Math.floor(s%3600/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"):String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
@@ -4100,7 +4108,7 @@ function mechIntro(force){const m=mechOf();if(!m||!MECH_INFO[m])return;const c=s
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="83a2142d4939";
+var APP_BUILD="b59ceb4d8009";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;

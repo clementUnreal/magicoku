@@ -52,3 +52,11 @@ function setMusic(on){MUS.on=on;try{localStorage.setItem("magicoku:music",on?"on
 document.addEventListener("click",e=>{const t=e.target.closest("button");if(t&&t.id==="oMusic")setMusic(!MUS.on)});
 (function(){const _r=renderHome;renderHome=function(){_r();const b=$("#oMusic");if(b){b.setAttribute("aria-pressed",MUS.on);$("#oMusicL").textContent=L("Musique du menu","Menu music")}}})();
 renderHome();
+/* the app goes to the background (home button, other app, screen off): silence everything at once, and bring the music back on return */
+(function(){
+  const off=()=>{try{stopMusic()}catch(_){}try{if(SND.ctx&&SND.ctx.state==="running")SND.ctx.suspend()}catch(_){}};
+  const on=()=>{if(document.hidden)return;try{if(SND.ctx&&SND.on&&SND.ctx.state==="suspended")SND.ctx.resume()}catch(_){}try{if(!$("#home").hidden)startMusic()}catch(_){}};
+  document.addEventListener("visibilitychange",()=>{document.hidden?off():on()});
+  addEventListener("pagehide",off);addEventListener("freeze",off,{capture:true});addEventListener("blur",()=>{if(document.hidden)off()});
+  addEventListener("pageshow",on);
+})();
