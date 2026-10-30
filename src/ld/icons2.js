@@ -2,7 +2,7 @@
 (function(){
   if(typeof IC2==="undefined")return;
   /* music covers */
-  if(typeof MU_IMG!=="undefined")Object.assign(MU_IMG,{waltz:IC2.violin,box:IC2.musicbox,lofi:IC2.headphones,fair:IC2.carousel,mystery:IC2.magnifier});
+  if(typeof MU_IMG!=="undefined")Object.assign(MU_IMG,{waltz:IC2.violin,box:IC2.musicbox,lofi:IC2.headphones,fair:IC2.carousel,mystery:IC2.magnifier,harp:IC2.mu_harp,tavern:IC2.mu_tavern,macabre:IC2.mu_macabre});
   /* ornaments: a painted ring around the portrait instead of emoji corners */
   const ring=(cls,img,pad)=>`.cav.${cls}{overflow:visible!important}.cav.${cls} img{box-shadow:none!important}
 .cav.${cls}::before{content:none!important}

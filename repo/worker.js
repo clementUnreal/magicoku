@@ -41,12 +41,12 @@ const SHOP = {
   // music styles
   "m:box": 80, "m:lofi": 120, "m:fair": 120, "m:mystery": 150, "m:harp": 150, "m:tavern": 150, "m:macabre": 200,
   // characters for the profile picture
-  "c:fox": 200, "c:cat": 200, "c:snowowl": 200, "c:toad": 250, "c:dragon": 350, "c:penguin": 999, "c:mandrake": 150, "c:snowman": 150, "c:gargoyle": 200, "c:owl": 200, "c:cauldron": 120, "c:statue": 250,
+  "c:fox": 200, "c:cat": 200, "c:snowowl": 200, "c:toad": 250, "c:dragon": 350, "c:penguin": 999, "c:mandrake": 150, "c:snowman": 150, "c:gargoyle": 200, "c:owl": 200, "c:cauldron": 120, "c:statue": 250, "c:gentleman": 400, "c:moonwitch": 500, "c:vampire": 600, "c:unicorn": 700, "c:phoenix": 800,
   // ornaments around the profile picture
   "o:gold": 100, "o:flowers": 120, "o:stars": 150, "o:frost": 150, "o:flames": 200, "o:rainbow": 300,
   "o:hallo": 150, "o:vines": 180, "o:crystal": 250, "o:aurora": 350, "o:royal": 500,
   // titles
-  "t:apprenti": 40, "t:limier": 80, "t:plume": 80, "t:lune": 150, "t:maitre": 250, "t:legende": 500,
+  "t:apprenti": 40, "t:limier": 80, "t:plume": 80, "t:lune": 150, "t:maitre": 250, "t:legende": 500, "t:fantomes": 150, "t:secrets": 250, "t:archimage": 400, "t:ombre": 600,
   // rename the suspects for yourself (personal quill, unlimited edits)
   "n:rename": 100,
 };

@@ -126,8 +126,8 @@ head+=r'''const KNIFE=`<svg class="knife" viewBox="0 0 40 40"><g transform="rota
 function ava(p,o={}){const k=M.people[p][5];if(k)return `<img class="pimg" src="${POR[k]}" alt="" draggable="false" style="background:${look(p)[4]}">`+(o.angry?KNIFE:"");return face(look(p),o)+(o.angry&&false?KNIFE:"")}
 '''
 import base64 as _b64,os as _os
-head+="var CH_IMG="+json.dumps({k:"data:image/webp;base64,"+_b64.b64encode(open(_os.path.join("..","home2","ch_"+k+".webp"),"rb").read()).decode() for k in ["dragon","toad","snowowl","fox","cat","penguin","whitecat"]})+";\n"
-head+="var TT_IMG="+json.dumps({k:"data:image/webp;base64,"+_b64.b64encode(open(_os.path.join("..","home2","tt_"+k+".webp"),"rb").read()).decode() for k in ["apprenti","limier","plume","lune","maitre","legende"]})+";\n"
+head+="var CH_IMG="+json.dumps({k:"data:image/webp;base64,"+_b64.b64encode(open(_os.path.join("..","home2","ch_"+k+".webp"),"rb").read()).decode() for k in ["dragon","toad","snowowl","fox","cat","penguin","whitecat","vampire","moonwitch","phoenix","unicorn","gentleman"]})+";\n"
+head+="var TT_IMG="+json.dumps({k:"data:image/webp;base64,"+_b64.b64encode(open(_os.path.join("..","home2","tt_"+k+".webp"),"rb").read()).decode() for k in ["apprenti","limier","plume","lune","maitre","legende","fantomes","secrets","archimage","ombre"]})+";\n"
 head+="var MU_IMG="+json.dumps({k:"data:image/svg+xml;base64,"+_b64.b64encode(open(_os.path.join("..","home2","mu",k+".svg"),"rb").read()).decode() for k in ["waltz","box","lofi","fair","mystery"]})+";\n"
 head+="var IC2="+json.dumps({_f[:-5]:"data:image/webp;base64,"+_b64.b64encode(open(_os.path.join("..","home2","ic2",_f),"rb").read()).decode() for _f in sorted(_os.listdir(_os.path.join("..","home2","ic2"))) if _f.endswith(".webp")})+";\n"
 head+="var MK_IMG="+json.dumps({k:"data:image/webp;base64,"+_b64.b64encode(open(_os.path.join("..","home2","mk_"+k+".webp"),"rb").read()).decode() for k in ["cross","star","moon","heart","skull","paw"]})+";\n"
