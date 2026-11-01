@@ -1,7 +1,7 @@
 /* ================= Halloween event: "La nuit des fantômes" (10 expert levels with a ghost) + Halloween look ================= */
 var HW={on:false,i:0};
 var HW_END=Date.UTC(2026,10,9,22,59);      /* event levels: until Sunday 9 November 23:59 (Paris) */
-var HW_THEME_END=Date.UTC(2026,10,3,22,59);/* Halloween look of the site: until Monday 3 November 23:59 (Paris) */
+var HW_THEME_END=Date.UTC(2026,10,1,15,0);/* Halloween look of the site: ended Sunday 1 November 2026 (Paris) */
 function hwOpen(){return typeof HW_DATA!=="undefined"&&HW_DATA.length&&Date.now()<=HW_END}
 (function(){
   if(typeof HW_DATA==="undefined")return;
