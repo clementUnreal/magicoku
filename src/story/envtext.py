@@ -131,3 +131,61 @@ TITLES["stadium"].append(('La Finale du Siècle', 'The Final of the Century', '�
 TITLES["hospital"].append(('Le Remède Interdit', 'The Forbidden Cure', '금지된 치료약', '禁じられた薬'))
 TITLES["ministry"].append(('Le Bureau Sans Porte', 'The Office With No Door', '문 없는 집무실', '扉のない執務室'))
 TITLES["fortress"].append(('Le Trône des Brumes', 'The Throne of Mists', '안개의 왕좌', '霧の玉座'))
+
+# ---------------- season 2: chapters 11-20 (they reuse the places of chapters 1-10, with a new rule each) ----------------
+CH+=[
+ ("Chapitre 11 · Les Spectres de la Forteresse","Chapter 11 · The Spectres of the Fortress","11장 · 요새의 유령들","第11章・要塞の亡霊たち"),
+ ("Chapitre 12 · Le Vol des Chouettes","Chapter 12 · The Flight of the Owls","12장 · 올빼미의 비행","第12章・フクロウの飛翔"),
+ ("Chapitre 13 · L'Échiquier du Ministère","Chapter 13 · The Ministry Chessboard","13장 · 마법부의 체스판","第13章・魔法省のチェス盤"),
+ ("Chapitre 14 · Le Bal de Givrelune","Chapter 14 · The Frostmoon Ball","14장 · 서리달 무도회","第14章・霜月の舞踏会"),
+ ("Chapitre 15 · La Balance d'Or","Chapter 15 · The Golden Scales","15장 · 황금 저울","第15章・黄金の天秤"),
+ ("Chapitre 16 · Les Numéros du Stade","Chapter 16 · The Stadium Numbers","16장 · 경기장의 등번호","第16章・スタジアムの背番号"),
+ ("Chapitre 17 · Le Remède le Plus Proche","Chapter 17 · The Nearest Remedy","17장 · 가장 가까운 치료약","第17章・いちばん近い薬"),
+ ("Chapitre 18 · Le Marché aux Chandelles","Chapter 18 · The Candle Market","18장 · 촛불 시장","第18章・ろうそく市場"),
+ ("Chapitre 19 · Les Wagons de Brumeval","Chapter 19 · The Brumeval Carriages","19장 · 브뤼므발의 객차","第19章・ブリュムヴァルの客車"),
+ ("Chapitre 20 · Le Dernier Mystère du Lac","Chapter 20 · The Lake's Last Mystery","20장 · 호수의 마지막 수수께끼","第20章・湖の最後の謎"),
+]
+SHORT=[(f"Chapitre {i}",f"Chapter {i}",f"{i}장",f"第{i}章") for i in range(1,21)]
+# level titles of chapters 11-20 (index 0 = chapter 11), 11 per chapter, the last one is the expert level
+TITLES2=[
+ [("Le Premier Frisson","The First Shiver","첫 번째 오싹함","最初の寒気"),("Les Chaînes qui grincent","The Creaking Chains","삐걱대는 사슬","きしむ鎖"),("La Dame grise","The Grey Lady","회색 부인","灰色の貴婦人"),
+  ("Le Couloir glacé","The Icy Corridor","얼어붙은 복도","凍える廊下"),("Le Portrait qui observe","The Watching Portrait","지켜보는 초상화","見つめる肖像画"),("La Chandelle éteinte","The Snuffed Candle","꺼진 촛불","消えたろうそく"),
+  ("Le Banquet des ombres","The Banquet of Shadows","그림자들의 연회","影の晩餐会"),("La Tour hantée","The Haunted Tower","유령의 탑","幽霊の塔"),("Les Murmures du donjon","The Whispers of the Keep","본성의 속삭임","天守のささやき"),
+  ("Le Bal des spectres","The Spectres' Ball","유령들의 무도회","亡霊の舞踏会"),("Le Seigneur fantôme","The Phantom Lord","유령 영주","亡霊の城主")],
+ [("Le Hibou du soir","The Evening Owl","저녁 부엉이","夕暮れのフクロウ"),("Les Plumes perdues","The Lost Feathers","잃어버린 깃털","なくした羽根"),("Le Chêne creux","The Hollow Oak","속이 빈 참나무","空洞のオーク"),
+  ("La Clairière lunaire","The Moonlit Glade","달빛 빈터","月明かりの空き地"),("Le Nid secret","The Secret Nest","비밀 둥지","秘密の巣"),("Le Hululement","The Hoot","부엉이 울음소리","フクロウの鳴き声"),
+  ("Les Yeux dans le noir","Eyes in the Dark","어둠 속의 눈","闇の中の目"),("La Grande Chouette blanche","The Great White Owl","커다란 흰올빼미","大きなシロフクロウ"),("Le Vol de minuit","The Midnight Flight","한밤의 비행","真夜中の飛行"),
+  ("Le Parlement des chouettes","The Parliament of Owls","올빼미 의회","フクロウの議会"),("La Reine des Hiboux","The Queen of Owls","부엉이 여왕","フクロウの女王")],
+ [("Le Premier Pion","The First Pawn","첫 번째 폰","最初のポーン"),("Le Fou du ministre","The Minister's Bishop","장관의 비숍","大臣のビショップ"),("Le Dallage noir et blanc","The Black-and-White Floor","흑백 바닥","白黒の床"),
+  ("La Tour d'ivoire","The Ivory Tower","상아탑","象牙の塔"),("Le Cavalier pressé","The Hasty Knight","서두르는 나이트","急ぐナイト"),("Le Roque","Castling","캐슬링","キャスリング"),
+  ("La Partie interrompue","The Interrupted Game","중단된 대국","中断された対局"),("La Reine noire","The Black Queen","검은 퀸","黒のクイーン"),("Échec au roi","Check!","체크!","チェック！"),
+  ("Le Pat","Stalemate","스테일메이트","ステイルメイト"),("Échec et mat","Checkmate","체크메이트","チェックメイト")],
+ [("L'Invitation","The Invitation","초대장","招待状"),("La Première Valse","The First Waltz","첫 번째 왈츠","最初のワルツ"),("Les Gants de velours","The Velvet Gloves","벨벳 장갑","ビロードの手袋"),
+  ("Le Buffet de glace","The Ice Buffet","얼음 뷔페","氷のビュッフェ"),("Le Cavalier masqué","The Masked Partner","가면 쓴 파트너","仮面の相手"),("La Robe de neige","The Snow Gown","눈의 드레스","雪のドレス"),
+  ("Le Quadrille","The Quadrille","카드리유","カドリーユ"),("L'Orchestre de givre","The Frost Orchestra","서리 오케스트라","霜のオーケストラ"),("Les Douze Coups","The Twelve Strokes","열두 번의 종소리","十二の鐘"),
+  ("La Dernière Danse","The Last Dance","마지막 춤","最後のダンス"),("La Reine du Bal","The Belle of the Ball","무도회의 여왕","舞踏会の女王")],
+ [("La Première Pièce","The First Coin","첫 번째 동전","最初の硬貨"),("Le Plateau d'argent","The Silver Pan","은 접시","銀の皿"),("Le Contrepoids","The Counterweight","평형추","釣り合いのおもり"),
+  ("Le Compte en déséquilibre","The Unbalanced Account","맞지 않는 장부","合わない帳簿"),("La Pesée des lingots","The Weighing of the Bars","금괴 무게 달기","金塊の計量"),("Le Grand Livre","The Great Ledger","큰 장부","大帳簿"),
+  ("L'Équilibre parfait","Perfect Balance","완벽한 균형","完璧な釣り合い"),("La Fausse Monnaie","The Counterfeit Coins","위조 동전","偽金"),("Le Coffre des Jumeaux","The Twins' Vault","쌍둥이 금고","双子の金庫"),
+  ("Le Poids du secret","The Weight of the Secret","비밀의 무게","秘密の重さ"),("La Balance du Destin","The Scales of Fate","운명의 저울","運命の天秤")],
+ [("Le Coup d'envoi","The Kick-off","킥오프","キックオフ"),("Le Numéro 7","Number 7","7번","背番号7"),("Les Maillots mélangés","The Mixed-up Jerseys","뒤섞인 유니폼","入れ替わったユニフォーム"),
+  ("Le Tableau des scores","The Scoreboard","점수판","スコアボード"),("La Mi-temps","Half-time","하프타임","ハーフタイム"),("Les Pairs contre les Impairs","Evens versus Odds","짝수 대 홀수","偶数対奇数"),
+  ("Le Tirage au sort","The Coin Toss","동전 던지기","コイントス"),("Les Prolongations","Extra Time","연장전","延長戦"),("La Séance de tirs","The Shoot-out","승부차기","PK戦"),
+  ("La Coupe de Brumelune","The Brumelune Cup","브뤼믈륀 컵","ブリュムリュヌ杯"),("Le Match Parfait","The Perfect Match","완벽한 경기","完璧な試合")],
+ [("La Première Potion","The First Potion","첫 번째 물약","最初の薬"),("Le Flacon d'à côté","The Nearby Flask","옆의 약병","すぐそばの小瓶"),("Le Remède à portée de main","The Cure Within Reach","손 닿는 곳의 치료약","手の届く薬"),
+  ("La Tisane tiède","The Lukewarm Herbal Tea","미지근한 허브차","ぬるいハーブティー"),("L'Infirmière pressée","The Hurried Nurse","바쁜 간호사","急ぐ看護師"),("Le Lit le plus proche","The Nearest Bed","가장 가까운 침대","いちばん近いベッド"),
+  ("La Fièvre de minuit","The Midnight Fever","한밤의 열병","真夜中の熱"),("Le Sirop de lune","The Moon Syrup","달빛 시럽","月のシロップ"),("L'Armoire interdite","The Forbidden Cabinet","금지된 약장","禁じられた薬棚"),
+  ("Le Dernier Comprimé","The Last Pill","마지막 알약","最後の錠剤"),("L'Antidote perdu","The Lost Antidote","잃어버린 해독제","失われた解毒剤")],
+ [("La Première Flamme","The First Flame","첫 불꽃","最初の炎"),("Le Marchand de cire","The Wax Seller","밀랍 장수","ろう売り"),("Les Lanternes flottantes","The Floating Lanterns","떠다니는 등불","浮かぶランタン"),
+  ("L'Ombre du chaudron","The Cauldron's Shadow","가마솥의 그림자","大鍋の影"),("La Mèche courte","The Short Wick","짧은 심지","短い芯"),("Le Coin obscur","The Dark Corner","어두운 구석","暗い隅"),
+  ("La Procession des bougies","The Candle Procession","촛불 행렬","ろうそくの行列"),("Le Souffle du vent","The Gust of Wind","바람의 숨결","風のひと吹き"),("Les Mille Lueurs","The Thousand Glimmers","천 개의 불빛","千の灯り"),
+  ("La Nuit sans lune","The Moonless Night","달 없는 밤","月のない夜"),("Le Dernier Cierge","The Last Candle","마지막 촛불","最後のろうそく")],
+ [("Le Premier Wagon","The First Carriage","첫 번째 객차","一両目"),("Le Compartiment 3","Compartment 3","3번 객실","3号コンパートメント"),("La Voiture-restaurant","The Dining Car","식당칸","食堂車"),
+  ("Le Contrôleur","The Ticket Inspector","검표원","車掌"),("Les Couchettes","The Sleeper Berths","침대칸","寝台"),("Le Wagon des bagages","The Luggage Van","수하물 칸","荷物車"),
+  ("L'Arrêt imprévu","The Unplanned Stop","예정에 없던 정차","予定外の停車"),("Le Tunnel","The Tunnel","터널","トンネル"),("Le Dernier Wagon","The Last Carriage","마지막 객차","最後尾の車両"),
+  ("Le Train fantôme","The Ghost Train","유령 열차","幽霊列車"),("Le Terminus des Étoiles","The Starlight Terminus","별빛 종착역","星の終着駅")],
+ [("Le Retour au lac","Back to the Lake","호수로의 귀환","湖への帰還"),("La Brume du matin","The Morning Mist","아침 안개","朝もや"),("Le Reflet trompeur","The Deceptive Reflection","거짓된 반영","惑わす映り込み"),
+  ("La Barque de cristal","The Crystal Boat","수정 나룻배","水晶の小舟"),("Le Chant oublié","The Forgotten Song","잊힌 노래","忘れられた歌"),("Les Eaux profondes","The Deep Waters","깊은 물","深い水"),
+  ("L'Île aux lucioles","Firefly Island","반딧불이 섬","ホタルの島"),("Le Phare éteint","The Dark Lighthouse","꺼진 등대","消えた灯台"),("La Tempête","The Storm","폭풍","嵐"),
+  ("Le Secret des Sirènes","The Mermaids' Secret","인어들의 비밀","人魚の秘密"),("Le Grand Final","The Grand Finale","대단원","グランドフィナーレ")],
+]

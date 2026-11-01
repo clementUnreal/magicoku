@@ -1,5 +1,26 @@
 [
  {
+  "id": 81,
+  "date": "2026-11-01",
+  "icon": "📖",
+  "fr": {
+   "t": "Saison 2 : 10 nouveaux chapitres !",
+   "d": "Le mode histoire continue après le chapitre 10 avec 110 nouvelles enquêtes et une nouvelle règle par chapitre : le fantôme, le vol de chouette, les diagonales, coin à coin, la balance, pair ou impair, plus près, les chandeliers, entre les deux… et un grand final qui mélange tout. Le chapitre 11 s'ouvre une fois le chapitre 10 validé avec ses lunes."
+  },
+  "en": {
+   "t": "Season 2: 10 new chapters!",
+   "d": "Story mode carries on after chapter 10 with 110 new cases and a new rule in each chapter: the ghost, owl flight, diagonals, corner to corner, the scales, even or odd, closer, candlelight, in between… and a grand finale that mixes everything. Chapter 11 opens once chapter 10 is cleared with its moons."
+  },
+  "ko": {
+   "t": "시즌 2: 새로운 10개 장!",
+   "d": "스토리 모드가 10장 이후로도 이어져요. 새 사건 110개와 장마다 새로운 규칙이 있어요: 유령, 올빼미 거리, 대각선, 모서리끼리, 저울, 짝수 홀수, 더 가까이, 촛대 불빛, 사이… 그리고 모든 규칙이 섞인 대단원까지. 10장을 달로 통과하면 11장이 열려요."
+  },
+  "ja": {
+   "t": "シーズン2：新しい10章！",
+   "d": "ストーリーモードが第10章のあとも続きます。新しい事件110件と、章ごとの新ルール：幽霊、フクロウの飛び方、ななめの線、角どうし、天秤、偶数・奇数、近いのは、燭台の光、あいだ……そしてすべてが混ざるグランドフィナーレ。第10章を月でクリアすると第11章が開きます。"
+  }
+ },
+ {
   "id": 80,
   "date": "2026-10-30",
   "icon": "🛍️",

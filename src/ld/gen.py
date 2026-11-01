@@ -30,19 +30,40 @@ def unary_ok(case,cl,r,c):
     if k=="adj":return v in adj_types(case,r,c)
     if k=="row":return r==v
     if k=="col":return c==v
+    if k=="cpar":return (c+1)%2==(0 if v else 1)          # v=1: even column number (2,4,6...)
+    if k=="lit":return lit(case,r,c)
+    if k=="shade":return not lit(case,r,c)
     return True
+LIGHT={"candle"}
+def lit(case,r,c):
+    o=case["_obj"];n=case["n"]
+    return any(0<=r+a<n and 0<=c+b<n and o[r+a][c+b] in LIGHT for a in(-1,0,1) for b in(-1,0,1))
+def dobj(case,t,x):
+    D=case.setdefault("_dobj",{})
+    if t not in D:
+        n=case["n"];o=case["_obj"];cs=[(r,c) for r in range(n) for c in range(n) if o[r][c]==t]
+        D[t]={(r,c):min(abs(r-a)+abs(c-b) for a,b in cs) for r in range(n) for c in range(n)} if cs else None
+    return D[t][x] if D[t] else 99
 def roomof(case,x):return case["rooms"][x[0]][x[1]]
 
-REL2=("dist","knight","mirc","mird","mira")
+REL2=("dist","knight","mirc","mird","mira","owl","diag","kiss","cspar","cdpar","closer","rgap","cgap")
 def rel_ok(case,k,v,x,y):
     n=case["n"]
+    if k=="owl":return max(abs(x[0]-y[0]),abs(x[1]-y[1]))==v[1]
+    if k=="diag":return x!=y and abs(x[0]-y[0])==abs(x[1]-y[1])
+    if k=="kiss":return abs(x[0]-y[0])==1 and abs(x[1]-y[1])==1
+    if k=="cspar":return (x[1]-y[1])%2==0
+    if k=="cdpar":return (x[1]-y[1])%2==1
+    if k=="closer":return dobj(case,v[0],tuple(x))<dobj(case,v[0],tuple(y))
+    if k=="rgap":return abs(x[0]-y[0])-1==v[1]
+    if k=="cgap":return abs(x[1]-y[1])-1==v[1]
     if k=="dist":return abs(x[0]-y[0])+abs(x[1]-y[1])==v[1]
     if k=="knight":return sorted((abs(x[0]-y[0]),abs(x[1]-y[1])))==[1,2]
     if k=="mirc":return y==(n-1-x[0],n-1-x[1])
     if k=="mird":return y==(x[1],x[0])
     if k=="mira":return y==(n-1-x[1],n-1-x[0])
     return True
-def rel_q(k,v):return v[0] if k=="dist" else v
+def rel_q(k,v):return v[0] if k in("dist","owl","rgap","cgap") else v[1] if k=="closer" else v
 def propagate_new(case,clues,cand,P):
     ch=False
     for p in range(P):
@@ -61,6 +82,33 @@ def propagate_new(case,clues,cand,P):
                 if ns!=cand[a]:cand[a]=ns;ch=True
                 ns={z for z in cand[b] if any((2*x[0]-z[0],2*x[1]-z[1]) in cand[a] for x in cand[p])}
                 if ns!=cand[b]:cand[b]=ns;ch=True
+    for p in range(P):
+        if not any(k=="lonely" for k,v in clues.get(p,[])):continue
+        for q in range(P):
+            if q==p:continue
+            if len(cand[q])==1:
+                y=next(iter(cand[q]));ns={x for x in cand[p] if not(abs(x[0]-y[0])==1 and abs(x[1]-y[1])==1)}
+                if ns!=cand[p]:cand[p]=ns;ch=True
+            if len(cand[p])==1:
+                x=next(iter(cand[p]));ns={y for y in cand[q] if not(abs(x[0]-y[0])==1 and abs(x[1]-y[1])==1)}
+                if ns!=cand[q]:cand[q]=ns;ch=True
+    R_=case["rooms"]
+    for k,v in clues.get(-1,[]):
+        if k=="more":
+            A,B=v
+            sA=[q for q in range(P) if cand[q] and all(R_[x[0]][x[1]]==A for x in cand[q])];pA=[q for q in range(P) if any(R_[x[0]][x[1]]==A for x in cand[q])]
+            sB=[q for q in range(P) if cand[q] and all(R_[x[0]][x[1]]==B for x in cand[q])];pB=[q for q in range(P) if any(R_[x[0]][x[1]]==B for x in cand[q])]
+            if len(pA)==len(sB)+1:
+                for q in pA:
+                    ns={x for x in cand[q] if R_[x[0]][x[1]]==A}
+                    if ns!=cand[q]:cand[q]=ns;ch=True
+                for q in pB:
+                    if q in sB:continue
+                    ns={x for x in cand[q] if R_[x[0]][x[1]]!=B}
+                    if ns!=cand[q]:cand[q]=ns;ch=True
+            elif len(pA)<=len(sB):
+                for q in range(P):cand[q]=set()
+                return True
     for k,v in clues.get(-1,[]):
         if k=="cnt":
             Y,N=v;R=case["rooms"]
@@ -167,6 +215,9 @@ def check_full(case,clues,sol):
             if k=="cnt":
                 if sum(1 for y in sol if roomof(case,y)==v[0])!=v[1]:return False
                 continue
+            if k=="more":
+                if not sum(1 for y in sol if roomof(case,y)==v[0])>sum(1 for y in sol if roomof(case,y)==v[1]):return False
+                continue
             x=sol[p]
             if k in REL2:
                 if not rel_ok(case,k,v,x,sol[rel_q(k,v)]):return False
@@ -175,7 +226,7 @@ def check_full(case,clues,sol):
                 a,b=sol[v[0]],sol[v[1]]
                 if (a[0]+b[0],a[1]+b[1])!=(2*x[0],2*x[1]):return False
                 continue
-            if k in("room","notroom","on","floor","adj","row","col"):
+            if k in("room","notroom","on","floor","adj","row","col","cpar","lit","shade"):
                 if not unary_ok(case,(k,v),*x):return False
             elif k=="same":
                 if roomof(case,x)!=roomof(case,sol[v]):return False
@@ -184,6 +235,7 @@ def check_full(case,clues,sol):
             elif k=="east" and not x[1]>sol[v][1]:return False
             elif k=="west" and not x[1]<sol[v][1]:return False
             elif k=="alone" and sum(1 for y in sol if roomof(case,y)==roomof(case,x))!=1:return False
+            elif k=="lonely" and any(abs(x[0]-y[0])==1 and abs(x[1]-y[1])==1 for y in sol):return False
     return True
 def rand_sol(case,rng):
     n=case["n"];cells=set(case["cells"])
@@ -222,6 +274,34 @@ def pool(case,sol,p,level):
         if "mirror" in M_:
             for k in ("mirc","mird","mira"):
                 if rel_ok(case,k,None,x,y):out.append(((k,q),M_["mirror"]))
+    if p>=0:
+        Q=[q for q in range(len(sol)) if q!=p]
+        if "owl" in M_:
+            for q in Q:
+                y=sol[q];d=max(abs(x[0]-y[0]),abs(x[1]-y[1]))
+                if d<=4:out.append((("owl",(q,d)),M_["owl"]))
+        if "diag" in M_:
+            for q in Q:
+                if rel_ok(case,"diag",None,x,sol[q]):out.append((("diag",q),M_["diag"]))
+        if "kiss" in M_:
+            ks=[q for q in Q if rel_ok(case,"kiss",None,x,sol[q])]
+            for q in ks:out.append((("kiss",q),M_["kiss"]))
+            if not ks:out.append((("lonely",None),M_["kiss"]))
+        if "par" in M_:
+            out.append((("cpar",1 if (x[1]+1)%2==0 else 0),M_["par"]))
+            for q in Q:out.append((("cspar" if (x[1]-sol[q][1])%2==0 else "cdpar",q),M_["par"]*.6))
+        if "closer" in M_:
+            o=case["_obj"];n=case["n"];ts=sorted({o[r][c] for r in range(n) for c in range(n) if o[r][c] and o[r][c] not in("void","poison")})
+            for t in ts:
+                for q in Q:
+                    if rel_ok(case,"closer",(t,q),x,sol[q]):out.append((("closer",(t,q)),M_["closer"]/max(1,len(ts)/2)))
+        if "lit" in M_ and any(case["_obj"][r][c] in LIGHT for r in range(case["n"]) for c in range(case["n"])):
+            out.append((("lit" if lit(case,*x) else "shade",None),M_["lit"]))
+        if "gap" in M_:
+            for q in Q:
+                y=sol[q]
+                out.append((("rgap",(q,abs(x[0]-y[0])-1)),M_["gap"]))
+                out.append((("cgap",(q,abs(x[1]-y[1])-1)),M_["gap"]*.8))
     if "mirror" in M_ and p>=0:
         for a in range(len(sol)):
             for b in range(a+1,len(sol)):
@@ -233,6 +313,11 @@ def gpool(case,sol):
     if "cnt" in M_:
         for Y in sorted(set("".join(case["rooms"]))-{"."}):
             N=sum(1 for y in sol if roomof(case,y)==Y);out.append((("cnt",(Y,N)),M_["cnt"]))
+    if "more" in M_:
+        rs=sorted(set("".join(case["rooms"]))-{"."});cnt={Y:sum(1 for y in sol if roomof(case,y)==Y) for Y in rs}
+        for A in rs:
+            for B in rs:
+                if cnt[A]>cnt[B]:out.append((("more",(A,B)),M_["more"]))
     return out
 def build(case,seed,tries=3000):
     prep(case);rng=random.Random(seed);P=case["n"];lv=case["level"]

@@ -1,6 +1,6 @@
 import random, json, sys
 from gen import *
-MECHK={"dist","knight","mirc","mird","mira","mid","cnt"}
+MECHK={"dist","knight","mirc","mird","mira","mid","cnt","owl","diag","kiss","lonely","more","cpar","cspar","cdpar","closer","lit","shade","rgap","cgap"}
 def nmech(clues):return sum(1 for v in clues.values() for c in v if c[0] in MECHK)
 def construct(case,sol,rng,lv):
     P=case["n"];pools={p:pool(case,sol,p,max(lv,0)) for p in range(P)}
@@ -14,7 +14,7 @@ def construct(case,sol,rng,lv):
         best=None
         cands=[]
         for p in pools:
-            if len(clues.get(p,[]))>=2:continue
+            if len(clues.get(p,[]))>=(3 if p<0 else 2):continue
             for cl,w in pools[p]:
                 if cl in clues.get(p,[]):continue
                 cands.append((p,cl,w))

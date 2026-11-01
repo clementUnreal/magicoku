@@ -14,11 +14,21 @@ var CH_TAG={
   ["Dix enquêtes dans la clameur des tribunes.","Ten cases amid the roar of the stands.","관중의 함성 속에서 펼쳐지는 열 개의 사건.","観客の歓声の中で起きる十の事件。"],
   ["Dix enquêtes entre potions et remèdes.","Ten cases among potions and remedies.","물약과 치료약 사이에서 펼쳐지는 열 개의 사건.","魔法薬と治療薬のあいだで起きる十の事件。"],
   ["Dix enquêtes dans les couloirs du pouvoir.","Ten cases in the corridors of power.","권력의 복도에서 펼쳐지는 열 개의 사건.","権力の廊下で起きる十の事件。"],
-  ["Dix enquêtes au bout de la brume.","Ten cases at the end of the mist.","안개 끝에서 펼쳐지는 열 개의 사건.","霧の果てで起きる十の事件。"]]};
-var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","stall","snowman","anchor","broomrack","medcab","fountain","gargoyle"]};
+  ["Dix enquêtes au bout de la brume.","Ten cases at the end of the mist.","안개 끝에서 펼쳐지는 열 개의 사건.","霧の果てで起きる十の事件。"],
+  ["Saison 2 : la forteresse est hantée.","Season 2: the fortress is haunted.","시즌 2: 요새에 유령이 나타나요.","シーズン2：要塞に幽霊が出る。"],
+  ["Les chouettes ont tout vu depuis les branches.","The owls saw everything from the branches.","올빼미들이 나뭇가지 위에서 모든 걸 봤어요.","フクロウたちは枝の上からすべてを見ていた。"],
+  ["Une partie d'échecs grandeur nature.","A life-size game of chess.","실물 크기의 체스 한 판.","実物大のチェスの対局。"],
+  ["Un bal où l'on danse coin à coin.","A ball where people dance corner to corner.","모서리끼리 맞닿아 춤추는 무도회.","角どうしで踊る舞踏会。"],
+  ["Tout se pèse, même les visiteurs.","Everything is weighed, even the visitors.","손님까지 모든 걸 저울에 달아요.","お客さんまで、すべてを量る。"],
+  ["Pair ou impair : les maillots parlent.","Even or odd: the jerseys speak.","짝수일까 홀수일까: 유니폼이 말해 줘요.","偶数か奇数か：ユニフォームが語る。"],
+  ["Qui était le plus près des remèdes ?","Who was nearest the remedies?","누가 약에 가장 가까이 있었을까요?","誰がいちばん薬の近くにいた？"],
+  ["Entre lumière et ombre, au marché de nuit.","Between light and shadow, at the night market.","야시장의 빛과 어둠 사이에서.","夜の市場の、光と影のあいだで。"],
+  ["Chaque rangée compte, wagon après wagon.","Every row counts, carriage after carriage.","객차마다 한 줄 한 줄이 중요해요.","車両ごとに、一行一行が大切。"],
+  ["Toutes les règles de la saison, réunies.","Every rule of the season, all together.","이번 시즌의 모든 규칙이 한자리에.","シーズンのすべてのルールが集結。"]]};
+var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","stall","snowman","anchor","broomrack","medcab","fountain","gargoyle","bars","tree","statue","hearth","scales","hoop","bed","candle","luggage","boat"]};
 (function(){
   const DIFF=[["Facile","Easy","쉬움","やさしい"],["Moyen","Medium","보통","ふつう"],["Difficile","Hard","어려움","むずかしい"],["Expert","Expert","전문가","エキスパート"]];
-  const tiers=()=>LVMODE==="story"?[...Array(10).keys()].map(k=>k+3):[0,1,2];
+  const tiers=()=>LVMODE==="story"?[...Array(typeof STORY_CH!=="undefined"?STORY_CH.length:10).keys()].map(k=>k+3):[0,1,2];
   const idxOf=t=>DATA.map((c,i)=>i).filter(i=>tierOf(i)===t);
   const diffOf=(t,k)=>k>=10?3:t<3?t:(k<3?0:k<8?1:2);
   function chName(t){const full=TX(CHAPTERS[t]);const p=full.split(/ · |・/);return {num:p[0],name:p.slice(1).join(" · ")||full}}

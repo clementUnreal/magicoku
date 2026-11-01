@@ -15,7 +15,7 @@ function hwOpen(){return typeof HW_DATA!=="undefined"&&HW_DATA.length&&Date.now(
     HW.on=true;HW.i=i;document.body.classList.add("hw-play");$("#home").hidden=true;openCase(ci);render();renderStatic();try{renderTimer()}catch(_){}setTimeout(rulePop,600)};
   new MutationObserver(()=>{if(HW.on&&!$("#home").hidden){HW.on=false;document.body.classList.remove("hw-play");try{openCase(ci)}catch(e){}try{renderHome()}catch(_){}}}).observe($("#home"),{attributes:true,attributeFilter:["hidden"]});
   /* ---------- hints: the usual deduction engine doesn't know ghosts, so hints show a square directly ---------- */
-  if(typeof deduceR==="function"){const _d=deduceR;deduceR=function(){if(HW.on)return null;return _d.apply(this,arguments)}}
+  if(typeof deduceR==="function"){const _d=deduceR;deduceR=function(){if(HW.on||(C&&C.ghost!=null))return null;return _d.apply(this,arguments)}}
   /* ---------- testimony: "floated over <furniture>" ---------- */
   function floatTxt(p,v){const o=OBJN[v]?TX(OBJN[v]):v;
     if(LANG==="fr"){const t=o.startsWith("un ")?"d'"+o:o.startsWith("une ")?"d'"+o:o.startsWith("le ")?"d'un "+o.slice(3):o.startsWith("la ")?"d'une "+o.slice(3):o.startsWith("les ")?"de "+o:o.startsWith("l'")?"de "+o:"de "+o;return `flottait au-dessus ${t} 👻`}
@@ -37,14 +37,17 @@ function hwOpen(){return typeof HW_DATA!=="undefined"&&HW_DATA.length&&Date.now(
   /* ---------- in-game: title, ghost look, reminder line ---------- */
   const _rs=renderStatic;renderStatic=function(){const r=_rs.apply(this,arguments);try{paintGame()}catch(_){}return r};
   const _r=render;render=function(){const r=_r.apply(this,arguments);try{paintGhost()}catch(_){}return r};
-  function paintGame(){document.body.classList.toggle("hw-play",HW.on);if(!HW.on)return;
+  function paintGame(){document.body.classList.toggle("hw-play",HW.on);if(!HW.on){paintGhostStory();return}
     const setT=()=>{const t=$("#g3T");if(t&&HW.on)t.innerHTML=`🎃 ${L("Halloween","Halloween","할로윈","ハロウィン")} · ${HW.i+1}/10<small>${TX(M.title)}</small>`};requestAnimationFrame(setT);setTimeout(setT,120);
     const t=$("#g3T");if(t)t.innerHTML=`🎃 ${L("Halloween","Halloween","할로윈","ハロウィン")} · ${HW.i+1}/10<small>${TX(M.title)}</small>`;
     const ct=$("#caseTitle");if(ct)ct.textContent=`🎃 ${TX(M.title)}`;
     const rec=document.querySelector(".recit");const end=document.querySelector(".recit .st-end");if(end&&!end.dataset.hw){end.dataset.hw=1;end.insertAdjacentHTML("beforeend"," "+L("(Le fantôme ne compte pas : il peut être là en plus.)","(The ghost doesn't count: it may be there too.)","(유령은 세지 않아요. 함께 있을 수도 있어요.)","（幽霊は数えません。一緒にいることもあります。）"))}
     if(rec&&!rec.querySelector(".hw-rem")){const d=document.createElement("p");d.className="hw-rem";d.innerHTML=`👻 <b>${ghostName()}</b> ${L("est un fantôme","is a ghost","은(는) 유령","は幽霊")} · <a href="#" data-hwr>${L("règles du fantôme","ghost rules","유령 규칙","幽霊のルール")}</a>`;rec.prepend(d)}}
+  function paintGhostStory(){if(!C||C.ghost==null)return;
+    const rec=document.querySelector(".recit");const end=document.querySelector(".recit .st-end");if(end&&!end.dataset.hw){end.dataset.hw=1;end.insertAdjacentHTML("beforeend"," "+L("(Le fantôme ne compte pas : il peut être là en plus.)","(The ghost doesn't count: it may be there too.)","(유령은 세지 않아요. 함께 있을 수도 있어요.)","（幽霊は数えません。一緒にいることもあります。）"))}
+    if(rec&&!rec.querySelector(".hw-rem")){const d=document.createElement("p");d.className="hw-rem";d.innerHTML=`👻 <b>${ghostName()}</b> ${L("est un fantôme","is a ghost","은(는) 유령","は幽霊")}`;rec.prepend(d)}}
   document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest("[data-hwr]");if(a){e.preventDefault();rulePop()}});
-  function paintGhost(){if(!HW.on||!C||C.ghost==null)return;const g=C.ghost;
+  function paintGhost(){if(!C||C.ghost==null)return;const g=C.ghost;
     document.querySelectorAll(`.card[data-p="${g}"]`).forEach(c=>c.classList.add("hw-ghost"));
     document.querySelectorAll("#marks .mk.hw-g").forEach(e=>e.classList.remove("hw-g"));
     const x=S.place[g];if(x){const el=document.querySelector(`#marks .mk[data-r="${x[0]}"][data-c="${x[1]}"]`);if(el)el.classList.add("hw-g")}}
