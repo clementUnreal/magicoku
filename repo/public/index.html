@@ -3604,7 +3604,13 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
   function go(i){$("#home").hidden=true;openCase(i);let seen=null;try{seen=localStorage.getItem("magicoku:tuto")}catch(_){}if(!seen)setTimeout(()=>tuto(0),400)}
   function pickDefaults(enter){const ts=tiers();if(LVV.ch==null||!ts.includes(LVV.ch)||(enter&&idxOf(LVV.ch).every(lvlSolved))){LVV.ch=ts.find(t=>chOpen(t)&&idxOf(t).some(i=>!lvlSolved(i)))??ts.filter(chOpen).pop()??ts[0];LVV.sel=null}
     const ix=idxOf(LVV.ch);if(LVV.sel==null||!ix.includes(LVV.sel)||(enter&&lvlSolved(LVV.sel)&&ix.some(i=>unlocked(i)&&!lvlSolved(i))))LVV.sel=ix.find(i=>unlocked(i)&&!lvlSolved(i))??null}
-  function render(enter){const v=ensure();pickDefaults(enter);const ts=tiers(),mode=LVMODE==="story"?"story":"disc",t=LVV.ch,ix=idxOf(t),pos=ts.indexOf(t);
+  function render(enter){const v=ensure();const os=v.querySelector(".lvside"),keep=os?[os.scrollTop,os.scrollLeft]:null,hm=$("#home"),hy=hm?hm.scrollTop:0,vy=v.scrollTop;
+    _render(enter);
+    /* keep the chapter list where it was (it used to jump back to chapters 1-4); on entering, bring the current chapter into view */
+    const ns=v.querySelector(".lvside");if(!ns)return;
+    if(keep&&!enter){ns.scrollTop=keep[0];ns.scrollLeft=keep[1];if(hm)hm.scrollTop=hy;v.scrollTop=vy}
+    else{const on=ns.querySelector(".lvch.on");if(on){const r=on.getBoundingClientRect(),q=ns.getBoundingClientRect();if(ns.scrollHeight>ns.clientHeight)ns.scrollTop+=r.top-q.top-(q.height-r.height)/2;if(ns.scrollWidth>ns.clientWidth)ns.scrollLeft+=r.left-q.left-(q.width-r.width)/2}}}
+  function _render(enter){const v=ensure();pickDefaults(enter);const ts=tiers(),mode=LVMODE==="story"?"story":"disc",t=LVV.ch,ix=idxOf(t),pos=ts.indexOf(t);
     const done=ix.filter(lvlSolved).length,cn=chName(t);
     const side=ts.map((tt,k)=>{const c=chName(tt),open=chOpen(tt),all=idxOf(tt).every(lvlSolved);return `<button class="lvch${tt===t?" on":""}${open?"":" locked"}" data-ch="${tt}"><span class="ci">${SPR[CH_ICON[mode][k]]?`<img src="${SPR[CH_ICON[mode][k]]}" alt="">`:`<img class="ci-pic" src="${CH_ICON[mode][k]}" alt="">`}</span><span class="ct"><b>${c.num.replace(/^(Chapitre|Chapter) /,"")}</b> · ${c.name}</span>${open?(all?`<span class="cs">✓</span>`:`<span class="cs">›</span>`):`<span class="cs">🔒</span>`}</button>`}).join("");
     const cards=ix.map((i,k)=>{const ex=k>=10,ok=lvlSolved(i),u=unlocked(i),d=diffOf(t,k),sz=DATA[i].rooms.length;
@@ -4228,7 +4234,7 @@ Object.assign(MECH_INFO,{
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="d8a0216845fd";
+var APP_BUILD="f17e7a9293ab";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
