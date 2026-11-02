@@ -100,5 +100,11 @@ Object.assign(MECH_INFO,{
 /* painted pictures for the season-2 rules (shown big in the "New rule" popup) */
 (function(){if(typeof IC2==="undefined"||typeof mechIntro!=="function")return;
   const IMG={ghost:IC2.mi_ghost,owl:IC2.mi_owl,diag:IC2.mi_diag,kiss:IC2.mi_kiss,more:IC2.mi_more,par:IC2.mi_par,closer:IC2.mi_closer,gap:IC2.mi_gap,mix2:IC2.mi_mix2,lit:IC2.mi_lit};
+  /* chapters 11-20: the painted pictures also stand for the chapters in the level list and on the story's rule button */
+  const ORDER=["ghost","owl","diag","kiss","more","par","closer","lit","gap","mix2"];
+  if(typeof CH_ICON!=="undefined")ORDER.forEach((m,i)=>{if(IMG[m])CH_ICON.story[10+i]=IMG[m]});
+  const _sh=storyHTML;storyHTML=function(){let h=_sh.apply(this,arguments);try{const m=mechOf(),src=IMG[m];if(src&&MECH_INFO[m])h=h.replace('<button class="mech-help">'+MECH_INFO[m][0],`<button class="mech-help"><img class="mh-pic" src="${src}" alt="">`)}catch(_){}return h};
   const _mi=mechIntro;mechIntro=function(){const r=_mi.apply(this,arguments);try{const el=$("#mechIntro"),src=IMG[mechOf()];if(el&&!el.hidden&&src){const ic=el.querySelector(".miic");if(ic&&!ic.querySelector("img"))ic.innerHTML=`<img class="mi-pic" src="${src}" alt="">`}}catch(_){}return r};
-  const st=document.createElement("style");st.textContent=`.miic img.mi-pic{display:block;width:min(240px,70vw);height:auto;margin:0 auto 4px;border-radius:18px;filter:drop-shadow(0 6px 12px #0006)}`;document.head.appendChild(st)})();
+  const st=document.createElement("style");st.textContent=`.lvch .ci img.ci-pic{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.mech-help img.mh-pic{width:44px;height:27px;object-fit:cover;border-radius:6px;vertical-align:middle;margin-right:4px}
+.miic img.mi-pic{display:block;width:min(240px,70vw);height:auto;margin:0 auto 4px;border-radius:18px;filter:drop-shadow(0 6px 12px #0006)}`;document.head.appendChild(st)})();

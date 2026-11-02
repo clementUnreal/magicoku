@@ -3606,7 +3606,7 @@ var CH_ICON={disc:["book","cauldron","candle"],story:["tree","clock","gold","sta
     const ix=idxOf(LVV.ch);if(LVV.sel==null||!ix.includes(LVV.sel)||(enter&&lvlSolved(LVV.sel)&&ix.some(i=>unlocked(i)&&!lvlSolved(i))))LVV.sel=ix.find(i=>unlocked(i)&&!lvlSolved(i))??null}
   function render(enter){const v=ensure();pickDefaults(enter);const ts=tiers(),mode=LVMODE==="story"?"story":"disc",t=LVV.ch,ix=idxOf(t),pos=ts.indexOf(t);
     const done=ix.filter(lvlSolved).length,cn=chName(t);
-    const side=ts.map((tt,k)=>{const c=chName(tt),open=chOpen(tt),all=idxOf(tt).every(lvlSolved);return `<button class="lvch${tt===t?" on":""}${open?"":" locked"}" data-ch="${tt}"><span class="ci"><img src="${SPR[CH_ICON[mode][k]]}" alt=""></span><span class="ct"><b>${c.num.replace(/^(Chapitre|Chapter) /,"")}</b> · ${c.name}</span>${open?(all?`<span class="cs">✓</span>`:`<span class="cs">›</span>`):`<span class="cs">🔒</span>`}</button>`}).join("");
+    const side=ts.map((tt,k)=>{const c=chName(tt),open=chOpen(tt),all=idxOf(tt).every(lvlSolved);return `<button class="lvch${tt===t?" on":""}${open?"":" locked"}" data-ch="${tt}"><span class="ci">${SPR[CH_ICON[mode][k]]?`<img src="${SPR[CH_ICON[mode][k]]}" alt="">`:`<img class="ci-pic" src="${CH_ICON[mode][k]}" alt="">`}</span><span class="ct"><b>${c.num.replace(/^(Chapitre|Chapter) /,"")}</b> · ${c.name}</span>${open?(all?`<span class="cs">✓</span>`:`<span class="cs">›</span>`):`<span class="cs">🔒</span>`}</button>`}).join("");
     const cards=ix.map((i,k)=>{const ex=k>=10,ok=lvlSolved(i),u=unlocked(i),d=diffOf(t,k),sz=DATA[i].rooms.length;
       return `<button class="lvc${ex?" expert":""}${ok?" done":""}${u?"":" locked"}${LVV.sel===i?" sel":""}" data-lv="${i}"><span class="lvh"><b>${k>=10?"★ "+L("Expert","Expert","전문가","エキスパート"):L("Niveau","Level","레벨","レベル")+" "+(k+1)}</b>${ok?`<i class="ok">✓</i>`:u?"":`<i class="lk">🔒</i>`}</span><span class="lvt">${thumb(i)}</span><span class="lvn">${TX(META[DATA[i].id].title)}</span><span class="lvs">${sz} × ${sz}</span><span class="lvd d${d}">${TX(DIFF[d])}</span>${LVV.sel===i?`<span class="lvp">${L("À jouer","Up next","플레이","プレイ")}</span>`:""}</button>`}).join("");
     const legend=mode==="story"?`<div class="lvleg"><span><i class="d0"></i>${L("Faciles 1–3","Easy 1–3","쉬움 1~3","やさしい 1〜3")}</span><span><i class="d1"></i>${L("Moyens 4–8","Medium 4–8","보통 4~8","ふつう 4〜8")}</span><span><i class="d2"></i>${L("Difficiles 9–10","Hard 9–10","어려움 9~10","むずかしい 9〜10")}</span><span><i class="d3"></i>${L("Expert 11","Expert 11","전문가 11","エキスパート 11")}</span></div>`:`<div class="lvleg"></div>`;
@@ -4182,8 +4182,14 @@ Object.assign(MECH_INFO,{
 /* painted pictures for the season-2 rules (shown big in the "New rule" popup) */
 (function(){if(typeof IC2==="undefined"||typeof mechIntro!=="function")return;
   const IMG={ghost:IC2.mi_ghost,owl:IC2.mi_owl,diag:IC2.mi_diag,kiss:IC2.mi_kiss,more:IC2.mi_more,par:IC2.mi_par,closer:IC2.mi_closer,gap:IC2.mi_gap,mix2:IC2.mi_mix2,lit:IC2.mi_lit};
+  /* chapters 11-20: the painted pictures also stand for the chapters in the level list and on the story's rule button */
+  const ORDER=["ghost","owl","diag","kiss","more","par","closer","lit","gap","mix2"];
+  if(typeof CH_ICON!=="undefined")ORDER.forEach((m,i)=>{if(IMG[m])CH_ICON.story[10+i]=IMG[m]});
+  const _sh=storyHTML;storyHTML=function(){let h=_sh.apply(this,arguments);try{const m=mechOf(),src=IMG[m];if(src&&MECH_INFO[m])h=h.replace('<button class="mech-help">'+MECH_INFO[m][0],`<button class="mech-help"><img class="mh-pic" src="${src}" alt="">`)}catch(_){}return h};
   const _mi=mechIntro;mechIntro=function(){const r=_mi.apply(this,arguments);try{const el=$("#mechIntro"),src=IMG[mechOf()];if(el&&!el.hidden&&src){const ic=el.querySelector(".miic");if(ic&&!ic.querySelector("img"))ic.innerHTML=`<img class="mi-pic" src="${src}" alt="">`}}catch(_){}return r};
-  const st=document.createElement("style");st.textContent=`.miic img.mi-pic{display:block;width:min(240px,70vw);height:auto;margin:0 auto 4px;border-radius:18px;filter:drop-shadow(0 6px 12px #0006)}`;document.head.appendChild(st)})();
+  const st=document.createElement("style");st.textContent=`.lvch .ci img.ci-pic{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.mech-help img.mh-pic{width:44px;height:27px;object-fit:cover;border-radius:6px;vertical-align:middle;margin-right:4px}
+.miic img.mi-pic{display:block;width:min(240px,70vw);height:auto;margin:0 auto 4px;border-radius:18px;filter:drop-shadow(0 6px 12px #0006)}`;document.head.appendChild(st)})();
 /* ================= full screen (Fullscreen API; on iPhone: add to home screen) ================= */
 (function(){
   const d=document,el=d.documentElement;
@@ -4222,7 +4228,7 @@ Object.assign(MECH_INFO,{
   paint();
 })();
 /* ================= "new version available" banner ================= (rev 2) */
-var APP_BUILD="a89a40500b23";
+var APP_BUILD="d8a0216845fd";
 (function(){
   let shown=false;
   async function check(){if(shown||APP_BUILD.startsWith("__"))return;
