@@ -271,3 +271,19 @@ ON.update({
  "s_lily":_sit("sur un nénuphar géant","sitting on a giant water lily","거대한 수련 잎 위에 앉아 있었다","大きなスイレンの葉に座っていた"),
  "s_fboat":_sit("dans une barque fleurie","sitting in a flower-decked boat","꽃 장식 나룻배에 앉아 있었다","花で飾った小舟に乗っていた"),
 })
+
+# season 2: chapters whose place changed look get their own room names (chapter number -> room type -> fr, en, ko, ja)
+ROOMS2={
+ 14:{"taverne":("la Salle de bal","the Ballroom","무도회장","舞踏室"),"confiserie":("le Buffet des desserts","the Dessert Buffet","디저트 뷔페","デザートの間"),
+     "poste":("le Vestiaire","the Cloakroom","외투 보관실","クローク"),"place":("la Terrasse enneigée","the Snowy Terrace","눈 덮인 테라스","雪のテラス"),
+     "cabane":("le Petit Salon","the Small Parlour","작은 응접실","小さな客間"),"salonthe":("le Salon de thé","the Tea Room","찻집","ティールーム"),
+     "forge":("la Galerie des glaces","the Hall of Mirrors","거울의 방","鏡の間"),"pont":("l'Escalier d'honneur","the Grand Staircase","중앙 계단","大階段")},
+ 17:{"accueil":("le Vestibule","the Entrance Hall","현관","玄関ホール"),"salle":("la Grande Serre","the Great Greenhouse","큰 온실","大温室"),
+     "pharmacie":("l'Herboristerie","the Herbalist's Shop","약초 상점","薬草店"),"serreh":("la Serre aux simples","the Herb Greenhouse","약초 온실","薬草の温室"),
+     "chambre":("la Chambre de repos","the Resting Room","휴식실","休憩室"),"bloc":("la Salle des soins","the Treatment Room","치료실","手当ての間"),
+     "laboh":("la Distillerie","the Still Room","증류실","蒸留室"),"jardin":("le Jardin d'hiver","the Winter Garden","겨울 정원","冬の庭")},
+ 19:{"quai":("le Wagon de queue","the Rear Carriage","맨 뒤 객차","最後尾の車両"),"attente":("le Wagon-salon","the Lounge Car","라운지 칸","ラウンジ車"),
+     "guichet":("le Compartiment du contrôleur","the Guard's Compartment","차장실","車掌室"),"consigne":("le Fourgon à bagages","the Luggage Van","수하물 칸","荷物車"),
+     "buffet":("le Wagon-restaurant","the Dining Car","식당칸","食堂車"),"voies":("la Passerelle","the Gangway","연결 통로","連結通路"),
+     "hallg":("le Wagon-lits","the Sleeping Car","침대칸","寝台車"),"souterrain":("la Locomotive","the Locomotive","기관차","機関車")},
+}

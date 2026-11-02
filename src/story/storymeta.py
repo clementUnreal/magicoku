@@ -2,7 +2,7 @@ import random,sys
 sys.path.insert(0,'../ld');sys.path.insert(0,'../i18n')
 import metagen as MG
 from envrt import ENVS
-from envtext import CH,SHORT,ROOMS,TITLES,TITLES2
+from envtext import CH,SHORT,ROOMS,TITLES,TITLES2,ROOMS2
 from data import NAMES as _N, D as _D
 PLACE={"forest":("la Forêt des Murmures","the Whispering Forest"),"station":("la Gare de Brumeval","Brumeval Station"),"bank":("la Banque des Profondeurs","the Bank of the Depths"),
  "alley":("la Ruelle des Marchands","Merchants' Lane"),"village":("le Village de Givrelune","the Village of Frostmoon"),"lake":("le Lac aux Sirènes","the Mermaids' Lake"),
@@ -28,6 +28,7 @@ def build(lid,d,c,k):
         def li(h,f=1.08):
             n_=int(h[1:],16);r_,g_,b_=n_>>16,n_>>8&255,n_&255;return "#%02x%02x%02x"%(min(255,int(r_*f)),min(255,int(g_*f)),min(255,int(b_*f)))
         floors={kk:[pal[tl.index(t)%len(pal)],li(pal[tl.index(t)%len(pal)])] for kk,t in d["types"].items()}
+        if c+1 in ROOMS2:rooms={kk:list(ROOMS2[c+1].get(t,rooms[kk])) for kk,t in d["types"].items()}
     # big levels can use the same room type twice: the second one becomes its "annex", with its own name and a shifted floor colour
     seen={}
     for kk in sorted(d["types"]):
