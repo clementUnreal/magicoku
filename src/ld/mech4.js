@@ -1,10 +1,10 @@
 /* ================= Story season 2 (chapters 11-20): one new rule per chapter =================
    11 ghost (rules shared with the Halloween event, see halloween.js) · 12 owl flight (king distance) · 13 diagonals
    14 corner to corner · 15 the scales (more people in A than in B) · 16 even/odd columns · 17 closer to an object
-   18 candlelight (the 8 squares around a candelabra are lit) · 19 rows/columns in between · 20 everything mixed */
+   18 lantern light (the 8 squares around a paper lantern are lit) · 19 rows/columns in between · 20 everything mixed */
 MECH_IDS.push("ghost","owl","diag","kiss","more","par","closer","lit","gap","mix2");
 (function(){
-  const lit=(r,c)=>{if(!OBJ)return false;for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const rr=r+a,cc=c+b;if(rr>=0&&rr<N&&cc>=0&&cc<N&&OBJ[rr][cc]==="candle")return true}return false};
+  const lit=(r,c)=>{if(!OBJ)return false;for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const rr=r+a,cc=c+b;if(rr>=0&&rr<N&&cc>=0&&cc<N&&(OBJ[rr][cc]==="candle"||OBJ[rr][cc]==="s_lantern"))return true}return false};
   window.mechLit=lit;
   /* ---------- clue sentences (fr, en, ko, ja) ---------- */
   const de=(qn,Q)=>vowelStart(qn)?"d'"+Q:"de "+Q;
@@ -21,8 +21,8 @@ MECH_IDS.push("ghost","owl","diag","kiss","more","par","closer","lit","gap","mix
     if(k==="cspar")return L(`avait un numéro de colonne <b>de même parité</b> que celui ${de(an(v),A(v))} (tous deux pairs ou tous deux impairs)`,`had a column number with the <b>same parity</b> as ${A(v)}'s (both even or both odd)`,`${A(v)}${wa(an(v))} <b>짝홀이 같은</b> 번호의 열에 있었다(둘 다 짝수이거나 둘 다 홀수)`,`${A(v)}と<b>偶奇が同じ</b>番号の列にいた（どちらも偶数か、どちらも奇数）`);
     if(k==="cdpar")return L(`avait un numéro de colonne <b>de parité différente</b> de celui ${de(an(v),A(v))} (l'un pair, l'autre impair)`,`had a column number with a <b>different parity</b> from ${A(v)}'s (one even, the other odd)`,`${A(v)}${wa(an(v))} <b>짝홀이 다른</b> 번호의 열에 있었다(하나는 짝수, 하나는 홀수)`,`${A(v)}と<b>偶奇が違う</b>番号の列にいた（一方が偶数、もう一方が奇数）`);
     if(k==="closer"){const [t,q]=v;return L(`se trouvait <b>plus près</b> ${OK(t,0)} ${que(an(q))}${A(q)}`,`was <b>closer</b> to ${OK(t,1)} than ${A(q)}`,`${A(q)}보다 ${OK(t,2)}에 <b>더 가까이</b> 있었다`,`${A(q)}よりも${OK(t,3)}の<b>近く</b>にいた`)}
-    if(k==="lit")return L(`se tenait <b>dans la lumière</b> d'un chandelier`,`was standing <b>in the light</b> of a candelabra`,`촛대 <b>불빛 안에</b> 서 있었다`,`燭台の<b>光の中</b>に立っていた`);
-    if(k==="shade")return L(`se tenait <b>dans l'ombre</b>, loin de tout chandelier`,`was standing <b>in the shadows</b>, away from every candelabra`,`모든 촛대에서 떨어진 <b>어둠 속</b>에 서 있었다`,`どの燭台からも離れた<b>暗がり</b>に立っていた`);
+    if(k==="lit")return L(`se tenait <b>dans la lumière</b> d'une lanterne`,`was standing <b>in the light</b> of a lantern`,`등불 <b>빛 안에</b> 서 있었다`,`提灯の<b>光の中</b>に立っていた`);
+    if(k==="shade")return L(`se tenait <b>dans l'ombre</b>, loin de toute lanterne`,`was standing <b>in the shadows</b>, away from every lantern`,`모든 등불에서 떨어진 <b>어둠 속</b>에 서 있었다`,`どの提灯からも離れた<b>暗がり</b>に立っていた`);
     if(k==="rgap"||k==="cgap"){const [q,n]=v,row=k==="rgap";
       if(n===0)return L(`était sur ${row?"une rangée":"une colonne"} <b>${row?"voisine":"voisine"}</b> de celle ${de(an(q),A(q))}`,`was in the ${row?"row":"column"} <b>right next to</b> ${A(q)}'s`,`${A(q)}의 <b>바로 옆 ${row?"행":"열"}</b>에 있었다`,`${A(q)}の<b>すぐ隣の${row?"行":"列"}</b>にいた`);
       return L(`avait exactement <b>${n} ${row?(n>1?"rangées":"rangée"):(n>1?"colonnes":"colonne")}</b> entre la sienne et celle ${de(an(q),A(q))}`,`had exactly <b>${n} ${row?(n>1?"rows":"row"):(n>1?"columns":"column")}</b> between ${f?"hers":"his"} and ${A(q)}'s`,`${A(q)}${wa(an(q))}의 사이에 정확히 <b>${n}개의 ${row?"행":"열"}</b>이 있었다`,`${A(q)}との間に、ちょうど<b>${n}${row?"行":"列"}</b>あった`)}
@@ -42,7 +42,7 @@ MECH_IDS.push("ghost","owl","diag","kiss","more","par","closer","lit","gap","mix
     if(set.has("more"))out.push(L("⚖️ La <b>balance</b> compte tout le monde, victime comprise. Une pièce vide compte zéro.","⚖️ The <b>scales</b> count everyone, victim included. An empty room counts as zero.","⚖️ <b>저울</b>은 피해자를 포함해 모두를 세요. 빈 방은 0명이에요.","⚖️ <b>天秤</b>は被害者も含めて全員を数えます。空の部屋は0人です。"));
     if(set.has("cpar")||set.has("cspar")||set.has("cdpar"))out.push(L("🎲 Les colonnes <b>paires</b> sont 2, 4, 6, 8 ; les <b>impaires</b> sont 1, 3, 5, 7, 9.","🎲 <b>Even</b> columns are 2, 4, 6, 8; <b>odd</b> ones are 1, 3, 5, 7, 9.","🎲 <b>짝수</b> 열은 2, 4, 6, 8이고 <b>홀수</b> 열은 1, 3, 5, 7, 9예요.","🎲 <b>偶数</b>の列は2・4・6・8、<b>奇数</b>の列は1・3・5・7・9です。"));
     if(set.has("closer"))out.push(L("📏 <b>Plus près</b> : on compte les pas jusqu'à l'objet le plus proche de ce type (haut, bas, gauche, droite, à travers les murs). Être dessus compte zéro pas.","📏 <b>Closer</b>: count the steps to the nearest object of that kind (up, down, left, right, through walls). Standing on it counts as zero steps.","📏 <b>더 가까이</b>: 그 종류의 가장 가까운 물건까지 걸음 수를 세요(위·아래·왼쪽·오른쪽, 벽을 지나도 돼요). 그 위에 있으면 0걸음이에요.","📏 <b>近く</b>：その種類のいちばん近い物まで歩数を数えます（上下左右、壁を通りぬけてOK）。上にいれば0歩です。"));
-    if(set.has("lit")||set.has("shade"))out.push(L("🕯️ Un chandelier éclaire les <b>8 cases</b> qui l'entourent (diagonales comprises), même à travers un mur. Toutes les autres cases sont dans l'ombre.","🕯️ A candelabra lights up the <b>8 squares</b> around it (diagonals included), even through a wall. Every other square is in the shadows.","🕯️ 촛대는 주변 <b>8칸</b>(대각선 포함)을 밝혀요. 벽 너머도 마찬가지예요. 나머지 칸은 모두 어둠 속이에요.","🕯️ 燭台はまわりの<b>8マス</b>（ななめも含む）を照らします。壁の向こうも同じ。ほかのマスはすべて暗がりです。"));
+    if(set.has("lit")||set.has("shade"))out.push(L("🏮 Une lanterne éclaire les <b>8 cases</b> qui l'entourent (diagonales comprises), même à travers un mur. Toutes les autres cases sont dans l'ombre.","🏮 A lantern lights up the <b>8 squares</b> around it (diagonals included), even through a wall. Every other square is in the shadows.","🏮 등불은 주변 <b>8칸</b>(대각선 포함)을 밝혀요. 벽 너머도 마찬가지예요. 나머지 칸은 모두 어둠 속이에요.","🏮 提灯はまわりの<b>8マス</b>（ななめも含む）を照らします。壁の向こうも同じ。ほかのマスはすべて暗がりです。"));
     if(set.has("rgap")||set.has("cgap"))out.push(L("🔢 On compte les rangées (ou les colonnes) <b>entre</b> les deux personnes, sans compter les leurs.","🔢 Count the rows (or columns) <b>between</b> the two people, not their own.","🔢 두 사람 <b>사이</b>의 행(또는 열)을 세요. 두 사람이 있는 줄은 빼고요.","🔢 2人の<b>あいだ</b>の行（または列）を数えます。2人がいる行や列は数えません。"));
     return out.length?`<p class="st-mech">${out.join("<br>")}</p>`:""}
   const _sh=storyHTML;storyHTML=function(){let h=_sh.apply(this,arguments);if(!C||mechSpecial())return h;
@@ -82,18 +82,18 @@ Object.assign(MECH_INFO,{
    "At the infirmary, every second counts: who was nearest the remedies? “Basile was closer to a bed than Flora”: count the steps to the nearest bed (up, down, left or right, through walls), and Basile needs strictly fewer than Flora. Standing on the object counts as zero steps.",
    "병원에서는 일 초가 아까워요. 누가 약에 가장 가까이 있었을까요? ‘바질은 플로라보다 침대에 더 가까이 있었다’: 가장 가까운 침대까지 걸음 수를 세면(위·아래·왼쪽·오른쪽, 벽을 지나도 돼요) 바질이 플로라보다 확실히 적어요. 물건 위에 있으면 0걸음이에요.",
    "療養院では一秒が大切。誰がいちばん薬の近くにいた？「バジルはフローラよりベッドの近くにいた」：いちばん近いベッドまでの歩数（上下左右、壁を通りぬけてOK）を数えると、バジルのほうがはっきり少ないということ。物の上にいれば0歩です。"]],
- lit:["🕯️",["Les chandeliers","Candlelight","촛대 불빛","燭台の光"],["Le marché de nuit n'est éclairé que par quelques chandeliers. Un chandelier éclaire les 8 cases qui l'entourent (diagonales comprises), même à travers un mur. « Dans la lumière » : sur une de ces cases. « Dans l'ombre » : sur aucune. Les cases éclairées brillent sur le plan.",
-   "The night market is lit only by a few candelabras. A candelabra lights up the 8 squares around it (diagonals included), even through a wall. “In the light”: on one of those squares. “In the shadows”: on none of them. The lit squares glow on the map.",
-   "야시장은 촛대 몇 개로만 밝혀져 있어요. 촛대는 주변 8칸(대각선 포함)을 밝히고, 벽 너머도 마찬가지예요. ‘불빛 안’: 그 칸 중 하나에 있어요. ‘어둠 속’: 그 어느 칸에도 없어요. 밝은 칸은 지도에서 빛나요.",
-   "夜の市場は、いくつかの燭台だけで照らされている。燭台はまわりの8マス（ななめも含む）を照らし、壁の向こうも同じ。「光の中」：そのどれかのマスにいる。「暗がり」：どのマスにもいない。照らされたマスは見取り図の上で光ります。"]],
+ lit:["🏮",["Les lanternes","Lantern light","등불 빛","提灯の光"],["Le marché de nuit n'est éclairé que par quelques lanternes en papier. Une lanterne éclaire les 8 cases qui l'entourent (diagonales comprises), même à travers un mur. « Dans la lumière » : sur une de ces cases. « Dans l'ombre » : sur aucune. Les cases éclairées brillent sur le plan.",
+   "The night market is lit only by a few paper lanterns. A lantern lights up the 8 squares around it (diagonals included), even through a wall. “In the light”: on one of those squares. “In the shadows”: on none of them. The lit squares glow on the map.",
+   "야시장은 등불 몇 개로만 밝혀져 있어요. 등불은 주변 8칸(대각선 포함)을 밝히고, 벽 너머도 마찬가지예요. ‘불빛 안’: 그 칸 중 하나에 있어요. ‘어둠 속’: 그 어느 칸에도 없어요. 밝은 칸은 지도에서 빛나요.",
+   "夜の市場は、いくつかの提灯だけで照らされている。提灯はまわりの8マス（ななめも含む）を照らし、壁の向こうも同じ。「光の中」：そのどれかのマスにいる。「暗がり」：どのマスにもいない。照らされたマスは見取り図の上で光ります。"]],
  gap:["🔢",["Entre les deux","In between","사이","あいだ"],["Dans le train, chacun a sa rangée de sièges. « Il y avait exactement 2 rangées entre la sienne et celle de Flora » : on compte les rangées (ou les colonnes) qui les séparent, sans compter les leurs. « Rangée voisine » : aucune rangée entre les deux.",
    "On the train, everyone has their own row of seats. “There were exactly 2 rows between theirs and Flora's”: count the rows (or columns) that separate them, not their own. “Neighbouring row”: no row in between.",
    "기차에서는 저마다 자기 좌석 줄이 있어요. ‘자기 줄과 플로라의 줄 사이에 정확히 2개의 행이 있었다’: 두 사람 사이에 있는 행(또는 열)을 세요. 두 사람이 있는 줄은 빼고요. ‘바로 옆 행’: 사이에 행이 하나도 없어요.",
    "列車では、それぞれ自分の座席の列がある。「自分の行とフローラの行の間に、ちょうど2行あった」：2人を隔てる行（または列）を数えます。2人がいる行は数えません。「すぐ隣の行」：間に1行もないということ。"]],
- mix2:["🌊",["Le grand mystère","The great mystery","거대한 수수께끼","大いなる謎"],["Le lac mélange toutes les règles de la saison : vol de chouette, diagonales, coins, balance, parité, plus près, chandeliers, rangées d'écart. Le rappel en bas du récit te dit lesquelles comptent dans chaque enquête.",
-   "The lake mixes every rule of the season: owl flight, diagonals, corners, scales, parity, closer, candlelight, rows in between. The reminder at the bottom of the story tells you which ones apply to each case.",
-   "호수에서는 이번 시즌의 모든 규칙이 섞여 나와요. 올빼미 거리, 대각선, 모서리, 저울, 짝홀, 더 가까이, 촛대 불빛, 사이의 행. 이야기 맨 아래의 안내를 보면 사건마다 어떤 규칙이 적용되는지 알 수 있어요.",
-   "湖ではシーズンのすべてのルールが混ざっている。フクロウの飛び方、ななめの線、角どうし、天秤、偶数・奇数、近いのは、燭台の光、あいだの行。物語の下の案内を見れば、それぞれの事件でどれが使われているかわかります。"]]});
+ mix2:["🌊",["Le grand mystère","The great mystery","거대한 수수께끼","大いなる謎"],["Le lac mélange toutes les règles de la saison : vol de chouette, diagonales, coins, balance, parité, plus près, lanternes, rangées d'écart. Le rappel en bas du récit te dit lesquelles comptent dans chaque enquête.",
+   "The lake mixes every rule of the season: owl flight, diagonals, corners, scales, parity, closer, lantern light, rows in between. The reminder at the bottom of the story tells you which ones apply to each case.",
+   "호수에서는 이번 시즌의 모든 규칙이 섞여 나와요. 올빼미 거리, 대각선, 모서리, 저울, 짝홀, 더 가까이, 등불 빛, 사이의 행. 이야기 맨 아래의 안내를 보면 사건마다 어떤 규칙이 적용되는지 알 수 있어요.",
+   "湖ではシーズンのすべてのルールが混ざっている。フクロウの飛び方、ななめの線、角どうし、天秤、偶数・奇数、近いのは、提灯の光、あいだの行。物語の下の案内を見れば、それぞれの事件でどれが使われているかわかります。"]]});
 /* level select: the new chapters show their rule under their blurb too */
 (function(){try{if(typeof CH_TAG==="undefined")return;CH_TAG.story.forEach((a,i)=>{if(i<10)return;const m=MECH_INFO[MECH_IDS[i]];if(!m)return;
   const lab=["Règle","Rule","규칙","ルール"];for(let j=0;j<4;j++)a[j]=a[j]+" "+m[0]+" "+lab[j]+(j===0?" : ":": ")+m[1][j]+"."})}catch(e){}})();

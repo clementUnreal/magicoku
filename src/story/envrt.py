@@ -21,5 +21,6 @@ ENV_RT={
  "fortress":{"cour":(["gargoyle","brazier"],["straw"]),"cachots":(["bars","bars"],["straw"]),"tourf":(["brazier","gargoyle"],["straw"]),"garde":(["brazier","desk"],["chair","stool"]),
              "chemin":(["gargoyle","bars"],["straw"]),"armurerie":(["brazier","shelf"],["stool"]),"chapelle":(["statue","candle"],["bench"]),"donjon":(["bars","brazier"],["straw"])},
 }
-NEW_WALK={"stump","bench","minecart","barrel","stool","boat","bleacher","bed","straw"}
+NEW_WALK={"stump","bench","minecart","barrel","stool","boat","bleacher","bed","straw",
+ "s_spectral","s_leaves","s_moss","s_mbench","s_pouf","s_gchair","s_dugout","s_stand","s_canopy","s_wicker","s_rug","s_cushion","s_banq","s_lily","s_fboat"}
 ENVS=["forest","station","bank","alley","village","lake","stadium","hospital","ministry","fortress"]

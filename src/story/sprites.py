@@ -48,6 +48,8 @@ def uris():
     for k,v in S.items():
         p=os.path.join(d,k+".webp")
         out[k]=("data:image/webp;base64,"+base64.b64encode(open(p,"rb").read()).decode()) if os.path.exists(p) else "data:image/svg+xml;base64,"+base64.b64encode(svg(v).encode()).decode()
+    for f in sorted(os.listdir(d)):   # painted objects that have no SVG fallback (season 2)
+        if f.endswith(".webp") and f[:-5] not in out:out[f[:-5]]="data:image/webp;base64,"+base64.b64encode(open(os.path.join(d,f),"rb").read()).decode()
     return out
 if __name__=="__main__":
     import json;u=uris();print(len(u));open('sprites_preview.html','w').write('<body style="background:#efe0c4;display:flex;flex-wrap:wrap;gap:8px">'+''.join(f'<div style="width:110px;text-align:center"><img src="{v}" width="100"><br>{k}</div>' for k,v in u.items())+'</body>')
