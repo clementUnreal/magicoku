@@ -34,7 +34,7 @@ def unary_ok(case,cl,r,c):
     if k=="lit":return lit(case,r,c)
     if k=="shade":return not lit(case,r,c)
     return True
-LIGHT={"candle"}
+LIGHT={"candle","s_lantern"}
 def lit(case,r,c):
     o=case["_obj"];n=case["n"]
     return any(0<=r+a<n and 0<=c+b<n and o[r+a][c+b] in LIGHT for a in(-1,0,1) for b in(-1,0,1))
