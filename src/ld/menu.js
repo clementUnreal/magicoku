@@ -2,15 +2,24 @@
 const ACC={mode:"none",uid:null,profile:null,db:null};
 const LKEY="magicoku:account";
 function locProfile(){try{return JSON.parse(localStorage.getItem(LKEY)||"null")}catch(e){return null}}
+/* the browser lost the account (storage wiped or full): the server remembers this device through a cookie, take the account back silently */
+async function serverAccount(){try{const ac=new AbortController();setTimeout(()=>ac.abort(),3000);const r=await fetch("/api/me",{cache:"no-store",credentials:"same-origin",signal:ac.signal});if(!r.ok)return null;const d=await r.json();if(!d||!d.pseudo||!d.pid)return null;
+  const prog={},ids=new Set(DATA.map(c=>c.id));
+  for(const [lid,v] of Object.entries(d.progress||{})){if(ids.has(lid))prog[lid]={solved:true,hints:v.h||0,time:v.t||0,attempts:v.a||1,at:Date.now()}}
+  const want=Math.min(+(d.progress&&d.progress._n)||0,DATA.length);
+  for(let i=0;i<DATA.length&&Object.keys(prog).length<want;i++){const id=DATA[i].id;if(/^s\d+n\d+$/.test(id))continue;if(!prog[id])prog[id]={solved:true,hints:0,time:0,attempts:1,at:Date.now()}}
+  const p={games:0,created:Date.now(),pseudo:d.pseudo,avatar:d.avatar||AVS[0],progress:prog,pid:d.pid,ptok:d.ptok};
+  try{localStorage.setItem(LKEY,JSON.stringify(p));localStorage.setItem("magicoku:tuto","done")}catch(_){}return p}catch(_){return null}}
 async function initAccount(){
-  ACC.profile=locProfile();if(ACC.profile)ACC.mode="local";
+  ACC.profile=locProfile();if(!(ACC.profile&&ACC.profile.pseudo)){const p=await serverAccount();if(p)ACC.profile=p}
+  if(ACC.profile)ACC.mode="local";
   try{const user=await claude.use("user"),db=await claude.use("db");
     if(user&&db){const uid=await user.id();if(uid){ACC.db=db;ACC.uid=uid;ACC.mode="cloud";
       const snap=await db.doc("data/users/"+uid+"/profile").get();
       if(snap.exists){ACC.profile=snap.data();try{localStorage.setItem(LKEY,JSON.stringify(ACC.profile))}catch(e){}}
       else if(ACC.profile&&ACC.profile.pseudo){await saveProfile()} }}}catch(e){}
   if(ACC.profile&&ACC.profile.pseudo)syncRank();
-  renderHome();
+  ACC.ready=true;renderHome();
 }
 const rid=()=>(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2));
 function syncRank(){const p=ACC.profile;if(!p||!p.pseudo)return;

@@ -72,7 +72,7 @@
       setTimeout(()=>{const lg=$("#legacy");if(lg){lg.scrollIntoView({block:"center"});const b=lg.querySelector("button");if(b)b.click()}},300);
       const w=setInterval(()=>{if(has()){clearInterval(w);return}if($("#pAccount")&&$("#pAccount").hidden){clearInterval(w);open("create")}},800)}}
   /* show at start-up, and whenever someone ends up without a detective */
-  function check(){if(has()||(el&&!el.hidden)||stage==="code")return;open("create")}
+  function check(){if(!ACC.ready){setTimeout(check,250);return}if(has()||(el&&!el.hidden)||stage==="code")return;open("create")}
   setTimeout(check,700);
   const _rh=renderHome;renderHome=function(){_rh.apply(this,arguments);try{if(!has()&&stage!=="code"&&stage!=="done")check()}catch(_){}};
 })();

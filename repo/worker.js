@@ -324,6 +324,11 @@ export class Leaderboard extends DurableObject {
     if (pseudo.toLowerCase() === ADMIN && /^[\w-]{8,64}$/.test(nid)) { const a = await this.admins(); if (!a.includes(nid)) { a.push(nid); await this.ctx.storage.put("__admins", a); } }
     return { status: 200, body: { pseudo: best.pseudo, avatar: best.avatar, progress } };
   }
+  async me(id, token) {
+    const row = await this.auth(id, token);
+    if (!row) return null;
+    return { pseudo: row.pseudo, avatar: row.avatar, progress: await this.progress(row.pseudo) };
+  }
   async auth(id, token) {
     const v = await this.ctx.storage.get("p:" + clean(id, 64));
     if (!v || !v.tok || v.tok !== (await sha(token)) || !v.row) return null;
@@ -804,9 +809,22 @@ export default {
         let body;
         try { body = await request.json(); } catch { return json({ error: "bad json" }, 400); }
         const r = await lb.submit(body);
-        return json(r.body, r.status);
+        const res = json(r.body, r.status);
+        // remember the player on the server side too: if the browser loses its data, /api/me brings the account back
+        if (r.status === 200 && /^[\w-]{8,64}$/.test(String(body.id || "")) && /^[\w-]{8,80}$/.test(String(body.token || "")))
+          res.headers.append("Set-Cookie", `mk=${body.id}.${body.token}; Path=/api; Max-Age=63072000; HttpOnly; Secure; SameSite=Lax`);
+        return res;
       }
       return json({ error: "method" }, 405);
+    }
+    if (url.pathname === "/api/me" && request.method === "GET") {
+      const m = /(?:^|;\s*)mk=([\w-]{8,64})\.([\w-]{8,80})/.exec(request.headers.get("Cookie") || "");
+      if (!m) return json({ error: "none" }, 404);
+      const d = await env.LB.get(env.LB.idFromName("main")).me(m[1], m[2]);
+      if (!d) return json({ error: "none" }, 404);
+      const res = json({ ...d, pid: m[1], ptok: m[2] });
+      res.headers.set("Cache-Control", "no-store");
+      return res;
     }
     if (url.pathname === "/api/pars") return json(await env.LB.get(env.LB.idFromName("main")).pars());
     if (url.pathname === "/api/level") {
