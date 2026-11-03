@@ -108,7 +108,7 @@
   const val=v=>typeof v==="function"?v():v;
   function paint(){if(!st)return;const s=st.steps[st.i];const b=ensureBox();
     b.innerHTML=`<span class="co-n">${L("Tutoriel","Tutorial","튜토리얼","チュートリアル")} · ${st.i+1}/${st.steps.length}</span><h3>${val(s.title)}</h3><p>${val(s.text)}</p><span class="co-warn">${st.warn||""}</span>
-      <div class="co-acts">${s.btn?`<button class="co-go">${val(s.btn)}</button>`:`<span class="co-wait"><i></i>${val(s.waitTxt)||""}</span>`}${st.mandatory?"":`<button class="co-skip">${L("Passer le tutoriel","Skip the tutorial","튜토리얼 건너뛰기","チュートリアルをスキップ")}</button>`}</div>`;
+      <div class="co-acts">${s.btn?`<button class="co-go">${val(s.btn)}</button>`:`<span class="co-wait"><i></i>${val(s.waitTxt)||""}</span>`}<button class="co-skip">${L("Passer le tutoriel","Skip the tutorial","튜토리얼 건너뛰기","チュートリアルをスキップ")}</button></div>`;
     b.hidden=false;highlight();place()}
   function curCell(){const s=st&&st.steps[st.i];if(!s||!s.cell)return null;if(s.cell==="q")return S.sel===st.q?st.cell2:null;return s.cell}
   function highlight(){document.querySelectorAll(".coach-hl").forEach(x=>x.classList.remove("coach-hl"));document.querySelectorAll(".coach-cell").forEach(x=>x.classList.remove("coach-cell"));
@@ -156,6 +156,13 @@
   addEventListener("resize",()=>{try{if(st)place()}catch(_){}});
 
   /* the old overlay tutorial is replaced */
-  tuto=function(){const mandatory=!done();pending=mandatory?2:1};
+  /* someone who has already solved a case never gets the tutorial forced on them again (e.g. after their browser lost its data) */
+  const played=()=>{try{const p=ACC&&ACC.profile&&ACC.profile.progress;if(p&&Object.values(p).some(x=>x&&x.solved))return true}catch(_){}
+    try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith("crimes-mignons-wiz:")&&/"solved":true/.test(localStorage.getItem(k)||""))return true}}catch(_){}return false};
+  let fromMenu=false;document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest("#bTuto"))fromMenu=true},true);
+  tuto=function(){const menu=fromMenu;fromMenu=false;
+    if(!menu&&!done()&&played()){try{localStorage.setItem(K,"done")}catch(_){}return}
+    if(!menu&&done())return;
+    const mandatory=!done();pending=mandatory?2:1};
   window.coachActive=()=>!!st;
 })();
