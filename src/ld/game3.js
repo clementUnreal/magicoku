@@ -185,6 +185,7 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
         <button data-g="theme" class="q-th${night?" on":""}"><span>${night?"🌙":"☀️"}</span>${night?L("Nuit","Night","나이트","ナイト"):L("Clair","Light","라이트","ライト")}</button>
         ${full?`<button data-g="full" class="q-full"><span>⛶</span>${L("Plein écran","Full screen","전체 화면","全画面")}</button>`:""}
         ${typeof orientTile==="function"?orientTile():""}
+        <button data-g="ui" class="q-ui"><span>🔠</span>${L("Affichage","Display","화면","表示")}</button>
         <button data-g="tuto" class="q-tuto"><span>❓</span>${L("Tutoriel","Tutorial","튜토리얼","チュートリアル")}</button>
       </div>
       <div class="g3-lang g3-mlang">${["fr","en","ko","ja"].map(l=>`<button data-lang="${l}" class="${LANG===l?"on":""}">${{fr:"FR",en:"EN",ko:"한",ja:"日"}[l]}</button>`).join("")}</div>
@@ -192,7 +193,7 @@ body.g3.g3-full .recit{max-height:calc(88vh - 150px)}
     m.onclick=e=>{const t=e.target.closest("button");if(e.target===m){close(m);return}if(!t)return;const g=t.dataset.g,lg=t.dataset.lang;
       if(lg){$("#l"+lg.toUpperCase()).click();setTimeout(()=>{openMenu();refresh()},60);return}
       if(!g)return;if(g==="orient"){if(typeof toggleOrient==="function")toggleOrient().then(()=>openMenu());return}if(g==="sound"||g==="theme"){if(g==="sound")setSound(!SND.on);else setTheme(themeNow()==="night"?"light":"night");openMenu();return}close(m);
-      if(g==="story")intro(true);else if(g==="sketch"){(sk?$("#vPlan"):$("#vSketch")).click()}else if(g==="rules")$("#bRules").click();else if(g==="tuto")$("#bTuto").click();
+      if(g==="story")intro(true);else if(g==="sketch"){(sk?$("#vPlan"):$("#vSketch")).click()}else if(g==="rules")$("#bRules").click();else if(g==="tuto")$("#bTuto").click();else if(g==="ui"){if(typeof openUi==="function")openUi()}
       else if(g==="clear"){clearAll()}
       else if(g==="sound"){setSound(!SND.on)}else if(g==="full")$("#bFull").click();else if(g==="home")$("#bMenu").click()}}
   function openPause(){const m=sheet("g3PauseS",`<h2>⏸ ${L("Pause","Paused","일시 정지","一時停止")}</h2>${stats()}<p class="g3-story" style="font-size:15px">${L("Le chronomètre est arrêté.","The clock is stopped.","시계가 멈췄어요.","タイマーは止まっています。")}</p><div class="g3-list"><button data-g="go" class="pill red g3-go" style="justify-content:center">▶ ${L("Reprendre","Resume","계속하기","再開")}</button><button data-g="story">📖 ${L("Relire l'histoire","Read the story again","이야기 다시 읽기","物語を読み直す")}</button></div>`);

@@ -1,5 +1,26 @@
 [
  {
+  "id": 82,
+  "date": "2026-11-09",
+  "icon": "🔠",
+  "fr": {
+   "t": "Règle l'affichage à ta façon",
+   "d": "Nouveau réglage « Affichage » (menu ☰ en jeu, ou Options sur l'accueil) : change la taille de l'interface, du texte, des boutons et du plateau, et choisis où placer les boutons, au-dessus ou sous le plateau, ou en bas de l'écran. Téléphone couché, tu peux aussi mettre les boutons du côté de ton pouce."
+  },
+  "en": {
+   "t": "Set up the display your way",
+   "d": "New “Display” settings (☰ menu in a game, or Options on the home screen): change the size of the interface, the text, the buttons and the board, and choose where the buttons go: above or under the board, or at the bottom of the screen. With the phone sideways, you can also put the buttons on your thumb's side."
+  },
+  "ko": {
+   "t": "화면을 내 마음대로",
+   "d": "새로운 「화면」 설정 (게임 중 ☰ 메뉴 또는 홈의 설정): 인터페이스, 글자, 버튼, 보드의 크기를 바꾸고, 버튼 위치를 보드 위, 보드 아래, 화면 맨 아래 중에서 고를 수 있어요. 가로 화면에서는 버튼을 엄지 쪽으로 옮길 수도 있어요."
+  },
+  "ja": {
+   "t": "表示を自分好みに",
+   "d": "新しい「表示」設定（ゲーム中の☰メニュー、またはホームのオプション）：画面全体・文字・ボタン・盤の大きさを変えられ、ボタンの位置も盤の上・盤の下・画面の一番下から選べます。横画面では、ボタンを親指側に置くこともできます。"
+  }
+ },
+ {
   "id": 81,
   "date": "2026-11-01",
   "icon": "📖",
